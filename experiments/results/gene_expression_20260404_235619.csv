@@ -1,0 +1,106 @@
+n_genes,method,encoding,error_pct,time_s
+10,Random Forest,raw,1.24,2.1
+10,SVM-RBF,raw,1.86,0.0
+10,MLP,raw,2.48,0.3
+10,KNN,raw,1.86,0.1
+10,XGBoost,raw,1.24,5.7
+10,Random Forest,ranked,3.73,1.2
+10,SVM-RBF,ranked,3.11,0.0
+10,MLP,ranked,3.11,0.7
+10,KNN,ranked,3.11,0.0
+10,XGBoost,ranked,4.35,2.8
+10,AF native [64] 1v,native,6.34,3.6
+10,AF native [64] 7v,native,4.47,4.1
+10,AF native [128] 1v,native,6.09,6.8
+10,AF native [128] 7v,native,5.09,7.8
+10,"AF native [64,32] 7v",native,3.6,10.2
+10,AF proj [128] p1 7v,projection,2.36,6.2
+10,AF proj [128] p2 7v,projection,2.36,6.2
+15,Random Forest,raw,0.62,1.3
+15,SVM-RBF,raw,0.62,0.0
+15,MLP,raw,1.24,0.2
+15,KNN,raw,1.24,0.0
+15,XGBoost,raw,1.24,7.6
+15,Random Forest,ranked,1.86,1.0
+15,SVM-RBF,ranked,2.48,0.0
+15,MLP,ranked,0.62,0.2
+15,KNN,ranked,3.11,0.0
+15,XGBoost,ranked,0.0,3.1
+15,AF native [64] 1v,native,2.36,4.2
+15,AF native [64] 7v,native,2.61,4.7
+15,AF native [128] 1v,native,4.1,7.2
+15,AF native [128] 7v,native,2.48,8.0
+15,"AF native [64,32] 7v",native,2.36,10.2
+15,AF proj [128] p1 7v,projection,1.99,6.2
+15,AF proj [128] p2 7v,projection,1.86,6.2
+20,Random Forest,raw,0.62,1.5
+20,SVM-RBF,raw,0.0,0.0
+20,MLP,raw,0.0,0.3
+20,KNN,raw,0.0,0.1
+20,XGBoost,raw,2.48,9.0
+20,Random Forest,ranked,0.0,1.2
+20,SVM-RBF,ranked,0.62,0.0
+20,MLP,ranked,0.62,0.3
+20,KNN,ranked,0.62,0.0
+20,XGBoost,ranked,0.0,3.5
+20,AF native [64] 1v,native,1.86,4.2
+20,AF native [64] 7v,native,1.24,4.6
+20,AF native [128] 1v,native,1.99,7.9
+20,AF native [128] 7v,native,1.12,8.8
+20,"AF native [64,32] 7v",native,1.12,10.4
+20,AF proj [128] p1 7v,projection,1.49,6.4
+20,AF proj [128] p2 7v,projection,0.37,6.4
+15,SVM-raw (mono: none),batch_monotone,0.62,0
+15,RF-raw (mono: none),batch_monotone,0.62,0
+15,SVM-ranked (mono: none),batch_monotone,2.48,0
+15,AF-native (mono: none),batch_monotone,2.48,0
+15,SVM-raw (mono: log(1+x)),batch_monotone,82.61,0
+15,RF-raw (mono: log(1+x)),batch_monotone,45.34,0
+15,SVM-ranked (mono: log(1+x)),batch_monotone,2.48,0
+15,AF-native (mono: log(1+x)),batch_monotone,2.48,0
+15,SVM-raw (mono: sqrt(|x|)),batch_monotone,82.61,0
+15,RF-raw (mono: sqrt(|x|)),batch_monotone,45.34,0
+15,SVM-ranked (mono: sqrt(|x|)),batch_monotone,2.48,0
+15,AF-native (mono: sqrt(|x|)),batch_monotone,2.48,0
+15,SVM-raw (mono: x^2 (signed)),batch_monotone,82.61,0
+15,RF-raw (mono: x^2 (signed)),batch_monotone,20.5,0
+15,SVM-ranked (mono: x^2 (signed)),batch_monotone,2.48,0
+15,AF-native (mono: x^2 (signed)),batch_monotone,2.48,0
+15,SVM-raw (mono: ×0.01 global),batch_monotone,82.61,0
+15,RF-raw (mono: ×0.01 global),batch_monotone,62.73,0
+15,SVM-ranked (mono: ×0.01 global),batch_monotone,2.48,0
+15,AF-native (mono: ×0.01 global),batch_monotone,2.48,0
+15,SVM-raw (mono: ×100 global),batch_monotone,82.61,0
+15,RF-raw (mono: ×100 global),batch_monotone,55.9,0
+15,SVM-ranked (mono: ×100 global),batch_monotone,2.48,0
+15,AF-native (mono: ×100 global),batch_monotone,2.48,0
+15,SVM-raw (gene σ=0.0),batch_pergene,0.62,0
+15,RF-raw (gene σ=0.0),batch_pergene,0.62,0
+15,SVM-ranked (gene σ=0.0),batch_pergene,2.48,0
+15,RF-ranked (gene σ=0.0),batch_pergene,1.24,0
+15,AF-native (gene σ=0.0),batch_pergene,2.48,0
+15,SVM-raw (gene σ=0.3),batch_pergene,0.0,0
+15,RF-raw (gene σ=0.3),batch_pergene,1.24,0
+15,SVM-ranked (gene σ=0.3),batch_pergene,1.24,0
+15,RF-ranked (gene σ=0.3),batch_pergene,1.24,0
+15,AF-native (gene σ=0.3),batch_pergene,2.86,0
+15,SVM-raw (gene σ=0.5),batch_pergene,16.77,0
+15,RF-raw (gene σ=0.5),batch_pergene,9.32,0
+15,SVM-ranked (gene σ=0.5),batch_pergene,0.62,0
+15,RF-ranked (gene σ=0.5),batch_pergene,1.86,0
+15,AF-native (gene σ=0.5),batch_pergene,2.48,0
+15,SVM-raw (gene σ=0.7),batch_pergene,59.01,0
+15,RF-raw (gene σ=0.7),batch_pergene,7.45,0
+15,SVM-ranked (gene σ=0.7),batch_pergene,9.32,0
+15,RF-ranked (gene σ=0.7),batch_pergene,8.07,0
+15,AF-native (gene σ=0.7),batch_pergene,10.31,0
+15,SVM-raw (gene σ=1.0),batch_pergene,71.43,0
+15,RF-raw (gene σ=1.0),batch_pergene,16.77,0
+15,SVM-ranked (gene σ=1.0),batch_pergene,9.32,0
+15,RF-ranked (gene σ=1.0),batch_pergene,20.5,0
+15,AF-native (gene σ=1.0),batch_pergene,12.67,0
+15,SVM-raw (gene σ=1.5),batch_pergene,82.61,0
+15,RF-raw (gene σ=1.5),batch_pergene,51.55,0
+15,SVM-ranked (gene σ=1.5),batch_pergene,43.48,0
+15,RF-ranked (gene σ=1.5),batch_pergene,34.16,0
+15,AF-native (gene σ=1.5),batch_pergene,60.75,0

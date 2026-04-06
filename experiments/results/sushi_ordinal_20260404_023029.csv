@@ -1,0 +1,13 @@
+dataset,method,encoding,error_pct
+sushi,Random Forest,numeric,35.2
+sushi,SVM-RBF,numeric,35.3
+sushi,MLP,numeric,38.7
+sushi,KNN,numeric,37.6
+sushi,XGBoost,numeric,35.9
+sushi,AF native [64] 1v,native,39.88
+sushi,AF native [128] 1v,native,39.14
+sushi,"AF native [64,32] 1v",native,39.14
+sushi,AF native [64] 7v,native,38.56
+sushi,AF native [128] 7v,native,38.94
+sushi,"AF native [64,32] 7v",native,38.32
+sushi,AF projection 7v,projection,48.88

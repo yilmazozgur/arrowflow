@@ -1,0 +1,85 @@
+dataset,method,data_mode,error_pct
+iris,Random Forest,raw,3.33
+iris,SVM-RBF,raw,3.33
+iris,MLP,raw,3.33
+iris,KNN,raw,3.33
+iris,XGBoost,raw,3.33
+iris,ArrowFlow,raw,4.44
+iris,Random Forest,ranked,3.33
+iris,SVM-RBF,ranked,3.33
+iris,MLP,ranked,0.0
+iris,KNN,ranked,6.67
+iris,XGBoost,ranked,3.33
+iris,ArrowFlow,ranked,2.22
+wine,Random Forest,raw,0.0
+wine,SVM-RBF,raw,2.78
+wine,MLP,raw,2.78
+wine,KNN,raw,0.0
+wine,XGBoost,raw,2.78
+wine,ArrowFlow,raw,4.63
+wine,Random Forest,ranked,0.0
+wine,SVM-RBF,ranked,5.56
+wine,MLP,ranked,2.78
+wine,KNN,ranked,2.78
+wine,XGBoost,ranked,2.78
+wine,ArrowFlow,ranked,6.48
+breast_cancer,Random Forest,raw,4.39
+breast_cancer,SVM-RBF,raw,1.75
+breast_cancer,MLP,raw,4.39
+breast_cancer,KNN,raw,2.63
+breast_cancer,XGBoost,raw,4.39
+breast_cancer,ArrowFlow,raw,2.92
+breast_cancer,Random Forest,ranked,4.39
+breast_cancer,SVM-RBF,ranked,3.51
+breast_cancer,MLP,ranked,5.26
+breast_cancer,KNN,ranked,4.39
+breast_cancer,XGBoost,ranked,4.39
+breast_cancer,ArrowFlow,ranked,9.94
+wine_quality,Random Forest,raw,25.94
+wine_quality,SVM-RBF,raw,30.63
+wine_quality,MLP,raw,30.31
+wine_quality,KNN,raw,29.69
+wine_quality,XGBoost,raw,24.06
+wine_quality,ArrowFlow,raw,36.88
+wine_quality,Random Forest,ranked,25.31
+wine_quality,SVM-RBF,ranked,34.38
+wine_quality,MLP,ranked,29.37
+wine_quality,KNN,ranked,30.31
+wine_quality,XGBoost,ranked,24.38
+wine_quality,ArrowFlow,ranked,34.48
+vehicle,Random Forest,raw,27.06
+vehicle,SVM-RBF,raw,14.12
+vehicle,MLP,raw,12.35
+vehicle,KNN,raw,27.06
+vehicle,XGBoost,raw,21.76
+vehicle,ArrowFlow,raw,18.43
+vehicle,Random Forest,ranked,26.47
+vehicle,SVM-RBF,ranked,17.65
+vehicle,MLP,ranked,22.35
+vehicle,KNN,ranked,28.24
+vehicle,XGBoost,ranked,21.76
+vehicle,ArrowFlow,ranked,22.55
+segment,Random Forest,raw,2.81
+segment,SVM-RBF,raw,3.25
+segment,MLP,raw,3.68
+segment,KNN,raw,4.11
+segment,XGBoost,raw,2.6
+segment,ArrowFlow,raw,4.83
+segment,Random Forest,ranked,3.03
+segment,SVM-RBF,ranked,3.03
+segment,MLP,ranked,3.25
+segment,KNN,ranked,5.41
+segment,XGBoost,ranked,2.6
+segment,ArrowFlow,ranked,5.27
+digits,Random Forest,raw,2.78
+digits,SVM-RBF,raw,1.67
+digits,MLP,raw,1.94
+digits,KNN,raw,2.22
+digits,XGBoost,raw,4.17
+digits,ArrowFlow,raw,4.81
+digits,Random Forest,ranked,3.89
+digits,SVM-RBF,ranked,3.33
+digits,MLP,ranked,3.33
+digits,KNN,ranked,2.78
+digits,XGBoost,ranked,3.33
+digits,ArrowFlow,ranked,5.28

@@ -1,0 +1,136 @@
+pca,n_train,method,error_pct,error_std,time_s,config
+16,1000,Random Forest,13.59,0,5.3,
+16,1000,SVM-RBF,11.22,0,0.3,
+16,1000,MLP,11.68,0,2.6,
+16,1000,KNN,13.93,0,0.1,
+16,1000,XGBoost,15.63,0,55.5,
+16,1000,AF [128] 2L 1v,28.94,0.73,5.3,filters=[128] iters=100 views=1 embed=32 lr=0.1
+16,1000,AF [128] 2L 7v,20.76,0.3,6.6,filters=[128] iters=100 views=7 embed=32 lr=0.1
+16,1000,AF [256] 2L 7v,19.36,0.13,12.6,filters=[256] iters=100 views=7 embed=32 lr=0.1
+16,1000,AF [256] 2L 7v lr.2,21.86,0.62,14.0,filters=[256] iters=100 views=7 embed=32 lr=0.2
+16,1000,AF [512] 2L 7v,18.81,0.21,26.5,filters=[512] iters=100 views=7 embed=32 lr=0.1
+16,1000,"AF [128,64] 3L 7v",18.08,0.19,15.0,"filters=[128, 64] iters=100 views=7 embed=32 lr=0.1"
+16,1000,"AF [256,128] 3L 7v",16.49,0.32,47.7,"filters=[256, 128] iters=100 views=7 embed=32 lr=0.1"
+16,1000,"AF [512,64] 3L 7v",16.34,0.04,73.1,"filters=[512, 64] iters=100 views=7 embed=32 lr=0.1"
+16,1000,"AF [1024,64] 3L 7v",16.57,0.23,248.9,"filters=[1024, 64] iters=100 views=7 embed=32 lr=0.1"
+16,1000,"AF [1024,128] 3L 7v",15.88,0.32,455.7,"filters=[1024, 128] iters=100 views=7 embed=32 lr=0.1"
+16,5000,Random Forest,10.43,0,48.0,
+16,5000,SVM-RBF,6.92,0,2.2,
+16,5000,MLP,8.54,0,15.8,
+16,5000,KNN,9.74,0,0.2,
+16,5000,XGBoost,10.2,0,569.1,
+16,5000,AF [128] 2L 1v,26.05,0.44,12.3,filters=[128] iters=200 views=1 embed=32 lr=0.1
+16,5000,AF [128] 2L 7v,18.01,0.18,14.6,filters=[128] iters=200 views=7 embed=32 lr=0.1
+16,5000,AF [256] 2L 7v,17.28,0.09,28.1,filters=[256] iters=200 views=7 embed=32 lr=0.1
+16,5000,AF [256] 2L 7v lr.2,18.62,0.14,29.1,filters=[256] iters=200 views=7 embed=32 lr=0.2
+16,5000,AF [512] 2L 7v,17.08,0.15,54.7,filters=[512] iters=200 views=7 embed=32 lr=0.1
+16,5000,"AF [128,64] 3L 7v",14.39,0.13,31.4,"filters=[128, 64] iters=200 views=7 embed=32 lr=0.1"
+16,5000,"AF [256,128] 3L 7v",13.17,0.11,92.0,"filters=[256, 128] iters=200 views=7 embed=32 lr=0.1"
+16,5000,"AF [512,64] 3L 7v",12.65,0.08,144.9,"filters=[512, 64] iters=200 views=7 embed=32 lr=0.1"
+16,5000,"AF [1024,64] 3L 7v",12.38,0.05,489.0,"filters=[1024, 64] iters=200 views=7 embed=32 lr=0.1"
+16,5000,"AF [1024,128] 3L 7v",12.16,0.15,886.4,"filters=[1024, 128] iters=200 views=7 embed=32 lr=0.1"
+16,10000,Random Forest,9.28,0,26.2,
+16,10000,SVM-RBF,5.98,0,1.8,
+16,10000,MLP,6.34,0,17.5,
+16,10000,KNN,8.41,0,0.4,
+16,10000,XGBoost,8.52,0,248.8,
+16,10000,AF [128] 2L 1v,25.14,0.57,28.7,filters=[128] iters=400 views=1 embed=32 lr=0.1
+16,10000,AF [128] 2L 7v,17.63,0.14,33.6,filters=[128] iters=400 views=7 embed=32 lr=0.1
+16,10000,AF [256] 2L 7v,16.62,0.25,61.9,filters=[256] iters=400 views=7 embed=32 lr=0.1
+16,10000,AF [256] 2L 7v lr.2,16.2,0.19,63.8,filters=[256] iters=400 views=7 embed=32 lr=0.2
+16,10000,AF [512] 2L 7v,15.97,0.06,121.3,filters=[512] iters=400 views=7 embed=32 lr=0.1
+16,10000,"AF [128,64] 3L 7v",13.45,0.02,66.2,"filters=[128, 64] iters=400 views=7 embed=32 lr=0.1"
+16,10000,"AF [256,128] 3L 7v",11.03,0.13,186.2,"filters=[256, 128] iters=400 views=7 embed=32 lr=0.1"
+16,10000,"AF [512,64] 3L 7v",10.65,0.12,293.3,"filters=[512, 64] iters=400 views=7 embed=32 lr=0.1"
+16,10000,"AF [1024,64] 3L 7v",10.14,0.15,970.8,"filters=[1024, 64] iters=400 views=7 embed=32 lr=0.1"
+16,10000,"AF [1024,128] 3L 7v",9.84,0.14,1745.6,"filters=[1024, 128] iters=400 views=7 embed=32 lr=0.1"
+32,1000,Random Forest,12.25,0,6.9,
+32,1000,SVM-RBF,10.55,0,0.3,
+32,1000,MLP,10.47,0,1.9,
+32,1000,KNN,13.68,0,0.1,
+32,1000,XGBoost,14.0,0,97.9,
+32,1000,AF [128] 2L 1v,25.72,1.12,5.1,filters=[128] iters=100 views=1 embed=32 lr=0.1
+32,1000,AF [128] 2L 7v,18.03,0.08,6.7,filters=[128] iters=100 views=7 embed=32 lr=0.1
+32,1000,AF [256] 2L 7v,17.38,0.14,13.4,filters=[256] iters=100 views=7 embed=32 lr=0.1
+32,1000,AF [256] 2L 7v lr.2,19.26,0.06,13.9,filters=[256] iters=100 views=7 embed=32 lr=0.2
+32,1000,AF [512] 2L 7v,17.12,0.18,27.5,filters=[512] iters=100 views=7 embed=32 lr=0.1
+32,1000,"AF [128,64] 3L 7v",17.86,0.13,16.2,"filters=[128, 64] iters=100 views=7 embed=32 lr=0.1"
+32,1000,"AF [256,128] 3L 7v",16.66,0.22,51.7,"filters=[256, 128] iters=100 views=7 embed=32 lr=0.1"
+32,1000,"AF [512,64] 3L 7v",15.77,0.21,74.4,"filters=[512, 64] iters=100 views=7 embed=32 lr=0.1"
+32,1000,"AF [1024,64] 3L 7v",15.56,0.16,257.9,"filters=[1024, 64] iters=100 views=7 embed=32 lr=0.1"
+32,1000,"AF [1024,128] 3L 7v",15.75,0.22,468.4,"filters=[1024, 128] iters=100 views=7 embed=32 lr=0.1"
+32,5000,Random Forest,8.8,0,62.2,
+32,5000,SVM-RBF,6.15,0,2.7,
+32,5000,MLP,5.74,0,12.5,
+32,5000,KNN,8.51,0,0.4,
+32,5000,XGBoost,9.24,0,1054.3,
+32,5000,AF [128] 2L 1v,22.61,0.27,11.9,filters=[128] iters=200 views=1 embed=32 lr=0.1
+32,5000,AF [128] 2L 7v,16.15,0.12,14.9,filters=[128] iters=200 views=7 embed=32 lr=0.1
+32,5000,AF [256] 2L 7v,15.38,0.32,28.0,filters=[256] iters=200 views=7 embed=32 lr=0.1
+32,5000,AF [256] 2L 7v lr.2,15.98,0.15,29.2,filters=[256] iters=200 views=7 embed=32 lr=0.2
+32,5000,AF [512] 2L 7v,14.77,0.21,56.2,filters=[512] iters=200 views=7 embed=32 lr=0.1
+32,5000,"AF [128,64] 3L 7v",14.67,0.06,33.1,"filters=[128, 64] iters=200 views=7 embed=32 lr=0.1"
+32,5000,"AF [256,128] 3L 7v",12.81,0.05,98.9,"filters=[256, 128] iters=200 views=7 embed=32 lr=0.1"
+32,5000,"AF [512,64] 3L 7v",12.33,0.23,149.8,"filters=[512, 64] iters=200 views=7 embed=32 lr=0.1"
+32,5000,"AF [1024,64] 3L 7v",11.95,0.17,497.0,"filters=[1024, 64] iters=200 views=7 embed=32 lr=0.1"
+32,5000,"AF [1024,128] 3L 7v",11.36,0.01,901.5,"filters=[1024, 128] iters=200 views=7 embed=32 lr=0.1"
+32,10000,Random Forest,7.66,0,32.1,
+32,10000,SVM-RBF,4.78,0,2.1,
+32,10000,MLP,4.56,0,9.8,
+32,10000,KNN,7.48,0,0.4,
+32,10000,XGBoost,7.02,0,487.4,
+32,10000,AF [128] 2L 1v,21.78,0.31,28.1,filters=[128] iters=400 views=1 embed=32 lr=0.1
+32,10000,AF [128] 2L 7v,15.53,0.21,33.8,filters=[128] iters=400 views=7 embed=32 lr=0.1
+32,10000,AF [256] 2L 7v,14.98,0.17,62.8,filters=[256] iters=400 views=7 embed=32 lr=0.1
+32,10000,AF [256] 2L 7v lr.2,15.42,0.08,65.5,filters=[256] iters=400 views=7 embed=32 lr=0.2
+32,10000,AF [512] 2L 7v,14.37,0.02,121.8,filters=[512] iters=400 views=7 embed=32 lr=0.1
+32,10000,"AF [128,64] 3L 7v",13.47,0.12,69.8,"filters=[128, 64] iters=400 views=7 embed=32 lr=0.1"
+32,10000,"AF [256,128] 3L 7v",10.76,0.12,196.3,"filters=[256, 128] iters=400 views=7 embed=32 lr=0.1"
+32,10000,"AF [512,64] 3L 7v",10.65,0.08,297.8,"filters=[512, 64] iters=400 views=7 embed=32 lr=0.1"
+32,10000,"AF [1024,64] 3L 7v",9.54,0.08,989.3,"filters=[1024, 64] iters=400 views=7 embed=32 lr=0.1"
+32,10000,"AF [1024,128] 3L 7v",9.32,0.05,1790.7,"filters=[1024, 128] iters=400 views=7 embed=32 lr=0.1"
+64,1000,Random Forest,11.37,0,10.0,
+64,1000,SVM-RBF,10.84,0,0.3,
+64,1000,MLP,11.33,0,1.8,
+64,1000,KNN,15.18,0,0.1,
+64,1000,XGBoost,14.47,0,184.8,
+64,1000,AF [128] 2L 1v,23.6,0.24,7.3,filters=[128] iters=100 views=1 embed=64 lr=0.1
+64,1000,AF [128] 2L 7v,16.52,0.12,10.2,filters=[128] iters=100 views=7 embed=64 lr=0.1
+64,1000,AF [256] 2L 7v,16.19,0.31,19.6,filters=[256] iters=100 views=7 embed=64 lr=0.1
+64,1000,AF [256] 2L 7v lr.2,17.83,0.28,20.6,filters=[256] iters=100 views=7 embed=64 lr=0.2
+64,1000,AF [512] 2L 7v,15.68,0.06,41.1,filters=[512] iters=100 views=7 embed=64 lr=0.1
+64,1000,"AF [128,64] 3L 7v",18.34,0.26,19.3,"filters=[128, 64] iters=100 views=7 embed=64 lr=0.1"
+64,1000,"AF [256,128] 3L 7v",16.08,0.11,54.6,"filters=[256, 128] iters=100 views=7 embed=64 lr=0.1"
+64,1000,"AF [512,64] 3L 7v",15.92,0.13,87.2,"filters=[512, 64] iters=100 views=7 embed=64 lr=0.1"
+64,1000,"AF [1024,64] 3L 7v",15.63,0.12,283.4,"filters=[1024, 64] iters=100 views=7 embed=64 lr=0.1"
+64,1000,"AF [1024,128] 3L 7v",15.25,0.18,501.0,"filters=[1024, 128] iters=100 views=7 embed=64 lr=0.1"
+64,5000,Random Forest,8.34,0,95.2,
+64,5000,SVM-RBF,5.97,0,3.4,
+64,5000,MLP,5.81,0,10.1,
+64,5000,KNN,8.7,0,0.5,
+64,5000,XGBoost,8.72,0,2045.8,
+64,5000,AF [128] 2L 1v,20.72,0.2,16.9,filters=[128] iters=200 views=1 embed=64 lr=0.1
+64,5000,AF [128] 2L 7v,14.2,0.09,21.9,filters=[128] iters=200 views=7 embed=64 lr=0.1
+64,5000,AF [256] 2L 7v,13.64,0.12,41.9,filters=[256] iters=200 views=7 embed=64 lr=0.1
+64,5000,AF [256] 2L 7v lr.2,14.63,0.24,43.0,filters=[256] iters=200 views=7 embed=64 lr=0.2
+64,5000,AF [512] 2L 7v,13.33,0.02,82.5,filters=[512] iters=200 views=7 embed=64 lr=0.1
+64,5000,"AF [128,64] 3L 7v",15.24,0.23,40.6,"filters=[128, 64] iters=200 views=7 embed=64 lr=0.1"
+64,5000,"AF [256,128] 3L 7v",12.83,0.02,113.9,"filters=[256, 128] iters=200 views=7 embed=64 lr=0.1"
+64,5000,"AF [512,64] 3L 7v",12.28,0.13,176.6,"filters=[512, 64] iters=200 views=7 embed=64 lr=0.1"
+64,5000,"AF [1024,64] 3L 7v",12.04,0.06,554.5,"filters=[1024, 64] iters=200 views=7 embed=64 lr=0.1"
+64,5000,"AF [1024,128] 3L 7v",11.22,0.1,973.3,"filters=[1024, 128] iters=200 views=7 embed=64 lr=0.1"
+64,10000,Random Forest,7.24,0,50.9,
+64,10000,SVM-RBF,4.94,0,2.7,
+64,10000,MLP,4.23,0,9.3,
+64,10000,KNN,7.22,0,0.5,
+64,10000,XGBoost,6.74,0,952.1,
+64,10000,AF [128] 2L 1v,18.65,0.44,41.0,filters=[128] iters=400 views=1 embed=64 lr=0.1
+64,10000,AF [128] 2L 7v,13.26,0.12,49.7,filters=[128] iters=400 views=7 embed=64 lr=0.1
+64,10000,AF [256] 2L 7v,12.45,0.09,88.1,filters=[256] iters=400 views=7 embed=64 lr=0.1
+64,10000,AF [256] 2L 7v lr.2,12.94,0.04,92.7,filters=[256] iters=400 views=7 embed=64 lr=0.2
+64,10000,AF [512] 2L 7v,12.59,0.11,175.1,filters=[512] iters=400 views=7 embed=64 lr=0.1
+64,10000,"AF [128,64] 3L 7v",13.28,0.12,86.9,"filters=[128, 64] iters=400 views=7 embed=64 lr=0.1"
+64,10000,"AF [256,128] 3L 7v",11.04,0.09,220.8,"filters=[256, 128] iters=400 views=7 embed=64 lr=0.1"
+64,10000,"AF [512,64] 3L 7v",10.2,0.11,346.5,"filters=[512, 64] iters=400 views=7 embed=64 lr=0.1"
+64,10000,"AF [1024,64] 3L 7v",9.42,0.07,1109.1,"filters=[1024, 64] iters=400 views=7 embed=64 lr=0.1"
+64,10000,"AF [1024,128] 3L 7v",9.09,0.03,1910.0,"filters=[1024, 128] iters=400 views=7 embed=64 lr=0.1"

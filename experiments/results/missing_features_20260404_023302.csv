@@ -1,0 +1,169 @@
+dataset,method,mask_frac,error_mean,error_std,error_stderr,n_realizations
+iris,Random Forest,0.0,3.33,0.0,0.0,5
+iris,SVM-RBF,0.0,3.33,0.0,0.0,5
+iris,MLP,0.0,3.33,0.0,0.0,5
+iris,KNN,0.0,3.33,0.0,0.0,5
+iris,XGBoost,0.0,3.33,0.0,0.0,5
+iris,ArrowFlow,0.0,4.44,0.0,0.0,5
+iris,Random Forest,0.1,9.33,3.27,1.46,5
+iris,SVM-RBF,0.1,10.67,5.73,2.56,5
+iris,MLP,0.1,15.33,8.84,3.96,5
+iris,KNN,0.1,10.67,4.42,1.98,5
+iris,XGBoost,0.1,15.33,1.63,0.73,5
+iris,ArrowFlow,0.1,11.78,4.95,2.21,5
+iris,Random Forest,0.3,10.0,2.11,0.94,5
+iris,SVM-RBF,0.3,15.33,4.99,2.23,5
+iris,MLP,0.3,20.67,4.9,2.19,5
+iris,KNN,0.3,14.0,2.49,1.12,5
+iris,XGBoost,0.3,14.67,3.4,1.52,5
+iris,ArrowFlow,0.3,16.0,1.66,0.74,5
+iris,Random Forest,0.5,29.33,4.9,2.19,5
+iris,SVM-RBF,0.5,36.0,5.33,2.39,5
+iris,MLP,0.5,33.33,3.65,1.63,5
+iris,KNN,0.5,37.33,5.33,2.39,5
+iris,XGBoost,0.5,34.67,6.18,2.76,5
+iris,ArrowFlow,0.5,24.67,1.91,0.85,5
+wine,Random Forest,0.0,0.0,0.0,0.0,5
+wine,SVM-RBF,0.0,2.78,0.0,0.0,5
+wine,MLP,0.0,2.78,0.0,0.0,5
+wine,KNN,0.0,0.0,0.0,0.0,5
+wine,XGBoost,0.0,2.78,0.0,0.0,5
+wine,ArrowFlow,0.0,4.63,0.0,0.0,5
+wine,Random Forest,0.1,1.11,2.22,0.99,5
+wine,SVM-RBF,0.1,3.89,1.36,0.61,5
+wine,MLP,0.1,3.33,2.72,1.22,5
+wine,KNN,0.1,3.33,2.08,0.93,5
+wine,XGBoost,0.1,3.33,1.11,0.5,5
+wine,ArrowFlow,0.1,5.74,1.59,0.71,5
+wine,Random Forest,0.3,5.56,3.51,1.57,5
+wine,SVM-RBF,0.3,6.11,1.11,0.5,5
+wine,MLP,0.3,7.78,2.08,0.93,5
+wine,KNN,0.3,10.56,5.39,2.41,5
+wine,XGBoost,0.3,6.67,2.83,1.27,5
+wine,ArrowFlow,0.3,8.52,2.95,1.32,5
+wine,Random Forest,0.5,7.22,4.51,2.02,5
+wine,SVM-RBF,0.5,11.67,3.24,1.45,5
+wine,MLP,0.5,12.22,5.72,2.56,5
+wine,KNN,0.5,11.11,4.3,1.92,5
+wine,XGBoost,0.5,10.0,5.15,2.3,5
+wine,ArrowFlow,0.5,11.11,3.04,1.36,5
+breast_cancer,Random Forest,0.0,4.39,0.0,0.0,5
+breast_cancer,SVM-RBF,0.0,1.75,0.0,0.0,5
+breast_cancer,MLP,0.0,4.39,0.0,0.0,5
+breast_cancer,KNN,0.0,2.63,0.0,0.0,5
+breast_cancer,XGBoost,0.0,4.39,0.0,0.0,5
+breast_cancer,ArrowFlow,0.0,2.92,0.0,0.0,5
+breast_cancer,Random Forest,0.1,4.39,0.0,0.0,5
+breast_cancer,SVM-RBF,0.1,2.46,0.86,0.38,5
+breast_cancer,MLP,0.1,4.21,0.35,0.16,5
+breast_cancer,KNN,0.1,2.98,0.89,0.4,5
+breast_cancer,XGBoost,0.1,4.39,0.55,0.25,5
+breast_cancer,ArrowFlow,0.1,3.51,0.61,0.27,5
+breast_cancer,Random Forest,0.3,4.91,1.19,0.53,5
+breast_cancer,SVM-RBF,0.3,3.33,1.29,0.58,5
+breast_cancer,MLP,0.3,4.56,1.16,0.52,5
+breast_cancer,KNN,0.3,4.21,1.7,0.76,5
+breast_cancer,XGBoost,0.3,5.44,0.86,0.38,5
+breast_cancer,ArrowFlow,0.3,4.85,1.3,0.58,5
+breast_cancer,Random Forest,0.5,5.96,0.35,0.16,5
+breast_cancer,SVM-RBF,0.5,5.09,1.16,0.52,5
+breast_cancer,MLP,0.5,5.79,1.19,0.53,5
+breast_cancer,KNN,0.5,4.21,1.02,0.46,5
+breast_cancer,XGBoost,0.5,9.65,2.48,1.11,5
+breast_cancer,ArrowFlow,0.5,6.67,1.07,0.48,5
+wine_quality,Random Forest,0.0,25.94,0.0,0.0,5
+wine_quality,SVM-RBF,0.0,30.63,0.0,0.0,5
+wine_quality,MLP,0.0,30.31,0.0,0.0,5
+wine_quality,KNN,0.0,29.69,0.0,0.0,5
+wine_quality,XGBoost,0.0,24.06,0.0,0.0,5
+wine_quality,ArrowFlow,0.0,36.88,0.0,0.0,5
+wine_quality,Random Forest,0.1,27.31,0.98,0.44,5
+wine_quality,SVM-RBF,0.1,33.56,1.21,0.54,5
+wine_quality,MLP,0.1,35.88,1.0,0.45,5
+wine_quality,KNN,0.1,32.0,0.85,0.38,5
+wine_quality,XGBoost,0.1,26.38,0.87,0.39,5
+wine_quality,ArrowFlow,0.1,39.96,1.15,0.51,5
+wine_quality,Random Forest,0.3,33.69,0.85,0.38,5
+wine_quality,SVM-RBF,0.3,40.31,1.67,0.74,5
+wine_quality,MLP,0.3,42.56,2.34,1.05,5
+wine_quality,KNN,0.3,38.56,1.88,0.84,5
+wine_quality,XGBoost,0.3,34.38,2.0,0.89,5
+wine_quality,ArrowFlow,0.3,44.25,1.91,0.85,5
+wine_quality,Random Forest,0.5,42.12,2.8,1.25,5
+wine_quality,SVM-RBF,0.5,42.44,1.57,0.7,5
+wine_quality,MLP,0.5,46.25,2.26,1.01,5
+wine_quality,KNN,0.5,43.94,1.68,0.75,5
+wine_quality,XGBoost,0.5,41.88,2.78,1.24,5
+wine_quality,ArrowFlow,0.5,47.25,1.25,0.56,5
+vehicle,Random Forest,0.0,27.06,0.0,0.0,5
+vehicle,SVM-RBF,0.0,14.12,0.0,0.0,5
+vehicle,MLP,0.0,12.35,0.0,0.0,5
+vehicle,KNN,0.0,27.06,0.0,0.0,5
+vehicle,XGBoost,0.0,21.76,0.0,0.0,5
+vehicle,ArrowFlow,0.0,18.43,0.0,0.0,5
+vehicle,Random Forest,0.1,29.53,1.46,0.65,5
+vehicle,SVM-RBF,0.1,23.06,1.91,0.85,5
+vehicle,MLP,0.1,22.94,2.6,1.16,5
+vehicle,KNN,0.1,26.82,1.52,0.68,5
+vehicle,XGBoost,0.1,24.24,1.72,0.77,5
+vehicle,ArrowFlow,0.1,33.61,3.47,1.55,5
+vehicle,Random Forest,0.3,43.29,2.54,1.14,5
+vehicle,SVM-RBF,0.3,40.59,3.85,1.72,5
+vehicle,MLP,0.3,40.71,3.38,1.51,5
+vehicle,KNN,0.3,35.76,5.12,2.29,5
+vehicle,XGBoost,0.3,37.53,1.2,0.54,5
+vehicle,ArrowFlow,0.3,53.29,2.02,0.9,5
+vehicle,Random Forest,0.5,54.12,3.13,1.4,5
+vehicle,SVM-RBF,0.5,50.94,4.35,1.94,5
+vehicle,MLP,0.5,48.12,4.78,2.14,5
+vehicle,KNN,0.5,46.94,4.52,2.02,5
+vehicle,XGBoost,0.5,49.29,2.61,1.17,5
+vehicle,ArrowFlow,0.5,60.59,3.38,1.51,5
+segment,Random Forest,0.0,2.81,0.0,0.0,5
+segment,SVM-RBF,0.0,3.25,0.0,0.0,5
+segment,MLP,0.0,3.68,0.0,0.0,5
+segment,KNN,0.0,4.11,0.0,0.0,5
+segment,XGBoost,0.0,2.6,0.0,0.0,5
+segment,ArrowFlow,0.0,4.83,0.0,0.0,5
+segment,Random Forest,0.1,4.16,0.35,0.15,5
+segment,SVM-RBF,0.1,6.41,0.35,0.16,5
+segment,MLP,0.1,5.89,0.37,0.17,5
+segment,KNN,0.1,4.42,0.32,0.14,5
+segment,XGBoost,0.1,4.59,0.29,0.13,5
+segment,ArrowFlow,0.1,11.26,0.38,0.17,5
+segment,Random Forest,0.3,15.11,0.94,0.42,5
+segment,SVM-RBF,0.3,25.24,1.72,0.77,5
+segment,MLP,0.3,21.73,2.18,0.98,5
+segment,KNN,0.3,13.38,1.19,0.53,5
+segment,XGBoost,0.3,17.14,0.79,0.35,5
+segment,ArrowFlow,0.3,30.68,0.69,0.31,5
+segment,Random Forest,0.5,40.39,2.17,0.97,5
+segment,SVM-RBF,0.5,49.13,2.21,0.99,5
+segment,MLP,0.5,40.35,1.53,0.68,5
+segment,KNN,0.5,37.75,2.77,1.24,5
+segment,XGBoost,0.5,39.39,2.87,1.28,5
+segment,ArrowFlow,0.5,51.31,1.89,0.84,5
+digits,Random Forest,0.0,2.78,0.0,0.0,5
+digits,SVM-RBF,0.0,1.67,0.0,0.0,5
+digits,MLP,0.0,1.94,0.0,0.0,5
+digits,KNN,0.0,2.22,0.0,0.0,5
+digits,XGBoost,0.0,4.17,0.0,0.0,5
+digits,ArrowFlow,0.0,4.81,0.0,0.0,5
+digits,Random Forest,0.1,4.22,0.71,0.32,5
+digits,SVM-RBF,0.1,2.33,0.33,0.15,5
+digits,MLP,0.1,3.28,0.48,0.21,5
+digits,KNN,0.1,2.72,0.64,0.29,5
+digits,XGBoost,0.1,7.83,1.46,0.65,5
+digits,ArrowFlow,0.1,6.46,0.63,0.28,5
+digits,Random Forest,0.3,12.22,0.84,0.38,5
+digits,SVM-RBF,0.3,7.28,1.63,0.73,5
+digits,MLP,0.3,6.28,1.92,0.86,5
+digits,KNN,0.3,5.83,1.22,0.54,5
+digits,XGBoost,0.3,19.44,1.42,0.63,5
+digits,ArrowFlow,0.3,13.07,1.92,0.86,5
+digits,Random Forest,0.5,34.72,2.23,1.0,5
+digits,SVM-RBF,0.5,25.0,1.95,0.87,5
+digits,MLP,0.5,13.39,1.22,0.55,5
+digits,KNN,0.5,16.56,1.74,0.78,5
+digits,XGBoost,0.5,38.94,2.86,1.28,5
+digits,ArrowFlow,0.5,23.72,1.35,0.6,5
