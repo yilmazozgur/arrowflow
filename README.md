@@ -2,7 +2,7 @@
 
 **Hierarchical Machine Learning in the Space of Permutations**
 
-[Read the paper (PDF)](manuscript/ArrowFlow_Yilmaz_2026.pdf)
+[arXiv:2604.04087](https://arxiv.org/abs/2604.04087) | [Read the paper (PDF)](manuscript/ArrowFlow_Yilmaz_2026.pdf)
 
 ArrowFlow is a machine learning architecture that operates entirely in the space of permutations. Its computational units are *ranking filters* -- learned orderings that compare inputs via Spearman's footrule distance and update through permutation-matrix accumulation, a non-gradient rule rooted in displacement evidence.
 
@@ -72,7 +72,7 @@ Results are saved to `experiments/results/`.
 
 ## Manuscript
 
-The full paper is in `manuscript/`. Preprint: [arXiv (coming soon)]
+The full paper is in `manuscript/`. Preprint: [arXiv:2604.04087](https://arxiv.org/abs/2604.04087)
 
 ## Citation
 
@@ -80,7 +80,7 @@ The full paper is in `manuscript/`. Preprint: [arXiv (coming soon)]
 @article{yilmaz2026arrowflow,
   title={ArrowFlow: Hierarchical Machine Learning in the Space of Permutations},
   author={Yilmaz, Ozgur},
-  journal={arXiv preprint},
+  journal={arXiv preprint arXiv:2604.04087},
   year={2026}
 }
 ```
