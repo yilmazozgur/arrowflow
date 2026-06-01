@@ -12,7 +12,7 @@ import pickle
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn.cluster import DBSCAN, SpectralClustering
+from sklearn.cluster import SpectralClustering
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from scipy import stats
 from scipy.spatial import distance_matrix, distance
@@ -35,65 +35,6 @@ class DataGraph:
     # Methods for data generation/transformation related with SortFlow algorithm
     def __init__(self, id_key):
         self.id = id_key
-
-    def load_sliding15(self):
-        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'docs', 'examples_4x4.json'))
-        with open(file_path, "rt") as fp:
-            sliding16_db = json.load(fp)
-
-        data_net = []
-        max_length_solution = 0
-        data_iter = 0
-        for board, solution in sliding16_db:
-            # Convert 2D list board to 1D list
-            vec_board = [str(item) for sublist in board for item in sublist]
-            length_solution = len(solution)
-            if length_solution > max_length_solution:
-                max_length_solution = length_solution
-            data_net.append([list(map(str, vec_board)), str(length_solution), 1])
-            data_iter += 1
-            print(data_iter)
-
-        # Split into train and test
-        np.random.shuffle(data_net)
-        split_index = int(len(data_net) * 0.8)
-        data_train_net = data_net[:split_index]
-        data_test_net = data_net[split_index:]
-        dataset_sliding_8 = {"data_train": data_train_net, "data_test": data_test_net,
-                         "adj_list_input": list(map(str, [i for i in range(0, 9)])),
-                         "number_of_classes": max_length_solution + 1, "max_input_size": 9}
-
-        # Save into pkl file
-        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'docs', 'sliding15.pkl'))
-        joblib.dump(dataset_sliding_8, file_path)
-
-    def load_sliding8(self):
-        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'docs', 'examples_3x3.json'))
-        with open(file_path, "rt") as fp:
-            sliding9_db = json.load(fp)
-
-        data_net = []
-        max_length_solution = 0
-        for board, solution in sliding9_db:
-            # Convert 2D list board to 1D list
-            vec_board = [str(item) for sublist in board for item in sublist]
-            length_solution = len(solution)
-            if length_solution > max_length_solution:
-                max_length_solution = length_solution
-            data_net.append([list(map(str, vec_board)), str(length_solution), 1])
-
-        # Split into train and test
-        np.random.shuffle(data_net)
-        split_index = int(len(data_net) * 0.8)
-        data_train_net = data_net[:split_index]
-        data_test_net = data_net[split_index:]
-        dataset_sliding_8 = {"data_train": data_train_net, "data_test": data_test_net,
-                         "adj_list_input": list(map(str, [i for i in range(0, 9)])),
-                         "number_of_classes": max_length_solution + 1, "max_input_size": 9}
-
-        # Save into pkl file
-        file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'docs', 'sliding8.pkl'))
-        joblib.dump(dataset_sliding_8, file_path)
 
     def swapPositions(self, list, pos1, pos2):
         list[pos1], list[pos2] = list[pos2], list[pos1]
@@ -807,9 +748,6 @@ class Vertex:
         self.idx_correction_cumsum = self.update_idx_correction_cumsum()
         self.missing_data_cost_weight = sortnet_config.missing_data_cost_weight #1
         self.layer_type = layer_type
-        self.dist_nonlinearity = min(sortnet_config.dist_nonlinearity, 1)
-        self.min_motion_zeroed = sortnet_config.min_motion_zeroed
-        self.apply_nonlinearity_distance = sortnet_config.apply_nonlinearity_distance
         self.distance_computation_metric = sortnet_config.distance_computation_metric
         self.average_method_position = sortnet_config.average_method_position
         self.normalize_motion_for_rf = True
@@ -845,7 +783,6 @@ class Vertex:
     def distance_cost_computation(self,motion_vector):
         cost = 0
         if motion_vector.shape[0]>0:
-            # motion_vector = self.nonlinear_distance_function(motion_vector)
             if self.distance_computation_metric == 'l1':
                 cost = (np.sum(np.abs(motion_vector)))
             elif self.distance_computation_metric == 'l2':
@@ -865,22 +802,6 @@ class Vertex:
     def relu(self, x):
         return (np.maximum(0, x))
         # return (np.maximum(0.1*x, x))
-
-    def nonlinear_distance_function(self, distance, func='affine'):
-        extent = distance.shape[0]
-        if func == 'sine':
-            distance_nonlinear = np.sin(np.pi * distance/(extent))
-        elif func == 'square':
-            distance_nonlinear = np.square(distance - extent/3)
-        elif func == 'relu':
-            distance_nonlinear = self.relu(distance)
-        elif func == 'affine':
-            distance_nonlinear = np.round(self.dist_nonlinearity*distance +
-                                          (0.9-self.dist_nonlinearity)*np.sign(distance)*extent)
-        else:
-            distance_nonlinear = distance
-
-        return distance_nonlinear
 
     # The most important function that computes the distance between two filters (sorted set). Edit distance is implemented.
     def compute_distance(self, adj_list_comp, direction='affinity', magnitude=1, compute_stage='feedforward'):
@@ -1007,12 +928,6 @@ class Vertex:
         else:
             pos1 = pos1_list[0]
             pos2 = pos2_list[0]
-        distance_estimated = pos2 - pos1
-        motion_indices[pos1] = distance_estimated
-
-    def compute_motion_indices_fast_furious(self, adj_list_comp, adj_vertex, motion_indices):
-        pos1 = self.adjacency_list_dict[adj_vertex][0]
-        pos2 = adj_list_comp.index(adj_vertex)
         distance_estimated = pos2 - pos1
         motion_indices[pos1] = distance_estimated
 
@@ -1258,7 +1173,6 @@ class SortFlowHybridNetwork:
         self.last_layer_update = sortnet_config.last_layer_update
         self.num_of_epochs = 0
         self.min_error_val = 100
-        self.nonlinear_activation = sortnet_config.nonlinear_activation
         self.no_of_classes = number_of_classes
         self.max_val_data = None
         self.min_val_data = None

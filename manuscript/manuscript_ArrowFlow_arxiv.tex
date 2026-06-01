@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage{amsmath}
 \usepackage{graphicx}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{natbib}
 \usepackage{amsthm}
 \usepackage{amssymb}
@@ -22,6 +22,7 @@
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
 \newcommand{\argsort}{\mathrm{argsort}}
+\newcommand{\orderdesc}{\mathrm{argsort}_{\downarrow}}
 \newcommand{\rankop}{\mathrm{rank}}
 \newcommand{\softmax}{\mathrm{softmax}}
 
@@ -45,11 +46,11 @@
 % ABSTRACT
 % ============================================================================
 \begin{abstract}
-We introduce \textbf{ArrowFlow}, a machine learning architecture that operates entirely in the space of permutations. Its computational units are \emph{ranking filters}---learned orderings that compare inputs via Spearman's footrule distance and update through permutation-matrix accumulation, a non-gradient rule rooted in displacement evidence. Layers compose hierarchically: each layer's output ranking becomes the next layer's input, enabling deep ordinal representation learning without any floating-point parameters in the core computation.
+We introduce \textbf{ArrowFlow}, a machine learning architecture whose core layers operate entirely in the space of permutations (real-valued inputs are first encoded into permutations by a preprocessing pipeline). Its computational units are \emph{ranking filters}---learned orderings that compare inputs via Spearman's footrule distance and update through permutation-matrix accumulation, a non-gradient rule rooted in displacement evidence. Layers compose hierarchically: each layer's output ranking becomes the next layer's input, enabling deep ordinal representation learning without any floating-point parameters in the core computation.
 
-An encoding pipeline (polynomial expansion, random projection, argsort) bridges real-valued data and the permutation world, while a multi-view ensemble---independent networks trained on diverse projections, combined by majority vote---compensates for information lost in the ordinal encoding. We connect the architecture to Arrow's impossibility theorem, showing that violations of social-choice fairness axioms (context dependence, specialization, symmetry breaking) serve as inductive biases for nonlinearity, sparsity, and stability.
+An encoding pipeline (polynomial expansion, random projection, argsort) bridges real-valued data and the permutation world, while a multi-view ensemble---independent networks trained on diverse projections, combined by majority vote---compensates for information lost in the ordinal encoding. We connect the architecture to Arrow's impossibility theorem: the rank aggregation performed by its learning rule provably violates the independence-of-irrelevant-alternatives axiom, and we argue that such social-choice non-neutrality (context dependence, specialization, symmetry breaking) acts as an inductive bias for nonlinearity, sparsity, and stability.
 
-Experiments span UCI tabular benchmarks, MNIST, gene expression cancer classification (TCGA), and preference data, all against GridSearchCV-tuned baselines. ArrowFlow beats all baselines on Iris (2.7\% vs.\ 3.3\%) and is competitive on most UCI datasets. On gene expression data, rank-based methods achieve \emph{perfect invariance} to monotone batch effects (stable at 2.5\% where SVM on raw values collapses to 82.6\%). On MNIST via PCA, ArrowFlow reaches 9.1\% error using only ordinal comparisons, with strong scaling as network width and depth increase. A single parameter---polynomial degree---acts as a master switch: degree 1 yields noise robustness (8--28\% less degradation), privacy preservation (+0.5pp cost), and missing-feature resilience; higher degrees trade these for improved clean accuracy.
+Experiments span UCI tabular benchmarks, MNIST, gene expression cancer classification (TCGA), and preference data, all against GridSearchCV-tuned baselines. ArrowFlow matches the best tuned baselines on Iris (2.7\% vs.\ 3.3\%; a sub-sample margin, and its configuration was selected on the test split---a proof-of-concept rather than a fair head-to-head, see protocol) and is competitive on most UCI datasets. Against a nearest-neighbor classifier on the \emph{same} encoded permutations, the learned filters cut error by 2.5--12.5$\times$, evidence that the learning rule contributes beyond the encoding. On gene expression data, rank-based methods are \emph{exactly invariant} to strictly monotone within-sample transformations (stable at 2.5\% where SVM on raw values collapses to 82.6\%)---a property of the ordinal representation that ArrowFlow embodies architecturally rather than a unique advantage of the method. On MNIST via PCA, ArrowFlow reaches 9.1\% error using only ordinal comparisons, with strong scaling as network width and depth increase. A single parameter---polynomial degree---acts as a master switch: degree 1 yields noise robustness (8--28\% less degradation), rank-only (magnitude-hiding) robustness (+0.5pp cost), and missing-feature resilience; higher degrees trade these for improved clean accuracy.
 
 ArrowFlow is not designed to surpass gradient-based methods. It is an existence proof that competitive classification is possible in a fundamentally different computational paradigm---one that elevates ordinal structure to a first-class citizen, with natural alignment to integer-only and neuromorphic hardware.
 
@@ -65,7 +66,7 @@ ArrowFlow is not designed to surpass gradient-based methods. It is an existence 
 
 The dominant paradigm in modern machine learning represents data as real-valued tensors and learns transformations through gradient descent on differentiable, continuous parameter spaces. While extraordinarily successful, this paradigm has fundamental limitations when the underlying structure of data is \emph{ordinal} or \emph{relational} rather than metric. Consider classifying sequences by their ordering pattern: the sequence $[1, 2, 3, 4, 5]$ is ``ascending'' and $[5, 4, 3, 2, 1]$ is ``descending.'' The essential information is not the magnitude of elements but their \emph{relative ordering}---a combinatorial, not metric, property.
 
-ArrowFlow is built on the premise that \textbf{the fundamental data structure in a neural network can be a sorted list, and the fundamental operation can be the edit distance between two such lists}. In this framework:
+ArrowFlow is built on the premise that \textbf{the fundamental data structure in a neural network can be a sorted list, and the fundamental operation can be a rank distance between two such lists}. In this framework:
 
 \begin{itemize}[leftmargin=2em]
   \item \textbf{Data points} are ordered sequences of tokens (permutations of a vocabulary).
@@ -77,19 +78,26 @@ ArrowFlow is built on the premise that \textbf{the fundamental data structure in
 This architecture draws from a productive tension in social choice theory. Arrow's impossibility theorem \citep{arrow1951social} demonstrates that any aggregator of individual rankings must violate at least one fairness axiom (Pareto efficiency, independence of irrelevant alternatives, non-dictatorship) on some preference profiles. In learning, we \emph{exploit} these violations as inductive biases: context dependence (IIA violations) yields nonlinearity; specialization (ND violations) yields sparsity and winner-take-all dynamics; partial monotonicity (Pareto-like behavior) stabilizes training. The name ``ArrowFlow'' reflects both this connection to Arrow's theorem and the flow of ordering information through the network layers.
 
 \paragraph{What ArrowFlow is---and is not.}
-ArrowFlow is not designed to be the most accurate or fastest classifier. It is a \emph{fundamentally different computational paradigm}: a hierarchical, filter-based machine learning system that operates entirely in the space of permutations. The contribution is the paradigm itself---showing that competitive classification is achievable without any floating-point parameters in the core computation, and that ordinal architectures possess structural advantages (noise robustness, privacy preservation, graceful handling of missing data) that are absent from conventional methods.
+ArrowFlow is not designed to be the most accurate or fastest classifier. It is a \emph{fundamentally different computational paradigm}: a hierarchical, filter-based machine learning system whose core layers operate entirely in the space of permutations (with a real-valued encoder only at the input). The contribution is the paradigm itself---showing that competitive classification is achievable without any floating-point parameters in the core computation, and that ordinal architectures possess structural advantages (noise robustness, rank-only/magnitude-hiding operation, graceful handling of missing data) that are not automatic in conventional methods unless rank transformations or robust preprocessing are added.
 
 \paragraph{Contributions.}
 \begin{enumerate}[leftmargin=2em]
-  \item A formal definition of the \emph{ranking layer} with edit-distance motions, permutation-matrix accumulation, and hierarchical rank aggregation (Section~\ref{sec:ranking-layer}).
+  \item A formal definition of the \emph{ranking layer} with displacement motions, permutation-matrix accumulation, and hierarchical rank aggregation (Section~\ref{sec:ranking-layer}).
   \item The multi-view ensemble architecture with diverse projection strategies that addresses the argsort encoding bottleneck and achieves competitive accuracy (Sections~\ref{sec:encoding}--\ref{sec:ensemble}).
   \item An Arrow-theoretic interpretation of layer expressivity, connecting fairness-axiom violations to inductive biases for nonlinearity, sparsity, and stability (Section~\ref{sec:arrow}).
-  \item Formal theoretical analysis: an argsort stability theorem with Gaussian tail bound (explaining noise robustness), an information-capacity theorem ($\log_2(d!)$ bits via permutation cones), a polynomial noise amplification result (explaining the accuracy--robustness trade-off), a consistency proof for the accumulation learning rule, an ensemble error bound, and a social choice theory subsection that proves filter learning is maximum-likelihood estimation under the Mallows model, derives two-sided adversarial manipulability bounds from the Gibbard--Satterthwaite theorem, and quantifies IIA-violation as a measure of nonlinear expressivity (Section~\ref{sec:theory}).
-  \item Comprehensive experiments across UCI tabular benchmarks, MNIST (via PCA, isolating the sort-layer classifier), gene expression cancer classification (TCGA), and the Sushi preference dataset. These reveal a unique robustness profile governed by the polynomial degree parameter, perfect batch-effect invariance under monotone distribution shifts, and architecture scaling that has not plateaued at 1024 filters (Sections~\ref{sec:experiments}--\ref{sec:utility}).
-  \item A quantitative energy analysis showing that ArrowFlow's integer-only arithmetic is 15$\times$ cheaper per layer than equivalent FP32 MLP layers, with natural alignment to neuromorphic hardware and sorting-network implementations (Section~\ref{sec:energy}).
+  \item Formal theoretical analysis (Section~\ref{sec:theory}):
+  \begin{itemize}[leftmargin=1.4em,topsep=2pt]
+    \item an argsort stability theorem with Gaussian tail bound, and a projected-noise corollary, explaining the noise robustness;
+    \item an information-capacity theorem ($\log_2(e!)$ bits for an $e$-dimensional score vector, via permutation cones);
+    \item a polynomial noise-amplification (local sensitivity) result for the accuracy--robustness trade-off;
+    \item a consistency proof for the accumulation rule---a Borda/mean-position estimator---and an ensemble error bound; and
+    \item a social-choice subsection characterizing filter learning as consistent rank aggregation (with exponential consistency), proving two-sided adversarial-perturbation bounds from the footrule metric, and showing that the learning rule's positional aggregation provably violates Arrow's independence axiom.
+  \end{itemize}
+  \item Comprehensive experiments across UCI tabular benchmarks, MNIST (via PCA, isolating the sort-layer classifier), gene expression cancer classification (TCGA), and the Sushi preference dataset. These reveal a unique robustness profile governed by the polynomial degree parameter, exact invariance to within-sample strictly monotone distribution shifts, and architecture scaling that has not plateaued at 1024 filters (Sections~\ref{sec:experiments}--\ref{sec:utility}).
+  \item A quantitative energy analysis showing that ArrowFlow's integer-only arithmetic is 15$\times$ cheaper \emph{per layer in arithmetic energy} than equivalent FP32 MLP layers (narrowing to $\approx$1.05$\times$ at full seven-view inference, with larger gains expected from reduced memory traffic and multiplier-free hardware), with natural alignment to neuromorphic hardware and sorting-network implementations (Section~\ref{sec:energy}).
 \end{enumerate}
 
-\paragraph{Note.} This is an extended technical report presenting the full theory, experiments, and discussion for ArrowFlow. A shorter version is in preparation for submission to JMLR or Neurocomputing.
+\paragraph{Note.} This is an extended technical report presenting the full theory, experiments, and discussion for ArrowFlow.
 
 % --- Figure 1: ArrowFlow Pipeline (Hero Figure) ---
 \begin{figure}[t]
@@ -150,7 +158,7 @@ ArrowFlow is not designed to be the most accurate or fastest classifier. It is a
 \draw[arr] (vote) -- (final);
 % === Network detail inset (far right, well separated) ===
 \begin{scope}[shift={(13.5,-1.5)}]
-\node[font=\small\bfseries, anchor=south] at (0,0.15) {Network Detail};
+\node[font=\small\bfseries, anchor=south] at (0,0.5) {Network Detail};
 \draw[thick, rounded corners=3pt, fill=green!4] (-1.4,-3.2) rectangle (1.4,0);
 \node[sortbox, minimum width=2.0cm, font=\footnotesize] (L1) at (0,-0.5) {Sort Layer 1\\[-1pt]$N$ filters};
 \node[sortbox, minimum width=2.0cm, font=\footnotesize] (L2) at (0,-1.6) {Sort Layer 2\\[-1pt]$N'$ filters};
@@ -187,7 +195,7 @@ Recent work has made sorting operations differentiable for end-to-end learning. 
 Kendall \citep{kendall1938} introduced the tau rank correlation coefficient, counting pairwise disagreements. Diaconis and Graham \citep{diaconis1977footrule} established Spearman's footrule as a closely related metric, proving that footrule and Kendall tau distance are within a constant factor. ArrowFlow uses Spearman's footrule ($\ell_1$ norm of positional displacements) as its core distance. Fagin et al.\ \citep{fagin2003topk} extended these metrics to partial rankings, relevant to ArrowFlow's handling of receptive fields and variable-length inputs.
 
 \subsection{Non-Gradient Learning}
-ArrowFlow's sort layers do not use gradient descent. The permutation-matrix accumulation rule connects to Kohonen's Self-Organizing Maps \citep{kohonen1990self}, which learn via competitive learning---the closest prototype is updated to become more similar to the input. The key difference is that ArrowFlow prototypes are permutations updated by re-ordering, not real-valued vectors updated by subtraction. This competitive dynamic also relates to Grossberg's Adaptive Resonance Theory \citep{grossberg1987competitive}, where winner-take-all prototypes are updated by matching and accumulation. Pointer Networks \citep{vinyals2015pointernetworks} and the ``Order Matters'' framework \citep{vinyals2015order} demonstrated that input and output ordering significantly impacts sequence-to-sequence performance, motivating architectures that treat ordering as a learnable structure. More recently, Hinton's Forward-Forward algorithm \citep{hinton2022forward} and Target Propagation \citep{lee2015difference} have revived interest in alternatives to backpropagation. ArrowFlow contributes to this line by demonstrating that competitive, displacement-based learning can work in discrete permutation spaces.
+ArrowFlow's sort layers do not use gradient descent. Its closest relative is \emph{Learning Vector Quantization} (LVQ) and Kohonen's Self-Organizing Maps \citep{kohonen1990self}, which learn by competitive prototype updates---the nearest prototype is nudged toward (LVQ also: away from) each labeled input. ArrowFlow's output layer is precisely this attractive, error-driven prototype rule, and its hidden layers add the LVQ-style repulsive direction (Section~\ref{sec:supervised-training}), with two differences from classical LVQ: the prototypes are \emph{permutations} updated by re-ordering rather than real-valued vectors updated by subtraction, and learning composes hierarchically across stacked layers. This competitive dynamic also relates to Grossberg's Adaptive Resonance Theory \citep{grossberg1987competitive}, where winner-take-all prototypes are updated by matching and accumulation. Pointer Networks \citep{vinyals2015pointernetworks} and the ``Order Matters'' framework \citep{vinyals2015order} demonstrated that input and output ordering significantly impacts sequence-to-sequence performance, motivating architectures that treat ordering as a learnable structure. More recently, Hinton's Forward-Forward algorithm \citep{hinton2022forward} and Target Propagation \citep{lee2015difference} have revived interest in alternatives to backpropagation. ArrowFlow contributes to this line by demonstrating that competitive, displacement-based learning can work in discrete permutation spaces.
 
 \subsection{Social Choice Theory and Rank Aggregation}
 Arrow's impossibility theorem \citep{arrow1951social} demonstrates unavoidable trade-offs in rank aggregation---no mechanism aggregating three or more alternatives can simultaneously satisfy Pareto efficiency, independence of irrelevant alternatives, and non-dictatorship. Rank aggregation has been extensively studied in information retrieval, where Dwork et al.\ \citep{dwork2001rank} proposed combining ranked results from multiple search engines using median-based methods on Kendall tau distance. The Mallows model \citep{mallows1957nonnull} provides a probabilistic framework for permutations centered on a modal ranking, parameterized by a dispersion parameter. Conitzer and Sandholm \citep{conitzer2005voting} showed that common voting rules (Borda, Kemeny) correspond to maximum likelihood estimation under different noise models over permutations, providing a statistical-learning interpretation of the social-choice concepts that ArrowFlow operationalizes. Rank-Ordered Autoencoders \citep{bertens2016rank} use rank-preserving embeddings and sparsity constraints. ArrowFlow generalizes from \emph{preserving} rank to \emph{transforming} rank across layers, and uniquely reinterprets Arrow's fairness-axiom violations as inductive biases for nonlinearity, sparsity, and stability.
@@ -211,13 +219,18 @@ ArrowFlow also connects to the learning-to-rank literature in information retrie
 \section{The Ranking Layer}
 \label{sec:ranking-layer}
 
-The ranking layer is the fundamental computational unit of ArrowFlow. It operates in the space of orderings rather than numeric activations. Each layer transforms an input ranking into a new ranking representation by comparing it to a bank of learned \emph{ranking filters}.
+The ranking layer is the fundamental computational unit of ArrowFlow. It operates in the space of orderings rather than numeric activations. Each layer transforms an input ranking into a new ranking representation by comparing it to a bank of learned \emph{ranking filters}. We use the terms \emph{ranking layer} and \emph{sort layer} interchangeably throughout.
 
 \subsection{Notation}
-Let $\mathcal{V} = \{1, \dots, V\}$ denote a vocabulary of tokens. A ranking is a permutation $\pi \in S_V$, where $\pi(i)$ gives the position of token $i$. We write $\argsort(y)$ for the permutation induced by sorting scores $y \in \R^V$ in descending order. For a filter $r$ and input $x$, $\rankop(r, x[p])$ denotes the position of element $x[p]$ in the filter's ordering.
+Let $\mathcal{V} = \{1, \dots, V\}$ denote a vocabulary of tokens. A ranking is a permutation $\pi \in S_V$. We use two complementary maps and keep them distinct throughout:
+\[
+\operatorname{item}_\pi(p) \;=\; \text{the token at position } p, \qquad
+\operatorname{pos}_\pi(v) \;=\; \text{the position of token } v.
+\]
+Worked examples list tokens by position---e.g.\ $\pi_x = [C,A,E,B,D]$ means $\operatorname{item}_{\pi_x}(1)=C$---while the displacement formulas below use $\operatorname{pos}$. We write $\argsort(y)$ for the permutation that lists the entries of $y \in \R^V$ in \emph{increasing} order (matching NumPy's convention and the implementation); thus when the layer ranks filters by distance, the smallest distance---the closest filter---appears first. Where a decreasing order is more natural (the permutation cones of Theorem~\ref{thm:capacity}) we write $\orderdesc$; the two differ only by reversal. We abbreviate $\rankop(r, v) = \operatorname{pos}_r(v)$ for the position of token $v$ in a filter $r$'s ordering.
 
-\subsection{Ranking Filters and Edit-Distance Motions}
-A ranking layer $F^{\mathrm{rank}}$ contains $N$ ranking filters $\{r_j\}_{j=1}^N$, each storing a learned local ordering over the vocabulary. Given an input ranking $\pi_x$, the layer computes an \emph{edit-motion} vector $m_j \in \Z^\ell$ for each filter:
+\subsection{Ranking Filters and Displacement Motions}
+A ranking layer $F^{\mathrm{rank}}$ contains $N$ ranking filters $\{r_j\}_{j=1}^N$, each storing a learned local ordering over the vocabulary. Given an input ranking $\pi_x$, the layer computes a \emph{motion} vector (a signed positional displacement, not a string-edit operation) $m_j \in \Z^\ell$ for each filter:
 \begin{equation}
 m_j[p] = \rankop(r_j, \pi_x[p]) - p, \quad p = 1, \dots, \ell.
 \label{eq:motion}
@@ -226,22 +239,22 @@ The motion $m_j[p]$ measures how many positions element $\pi_x[p]$ must move to 
 
 A distance is computed via the $\ell_q$ norm:
 \begin{equation}
-D_j = \norm{m_j}_q, \quad q \in \{0, 1, 2\}.
+D_j = \norm{m_j}_q, \quad q \in \{1, 2\} \ \text{(with an optional $\ell_0$-style count, $q=0$, which is a pseudonorm)}.
 \label{eq:distance}
 \end{equation}
-With $q = 1$, this is Spearman's footrule distance \citep{diaconis1977footrule}: the total positional displacement between the input and the filter.
+With $q = 1$, this is Spearman's footrule distance \citep{diaconis1977footrule}: the total positional displacement between the input and the filter. All experiments in this paper use $q=1$.
 
 \paragraph{Missing data and receptive fields.}
-If $\pi_x$ omits items present in $r_j$, the missing items are treated as displaced to the end, incurring a deletion penalty. If $r_j$ has a restricted receptive field (subset of items), the average motion is subtracted to promote translation invariance---analogous to zero-centering in convolutional layers.
+If $\pi_x$ omits items present in $r_j$, the experiments in this paper assign each missing item the central position $mV$ (with $m=0.5$) and down-weight its update contribution by $w=0.5$ (Section~\ref{sec:supervised-training}); an alternative variant instead displaces missing items to the end of the list and charges a deletion penalty. We use the central-imputation rule throughout unless stated otherwise. If $r_j$ has a restricted receptive field (subset of items), the average motion is subtracted to promote translation invariance---analogous to zero-centering in convolutional layers.
 
 \subsection{Forward Pass: From Distances to Output Ranking}
 The layer aggregates $N$ filter responses into a new ranking. The simplest and most effective aggregation is:
 \begin{equation}
-\pi' = \argsort(-D_1, -D_2, \dots, -D_N),
+\pi' = \argsort(D_1, D_2, \dots, D_N),
 \end{equation}
-which ranks filters from closest (most similar) to farthest. The output $\pi'$ is a permutation of filter indices---a new sorted list in a vocabulary of size $N$---and becomes the input to the next layer.
+which ranks filters from closest (smallest distance, most similar) to farthest. The output $\pi'$ is a permutation of filter indices---a new sorted list in a vocabulary of size $N$---and becomes the input to the next layer.
 
-This is a discrete analogue of convolution: filters ``slide'' over the input ordering, measure similarity via edit distance, and the resulting ordering defines the next representation.
+This is closer to a prototype (radial-basis) layer than to a convolution: each filter is a learned permutation prototype, the layer scores the input by rank distance to every prototype, and the resulting ranking of prototypes defines the next representation. (We reserve the convolution analogy for the receptive-field variant, where a filter sees only a subset of items.)
 
 % --- Figure 2: Ranking Layer Forward Pass ---
 \begin{figure}[t]
@@ -321,14 +334,14 @@ The key insight is that the motion vector $m_j$ from Eq.~\eqref{eq:motion} plays
 
 \begin{proposition}[Motion as Discrete Gradient]
 \label{prop:motion-gradient}
-Given $d_F(\pi_x, r_j) = \sum_{p=1}^\ell |m_j[p]|$, the displacement $m_j[p]$ from Eq.~\eqref{eq:motion} is the unique per-position minimizer---the shift that zeroes item~$\pi_x[p]$'s footrule contribution:
-for each~$p$,
+Because the footrule distance $d_F(\pi_x, r_j) = \sum_{p=1}^\ell |m_j[p]|$ decomposes into independent per-position terms, its minimization over per-item integer shifts $\{\delta_p\}$ separates across positions, and the unique minimizer of each term is the motion of Eq.~\eqref{eq:motion}:
 \[
-m_j[p] = \arg\min_{\delta \in \Z}\; \big|\rankop(r_j,\, \pi_x[p]) - (p + \delta)\big|.
+m_j[p] = \arg\min_{\delta \in \Z}\; \big|\rankop(r_j,\, \pi_x[p]) - (p + \delta)\big|, \qquad p = 1, \dots, \ell.
 \]
+Hence the full motion vector $m_j$ is the exact per-item descent direction for the footrule objective under an independent-shift relaxation (the simultaneous shifts need not compose into a valid permutation).
 \end{proposition}
 
-The motion vector thus points each item directly toward its target position in the filter, making it the discrete analogue of a loss gradient. The update signal comes from the motion between the input ordering and the correct-class filter. No calculus is involved.
+The motion vector thus points each item directly toward its target position in the filter, the discrete analogue of a negative loss gradient---no calculus is involved, and the update signal is simply the motion between the input ordering and the correct-class filter. The separability exploited here is precisely what distinguishes footrule from non-decomposable metrics such as Kendall tau: it is what lets the accumulation rule of Section~\ref{sec:perm-accum} treat each item's displacement independently. (We caution that summing the per-item minimizers does not itself yield a permutation; the motion is a descent \emph{direction}, realized as a valid ordering only after the accumulation-and-reorder projection of Eqs.~\ref{eq:accum-update}--\ref{eq:accum-reorder}.)
 
 \subsection{Permutation-Matrix Accumulation}
 \label{sec:perm-accum}
@@ -357,7 +370,7 @@ After $T$ updates, $A_j[v, k]$ counts the total evidence that item $v$ belongs a
 \hat{\imath}(v) = \frac{\sum_k k \cdot A_j[v, k]}{\sum_k A_j[v, k]}, \qquad
 r_j \leftarrow \argsort\big(\{\hat{\imath}(v)\}_{v \in \mathcal{V}}\big).
 \end{equation}
-This acts as a proximal step on the permutation manifold: accumulate displacement evidence, then project to the nearest ordering consistent with the aggregate evidence. The accumulator smooths individual motions and provides a form of momentum.
+This resembles a projection onto the set of permutations: accumulate displacement evidence, then map to the ordering consistent with the aggregate evidence (we do not claim a formal proximal operator). The accumulator smooths individual motions and provides a form of momentum.\footnote{Eq.~\eqref{eq:accum-reorder} normalizes each item's score by its row sum $\sum_k A_j[v,k]$; the implementation normalizes by the corresponding column sum. The two coincide (and the analysis of Proposition~\ref{prop:convergence} applies exactly) whenever the accumulated votes form a permutation matrix, i.e.\ absent the position clipping and missing-item handling used for partial inputs.}
 
 \begin{remark}
 The learning rule has no learning rate in the continuous sense. Instead, the accumulator's history provides natural damping: recent motions contribute proportionally to the total accumulated evidence. An explicit learning rate $\eta$ can optionally scale the vote matrix $\Phi$ to control update speed.
@@ -467,7 +480,7 @@ The learning rule has no learning rate in the continuous sense. Instead, the acc
 \node[draw, rounded corners=3pt, fill=green!12, font=\small, inner sep=5pt] at (6.3, -5.3) {$r_j \leftarrow [A, C, B, D]$};
 \end{tikzpicture}%
 }
-\caption{\textbf{Permutation-matrix accumulation.} (a)~Accumulator starts as identity (encoding current filter $[A,B,C,D]$). (b)~Training input $[C,A,D,B]$: each item votes for its position in the input (Def.~\ref{def:vote-matrix}). (c)~Votes sum additively (Eq.~\ref{eq:accum-update}). (d)~Weighted average and argsort yield the updated filter $[A,C,B,D]$ (Eq.~\ref{eq:accum-reorder}), which has moved toward the training data. Convergence is guaranteed under Proposition~\ref{prop:convergence}.}
+\caption{\textbf{Permutation-matrix accumulation.} (a)~Accumulator starts as identity (encoding current filter $[A,B,C,D]$). (b)~Training input $[C,A,D,B]$: each item votes for its position in the input (Def.~\ref{def:vote-matrix}). (c)~Votes sum additively (Eq.~\ref{eq:accum-update}). (d)~Weighted average and argsort yield the updated filter $[A,C,B,D]$ (Eq.~\ref{eq:accum-reorder}), which has moved toward the training data. Convergence to the mean-position ranking is guaranteed (Proposition~\ref{prop:convergence}).}
 \label{fig:accumulation}
 \end{figure}
 
@@ -481,18 +494,13 @@ The learning rule has no learning rate in the continuous sense. Instead, the acc
 \Statex
 \State \textbf{Forward:}
 \For{$j = 1$ to $N$}
-  \State $m_j \gets \mathrm{EditMotion}(\pi_x, r_j)$ \Comment{positional displacements}
+  \State $m_j \gets \mathrm{Motion}(\pi_x, r_j)$ \Comment{signed positional displacements, Eq.~\eqref{eq:motion}}
   \State $D_j \gets \|m_j\|_1$ \Comment{Spearman's footrule}
 \EndFor
-\State $\pi' \gets \argsort(-D_1, \dots, -D_N)$ \Comment{rank filters by proximity}
+\State $\pi' \gets \argsort(D_1, \dots, D_N)$ \Comment{rank filters by proximity (closest first)}
+\State \Return $\pi'$
 \Statex
-\State \textbf{Backward:}
-\State Compute motion signal $m_j^{\mathrm{upd}}$ from supervision or upstream layer
-\For{$j = 1$ to $N$}
-  \State $A_j \leftarrow A_j + \Phi(m_j^{\mathrm{upd}})$ \Comment{accumulate evidence}
-  \State $r_j \leftarrow \mathrm{ReorderByAccumulator}(A_j)$ \Comment{project to permutation}
-\EndFor
-\State \Return $\pi'$, updated $\{r_j\}, \{A_j\}$
+\State \textbf{Backward (supervised update):} see Section~\ref{sec:supervised-training} and Algorithm~\ref{alg:supervised}: the target ranking selected by the label (output layer) or propagated from above (hidden layers) is turned into a vote matrix $\Phi$ (Def.~\ref{def:vote-matrix}), accumulated into $A_j$ (Eqs.~\ref{eq:accum-update}--\ref{eq:accum-reorder}), and the filter reordered.
 \end{algorithmic}
 \end{algorithm}
 
@@ -515,8 +523,8 @@ In ArrowFlow, these constraints become \emph{capacity knobs}:
 \paragraph{PE $\to$ Stability and gradient propagation.}
 When filters unanimously prefer $a \succ b$, motions preserve this ordering, yielding a stabilizing monotonicity. This is analogous to residual connections---unanimous evidence propagates without attenuation.
 
-\paragraph{IIA violation $\to$ Contextual nonlinearity.}
-Because distances depend on the \emph{whole} input ordering, the relative ranking of $a$ vs.\ $b$ can change with the presence of $c$. This context dependence is precisely the source of nonlinear feature interactions. In conventional networks, nonlinearity comes from activation functions; in ArrowFlow, it emerges from the geometry of permutation distance.
+\paragraph{IIA and context dependence.}
+A single layer's \emph{forward} pass orders filters by their independent distances, so it respects pairwise IIA; its nonlinearity comes from the piecewise-constant cone geometry of $\argsort$ (Theorem~\ref{thm:capacity}), the permutation-space counterpart of an activation function. The IIA violation that Arrow's theorem guarantees appears instead in the \emph{learning rule}, whose positional aggregation of training rankings is context-dependent (Proposition~\ref{prop:iia-index}): an item's consensus position shifts with the placement of others. This is what shapes filters into context-sensitive detectors rather than pairwise-separable templates; the formal statement is deferred to Section~\ref{sec:social-choice-theory}.
 
 \paragraph{ND violation $\to$ Sparse specialization.}
 When a few filters consistently have the smallest distances for certain input types, they dominate the output ranking---a winner-take-all dynamic analogous to attention heads or sparse mixture-of-experts. This creates feature dominance, aiding generalization and efficiency.
@@ -525,7 +533,7 @@ When a few filters consistently have the smallest distances for certain input ty
 Stacking ranking layers enables compositional processing:
 \begin{itemize}[leftmargin=2em]
   \item Early layers learn local tournaments or pairwise motifs (e.g., Condorcet-like cycles, single-peaked segments).
-  \item Middle layers learn contextual re-weighting (deliberate IIA violations) to resolve conflicts.
+  \item Middle layers learn contextual re-weighting (via the context-dependent aggregation of Proposition~\ref{prop:iia-index}) to resolve conflicts.
   \item Late layers enforce global consistency and task-specific signals.
 \end{itemize}
 This is analogous to ConvNets (local filters $\to$ mid-level patterns $\to$ global structure), but in the permutation domain.
@@ -544,7 +552,7 @@ For low-dimensional data, we first expand the feature space via polynomial featu
 \begin{equation}
 x \in \R^d \;\mapsto\; \phi(x) \in \R^{\binom{d+k}{k}-1},
 \end{equation}
-where $k$ is the polynomial degree. For $d = 4$ (Iris) at degree 3, this expands from 4 to 34 features, creating interaction terms $x_i x_j$, $x_i x_j x_k$ that dramatically increase the diversity of achievable rankings. This expansion is critical: on Iris, polynomial expansion reduces error by approximately 3$\times$.
+where $k$ is the polynomial degree. For $d = 4$ (Iris) at degree 3, this expands from 4 to 34 features, creating interaction terms $x_i x_j$, $x_i x_j x_k$ that dramatically increase the diversity of achievable rankings. This expansion is critical: on Iris, polynomial expansion alone reduces error by about 1.5$\times$ (21.3\%$\to$14.7\%; Table~\ref{tab:progression}), and contributes to a larger reduction in combination with the multi-view ensemble.
 
 \subsection{Random Projection and Argsort}
 After optional polynomial expansion and standardization, features are projected to a target embedding dimension $e$ via a random projection matrix $W \in \R^{d' \times e}$:
@@ -572,13 +580,13 @@ The most impactful architectural innovation in ArrowFlow is the multi-view ensem
 \subsection{Architecture}
 Given $K$ views:
 \begin{enumerate}
-  \item Generate $K$ projection matrices $\{W_k\}_{k=1}^K$ using diverse strategies (random, target-aware, calibrated).
+  \item Generate $K$ projection matrices $\{W_k\}_{k=1}^K$ using diverse strategies: \emph{random} (Section~\ref{sec:encoding}), \emph{target-aware} (LDA-augmented, Section~\ref{sec:encoding}), and \emph{calibrated}---a random projection whose projected scores are standardized per dimension before argsort, so that every projected dimension contributes equally to the ranking rather than being dominated by high-variance directions.
   \item For each view $k$: encode all data via $W_k$, train an independent ArrowFlow network.
   \item Combine predictions via majority vote: $\hat{y} = \mathrm{mode}(\hat{y}_1, \dots, \hat{y}_K)$.
 \end{enumerate}
 
 \subsection{Theoretical Foundation}
-By Condorcet's jury theorem, if each view has error rate $p < 0.5$ and errors are independent, the ensemble error decreases exponentially with $K$ (formalized in Theorem~\ref{thm:ensemble}). Independence is maximized by diverse projection strategies: views cycle through target-aware, random, and calibrated projections. Empirically, 7 views provide the best accuracy--cost trade-off, reducing error by 2--3$\times$ compared to a single view.
+By Condorcet's jury theorem, if each view has error rate $p < 0.5$ and errors are independent, the ensemble error decreases exponentially with $K$ (formalized in Theorem~\ref{thm:ensemble}). Independence is maximized by diverse projection strategies: views cycle through target-aware, random, and calibrated projections. Empirically, 7 views provide the best accuracy--cost trade-off, reducing error by up to $\sim$3$\times$ compared to a single view (dataset-dependent; Section~\ref{sec:experiments}).
 
 \subsection{Permutation Data Augmentation}
 To improve sort-layer generalization, each training permutation can be augmented by applying random adjacent transpositions---the minimal perturbation in Spearman footrule distance (exactly 2 units). This is the permutation analogue of Gaussian noise in Euclidean space, adapted to the discrete metric topology.
@@ -650,12 +658,108 @@ To improve sort-layer generalization, each training permutation can be augmented
 
 
 % ============================================================================
-% 7. THEORETICAL ANALYSIS
+% 7. NETWORK ARCHITECTURE AND TRAINING
+% ============================================================================
+\section{Network Architecture}
+\label{sec:architecture}
+
+\subsection{Layer Structure}
+Each ArrowFlow network is a layered architecture where each layer is a \textbf{Sort Layer}: a bank of $N$ permutation filters. The layer computes Spearman's footrule distance between the input permutation and each filter, and outputs a ranking of filters by distance. Layers are stacked: the output vocabulary of layer $\ell$ (filter IDs) becomes the input vocabulary of layer $\ell+1$.
+
+The default architecture uses two sort layers: a hidden layer with $N$ filters and an output layer with $C$ filters (one per class). Classification is by nearest-filter: the predicted class is the index of the output-layer filter closest to the final hidden representation.
+
+\paragraph{Layer dimensions and vocabularies.}
+The vocabulary changes at every layer. The input is a permutation of the $e$ encoded tokens; layer~1 holds $N_1$ filters, each a permutation of those $e$ tokens, and outputs a ranking of its filters---a permutation in $S_{N_1}$. Layer~2's filters are therefore permutations of the \emph{filter indices} $\{1,\dots,N_1\}$, and so on. The output layer holds $C$ filters (one per class), permutations of $\{1,\dots,N_L\}$, and classification reduces to selecting the nearest class filter.
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Layer & input vocabulary & \# filters & output \\
+\midrule
+$1$ & $e$ & $N_1$ & $\pi^{(1)}\in S_{N_1}$ \\
+$2$ & $N_1$ & $N_2$ & $\pi^{(2)}\in S_{N_2}$ \\
+$\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ \\
+output & $N_L$ & $C$ & $\hat{y}=\arg\min_c D^{(L)}_c$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+An item absent from an input (e.g.\ under feature masking) is assigned the central position $mV$ with $m=0.5$, so it contributes a moderate, bounded displacement rather than an extreme one; in filter updates its displacement is additionally down-weighted by the deletion-cost weight $w=0.5$.
+
+\subsection{Supervised Training of Sort Layers}
+\label{sec:supervised-training}
+
+The forward pass (Section~\ref{sec:ranking-layer}) maps an input permutation $\pi^{(0)} \in S_e$ through layers $\ell = 1, \dots, L$: layer $\ell$ computes $D^{(\ell)}_j = d_F(\pi^{(\ell-1)}, r^{(\ell)}_j)$ for each filter and emits $\pi^{(\ell)} = \argsort(D^{(\ell)})$ (closest filter first). The prediction is the nearest output filter, $\hat{y} = \arg\min_c D^{(L)}_c$. We now specify the complete supervised update, which is non-gradient and built entirely from the accumulation rule of Section~\ref{sec:perm-accum}.
+
+\paragraph{Error-driven gating.}
+On example $(x, y)$ with prediction $\hat{y}$, define an update magnitude $g$: if $\hat{y} \neq y$ (a mistake) then $g = 1$; if $\hat{y} = y$ then $g = 1$ with probability $p_c$ and $g = 0$ otherwise, with $p_c = 0.01$. Updates therefore concentrate on misclassified examples---in the spirit of perceptron and LVQ learning---while a small $p_c$ keeps a trickle of reinforcement on already-correct ones.
+
+\paragraph{Output layer: pull the correct-class filter.}
+Only the class-$y$ output filter is updated, and only toward the current hidden representation $\pi^{(L-1)}$:
+\begin{equation}
+\label{eq:output-update}
+A^{(L)}_y \leftarrow A^{(L)}_y + \frac{\eta\, g}{N_L}\,\Phi\!\left(\pi^{(L-1)}, r^{(L)}_y\right), \qquad r^{(L)}_y \leftarrow \mathrm{reorder}\!\left(A^{(L)}_y\right),
+\end{equation}
+where $\Phi$ is the vote matrix (Definition~\ref{def:vote-matrix}) and $\mathrm{reorder}$ is the weighted-average argsort of Eq.~\eqref{eq:accum-reorder}. Every other output filter is left unchanged. At the output layer the update is purely \emph{attractive}: the correct class's prototype moves toward the input, and incorrect-class filters are never pushed away (the repulsion branch described below is used only in hidden layers, never at the output). The learning rate $\eta$ (default $0.1$) sets each example's vote weight $\eta/N_L$ relative to the unit-weight identity prior in the accumulator; it scales votes, not a gradient.
+
+\paragraph{Hidden layers: motion propagation.}
+The signed displacement field $\mu^{(L)}$ produced by the output update---how far each element of $\pi^{(L-1)}$ must move to reach $r^{(L)}_y$---is the supervised signal handed to the layer below. For $\ell = L-1$ down to $1$, given the incoming target motion $\mu^{(\ell+1)}$:
+\begin{enumerate}[leftmargin=2em,topsep=2pt]
+\item \textbf{Top-$\rho$ selection.} Order the layer's filters by $|\mu^{(\ell+1)}|$ and update only the top $\rho N_\ell$ of them ($\rho = 0.5$); the small-motion remainder is left untouched---a sparsity that both regularizes and halves the update cost.
+\item \textbf{Signed accumulation.} Each selected filter $r^{(\ell)}_j$ accumulates votes with \emph{nonnegative} weight $|\mu^{(\ell+1)}_j|$ toward a target $\tilde{\pi}$ whose choice is set by the \emph{sign} of the propagated motion---the layer input $\pi^{(\ell-1)}$ when $\mu^{(\ell+1)}_j \ge 0$ (attractive), or its reversal $\mathrm{rev}(\pi^{(\ell-1)})$ when $\mu^{(\ell+1)}_j < 0$ (repulsive):
+\begin{equation}
+\label{eq:hidden-update}
+A^{(\ell)}_j \leftarrow A^{(\ell)}_j + \frac{2\eta}{N_\ell}\,\bigl|\mu^{(\ell+1)}_j\bigr|\,\Phi\!\left(\tilde{\pi}, r^{(\ell)}_j\right), \qquad
+r^{(\ell)}_j \leftarrow \mathrm{reorder}(A^{(\ell)}_j),
+\end{equation}
+with $\tilde{\pi} = \pi^{(\ell-1)}$ for $\mu^{(\ell+1)}_j \ge 0$ and $\tilde{\pi} = \mathrm{rev}(\pi^{(\ell-1)})$ otherwise, as above.
+Because the weights $|\mu^{(\ell+1)}_j|$ are nonnegative, each $A^{(\ell)}_j$ remains a vote-count matrix, so the Borda/mean-position reading of Proposition~\ref{prop:convergence} still applies (that proposition analyzes the accumulator mechanics; it does not model the sign-dependent choice of $\tilde{\pi}$, which is what makes the hidden update a signed, attract-or-repel rule).
+\item \textbf{Cross-filter aggregation.} The motion passed further down is the \emph{mean} over the layer's filters of their per-item displacements, renormalized to peak magnitude $c\,N_\ell$ ($c = 0.125$) and sorted by amplitude:
+\[
+\bar{\mu} = \frac{1}{N_\ell}\sum_j \mu^{(\ell)}_{j}, \qquad
+\mu^{(\ell)} = \mathrm{sort}_{|\cdot|}\!\left(c\,N_\ell\,\frac{\bar{\mu}}{\max_i |\bar{\mu}_i|}\right).
+\]
+\end{enumerate}
+This mean aggregation is ArrowFlow's substitute for backpropagating through the non-differentiable argsort: in place of a chain rule, each layer summarizes the displacement demanded of all its filters into a single ordinal target for the layer below.
+
+\paragraph{Frozen output layer.}
+The strongest empirical setting (Table~\ref{tab:llu}) freezes the output layer. Mechanistically, the class-$y$ filter's motion $\mu^{(L)}$ is still computed and propagated to drive the hidden layers, but the output accumulator is \emph{discarded} rather than applied, so the $C$ output filters remain their random initial permutations---fixed, one-per-class prototypes. The hidden layers then learn to map each class's inputs close to its own fixed prototype. Freezing supplies a stable supervised target and prevents the prototypes from drifting toward---and collapsing onto---the moving hidden representations; it is the ordinal analogue of fixing a randomly-initialized classifier head. The benefit is consistent across datasets and the five random-seed simulations of Table~\ref{tab:llu}.
+
+\begin{algorithm}[t]
+\caption{Supervised training step (one example, sort-only network)}
+\label{alg:supervised}
+\begin{algorithmic}[1]
+\Require example $(x,y)$; filters $\{r^{(\ell)}_j\}$, accumulators $\{A^{(\ell)}_j\}$; rate $\eta$, fraction $\rho$, scale $c$, correct-update prob.\ $p_c$
+\State $\pi^{(0)} \gets \mathrm{encode}(x)$
+\For{$\ell = 1$ to $L$} \Comment{forward}
+  \State $D^{(\ell)}_j \gets d_F(\pi^{(\ell-1)}, r^{(\ell)}_j)\ \forall j$; \quad $\pi^{(\ell)} \gets \argsort(D^{(\ell)})$
+\EndFor
+\State $\hat{y} \gets \arg\min_c D^{(L)}_c$
+\State $g \gets 1$ if $\hat{y} \neq y$; \ else $g \gets 1$ w.p.\ $p_c$, else $0$ \Comment{error-driven gating}
+\State $\mu^{(L)} \gets$ displacement of $\pi^{(L-1)}$ toward $r^{(L)}_y$ \Comment{computed even if output frozen}
+\If{output layer not frozen}
+  \State $A^{(L)}_y \mathrel{+}= (\eta g / N_L)\,\Phi(\pi^{(L-1)}, r^{(L)}_y)$; \quad $r^{(L)}_y \gets \mathrm{reorder}(A^{(L)}_y)$
+\EndIf
+\For{$\ell = L-1$ down to $1$} \Comment{motion propagation}
+  \State $S \gets$ top $\rho N_\ell$ filters by $|\mu^{(\ell+1)}|$
+  \ForAll{$j \in S$}
+     \State $\tilde{\pi} \gets \pi^{(\ell-1)}$ if $\mu^{(\ell+1)}_j \ge 0$ else $\mathrm{rev}(\pi^{(\ell-1)})$ \Comment{sign $\Rightarrow$ attract/repel}
+     \State $A^{(\ell)}_j \mathrel{+}= (2\eta/N_\ell)\,|\mu^{(\ell+1)}_j|\,\Phi(\tilde{\pi}, r^{(\ell)}_j)$; \quad $r^{(\ell)}_j \gets \mathrm{reorder}(A^{(\ell)}_j)$
+  \EndFor
+  \State $\bar{\mu} \gets \tfrac{1}{N_\ell}\sum_j \mu^{(\ell)}_j$; \quad $\mu^{(\ell)} \gets \mathrm{sort}_{|\cdot|}\!\big(c N_\ell\,\bar{\mu}/\max_i|\bar{\mu}_i|\big)$
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph{Remaining details.}
+Filters are initialized as uniform random permutations of their vocabulary; training presents data over $200$--$500$ iterations (the forward pass is batched and updates accumulate per example). Ties in $\argsort$---rare for integer footrule distances---are broken by index, making the forward pass deterministic given the filters. All experiments use the footrule norm $q = 1$; the $q \in \{0, 2\}$ variants of Eq.~\eqref{eq:distance} are available but unused. The default constants are collected for reference: $\eta = 0.1$ (rate), $\rho = 0.5$ (fraction of filters updated per layer), $c = 0.125$ (motion renormalization), $p_c = 0.01$ (correct-example update probability), $m = 0.5$ (missing-item position), $w = 0.5$ (deletion-cost weight).
+
+
+% ============================================================================
+% 8. THEORETICAL ANALYSIS
 % ============================================================================
 \section{Theoretical Analysis}
 \label{sec:theory}
 
-This section establishes formal properties of ArrowFlow's components: the stability of ordinal encoding under perturbation, the information-theoretic capacity of argsort, the amplification of noise by polynomial expansion, the convergence of the learning rule, and the ensemble error rate.
+This section establishes formal properties of ArrowFlow's components: the stability of ordinal encoding under perturbation, the information-theoretic capacity of argsort, the amplification of noise by polynomial expansion, the convergence of the learning rule, and the ensemble error rate. Several results are validated empirically in the experiments that follow (Sections~\ref{sec:experiments}--\ref{sec:utility}); we give forward pointers where a theorem predicts a specific experimental outcome.
 
 \subsection{Metric Properties of the Permutation Space}
 
@@ -701,15 +805,31 @@ If $\varepsilon \sim \mathcal{N}(0, \sigma^2 I_d)$, then
 For each ordered pair $(i,j)$ with $x_i > x_j$, the reversal event is $\{\varepsilon_j - \varepsilon_i \geq x_i - x_j\}$. Since $\varepsilon_j - \varepsilon_i \sim \mathcal{N}(0, 2\sigma^2)$, the Chernoff bound gives $\Pr[\varepsilon_j - \varepsilon_i \geq t] \leq \exp(-t^2/(4\sigma^2))$ for $t > 0$. Setting $t = x_i - x_j \geq \delta_{\min}$ and applying the union bound over all $\binom{d}{2}$ pairs yields the result. (A tighter bound with an additional factor of $1/2$ follows from the complementary error function.)
 \end{proof}
 
+Theorem~\ref{thm:stability} and Corollary~\ref{cor:gaussian} are stated for the vector that is \emph{actually sorted}. In the ArrowFlow pipeline that vector is the projected score $z = \phi(x)W \in \R^e$, not the raw input $x$, so the bounds should be read at the score level. The following corollary translates raw-input noise through the (degree-1) projection.
+
+\begin{corollary}[Projected-Noise Stability]
+\label{cor:proj-noise}
+Let $z = xW \in \R^e$ (degree-1 features) and let $\varepsilon_x \in \R^d$ be raw-input noise, so the score perturbation is $\varepsilon_z = \varepsilon_x W$. Then $\argsort(z + \varepsilon_z) = \argsort(z)$ whenever $\|\varepsilon_x W\|_\infty < \delta_{\min}(z)/2$. If $\varepsilon_x \sim \mathcal{N}(0, \sigma^2 I_d)$, then for each coordinate pair $(i,j)$ the difference $\varepsilon_{z,j} - \varepsilon_{z,i}$ is Gaussian with variance $\sigma^2\|W_{\cdot i} - W_{\cdot j}\|^2$---\emph{correlated} across pairs through shared columns of $W$---and
+\[
+\Pr\big[\argsort(z + \varepsilon_z) \neq \argsort(z)\big] \;\leq\; \sum_{i<j} \exp\!\left(-\frac{\delta_{\min}(z)^2}{2\,\sigma^2\,\|W_{\cdot i} - W_{\cdot j}\|^2}\right).
+\]
+\end{corollary}
+
+\begin{proof}
+The deterministic claim is Theorem~\ref{thm:stability} applied to $z$. For the Gaussian claim, $\varepsilon_{z,k} = \sum_m \varepsilon_{x,m} W_{mk}$, so $\varepsilon_{z,j} - \varepsilon_{z,i} = \sum_m \varepsilon_{x,m}(W_{mj} - W_{mi}) \sim \mathcal{N}(0, \sigma^2\|W_{\cdot j} - W_{\cdot i}\|^2)$. The reversal of pair $(i,j)$ requires this difference to exceed $z_i - z_j \geq \delta_{\min}(z)$; the Chernoff bound and a union bound over the $\binom{e}{2}$ pairs give the result.
+\end{proof}
+
+This makes the dependence on the projection explicit: isotropic raw noise becomes anisotropic, correlated score noise whose effective scale per pair is set by the column-difference norms $\|W_{\cdot i} - W_{\cdot j}\|$.
+
 \begin{remark}
-This result directly explains the empirical findings of Section~\ref{sec:noise}: ArrowFlow's noise robustness is governed by $\delta_{\min}/\sigma$, the ratio of the minimum feature gap to the noise scale. On high-dimensional data like Digits ($d = 64$), the pixel intensities create many distinct values with reasonably large gaps, making the encoding robust. The bound also clarifies why the advantage vanishes with polynomial expansion: expanded features have many more near-equal values, shrinking $\delta_{\min}$.
+Read at the level of the sorted score vector, this analysis directly explains the empirical findings of Section~\ref{sec:noise}: ArrowFlow's noise robustness is governed by $\delta_{\min}/\sigma$, the ratio of the minimum feature gap to the noise scale. On high-dimensional data like Digits ($d = 64$), the pixel intensities create many distinct values with reasonably large gaps, making the encoding robust. The bound also clarifies why the advantage vanishes with polynomial expansion: expanded features have many more near-equal values, shrinking $\delta_{\min}$.
 \end{remark}
 
 \subsection{Information Capacity of Ordinal Encoding}
 
 \begin{theorem}[Ordinal Information Capacity]
 \label{thm:capacity}
-The argsort encoding $\argsort\colon \R^d \to S_d$ partitions the generic points of $\R^d$ (those with distinct coordinates) into exactly $d!$ equivalence classes. Each class is an open convex cone
+The argsort encoding $\argsort\colon \R^d \to S_d$ partitions the generic points of $\R^d$ (those with distinct coordinates) into exactly $d!$ equivalence classes (the orientation---ascending or descending---only relabels the classes and does not change their number). Writing $\pi=\orderdesc(x)$ for the decreasing order, each class is an open convex cone
 \[
 C_\pi = \big\{x \in \R^d : x_{\pi(1)} > x_{\pi(2)} > \cdots > x_{\pi(d)}\big\},
 \]
@@ -724,7 +844,7 @@ called a \emph{permutation cone} (Weyl chamber of the symmetric group). The info
 Two points $x, y \in \R^d$ satisfy $\argsort(x) = \argsort(y)$ if and only if for all $i \neq j$: $x_i > x_j \Leftrightarrow y_i > y_j$. This defines $d!$ open cones, one per permutation $\pi \in S_d$, each nonempty and convex (defined by strict linear inequalities). The boundary $\{x : x_i = x_j \text{ for some } i \neq j\}$ has Lebesgue measure zero. Since argsort maps each cone to a distinct permutation, the encoding has exactly $\log_2(d!)$ bits of information. The asymptotic expansion follows from Stirling's formula $d! \approx \sqrt{2\pi d}\,(d/e)^d$.
 \end{proof}
 
-For $d = 64$ (Digits), the capacity is $\log_2(64!) \approx 296$ bits---substantial, but finite and far below the infinite capacity of real-valued representations. Polynomial expansion from $d$ to $d' = \binom{d+k}{k}-1$ features increases capacity to $\log_2(d'!)$, which grows super-linearly in $d'$.
+For $d = 64$ (Digits), the capacity is $\log_2(64!) \approx 296$ bits---substantial, but finite and far below the infinite capacity of real-valued representations. A subtlety matters for the full pipeline: ArrowFlow does not argsort the expanded features directly but a \emph{projected} score vector $z = \phi(x)W \in \R^e$ (Section~\ref{sec:encoding}). The relevant ordinal alphabet is therefore $S_e$, with maximum capacity $\log_2(e!)$ controlled by the embedding dimension $e$---\emph{not} $\log_2(d'!)$. Polynomial expansion from $d$ to $d' = \binom{d+k}{k}-1$ features does \emph{not} enlarge this alphabet when $e$ is fixed; instead it changes the geometry of the map $x \mapsto z$, and hence which permutation cones the data reach. For Digits with degree~1 and $e = d = 64$ the two coincide, which is why $\log_2(64!)$ applies there.
 
 % --- Figure 4: Permutation Cones ---
 \begin{figure}[t]
@@ -768,7 +888,7 @@ Let $x \in \R^d$ with $\|x\|_\infty \leq B$, and let $\varepsilon \sim \mathcal{
 \mathrm{Var}\big[f(x+\varepsilon) - f(x)\big] = \sigma^2 \|\nabla f(x)\|^2 + O(\sigma^4) \;=\; \sigma^2 \sum_{s=1}^k \prod_{t \neq s} x_{j_t}^2 \;+\; O(\sigma^4),
 \]
 which is at most $O(k\, \sigma^2 B^{2(k-1)})$.
-Consequently, the effective noise standard deviation per feature in the expanded space grows as $O(\sqrt{k}\, \sigma B^{k-1})$, weakening the stability bound of Theorem~\ref{thm:stability} by a factor of $B^{k-1}$ relative to degree-1 features.
+Consequently, the effective noise standard deviation per feature in the expanded space grows as $O(\sqrt{k}\, \sigma B^{k-1})$, weakening the stability bound of Theorem~\ref{thm:stability} by a factor of $B^{k-1}$ relative to degree-1 features. This is a \emph{local}, first-order (delta-method) sensitivity statement for a single distinct-index monomial; bridging it to a guarantee on argsort stability over all $\binom{d+k}{k}-1$ expanded features requires an additional union bound (Remark below), and the constant changes for repeated-index monomials such as $x_i^k$. We therefore use it to \emph{help explain}, not to fully prove, the empirical degradation of Section~\ref{sec:tradeoff}.
 \end{proposition}
 
 \begin{proof}
@@ -785,11 +905,11 @@ This proposition, combined with Theorem~\ref{thm:stability}, yields a qualitativ
 
 \subsection{Convergence of Permutation-Matrix Accumulation}
 
-The accumulation rule (Eqs.~\ref{eq:accum-update}--\ref{eq:accum-reorder}) can be analyzed as a statistical estimator of the optimal filter ordering.
+The accumulation rule (Eqs.~\ref{eq:accum-update}--\ref{eq:accum-reorder}) can be analyzed as a statistical estimator of the mean-position (Borda) ranking.
 
-\begin{proposition}[Accumulation Consistency]
+\begin{proposition}[Consistency of the Mean-Position Accumulator]
 \label{prop:convergence}
-Let $\pi_1, \ldots, \pi_T$ be i.i.d.\ samples from a distribution $P$ over $S_V$ with distinct expected positions: $\E[\pi(u)] \neq \E[\pi(v)]$ for all $u \neq v$. Define the target $\pi^* = \argsort\big(\E[\pi(1)], \ldots, \E[\pi(V)]\big)$. Then the filter ordering $r_T$ produced by the accumulation rule satisfies $r_T \to \pi^*$ almost surely as $T \to \infty$.
+Let $\pi_1, \ldots, \pi_T$ be i.i.d.\ samples from a distribution $P$ over $S_V$ with distinct expected positions: $\E[\pi(u)] \neq \E[\pi(v)]$ for all $u \neq v$. Define the \emph{mean-position ranking} $\pi_{\mathrm{mean}} = \argsort\big(\E[\pi(1)], \ldots, \E[\pi(V)]\big)$. Then the filter ordering $r_T$ produced by the accumulation rule satisfies $r_T \to \pi_{\mathrm{mean}}$ almost surely as $T \to \infty$. This is a Borda/mean-rank aggregate; it is \emph{not} in general the footrule median (Theorem~\ref{thm:mle-filter}).
 \end{proposition}
 
 \begin{proof}
@@ -797,11 +917,11 @@ The implementation initializes $A$ to the identity (a prior encoding the current
 \[
 \hat{\imath}_T(v) = \frac{\sum_k k \cdot A[v,k]}{\sum_k A[v,k]} = \frac{v + \sum_{t=1}^T \pi_t(v)}{1 + T},
 \]
-which is a convex combination of the prior position $v$ and the sample mean $(1/T)\sum_{t=1}^T \pi_t(v)$. As $T \to \infty$, the prior weight $1/(1+T) \to 0$, so $\hat{\imath}_T(v) \to \E[\pi(v)]$ almost surely by the strong law of large numbers. Since argsort is locally constant on the open set $\{y \in \R^V : y_u \neq y_v\ \forall\, u \neq v\}$, and the expected positions are distinct by assumption, eventually $\hat{\imath}_T$ lies in a neighborhood where argsort is constant, giving $r_T = \argsort(\hat{\imath}_T(1), \ldots, \hat{\imath}_T(V)) \to \pi^*$ almost surely.
+which is a convex combination of the prior position $v$ and the sample mean $(1/T)\sum_{t=1}^T \pi_t(v)$. As $T \to \infty$, the prior weight $1/(1+T) \to 0$, so $\hat{\imath}_T(v) \to \E[\pi(v)]$ almost surely by the strong law of large numbers. Since argsort is locally constant on the open set $\{y \in \R^V : y_u \neq y_v\ \forall\, u \neq v\}$, and the expected positions are distinct by assumption, eventually $\hat{\imath}_T$ lies in a neighborhood where argsort is constant, giving $r_T = \argsort(\hat{\imath}_T(1), \ldots, \hat{\imath}_T(V)) \to \pi_{\mathrm{mean}}$ almost surely.
 \end{proof}
 
 \begin{remark}
-For the Mallows model $P(\pi \mid \pi^*, \lambda) \propto \exp(-\lambda \cdot d_K(\pi, \pi^*))$ \citep{mallows1957nonnull} (originally defined with Kendall tau $d_K$; footrule variants also apply), the distinctness condition $\argsort(\E[\pi]) = \pi^*$ holds when $\lambda$ is sufficiently large. By the central limit theorem, $\hat{\imath}_T(v)$ has standard deviation $\sigma_v / \sqrt{T}$ where $\sigma_v^2 = \mathrm{Var}[\pi(v)] \leq V^2/4$. A union bound over all $V$ items gives that $\max_v |\hat{\imath}_T(v) - \E[\pi(v)]| < \gamma/2$ with high probability when $T = \Omega(V^2 \log V / \gamma^2)$, where $\gamma = \min_{u \neq v}|\E[\pi(u)] - \E[\pi(v)]|$ is the minimum gap between expected positions.
+For the Mallows model $P(\pi \mid \pi^*, \lambda) \propto \exp(-\lambda \cdot d_K(\pi, \pi^*))$ \citep{mallows1957nonnull} (originally defined with Kendall tau $d_K$; footrule variants also apply), the mean-position ranking coincides with the modal permutation, $\pi_{\mathrm{mean}} = \pi^*$, when $\lambda$ is sufficiently large. By the central limit theorem, $\hat{\imath}_T(v)$ has standard deviation $\sigma_v / \sqrt{T}$ where $\sigma_v^2 = \mathrm{Var}[\pi(v)] \leq V^2/4$. A union bound over all $V$ items gives that $\max_v |\hat{\imath}_T(v) - \E[\pi(v)]| < \gamma/2$ with high probability when $T = \Omega(V^2 \log V / \gamma^2)$, where $\gamma = \min_{u \neq v}|\E[\pi(u)] - \E[\pi(v)]|$ is the minimum gap between expected positions.
 \end{remark}
 
 \subsection{Multi-View Ensemble Error Bound}
@@ -820,13 +940,13 @@ Let $X_k \in \{0,1\}$ indicate a correct prediction by view $k$, with $\E[X_k] =
 \end{proof}
 
 \begin{remark}
-The independence assumption is critical and is the primary reason ArrowFlow uses diverse projection strategies. If all views used the same projection, their errors would be perfectly correlated and the ensemble would provide no benefit. Under full independence, $K = 7$ views with per-view error $p = 0.20$ would yield a 6$\times$ error reduction (exact binomial). Empirically, ArrowFlow's 7 views reduce error by 2--3$\times$ (Table~\ref{tab:progression}), which is less than the independent-view prediction, indicating that projection diversity achieves only partial decorrelation. The gap between theoretical and observed reduction quantifies the residual correlation among views---an important factor when choosing the number of views.
+The independence assumption is critical and is the primary reason ArrowFlow uses diverse projection strategies. If all views used the same projection, their errors would be perfectly correlated and the ensemble would provide no benefit. Under full independence, $K = 7$ views with per-view error $p = 0.20$ would yield a 6$\times$ error reduction (exact binomial). Empirically, ArrowFlow's 7 views reduce error by $1.3$--$3.3\times$ (Table~\ref{tab:progression}), which is less than the independent-view prediction, indicating that projection diversity achieves only partial decorrelation. The gap between theoretical and observed reduction quantifies the residual correlation among views---an important factor when choosing the number of views. This bound is therefore best read as an \emph{idealized} (independent, binary) benchmark: under pairwise error correlation $\rho > 0$ the effective number of independent voters is roughly $K/(1 + (K-1)\rho)$, so the exponential rate degrades accordingly, and the tasks here are multiclass rather than binary. A direct measurement of inter-view error correlation would turn this from generic theory into evidence about the actual architecture; we leave that to future work.
 \end{remark}
 
 \subsection{Social Choice Foundations: From Arrow's Theorem to Learning Guarantees}
 \label{sec:social-choice-theory}
 
-Section~\ref{sec:arrow} presented the Arrow connection as a design principle.  Here we make it formal: we state three results that follow from classical social choice theory and apply directly to ArrowFlow's ranking layers.  Together, they characterize \emph{what} the learning rule optimizes (Theorem~\ref{thm:mle-filter}), \emph{how much} a layer can be perturbed before its output changes (Theorem~\ref{thm:manipulability}), and \emph{how} IIA violations create the nonlinearity that makes permutation networks expressive (Proposition~\ref{prop:iia-index}).
+Section~\ref{sec:arrow} presented the Arrow connection as a design principle.  Here we make it precise, which requires one clarification at the outset.  The \emph{forward} pass of a ranking layer orders filters by their \emph{independent} distances $\{D_j\}$, so the relative order of filters $a$ and $b$ depends only on $D_a$ and $D_b$; the forward layer therefore \emph{satisfies} pairwise independence of irrelevant alternatives, and its nonlinearity originates in the piecewise-constant cone geometry of $\argsort$ (Theorem~\ref{thm:capacity}), not in any IIA violation.  The genuine social-choice content lives in the \emph{learning rule}: the accumulation update (Eqs.~\ref{eq:accum-update}--\ref{eq:accum-reorder}) aggregates the input rankings a filter accumulates into a consensus ordering, and \emph{this} aggregation is the object to which Arrow's and Gibbard--Satterthwaite's theorems apply.  We state three results that characterize \emph{what} the aggregation estimates (Theorem~\ref{thm:mle-filter} and Proposition~\ref{prop:exp-consistency}), \emph{how far} a layer's output can be moved by an adversarial input perturbation (Theorem~\ref{thm:manipulability}), and \emph{that} the aggregation provably violates IIA in the exact sense of Arrow's theorem (Proposition~\ref{prop:iia-index}).
 
 \subsubsection{Filter Learning as Maximum Likelihood Estimation}
 
@@ -837,105 +957,112 @@ P(\pi \mid \pi^*, \lambda) \;=\; \frac{1}{Z(\lambda)}\,\exp\!\bigl(-\lambda\, d_
 \end{equation}
 where $d_F$ is Spearman's footrule, $\pi^*$ is the modal (central) permutation, $\lambda > 0$ is a concentration parameter, and $Z(\lambda) = \sum_{\sigma \in S_V} \exp(-\lambda\, d_F(\sigma, \pi^*))$ is the normalizing constant.  The model is a natural generalization of the Gaussian: $\lambda$ controls dispersion and the mode $\pi^*$ is the permutation analogue of the mean.
 
-\begin{theorem}[Filter Learning as MLE]
+\begin{theorem}[Filter Learning as Consistent Rank Aggregation]
 \label{thm:mle-filter}
-Let $\pi_1, \dots, \pi_T \in S_V$ be i.i.d.\ samples from the footrule-Mallows model $P(\cdot \mid \pi^*, \lambda)$ with fixed $\lambda > 0$.  The maximum-likelihood estimator for the central permutation is
-\[
-\hat{\pi}^*_{\mathrm{MLE}} \;=\; \arg\min_{\sigma \in S_V}\; \sum_{t=1}^{T} d_F(\pi_t, \sigma),
-\]
-i.e., the \emph{footrule median} of the observed rankings.  ArrowFlow's accumulation rule (Eqs.~\ref{eq:accum-update}--\ref{eq:accum-reorder}) converges to $\hat{\pi}^*_{\mathrm{MLE}}$ as $T \to \infty$ under the conditions of Proposition~\ref{prop:convergence}.
+Let $\pi_1, \dots, \pi_T \in S_V$ be i.i.d.\ samples from the footrule-Mallows model $P(\cdot \mid \pi^*, \lambda)$ with fixed $\lambda > 0$.
+\begin{enumerate}[label=(\roman*)]
+\item The maximum-likelihood estimator of the central permutation is the \emph{footrule median}
+$\hat{\pi}^*_{\mathrm{MLE}} = \arg\min_{\sigma \in S_V} \sum_{t=1}^{T} d_F(\pi_t, \sigma)$.
+\item ArrowFlow's accumulation rule (Eqs.~\ref{eq:accum-update}--\ref{eq:accum-reorder}) instead computes the \emph{positional} (Borda) aggregate
+$r_T = \argsort\!\bigl(\tfrac1T\sum_t \pi_t(1), \dots, \tfrac1T\sum_t \pi_t(V)\bigr)$.
+\item Both estimators are consistent for the same target: $\hat{\pi}^*_{\mathrm{MLE}} \to \pi^*$ and $r_T \to \pi^*$ almost surely as $T \to \infty$.
+\end{enumerate}
 \end{theorem}
 
 \begin{proof}
-The log-likelihood of $\pi^*$ given the observations is
-\[
-\ell(\pi^*) = \sum_{t=1}^T \log P(\pi_t \mid \pi^*, \lambda) = -\lambda \sum_{t=1}^T d_F(\pi_t, \pi^*) - T\log Z(\lambda).
-\]
-Since $\lambda > 0$ and $Z(\lambda)$ does not depend on $\pi^*$, maximizing $\ell$ is equivalent to minimizing $\sum_t d_F(\pi_t, \pi^*)$.  This is a footrule-median problem, also known as the Kemeny-optimal aggregation under the footrule metric \citep{dwork2001rank}.  Proposition~\ref{prop:convergence} shows that the accumulation rule's running estimate converges almost surely to the argsort of the expected positions, which---under a Mallows model with sufficient concentration---coincides with $\pi^*$.  By the consistency of MLEs for exponential families, $\hat{\pi}^*_{\mathrm{MLE}} \to \pi^*$ almost surely as $T \to \infty$.
+\emph{(i)} The log-likelihood is $\ell(\sigma) = -\lambda \sum_t d_F(\pi_t, \sigma) - T\log Z(\lambda)$; since $\lambda > 0$ and $Z(\lambda)$ is independent of $\sigma$, maximizing $\ell$ is equivalent to minimizing $\sum_t d_F(\pi_t, \sigma)$, the footrule median (the footrule analogue of Kemeny aggregation \citep{dwork2001rank}).
+\emph{(ii)} is exactly Eq.~\eqref{eq:accum-reorder} once the identity prior is amortized (Proposition~\ref{prop:convergence}).
+\emph{(iii)} By the strong law, $\tfrac1T\sum_t \pi_t(v) \to \E[\pi(v)]$ a.s.\ for each item $v$. We assume the standard regularity condition that the expected positions are ordered consistently with the mode, $\argsort(\E[\pi(\cdot)]) = \pi^*$; this holds for the footrule-Mallows model at sufficiently large concentration $\lambda$ (intuitively, the symmetric unimodal law concentrates each item's position around its modal rank, though we do not prove the monotonicity for all $\lambda$ here). Under this condition $\pi_{\mathrm{mean}} = \argsort(\E[\pi(\cdot)]) = \pi^*$, and Proposition~\ref{prop:convergence} gives $r_T \to \pi_{\mathrm{mean}} = \pi^*$. The same symmetry makes $\pi^*$ the unique \emph{population} footrule median, so the empirical footrule-risk minimizer satisfies $\hat{\pi}^*_{\mathrm{MLE}} \to \pi^*$ by standard $M$-estimator consistency on the finite set $S_V$. Both estimators thus share the limit $\pi^*$, though they generally differ at finite $T$ (Borda mean-position vs.\ footrule median).
 \end{proof}
 
-\begin{corollary}[Asymptotic Efficiency]
-\label{cor:efficiency}
-Under the footrule-Mallows model, the MLE $\hat{\pi}^*_{\mathrm{MLE}}$ achieves the Cram\'er--Rao lower bound asymptotically.  Specifically, for any alternative estimator $\tilde{\pi}$ of $\pi^*$, the expected footrule loss satisfies
-\[
-\E\bigl[d_F(\tilde{\pi}, \pi^*)\bigr] \;\geq\; \E\bigl[d_F(\hat{\pi}^*_{\mathrm{MLE}}, \pi^*)\bigr]\;\bigl(1 + o(1)\bigr)
-\]
-as $T \to \infty$.  No other learning rule on permutation observations can do asymptotically better.
-\end{corollary}
-
 \begin{remark}
-This result connects ArrowFlow's learning rule to a 60-year tradition in rank aggregation.  The Kemeny rule---optimal aggregation under Kendall tau distance---is the MLE for the Kendall-Mallows model \citep{conitzer2005voting}.  Theorem~\ref{thm:mle-filter} is the footrule analogue: ArrowFlow's filter learning is the statistically optimal estimator for the permutation distribution most natural to its distance metric.  This is not a coincidence but a consequence of the exponential-family structure: the sufficient statistic is $\sum_t d_F(\pi_t, \cdot)$, and the accumulation rule estimates exactly this quantity.
+The distinction in parts (i)--(ii) matters: the accumulation rule is \emph{not} the footrule-median MLE at finite $T$---it is the cheaper $O(VT)$ positional statistic---but it is consistent for the same modal permutation. This is the honest version of the folklore ``Borda approximates Kemeny'': they agree in the limit, not in general. A minimal example makes the finite-sample gap concrete. For the profile $ABC,\,ABC,\,BCA,\,CBA$ over three items, the mean positions are $(2.00,\,1.75,\,2.25)$, so the accumulator returns $BAC$; the footrule median, however, is $ABC$ (footrule objective $8$ versus $10$ for $BAC$). The two disagree even though the mean positions are distinct, so this is not a tie-breaking artifact.
 \end{remark}
 
-\subsubsection{Adversarial Manipulability Bound}
-
-The Gibbard--Satterthwaite theorem \citep{gibbard1973manipulation,satterthwaite1975strategy} states that any non-dictatorial, surjective social choice function over three or more alternatives is \emph{manipulable}: some voter can benefit by misreporting preferences.  In ArrowFlow's context, ``manipulation'' corresponds to an adversarial perturbation of the input ranking that changes the layer's output.  We translate the Gibbard--Satterthwaite result into a quantitative bound on the minimum perturbation required.
-
-\begin{theorem}[Adversarial Manipulability Bound]
-\label{thm:manipulability}
-Let $f\colon S_V \to S_N$ be a ranking layer with $N \geq 3$ filters and vocabulary size $V$, where $f$ is surjective (all output rankings are achievable) and non-dictatorial (no single filter determines the output for all inputs).  Then:
-\begin{enumerate}[label=(\roman*)]
-\item \textbf{(Existence of adversarial inputs.)} There exists an input $\pi \in S_V$ and a perturbation $\pi' \in S_V$ with
+\begin{proposition}[Exponential Consistency]
+\label{prop:exp-consistency}
+Under the footrule-Mallows model with fixed $\lambda > 0$, the MLE identifies the true mode with error probability decaying exponentially in $T$:
 \[
-d_F(\pi, \pi') \;\leq\; 2(N-1)
+\Pr\bigl[\hat{\pi}^*_{\mathrm{MLE}} \neq \pi^*\bigr] \;\le\; (V!-1)\,\exp\!\Bigl(-\frac{T\,\Delta_\lambda^2}{2\,\mathrm{diam}^2}\Bigr),
 \]
-such that $f(\pi) \neq f(\pi')$.
+where $\mathrm{diam} = \lfloor V^2/2\rfloor$ is the footrule diameter (Lemma~\ref{lem:fk-equiv}) and
+$\Delta_\lambda = \min_{\sigma \neq \pi^*}\bigl(\E\,d_F(\pi,\sigma) - \E\,d_F(\pi,\pi^*)\bigr) > 0$ is the population footrule-risk gap.
+\end{proposition}
 
-\item \textbf{(Lower bound from stability.)} By Theorem~\ref{thm:stability}, for any input $\pi$ with minimum gap $\delta_{\min}(\pi)$ in the pre-argsort real-valued representation, no perturbation with footrule distance $d_F < \delta_{\min}(\pi)$ can change the layer output.
-\end{enumerate}
-Consequently, the minimum adversarial footrule perturbation $\Delta^*$ satisfies
+\begin{proof}
+The MLE prefers some $\sigma \neq \pi^*$ only if $\tfrac1T\sum_t\bigl[d_F(\pi_t,\sigma) - d_F(\pi_t,\pi^*)\bigr] \le 0$. Each summand lies in $[-\mathrm{diam}, \mathrm{diam}]$ (range $2\,\mathrm{diam}$) and has mean $\ge \Delta_\lambda > 0$ (positivity holds because $\pi^*$ is the unique population minimizer of the footrule risk under the symmetric unimodal Mallows law). Hoeffding's inequality for a sum of $T$ i.i.d.\ variables of range $2\,\mathrm{diam}$ bounds this event by $\exp\bigl(-2T\Delta_\lambda^2/(2\,\mathrm{diam})^2\bigr) = \exp\bigl(-T\Delta_\lambda^2/(2\,\mathrm{diam}^2)\bigr)$; a union bound over the $V!-1$ competing permutations gives the claim.
+\end{proof}
+
+\begin{remark}
+A Cram\'er--Rao bound does \emph{not} apply here: $\pi^*$ is a discrete parameter, so there is no Fisher information in the classical sense, and earlier drafts that invoked it were mistaken. Exponential consistency is the correct optimality notion---the misidentification probability vanishes geometrically at a rate governed by the footrule-risk gap $\Delta_\lambda$, which grows with the concentration $\lambda$. This connects ArrowFlow's learning rule to a 60-year tradition in rank aggregation: the Kemeny rule is the MLE for the Kendall-Mallows model \citep{conitzer2005voting}, and Theorem~\ref{thm:mle-filter} is the footrule analogue, with the accumulation rule reaching the same limit through cheaper positional aggregation.
+\end{remark}
+
+\subsubsection{Adversarial Perturbation Bounds}
+
+The Gibbard--Satterthwaite theorem \citep{gibbard1973manipulation,satterthwaite1975strategy} states that every non-dictatorial, surjective social choice function over three or more alternatives is \emph{manipulable}.  For ArrowFlow this is a motivating analogy rather than a proof device: it suggests that any non-trivial layer must admit input perturbations that change its output.  We make this quantitative with an elementary two-sided bound that follows directly from the metric structure of the footrule distance, with no appeal to social-choice axioms.
+
+\begin{theorem}[Adversarial Perturbation Bounds]
+\label{thm:manipulability}
+Fix a layer with filters $\phi_1, \dots, \phi_N$ and an input $\pi \in S_V$ whose filter-distances $D_j = d_F(\pi, \phi_j)$ are distinct.  Let $D_{(1)} < D_{(2)} < \cdots$ be the order statistics, $g_{\min}(\pi) = \min_k\bigl(D_{(k+1)} - D_{(k)}\bigr)$ the smallest consecutive gap, and
 \[
-\delta_{\min}(\pi) \;\leq\; \Delta^*(\pi) \;\leq\; 2(N-1).
+\Delta^*(\pi) = \min\{\, d_F(\pi, \pi') : f(\pi') \neq f(\pi)\,\}
+\]
+the minimum footrule perturbation of the input that changes the output ranking.  Then
+\[
+\tfrac12\,g_{\min}(\pi) \;\le\; \Delta^*(\pi) \;\le\; D_{(2)}(\pi).
 \]
 \end{theorem}
 
 \begin{proof}
-\textit{Part (i).}  Since $f$ is non-dictatorial and surjective with $N \geq 3$, the Gibbard--Satterthwaite theorem guarantees the existence of a manipulable profile.  In ArrowFlow's single-voter (single-input) setting, manipulability means there exist $\pi, \pi'$ with $f(\pi) \neq f(\pi')$.  The footrule bound $d_F(\pi, \pi') \leq 2(N-1)$ follows from the geometry of the layer: the output is determined by the ranking of distances $\{d_F(\pi, \phi_j)\}_{j=1}^N$ to the $N$ filters.  To change the output ranking, it suffices to swap the relative order of two adjacent filters in distance.  Moving one item in the input by one position changes its footrule distance to any filter by at most 2 (the maximum single-position footrule change).  To reverse the ordering of two filters at distance $\Delta$ apart, we need at most $\Delta/2$ single-item moves.  Since the maximum distance gap between adjacent filters (in the sorted distance sequence) is at most $2(V-1)/N$ on average, and we only need to swap one pair, the worst case over all filter configurations is $N-1$ moves of displacement 2 each, giving $d_F(\pi, \pi') \leq 2(N-1)$.
+\textit{Lower bound.}  For any $\pi'$, the triangle inequality for $d_F$ gives, for every filter $j$,
+\[
+\bigl|D_j(\pi') - D_j(\pi)\bigr| = \bigl|d_F(\pi', \phi_j) - d_F(\pi, \phi_j)\bigr| \le d_F(\pi, \pi').
+\]
+If $d_F(\pi, \pi') < \tfrac12 g_{\min}$, then every $D_j$ moves by less than $\tfrac12 g_{\min}$, so for any consecutive pair $D_{(k)} < D_{(k+1)}$ (gap $\ge g_{\min}$) we still have $D_{(k)}(\pi') < D_{(k+1)}(\pi')$.  No adjacent pair in the sorted-distance order crosses, hence $f(\pi') = \argsort(D) $ is unchanged and $\Delta^*(\pi) \ge \tfrac12 g_{\min}(\pi)$.
 
-\textit{Part (ii).}  This is a direct consequence of Theorem~\ref{thm:stability}: if $d_F(\pi, \pi') < \delta_{\min}$, then $\argsort$ is unchanged, so $f(\pi) = f(\pi')$.
+\textit{Upper bound.}  Let $\phi_{(2)}$ be the second-nearest filter.  Choosing $\pi' = \phi_{(2)}$ makes $d_F(\pi', \phi_{(2)}) = 0$, so $\phi_{(2)}$ becomes the (weakly) nearest filter; since the original top filter was $\phi_{(1)} \neq \phi_{(2)}$, the output ranking changes.  Therefore $\Delta^*(\pi) \le d_F(\pi, \phi_{(2)}) = D_{(2)}(\pi)$.
 \end{proof}
 
 \begin{remark}
-The two-sided bound reveals a design trade-off.  The lower bound $\delta_{\min}$ is a property of the data (how well-separated feature values are), while the upper bound $2(N-1)$ is a property of the architecture (number of filters).  Increasing $N$ makes the layer more expressive but also more manipulable---a direct instantiation of the Gibbard--Satterthwaite impossibility.  This provides a principled explanation for the empirical observation that excessively wide layers do not improve ArrowFlow's accuracy: beyond a critical width, the increased manipulability outweighs the representational benefit.
+Both bounds were confirmed numerically (they held in all $300$ random instances tested at $V = 6$, $N = 4$).  The lower bound is a certified-robustness guarantee: a margin $g_{\min}$ between consecutive filter-distances guarantees a footrule ball of radius $g_{\min}/2$ in which the output is constant---the permutation-space counterpart of Theorem~\ref{thm:stability}.  The upper bound shows the layer is always manipulable once a second filter is at finite distance, the quantitative echo of Gibbard--Satterthwaite.  Wider or more redundant filter banks tend to crowd filters at similar distances, shrinking $g_{\min}$ and the certified radius; this offers a principled, if partial, account of why excessively wide layers do not monotonically improve ArrowFlow's accuracy.
 \end{remark}
 
 \subsubsection{IIA-Violation Index and Nonlinear Expressivity}
 
-Arrow's theorem identifies IIA violation as the unavoidable trade-off for non-dictatorial aggregation.  We quantify the degree of IIA violation in a ranking layer and connect it to the layer's nonlinear expressivity.
+Arrow's theorem identifies IIA violation as the unavoidable price of non-dictatorial aggregation.  As established above, the forward layer \emph{satisfies} pairwise IIA, so we apply Arrow to the object that genuinely aggregates---the map $A$ that sends a profile of input rankings (the data a filter accumulates) to the consensus filter ordering of Eq.~\eqref{eq:accum-reorder}.  This is the social welfare function ArrowFlow actually optimizes, and we show it provably violates IIA.
 
-\begin{definition}[IIA-Violation Index]
+\begin{definition}[Accumulation Aggregation and its IIA-Violation Index]
 \label{def:iia-index}
-For a ranking layer $f\colon S_V \to S_N$ with $N$ filters, define the \emph{IIA-violation index} as the fraction of filter triples whose relative output ranking is context-dependent:
-\begin{multline*}
-\mathcal{I}(f) \;=\; \frac{1}{\binom{N}{3}} \sum_{\{a,b,c\} \subset [N]} \mathbf{1}\!\bigl[\,\exists\, \pi, \pi' \in S_V \text{ s.t.\ } d_F(\pi, \pi'_{\setminus c}) = 0,\\
-\rankop_f(\pi, a) < \rankop_f(\pi, b),\;\;
-\rankop_f(\pi', a) > \rankop_f(\pi', b)\,\bigr],
-\end{multline*}
-where $\rankop_f(\pi, j)$ is the position of filter $j$ in the output ranking $f(\pi)$, and $\pi'_{\setminus c}$ denotes that $\pi'$ differs from $\pi$ only in the component affecting filter $c$'s distance.  In words: the relative ranking of filters $a$ and $b$ changes when only the information relevant to filter $c$ is modified.
+Let $A\colon (S_V)^m \to S_V$ be the accumulation aggregation that maps a profile $\Pi = (\pi_1, \dots, \pi_m)$ of input rankings to the consensus ordering $A(\Pi) = \argsort\!\bigl(\sum_t \pi_t(1), \dots, \sum_t \pi_t(V)\bigr)$ of Eq.~\eqref{eq:accum-reorder} (smaller summed position ranked earlier).  Following Arrow, $A$ \emph{violates IIA on the pair $\{a,b\}$} if there exist profiles $\Pi, \Pi'$ that
+(i)~agree on every voter's relative order of $a$ and $b$, but
+(ii)~may differ arbitrarily in how voters rank the \emph{other} alternatives,
+yet for which $A(\Pi)$ and $A(\Pi')$ order $a$ and $b$ oppositely.  The \emph{IIA-violation index} $\mathcal{I}(A) \in [0,1]$ is the fraction of pairs $\{a,b\}\subset\mathcal{V}$ on which $A$ violates IIA.
 \end{definition}
 
-\begin{proposition}[IIA-Violation Bounds]
+\begin{proposition}[The Accumulation Aggregation Violates IIA]
 \label{prop:iia-index}
-For a surjective ranking layer $f$ with $N \geq 3$ filters:
+For $V \geq 3$ and $m \geq 2$, the accumulation aggregation $A$ of Definition~\ref{def:iia-index} satisfies:
 \begin{enumerate}[label=(\roman*)]
-\item \textbf{(Lower bound.)} $\mathcal{I}(f) \geq \frac{1}{\binom{N}{2}}$.  That is, at least one triple must violate IIA---a direct consequence of Arrow's theorem applied to the layer's aggregation rule.
+\item \textbf{(Pareto and non-dictatorship.)} If every voter places $a$ before $b$, then so does $A(\Pi)$; and no single voter determines $A(\Pi)$ for all profiles.
 
-\item \textbf{(Upper bound.)} $\mathcal{I}(f) \leq 1 - \frac{1}{N}$.  Full IIA violation ($\mathcal{I} = 1$) is impossible because the nearest filter always maintains its top rank under sufficiently small perturbations (by the stability theorem).
+\item \textbf{(Forced IIA violation.)} By Arrow's theorem, a social welfare function with universal domain over $V \geq 3$ alternatives cannot satisfy Pareto, non-dictatorship, and IIA simultaneously; since $A$ has the first two, it must violate IIA, i.e.\ $\mathcal{I}(A) > 0$.
 
-\item \textbf{(Expressivity connection.)} The number of distinct decision regions in the input space $S_V$ that $f$ can realize is at least $\Omega\!\bigl(\mathcal{I}(f) \cdot \binom{N}{3}\bigr)$.  Higher IIA violation implies more context-dependent boundaries, hence more expressive classification.
+\item \textbf{(Explicit witness.)} The violation is concrete, not merely abstract: there is an explicit two-voter profile pair, preserving every voter's $a$-vs-$b$ order and changing only $c$'s position, on which the consensus $a$-vs-$b$ order reverses.
 \end{enumerate}
 \end{proposition}
 
 \begin{proof}
-\textit{Part (i).}  If $\mathcal{I}(f) = 0$, every triple satisfies IIA.  By Arrow's theorem, the only aggregation rules satisfying universal domain, Pareto, and IIA for $N \geq 3$ are dictatorships.  Since $f$ is non-dictatorial (footrule distance from the input to different filters generically produces distinct rankings), at least one triple must violate IIA.  With $\binom{N}{3}$ triples, the minimum index is $1/\binom{N}{3} \geq 1/\binom{N}{2}$ for $N \geq 3$.
-
-\textit{Part (ii).}  For the nearest filter $a$ (with $d_F(\pi, \phi_a) < d_F(\pi, \phi_b)$ for all $b \neq a$), Theorem~\ref{thm:stability} guarantees that sufficiently small perturbations cannot change $a$'s top position.  Hence any triple containing $a$ as the ``first-ranked'' element cannot be fully IIA-violating for inputs in $a$'s Voronoi cell.  Since each filter's Voronoi cell contributes at least one non-violating constraint, $\mathcal{I}(f) \leq 1 - 1/N$.
-
-\textit{Part (iii).}  Each IIA-violating triple $\{a, b, c\}$ witnesses the existence of at least two input regions where the $a$-vs-$b$ ranking reverses depending on $c$.  These regions correspond to distinct decision boundaries.  Summing over all violating triples, the layer realizes at least $\mathcal{I}(f) \cdot \binom{N}{3}$ boundary-separated regions, each supporting a distinct classification behavior.
+\textit{Part (i).}  \emph{Pareto:} if $\pi_t(a) < \pi_t(b)$ for all $t$ then $\sum_t \pi_t(a) < \sum_t \pi_t(b)$, so $A(\Pi)$ ranks $a$ before $b$.  \emph{Non-dictatorship:} $A$ depends on all $m \geq 2$ voters symmetrically through the sum, so for any putative dictator there is a profile in which the remaining voters' summed positions overturn that voter's order; \emph{universal domain} holds since $A$ is defined on every profile.
+\textit{Part (ii).}  is then immediate from Arrow's impossibility theorem \citep{arrow1951social}.
+\textit{Part (iii).}  Take $V=3$ items $\{a,b,c\}$, positions counted from the top ($1,2,3$), and the two-voter profiles
+\[
+\Pi = \{\,abc,\; bca\,\}, \qquad \Pi' = \{\,acb,\; bac\,\}.
+\]
+Every voter's $a$-vs-$b$ order is identical in $\Pi$ and $\Pi'$ (voter~1 places $a$ before $b$; voter~2 places $b$ before $a$); only $c$'s rank changes between the profiles.  The summed positions $(\sum_t\pi_t(a),\sum_t\pi_t(b),\sum_t\pi_t(c))$ are $(4,3,5)$ for $\Pi$ and $(3,4,5)$ for $\Pi'$, so $A(\Pi)$ ranks $b$ before $a$ while $A(\Pi')$ ranks $a$ before $b$: the relative order reverses despite the preserved pairwise preferences, exhibiting an IIA violation directly.  (A broader search over random $V=6$ profiles finds such reversals abundantly.)
 \end{proof}
 
 \begin{remark}
-The IIA-violation index provides a permutation-theoretic measure of what activation functions provide in conventional networks: the ability to create nonlinear decision boundaries.  A linear classifier has $\mathcal{I} = 0$ (IIA is satisfied: the relative ranking of two outputs depends only on their respective inner products, not on third parties).  ArrowFlow's sort layers necessarily violate IIA---and Proposition~\ref{prop:iia-index} shows this is \emph{both unavoidable} (Arrow's theorem) \emph{and beneficial} (expressivity).  This formalizes the informal observation of Section~\ref{sec:arrow} that ``IIA violation $\to$ contextual nonlinearity.''
+This is the rigorous core of ArrowFlow's Arrow connection, and it sits where it belongs---in the \emph{learning} dynamics, not the forward pass.  Because the consensus depends on the global cardinal configuration rather than on pairwise orders alone, each learned filter is a \emph{context-dependent} summary of its training inputs; composed across layers with the piecewise-constant cone geometry of $\argsort$ (Theorem~\ref{thm:capacity}), this is what lets stacked ranking layers carve nonlinear decision regions.  We are careful not to overstate the link: the IIA violation is a property of the \emph{aggregation}, while the forward nonlinearity is a property of the \emph{cone partition}; the two meet in that the aggregation determines \emph{where} the cone boundaries---the learned filters---are placed.  This is the precise form of the informal claim of Section~\ref{sec:arrow} that social-choice non-neutrality drives expressivity.
 \end{remark}
 
 
@@ -953,7 +1080,7 @@ We conclude with three questions that we believe are within reach but remain ope
 
 
 % ============================================================================
-% 8. HYBRID RANK-TENSOR SYSTEM
+% 9. HYBRID RANK-TENSOR SYSTEM
 % ============================================================================
 \section{Hybrid Rank--Tensor System}
 \label{sec:hybrid}
@@ -974,26 +1101,6 @@ Empirically, the hybrid tensor$\to$sort architecture significantly underperforms
 
 
 % ============================================================================
-% 9. NETWORK ARCHITECTURE AND TRAINING
-% ============================================================================
-\section{Network Architecture}
-\label{sec:architecture}
-
-\subsection{Layer Structure}
-Each ArrowFlow network is a layered architecture where each layer is a \textbf{Sort Layer}: a bank of $N$ permutation filters. The layer computes Spearman's footrule distance between the input permutation and each filter, and outputs a ranking of filters by distance. Layers are stacked: the output vocabulary of layer $\ell$ (filter IDs) becomes the input vocabulary of layer $\ell+1$.
-
-The default architecture uses two sort layers: a hidden layer with $N$ filters and an output layer with $C$ filters (one per class). Classification is by nearest-filter: the predicted class is the index of the output-layer filter closest to the final hidden representation.
-
-\subsection{Training Details}
-\begin{itemize}[leftmargin=2em]
-  \item \textbf{Initialization:} All filters are random permutations of their vocabulary.
-  \item \textbf{Iteration:} Each iteration presents one data point. Typical training uses 200--500 iterations.
-  \item \textbf{Output layer:} Disabling output-layer updates consistently improves performance---a surprising finding. Frozen output layers serve as stable reference frames, forcing hidden layers to learn more discriminative ordinal representations.
-  \item \textbf{Learning rate:} Controls the scale of vote matrices. Default 0.1, with optional cosine annealing.
-\end{itemize}
-
-
-% ============================================================================
 % 10. EXPERIMENTS: UCI TABULAR BENCHMARKS
 % ============================================================================
 \section{Experiments: UCI Tabular Benchmarks}
@@ -1001,13 +1108,15 @@ The default architecture uses two sort layers: a hidden layer with $N$ filters a
 
 Having established the theoretical foundations, we now evaluate ArrowFlow empirically. The central question is: \emph{can a system with zero floating-point parameters in its core layers compete with heavily tuned gradient-based classifiers?} We first test clean classification accuracy on standard UCI datasets, then systematically probe ArrowFlow's structural advantages and limitations across noise, privacy, missing data, sample efficiency, natively ordinal data, gene expression, and MNIST.
 
-\paragraph{Experimental protocol.} All experiments use 80/20 train/test splits (random\_state=42), 5 independent simulations. Baselines use \textbf{GridSearchCV(cv=3)} with comprehensive hyperparameter grids (RF: 54 combos, SVM: 25, MLP: 48, KNN: 90, XGBoost: 96). ArrowFlow configs sweep width, depth, embedding dimension, views, augmentation, projection strategy, and learning rate.
+\paragraph{Experimental protocol.} All experiments use 80/20 train/test splits (random\_state=42), 5 independent simulations. Baselines use \textbf{GridSearchCV(cv=3)} with comprehensive hyperparameter grids (RF: 54, SVM: 25, MLP: 24, KNN: 24, XGBoost: 72 combinations). ArrowFlow configs sweep width, depth, embedding dimension, views, augmentation, projection strategy, and learning rate.
+
+\paragraph{Model selection and statistical caveats.} We are explicit about two limitations of this protocol. \emph{(i) Single split.} Results are reported on one fixed 80/20 split; the $\pm$ standard deviations for ArrowFlow reflect its internal randomness (random projections and filter initialization) over 5 simulations on that split, not split-to-split variance. Baselines are deterministic after \texttt{GridSearchCV} and appear as single-split point estimates, so we attach no confidence intervals to head-to-head differences and read small margins as ties---on Iris in particular, one test error equals $3.3\%$, so the $0.6$pp gap is below a single sample. \emph{(ii) Asymmetric model selection.} Baselines select hyperparameters by 3-fold cross-validation on the \emph{training} fold only, whereas the ArrowFlow ``best configuration'' in Table~\ref{tab:uci-main} is the best over our sweep \emph{as scored on the test split}. The ArrowFlow entries are therefore an optimistic, best-found estimate rather than a validation-selected one, and the comparison is not symmetric; we report them transparently as an upper bound on what the architecture attains under tuning, not as a fairly-tuned head-to-head, and a deployment estimate would require nested validation. All fitted preprocessing---standardization, polynomial expansion, LDA/PCA projections, and mutual-information gene selection---is learned on the training fold only and applied unchanged to test data. Unless stated otherwise, the robustness experiments of Section~\ref{sec:utility} use a single fixed configuration per dataset (not the tuned best of Table~\ref{tab:uci-main}), which is why a dataset's clean error can differ slightly across tables.
 
 \subsection{Main Results}
 
 \begin{table}[ht]
 \centering
-\caption{Best ArrowFlow configuration vs.\ GridSearchCV-tuned baselines. Test error (\%), mean $\pm$ std over 5 simulations. Bold = best overall.}
+\caption{Best ArrowFlow configuration vs.\ GridSearchCV-tuned baselines. Test error (\%), mean $\pm$ std over 5 simulations. Bold = best overall. ArrowFlow entries are the best configuration found over the sweep, selected on the test split (an optimistic estimate); baselines are CV-tuned on the training fold (see the model-selection caveats above).}
 \label{tab:uci-main}
 \footnotesize
 \begin{tabular}{lrrrlcccccc}
@@ -1025,11 +1134,11 @@ Digits & 5620 & 64 & 10 & {[256] e=64 p=1 lr=0.2} & 4.6\tiny{$\pm$0.3} & 2.8 & \
 \end{tabular}
 \end{table}
 
-ArrowFlow \textbf{beats all baselines on Iris} (2.7\% vs.\ 3.3\%)---the first result where a pure permutation-distance network outperforms every tuned classical method. On Wine (2.8\%), Breast Cancer (2.8\%), and Digits (4.6\%), ArrowFlow is competitive but does not match the best baseline. The gap grows with task complexity, confirming that argsort encoding loss limits performance on magnitude-sensitive tasks. Wine Quality is the weakest result (35.9\% vs.\ 24.1\%)---this binned regression task depends on subtle magnitude differences that argsort discards.
+ArrowFlow \textbf{edges out every tuned baseline on Iris} (2.7\% vs.\ 3.3\%). We report this with deliberate caution: the Iris test set has only 30 samples, so 3.3\% is a single misclassification and the 0.6pp margin is smaller than one test sample; moreover the baselines are single-split point estimates without variance (Section~\ref{sec:experiments}, protocol). The result is therefore best read as ArrowFlow \emph{reaching parity with}---and on average slightly bettering---the best tuned classical methods, which is, to our knowledge, the first time a pure permutation-distance network attains this on a tuned benchmark, rather than as a decisive win. On Wine (2.8\%), Breast Cancer (2.8\%), and Digits (4.6\%), ArrowFlow is competitive but does not match the best baseline. The gap grows with task complexity, confirming that argsort encoding loss limits performance on magnitude-sensitive tasks. Wine Quality is the weakest result (35.9\% vs.\ 24.1\%)---this binned regression task depends on subtle magnitude differences that argsort discards.
 
 \subsection{Does Learning Help? ArrowFlow vs.\ kNN}
 
-A critical question is whether ArrowFlow's permutation-matrix filter updates improve classification beyond simple distance lookup. We compare ArrowFlow to \textbf{kNN with Manhattan distance} (= Spearman footrule) on the \emph{exact same encoded permutations}---same polynomial expansion, same projection, same 7-view ensemble with majority vote. This isolates the contribution of learned filters from the encoding pipeline.
+A critical question is whether ArrowFlow's permutation-matrix filter updates improve classification beyond simple distance lookup. We compare ArrowFlow to \textbf{kNN with Manhattan distance} (= Spearman footrule on the encoded permutations) on the \emph{exact same encoded permutations}---same polynomial expansion, the same per-view diverse projections, and the same 7-view majority vote, with kNN substituted for the sort-layer network in each view. kNN uses uniform weights and the neighborhood size $k$ is swept over $\{1,3,5,7\}$ with the best reported (so, like ArrowFlow, its $k$ is selected on test---the comparison between the two is therefore symmetric). This isolates the contribution of learned filters from the encoding pipeline. We note that kNN must store all training permutations, whereas ArrowFlow stores only its $N$ filters per layer, so the comparison also favors ArrowFlow on memory.
 
 \begin{table}[ht]
 \centering
@@ -1050,7 +1159,7 @@ Digits       & 70.4\% & 63.7\% & \textbf{5.1\%}  & 12.5$\times$ \\
 \end{tabular}
 \end{table}
 
-ArrowFlow provides \textbf{2.5--12.5$\times$ error reduction} over kNN on 6/7 datasets, proving that filter updates learn meaningful ordinal representations. The improvement is largest on high-dimensional data (Digits: 12.5$\times$, Wine: 11.1$\times$), where kNN suffers from the curse of dimensionality in permutation space.
+ArrowFlow provides \textbf{2.5--12.5$\times$ error reduction} over kNN on 6/7 datasets, strong evidence that filter updates contribute useful ordinal representations beyond the encoding (in this protocol; kNN's $k$ is selected on test, as is ArrowFlow's configuration, so the comparison is symmetric). The improvement is largest on high-dimensional data (Digits: 12.5$\times$, Wine: 11.1$\times$), where kNN suffers from the curse of dimensionality in permutation space.
 
 \subsection{Parameter Sensitivity}
 
@@ -1221,7 +1330,7 @@ Baseline (single net)           & 21.3 & 13.3 & 6.8 & 17.8 \\
 \end{tabular}
 \end{table}
 
-The two largest contributions are \textbf{polynomial expansion} (1.5--3$\times$ error reduction for low-dimensional data) and \textbf{multi-view ensemble} (2--3$\times$ across all datasets). Together they reduce error by up to 8$\times$ from the baseline (Iris: 21.3\%$\to$2.7\%).
+The two largest contributions are \textbf{polynomial expansion} (up to $1.6\times$ error reduction for low-dimensional data; no benefit on Digits, which already uses degree~1) and the \textbf{multi-view ensemble} ($1.3$--$3.3\times$, dataset-dependent). Together they reduce error by up to 8$\times$ from the baseline (Iris: 21.3\%$\to$2.7\%).
 
 
 % ============================================================================
@@ -1235,7 +1344,7 @@ The preceding results show that ArrowFlow is competitive but not superior in cle
 \subsection{Noise Robustness}
 \label{sec:noise}
 
-\textbf{Rationale.} Theorem~\ref{thm:stability} predicts that the argsort encoding is stable when noise magnitude is smaller than half the minimum feature gap. This should make ArrowFlow a natural denoiser---small perturbations to feature values do not change relative orderings until noise exceeds the gap between adjacent values. Proposition~\ref{prop:poly-noise} predicts that this advantage vanishes with polynomial expansion, since cross-terms amplify noise by $B^{k-1}$. We test both predictions.
+\textbf{Rationale.} Theorem~\ref{thm:stability} predicts that the argsort encoding is stable when noise magnitude is smaller than half the minimum feature gap. This should make ArrowFlow ordinally stable to ranking-preserving noise---small perturbations to feature values do not change relative orderings until noise exceeds the gap between adjacent values (this is order-stability, not denoising in the sense of recovering a clean signal). Proposition~\ref{prop:poly-noise} predicts that this advantage vanishes with polynomial expansion, since cross-terms amplify noise by $B^{k-1}$. We test both predictions.
 
 \textbf{Protocol:} Train on clean data, evaluate on noisy test data ($X_{\mathrm{noisy}} = X + \mathcal{N}(0, \sigma \cdot \mathrm{std}_j)$, $\sigma \in \{0, 0.1, 0.25, 0.5, 1.0, 2.0\}$). Average over 5 noise realizations, 3 ArrowFlow simulations each.
 
@@ -1248,7 +1357,7 @@ The preceding results show that ArrowFlow is competitive but not superior in cle
 \toprule
 Method & $\sigma$=0 & $\sigma$=0.1 & $\sigma$=0.25 & $\sigma$=0.5 & $\sigma$=1.0 & $\sigma$=2.0 \\
 \midrule
-ArrowFlow   & 4.6 & 5.0  & 5.7  & 7.8  & 13.9 & \textbf{29.1} \\
+ArrowFlow   & 4.6 & 5.0  & 5.7  & 7.8  & 13.9 & 29.1 \\
 SVM-RBF     & 2.8 & 2.8  & 5.6  & 6.7  & 29.4 & 59.4 \\
 RF          & 0.0 & 0.0  & 1.7  & 7.2  & 10.6 & 31.1 \\
 MLP         & 2.8 & 2.8  & 3.3  & 6.1  & 10.6 & 25.6 \\
@@ -1268,7 +1377,7 @@ KNN         & 0.0 & 0.6  & 1.7  & 5.6  & 10.6 & 25.0 \\
 Method & $\sigma$=0 & $\sigma$=0.1 & $\sigma$=0.25 & $\sigma$=0.5 & $\sigma$=1.0 & $\sigma$=2.0 \\
 \midrule
 ArrowFlow   & 4.8  & 4.4  & 5.8  & 10.0 & 25.8 & 54.6 \\
-SVM-RBF     & 1.7  & 1.7  & 1.9  & 3.9  & 17.2 & \textbf{87.3} \\
+SVM-RBF     & 1.7  & 1.7  & 1.9  & 3.9  & 17.2 & 87.3 \\
 RF          & 2.8  & 2.7  & 3.3  & 6.6  & 18.0 & 49.7 \\
 MLP         & 1.9  & 2.3  & 2.3  & 5.2  & 14.6 & 46.8 \\
 XGBoost     & 4.2  & 4.7  & 7.2  & 12.9 & 30.5 & 58.4 \\
@@ -1298,12 +1407,12 @@ Segment & 2 & 74.1 & 55.4 & 61.1 & 59.7 & 63.6 & 50.6 & 58.1 \\
 
 \textbf{Findings:} On $\mathrm{pol\_deg}$=1 datasets (Wine, Digits), ArrowFlow degrades \textbf{8--28\% less} than the baseline average, consistent with the argsort stability bound (Theorem~\ref{thm:stability}): when $\delta_{\min}/\sigma$ is large, ordinal encoding is robust. SVM-RBF suffers catastrophic failure on Digits (87.3\% at $\sigma$=2.0, a 51$\times$ degradation) due to kernel-scale mismatch; ArrowFlow never exhibits such catastrophic modes. On $\mathrm{pol\_deg}>1$ datasets, polynomial expansion amplifies noise as predicted by Proposition~\ref{prop:poly-noise}: degree-2 interaction terms $x_i x_j$ have effective noise $\approx \sigma B$ instead of $\sigma$, creating spurious ranking changes that erase the robustness advantage.
 
-\subsection{Privacy-Preserving Classification}
+\subsection{Rank-Only (Magnitude-Hiding) Classification}
 \label{sec:privacy}
 
-\textbf{Rationale.} If only the \emph{relative ordering} of feature values is shared (not their magnitudes), sensitive information is substantially harder to reconstruct. Since ArrowFlow already operates on ordinal data, it should suffer minimal accuracy loss from this ``ordinal privacy'' constraint---a prediction we test by replacing raw features with per-column ranks.
+\textbf{Rationale.} We test how much accuracy a classifier loses when it may see only the \emph{relative ordering} of feature values, not their magnitudes. We call this a \emph{rank-only} or \emph{magnitude-hiding} setting; it is a proxy for privacy rather than a formal guarantee---per-column ranks still expose order, quantiles, and sample-membership relations, and a formal treatment would require differential privacy or secure aggregation (Section~\ref{sec:future}). Since ArrowFlow already operates on ordinal data, it should suffer minimal accuracy loss under this constraint---a prediction we test by replacing raw features with per-column ranks.
 
-\textbf{Protocol:} Replace raw features with per-column ranks (ordinal privacy: magnitudes hidden). Train and test all methods on both raw and rank-transformed data.
+\textbf{Protocol:} Replace raw features with per-column ranks (ordinal privacy: magnitudes hidden). Train and test all methods on both raw and rank-transformed data. (Implementation note: the per-column ranks here are computed over the pooled train+test columns, which lets a small amount of test-distribution information into the rank values; a strict pipeline would fit the column ranking on the training split alone. The effect is minor for this experiment but we flag it for completeness.)
 
 \begin{table}[ht]
 \centering
@@ -1336,7 +1445,7 @@ Dataset & Method & Raw & Ranked & $\Delta$ \\
 \end{tabular}
 \end{table}
 
-On Segment and Digits, ArrowFlow degrades only \textbf{+0.4--0.5pp}---near-zero cost for ordinal privacy. On Iris, ArrowFlow actually \emph{improves} ($-$2.2pp), suggesting rank normalization removes noise that confused the encoding pipeline. MLP suffers the worst degradation (+10pp on Vehicle), confirming that continuous-input networks lose the most when magnitudes are removed.
+On Segment and Digits, ArrowFlow degrades only \textbf{+0.4--0.5pp}---near-zero cost for the rank-only constraint. On Iris, ArrowFlow actually \emph{improves} ($-$2.2pp), suggesting rank normalization removes noise that confused the encoding pipeline. MLP suffers the worst degradation (+10pp on Vehicle), confirming that continuous-input networks lose the most when magnitudes are removed.
 
 \subsection{Missing Features}
 \label{sec:missing}
@@ -1536,7 +1645,7 @@ $\times 100$ global  & 82.6 & 55.9 & \textbf{2.5} & \textbf{2.5} \\
 \end{tabular}
 \end{table}
 
-SVM on raw values collapses to 82.6\% (near random for 5 classes) on every transform. Random Forest degrades to 20--63\%. ArrowFlow native and SVM on rank-transformed data remain perfectly stable at 2.5\%---confirming the theoretical guarantee of Theorem~\ref{thm:stability}: any monotone transformation preserves all pairwise orderings, so the argsort output is unchanged.
+SVM on raw values collapses to 82.6\% (near random for 5 classes) on every transform. Random Forest degrades to 20--63\%. ArrowFlow native and SVM on rank-transformed data remain perfectly stable at 2.5\%. This is exact order preservation under strictly monotone within-sample maps---a direct consequence of the rank transform, not of the small-noise stability theorem (Theorem~\ref{thm:stability}): any strictly monotone transformation preserves all pairwise orderings, so the argsort output is unchanged.
 
 \paragraph{Batch effect: per-gene scaling (ComBat model).}
 Real batch effects also include \emph{per-gene} multiplicative shifts (different probe affinities, amplification efficiencies). We simulate these with log-normal scaling: $\text{scale}_i = \exp(\mathcal{N}(0, \sigma))$ per gene, where $\sigma$ controls severity. At $\sigma = 0.3$ (mild, routine batch variation), 95\% of scale factors fall in $[0.55, 1.82]$; at $\sigma = 0.7$ (cross-platform), in $[0.25, 4.06]$.
@@ -1623,11 +1732,11 @@ Architecture & Views & Error (\%) & Params (filters) \\
 \end{tabular}
 \end{table}
 
-Three clear trends emerge: (1)~\textbf{Multi-view ensemble} cuts error nearly in half (18.7\% $\to$ 13.3\% from 1 to 7 views), confirming the multi-view result from Section~\ref{sec:ensemble}. (2)~\textbf{Depth helps}: 3-layer architectures consistently outperform 2-layer at matched width (e.g., [256,128] 3L at 11.0\% vs.\ [256] 2L at 12.5\%). (3)~\textbf{Width helps}: scaling from 256 to 1024 first-layer filters reduces error from 11.0\% to 9.1\%, and the curve has not plateaued---suggesting that even wider networks would continue to improve.
+Three clear trends emerge: (1)~\textbf{Multi-view ensemble} cuts error nearly in half (18.7\% $\to$ 13.3\% from 1 to 7 views), confirming the multi-view result from Section~\ref{sec:ensemble}. (2)~\textbf{Depth helps}: 3-layer architectures consistently outperform 2-layer at matched width (e.g., [256,128] 3L at 11.0\% vs.\ [256] 2L at 12.5\%). (3)~\textbf{Width helps}: scaling from 256 to 1024 first-layer filters reduces error from 11.0\% to 9.1\%, and the best 3-layer configurations have not plateaued at the largest tested width---suggesting capacity remains one bottleneck. (Width alone is not monotonic: [512] 2-layer is marginally worse than [256] 2-layer; the gains come from depth combined with width.)
 
-\paragraph{PCA dimension is irrelevant to ArrowFlow.} Baselines benefit substantially from higher PCA dimensions (MLP: 6.3\% $\to$ 4.6\% $\to$ 4.2\% across PCA 16/32/64 at $N$=10K), but ArrowFlow's best error barely changes (9.8\% $\to$ 9.3\% $\to$ 9.1\%). This is consistent with the argsort bottleneck: once features are converted to ranks, the ordinal information saturates quickly. Additional PCA dimensions provide diminishing marginal ordinal structure.
+\paragraph{PCA dimension has limited effect on ArrowFlow.} Baselines benefit substantially from higher PCA dimensions (MLP: 6.3\% $\to$ 4.6\% $\to$ 4.2\% across PCA 16/32/64 at $N$=10K), but ArrowFlow's best error changes only slightly (9.8\% $\to$ 9.3\% $\to$ 9.1\%). This is consistent with the argsort bottleneck: once features are converted to ranks, additional PCA dimensions bring diminishing marginal ordinal structure.
 
-\paragraph{Honest assessment.} ArrowFlow does not match gradient-trained classifiers on MNIST. The $\sim$5pp gap is real and persistent. However, 9.1\% error from a \emph{pure comparison-based} classifier---no multiply-accumulate operations, no floating-point parameters---is a meaningful existence proof. The strong scaling with width and depth suggests that ArrowFlow's capacity, not its learning principle, is the current bottleneck. This motivates the vectorization work discussed in Section~\ref{sec:future}: faster forward passes would enable exploring architectures beyond the current computational limits.
+\paragraph{Honest assessment.} ArrowFlow does not match gradient-trained classifiers on MNIST. The $\sim$5pp gap is real and persistent. However, 9.1\% error from a \emph{pure comparison-based} classifier---no multiply-accumulate operations, no floating-point parameters---is a meaningful existence proof. The strong scaling with width and depth suggests that limited capacity is \emph{a} current bottleneck (the curve has not plateaued); we cannot conclude it is the \emph{only} one, as the learning rule may also limit attainable accuracy. This motivates the vectorization work discussed in Section~\ref{sec:future}: faster forward passes would enable exploring architectures beyond the current computational limits.
 
 
 \subsection{The Polynomial Trade-Off: A Unifying Finding}
@@ -1645,7 +1754,7 @@ Property & pol\_deg=1 & pol\_deg$>$1 \\
 \midrule
 Clean accuracy          & $-$ (magnitude lost)        & $+$ (3$\times$ on low-dim) \\
 Noise robustness        & $+$ (8--28\% less degrad.)  & $-$ (noise amplified) \\
-Privacy (rank transform)& $+$ ($<$0.5pp cost)         & $-$ (up to 7pp cost) \\
+Rank-only (rank transform)& $+$ ($<$0.5pp cost)         & $-$ (up to 7pp cost) \\
 Missing features        & $+$ (beats BL on Iris)      & $-$ (poly amplifies zeros) \\
 Batch-effect invariance & $+$ (perfect, monotone)     & $-$ (poly breaks ranks) \\
 Sample efficiency       & $\circ$                     & $+$ (richer features) \\
@@ -1716,15 +1825,15 @@ This trade-off is \textbf{architecturally unique to ArrowFlow}. No other archite
 % Information bar
 \draw[thick, fill=blue!40] (-0.2, 0.3) rectangle (3.6, 0.6);
 \draw[thick] (-0.2, 0.3) rectangle (4.6, 0.6);
-\node[lbl, font=\footnotesize] at (2.2, 0.05) {Information: high ($d'$ features)};
+\node[lbl, font=\footnotesize] at (2.2, 0.05) {Richer pre-projection geometry};
 % Robustness bar
 \draw[thick, fill=red!25] (-0.2, -0.4) rectangle (1.2, -0.1);
 \draw[thick] (-0.2, -0.4) rectangle (4.6, -0.1);
 \node[lbl, font=\footnotesize] at (2.2, -0.65) {Robustness: low (noise $\times B^{k-1}$)};
 \end{scope}
 % === Bottom summary ===
-\node[draw, rounded corners=3pt, fill=yellow!8, font=\footnotesize, text width=11cm, align=center, inner sep=5pt] at (5.9, -1.5) {
-\textbf{Thm.~\ref{thm:stability} + Prop.~\ref{prop:poly-noise}:} Degree-$k$ expansion multiplies noise by $B^{k-1}$, increases capacity from $\log_2(d!)$ to $\log_2(d'!)$.
+\node[draw, rounded corners=3pt, fill=yellow!8, font=\footnotesize, text width=11cm, align=center, inner sep=5pt] at (5.9, -2.1) {
+\textbf{Thm.~\ref{thm:stability} + Prop.~\ref{prop:poly-noise}:} Degree-$k$ expansion multiplies noise by $B^{k-1}$; it reshapes the geometry of the fixed-length-$e$ ordinal code rather than enlarging its $\log_2(e!)$ capacity.
 };
 \end{tikzpicture}%
 }
@@ -1743,12 +1852,12 @@ This trade-off is \textbf{architecturally unique to ArrowFlow}. No other archite
 
 The experiments tell a consistent story: ArrowFlow is competitive on clean accuracy, measurably superior in robustness scenarios (noise, privacy, missing data, batch effects), and limited by the information bottleneck of ordinal encoding. The deeper lesson is that competitive machine learning is possible without any floating-point parameters in the core computation. This is a proof of concept for a broader class of \emph{combinatorial learning systems} where the learned representation is a discrete structure (permutation, partition, matching) rather than a real-valued tensor. The existence proof matters: if permutation-based filters can compete with gradient-trained networks on standard benchmarks, what other combinatorial primitives---matchings, lattice orderings, graph homomorphisms---might serve as computational substrates for learning?
 
-The architecture reveals a productive duality: the same properties that Arrow's theorem forbids in fair social choice (context dependence, dictatorship) are precisely what enable representational power in learning. This is not a coincidence---learning \emph{requires} breaking symmetry and introducing bias, and Arrow's axioms precisely characterize the symmetries that must be broken. The connection runs deeper than analogy: each ranking layer literally performs rank aggregation across filters, and the impossibility theorem explains why this aggregation cannot be simultaneously fair, context-free, and non-dictatorial. ArrowFlow's design exploits each violation as an inductive bias.
+The architecture reveals a productive duality: the same properties that Arrow's theorem forbids in fair social choice (context dependence, dictatorship) are precisely what enable representational power in learning. This is more than a loose analogy: the \emph{learning rule} of each layer literally performs rank aggregation over the inputs a filter accumulates, and Arrow's impossibility theorem explains why that aggregation cannot be simultaneously Pareto-respecting, context-free (IIA), and non-dictatorial (Section~\ref{sec:social-choice-theory}). ArrowFlow's design exploits each violation as an inductive bias. The forward pass, by contrast, satisfies pairwise IIA; its nonlinearity comes from the cone geometry of argsort, not from a fairness violation.
 
 \subsection{Connections to Other Paradigms}
 
 \paragraph{Self-Organizing Maps.}
-Filter updates resemble Kohonen's competitive learning \citep{kohonen1990self}---the closest prototype moves toward the input. The key difference is that ArrowFlow prototypes are permutations and ``similarity'' is discrete edit distance. Both learn without gradients with winner-take-all dynamics. SOMs preserve topological relationships in a 2D grid; ArrowFlow preserves hierarchical composition via layer stacking.
+Filter updates resemble Kohonen's competitive learning \citep{kohonen1990self}---the closest prototype moves toward the input. The key difference is that ArrowFlow prototypes are permutations and ``similarity'' is a discrete rank distance. Both learn without gradients with winner-take-all dynamics. SOMs preserve topological relationships in a 2D grid; ArrowFlow preserves hierarchical composition via layer stacking.
 
 \paragraph{Nearest-Neighbor Classification.}
 The output sort layer performs 1-NN classification in permutation distance space. Hidden layers act as a learned nonlinear embedding into a space where class-conditional distances are more separable. The 2.5--12.5$\times$ improvement over kNN on the same encoded features (Table~\ref{tab:knn}) confirms that this embedding is genuinely useful---ArrowFlow does not merely store templates but learns discriminative ordinal representations.
@@ -1860,17 +1969,17 @@ Table~\ref{tab:energy-full} compares full-inference energy for ArrowFlow's best 
 \toprule
 Component & ArrowFlow (pJ) & MLP (pJ) \\
 \midrule
-Sort/hidden layer ($\times$7 views) & $7 \times 49{,}152 \times 0.1 = 34{,}406$ & $8{,}192 \times 4.6 = 37{,}683$ \\
-Output layer ($\times$7 views) & $7 \times 768 \times 0.1 = 538$ & $1{,}280 \times 4.6 = 5{,}888$ \\
+Hidden, dist.+sort ($\times$7) & $7 (49{,}152{+}2{,}048)(0.1) = 35{,}840$ & $8{,}192 (4.6) = 37{,}683$ \\
+Output, dist.+$\arg\min$ ($\times$7) & $7 \times 7{,}690 (0.1) = 5{,}383$ & $1{,}280 (4.6) = 5{,}888$ \\
 Majority vote & $\sim$70  & --- \\
 \midrule
-\textbf{Total arithmetic} & \textbf{35,014} & \textbf{43,571} \\
-\textbf{Ratio} & \multicolumn{2}{c}{$1.2\times$ in favor of ArrowFlow} \\
+\textbf{Total arithmetic} & \textbf{41,293} & \textbf{43,571} \\
+\textbf{Ratio} & \multicolumn{2}{c}{$\approx 1.05\times$ in favor of ArrowFlow} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The 7-view ensemble erodes much of the per-operation advantage, reducing the ratio to $\sim$1.2$\times$ at the full-inference level. However, three factors make the real-world advantage substantially larger:
+Here the output layer compares the length-$256$ hidden ranking to $C=10$ class filters ($3CV=7{,}680$ displacement operations per view) and predicts by $\arg\min$ rather than a full sort; the hidden layer includes its $N\log_2 N$ ranking cost. The 7-view ensemble erodes nearly all of the per-operation advantage, reducing the ratio to only $\approx$1.05$\times$ at the full-inference arithmetic level. However, three factors make the real-world advantage substantially larger:
 \begin{enumerate}[leftmargin=2em]
   \item \textbf{Memory bandwidth}: ArrowFlow's 8-bit parameters require 4$\times$ less memory bandwidth than FP32 weights. On memory-bound hardware (edge devices, neuromorphic chips), this translates directly to energy savings.
   \item \textbf{Parallelism}: The 7 views are embarrassingly parallel and operate on compact integer data, making them highly amenable to SIMD or multi-core execution with minimal inter-core communication.
@@ -1888,19 +1997,22 @@ ArrowFlow's computation maps naturally to neuromorphic architectures:
   \item \textbf{Event-driven sparsity.} Neuromorphic chips like Intel Loihi \citep{davies2018loihi} (23.6\,pJ/op at 14nm) and IBM TrueNorth \citep{merolla2014million} (26\,pJ/event at 28nm) achieve low energy through event-driven computation: neurons consume energy only when they spike. ArrowFlow's winner-take-all dynamics (Section~\ref{sec:arrow}, ND violation) create natural sparsity---most filters have large distances and only the closest few matter. An event-driven implementation could skip distance computation once a filter's partial distance exceeds the current minimum, reducing average-case energy well below the worst-case $3NV$ operations.
 \end{itemize}
 
+\paragraph{Scope and caveats.}
+This analysis is deliberately narrow: it counts \emph{arithmetic} energy in the core sort layers only. Four caveats bound any system-level claim. (i)~The \emph{encoder} is not free---polynomial expansion, standardization, and especially the random/LDA projection use floating-point multiply--adds unless the projections are precomputed, quantized, or replaced by sparse/sign projections; our accounting excludes these. (ii)~A fair deployment baseline is often an \emph{INT8-quantized} MLP, not FP32, which narrows the per-operation gap substantially. (iii)~Classification may not require sorting all $N$ distances---nearest-filter or top-$k$ selection would lower ArrowFlow's cost further, but the comparison should hold the operation set fixed. (iv)~Memory access typically dominates arithmetic, so the realized advantage depends on the memory hierarchy and the degree of view parallelism. We therefore present the figures as an arithmetic-level indication, not a measured system-level speedup.
+
 \paragraph{Summary.}
-At the per-operation level, ArrowFlow's integer-only arithmetic is 15--150$\times$ more energy-efficient than FP32 MACs. The multi-view ensemble partially offsets this at the system level, but the combination of compact 8-bit parameters, zero floating-point hardware requirements, and natural alignment with neuromorphic spike-order coding makes ArrowFlow a compelling target for energy-constrained deployment. A custom ASIC or neuromorphic implementation of ArrowFlow's sort layers---comparators, integer adders, and index tables, with no multiply units---could achieve inference at a fraction of the energy cost of equivalently-accurate conventional networks.
+At the arithmetic-operation level, ArrowFlow's core layers replace FP32 MACs with integer comparisons and additions, a 15--150$\times$ per-operation gap that narrows at the full-inference level (to $\approx$1.05$\times$ for the seven-view Digits configuration). The system-level advantage will depend on the encoder, memory hierarchy, quantization baseline, and view parallelism. Even so, the combination of compact 8-bit parameters, no floating-point multiply units, and natural alignment with neuromorphic spike-order coding makes a custom ASIC or neuromorphic implementation of ArrowFlow's sort layers---comparators, integer adders, and index tables---a plausible route to low-energy inference, which we leave to future hardware work.
 
 \subsection{The Argsort Bottleneck: A Fundamental Limit}
 
-The argsort encoding is simultaneously ArrowFlow's greatest strength and its most fundamental limitation. By converting real-valued features to orderings, ArrowFlow gains scale invariance, noise robustness (Theorem~\ref{thm:stability}), and privacy preservation---but loses all magnitude information. Theorem~\ref{thm:capacity} quantifies this: the ordinal representation has capacity $\log_2(d!) \approx d \log_2 d$ bits, finite and far below the infinite capacity of real-valued representations. Polynomial expansion increases $d$ and hence capacity, but Proposition~\ref{prop:poly-noise} shows this amplifies noise by a factor of $B^{k-1}$, weakening the stability bound. This tension---more information capacity vs.\ less noise robustness---is the formal basis of the polynomial trade-off documented in Section~\ref{sec:tradeoff}.
+The argsort encoding is simultaneously ArrowFlow's greatest strength and its most fundamental limitation. By converting real-valued features to orderings, ArrowFlow gains scale invariance, noise robustness (Theorem~\ref{thm:stability}), and rank-only (magnitude-hiding) operation---but loses all magnitude information. Theorem~\ref{thm:capacity} quantifies this: the length-$e$ ordinal code has capacity $\log_2(e!) \approx e \log_2 e$ bits, finite and far below the infinite capacity of real-valued representations. Polynomial expansion reshapes the feature geometry feeding this fixed-length code rather than enlarging its capacity, and by Proposition~\ref{prop:poly-noise} it amplifies noise by a factor of $B^{k-1}$, weakening the stability bound. This tension---more information capacity vs.\ less noise robustness---is the formal basis of the polynomial trade-off documented in Section~\ref{sec:tradeoff}.
 
 \subsection{Limitations}
 
 \begin{itemize}[leftmargin=2em]
   \item \textbf{Computational cost:} Each forward pass is $O(NV)$ per data point. While the forward pass has been vectorized via batch distance computation, the backward pass remains sequential. This makes ArrowFlow approximately 10$\times$ slower than an equivalently-sized MLP per training iteration.
   \item \textbf{Information loss:} The argsort encoding discards magnitude information. Polynomial expansion mitigates but does not eliminate this, and introduces a robustness trade-off.
-  \item \textbf{Scaling gap:} On larger datasets, ArrowFlow lags behind gradient-based methods. On MNIST (Section~\ref{sec:mnist-pca}), best ArrowFlow achieves 9.1\% vs.\ MLP's 4.2\%---a persistent $\sim$5pp gap. However, the gap narrows with wider architectures and has not plateaued, suggesting capacity rather than the learning principle is the bottleneck.
+  \item \textbf{Scaling gap:} On larger datasets, ArrowFlow lags behind gradient-based methods. On MNIST (Section~\ref{sec:mnist-pca}), best ArrowFlow achieves 9.1\% vs.\ MLP's 4.2\%---a persistent $\sim$5pp gap. However, the gap narrows with wider architectures and has not plateaued, suggesting limited capacity is at least one bottleneck (though not necessarily the only one).
   \item \textbf{Natively ordinal data:} ArrowFlow's whole-permutation distance is too holistic when only local ordinal features are predictive (Sushi experiment, Section~\ref{sec:sushi}).
   \item \textbf{Rank-transform baseline:} On gene expression data (Section~\ref{sec:gene}), SVM on rank-transformed features achieves comparable or better batch-effect robustness than ArrowFlow native. The robustness advantage belongs to the ordinal representation principle, not to ArrowFlow specifically---though ArrowFlow provides this guarantee architecturally rather than as a preprocessing choice.
   \item \textbf{Hybrid architecture failure:} The tensor$\to$sort interface (Section~\ref{sec:hybrid}) destroys continuous representations via argsort discretization, preventing effective hybrid architectures.
@@ -1923,7 +2035,7 @@ The argsort encoding is simultaneously ArrowFlow's greatest strength and its mos
 
 
 % ============================================================================
-% 12. CONCLUSION
+% 13. CONCLUSION
 % ============================================================================
 \section{Conclusion}
 \label{sec:conclusion}
@@ -1932,20 +2044,20 @@ ArrowFlow demonstrates that machine learning can operate effectively in the spac
 
 The key empirical findings, across 7 UCI datasets, MNIST, gene expression cancer classification, and preference data, with GridSearchCV-tuned baselines, are:
 \begin{enumerate}[leftmargin=2em]
-  \item ArrowFlow \textbf{beats all baselines on Iris} (2.7\% vs.\ 3.3\%) and is competitive on 5 of 7 UCI datasets, proving that zero-floating-point-parameter architectures can match gradient-trained networks.
-  \item The \textbf{polynomial degree acts as a master switch} between accuracy and robustness. At degree~1, ArrowFlow provides measurable noise robustness (8--28\% less degradation), near-zero-cost privacy preservation (+0.5pp under rank transforms), and superior missing-feature handling (beats all baselines on Iris at 50\% masking). At higher degrees, clean accuracy improves but perturbation amplification erases these advantages.
-  \item On gene expression data, ordinal encoding provides \textbf{perfect invariance to monotone batch effects}: SVM on raw values collapses from 0.6\% to 82.6\% under $\log$, $\sqrt{}$, or global scaling, while rank-based methods remain stable at 2.5\%. Under realistic per-gene batch effects ($\sigma \leq 0.5$), rank methods are unaffected while raw-input SVM error increases $28\times$. ArrowFlow embodies this ordinal robustness architecturally.
+  \item ArrowFlow \textbf{matches or slightly edges every tuned baseline on Iris} (2.7\% vs.\ 3.3\%; a sub-sample margin, see Section~\ref{sec:experiments}) and is competitive on 5 of 7 UCI datasets, showing that zero-floating-point-parameter architectures can rival gradient-trained networks.
+  \item The \textbf{polynomial degree acts as a master switch} between accuracy and robustness. At degree~1, ArrowFlow provides measurable noise robustness (8--28\% less degradation), near-zero-cost rank-only (magnitude-hiding) operation (+0.5pp under rank transforms), and superior missing-feature handling (lowest error on Iris at 50\% masking). At higher degrees, clean accuracy improves but perturbation amplification erases these advantages.
+  \item On gene expression data, ordinal encoding provides \textbf{exact invariance to within-sample monotone batch effects}: SVM on raw values collapses from 0.6\% to 82.6\% under $\log$, $\sqrt{}$, or global scaling, while rank-based methods remain stable at 2.5\%. Under realistic per-gene batch effects ($\sigma \leq 0.5$), rank methods are unaffected while raw-input SVM error increases $28\times$. ArrowFlow embodies this ordinal robustness architecturally.
   \item On \textbf{MNIST via PCA}, ArrowFlow achieves 9.1\% error using only ordinal comparisons. It \textbf{scales strongly} with width and depth (18.7\%$\to$9.1\%), and the scaling curve has not plateaued, suggesting capacity is the bottleneck.
-  \item The \textbf{multi-view ensemble} with diverse projections is the single most impactful component, reducing error by 2--3$\times$.
+  \item The \textbf{multi-view ensemble} with diverse projections is the single most impactful component, reducing error by up to $\sim$3$\times$ (1.3--3.3$\times$ across datasets).
   \item \textbf{Freezing the output layer} consistently improves performance, a novel training strategy analogous to fixing classifier heads in transfer learning.
   \item ArrowFlow's \textbf{learning genuinely helps}: 2.5--12.5$\times$ improvement over kNN on the same encoded features proves that filter updates learn discriminative ordinal structure.
 \end{enumerate}
 
-Beyond empirics, the theoretical analysis (Section~\ref{sec:theory}) provides formal grounding: the argsort stability theorem (Theorem~\ref{thm:stability}) and its Gaussian corollary explain the noise robustness; the information capacity theorem (Theorem~\ref{thm:capacity}) quantifies the encoding bottleneck at $\log_2(d!)$ bits; the polynomial noise amplification result (Proposition~\ref{prop:poly-noise}) explains the accuracy--robustness trade-off; and the accumulation consistency result (Proposition~\ref{prop:convergence}) guarantees that the learning rule converges to the optimal filter ordering.
+Beyond empirics, the theoretical analysis (Section~\ref{sec:theory}) provides formal grounding: the argsort stability theorem (Theorem~\ref{thm:stability}) and its Gaussian corollary explain the noise robustness; the information capacity theorem (Theorem~\ref{thm:capacity}) quantifies the encoding bottleneck at $\log_2(e!)$ bits for the $e$-dimensional projected code; the polynomial noise amplification result (Proposition~\ref{prop:poly-noise}) explains the accuracy--robustness trade-off; and the accumulation consistency result (Proposition~\ref{prop:convergence}) guarantees that the learning rule converges to the mean-position ranking (the Borda aggregate of accumulated evidence).
 
 The deeper contribution is conceptual: ArrowFlow shows that the violations of Arrow's social-choice axioms---context dependence, specialization, symmetry breaking---are not obstacles but \emph{mechanisms} for learning. Each ranking layer is a micro-democracy of filters whose deliberate ``unfairness'' creates nonlinearity, sparsity, and hierarchical composition. This reframes neural computation through the lens of combinatorics and voting theory, opening a new research direction at the intersection of social choice, rank-order coding, and representation learning.
 
-ArrowFlow is not the final word in ordinal machine learning---it is the first. The encoding bottleneck, the scaling gap, and the holistic-distance limitation are real constraints that bound the current system's practical applicability. But the fact that a system with \emph{zero floating-point parameters} in its core layers can achieve 2.7\% error on Iris, 9.1\% on MNIST, and perfect batch-effect invariance on gene expression data---and that we can \emph{prove} why its robustness properties hold---is, we believe, a foundation worth building on.
+ArrowFlow is an early entry in ordinal machine learning, not a finished one. The encoding bottleneck, the scaling gap, and the holistic-distance limitation are real constraints that bound the current system's practical applicability. But the fact that a system with \emph{zero floating-point parameters} in its core layers can reach 2.7\% error on Iris, 9.1\% on MNIST, and exact invariance to monotone batch effects on gene expression data---and that we can \emph{partly explain}, with proofs tied to the encoding and the learning rule, why its robustness properties hold---is, we believe, a foundation worth building on.
 
 
 % ============================================================================
