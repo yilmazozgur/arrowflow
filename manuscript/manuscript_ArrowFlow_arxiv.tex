@@ -189,7 +189,7 @@ ArrowFlow sits at the intersection of several research traditions: neuroscience-
 Rank Order Coding (ROC) encodes stimulus strength via the \emph{order} of neural spikes rather than absolute firing rates, highlighting order as an information carrier \citep{thorpe1998rapid, gautrais1998rate}. This biological principle---that relative ordering is more robust and efficient than precise magnitude encoding---motivates ArrowFlow's core design. The approach has shown promise in image recognition, where relative pixel intensities can be more informative than precise values under varying conditions \citep{jost2002rank, bonilla2022analyzing}. ArrowFlow generalizes ROC from a fixed encoding scheme to a \emph{learnable hierarchical transformation} of orderings across layers.
 
 \subsection{Differentiable Sorting and Sinkhorn Networks}
-Recent work has made sorting operations differentiable for end-to-end learning. NeuralSort \citep{grover2019neuralsort} and SoftSort \citep{prillo2020softsort} provide continuous relaxations of argsort. Blondel et al.\ \citep{blondel2020fast} introduced fast differentiable sorting via optimal transport. Gumbel-Sinkhorn networks \citep{mena2018gumbelsinkhorn} learn latent permutations through doubly stochastic matrices, leveraging the classical Sinkhorn normalization \citep{sinkhorn1967diagonal}. These approaches treat order as a soft surrogate for continuous scores---they relax permutations everywhere to enable gradient flow. ArrowFlow takes the opposite approach: it \textbf{operates directly on discrete permutations} and replaces gradient descent with permutation-matrix-based updates. Differentiability is needed only at the boundaries between rank and tensor layers, not within the ranking computation itself.
+Recent work has made sorting operations differentiable for end-to-end learning. NeuralSort \citep{grover2019neuralsort} and SoftSort \citep{prillo2020softsort} provide continuous relaxations of argsort. Blondel et al.\ \citep{blondel2020fast} introduced fast ($O(n\log n)$) differentiable sorting and ranking via projection onto the permutahedron (optimal-transport formulations of differentiable sorting are a separate line of work). Gumbel-Sinkhorn networks \citep{mena2018gumbelsinkhorn} learn latent permutations through doubly stochastic matrices, leveraging the classical Sinkhorn normalization \citep{sinkhorn1967diagonal}. These approaches treat order as a soft surrogate for continuous scores---they relax permutations everywhere to enable gradient flow. ArrowFlow takes the opposite approach: it \textbf{operates directly on discrete permutations} and replaces gradient descent with permutation-matrix-based updates. Differentiability is needed only at the boundaries between rank and tensor layers, not within the ranking computation itself.
 
 \subsection{Permutation Distance Metrics}
 Kendall \citep{kendall1938} introduced the tau rank correlation coefficient, counting pairwise disagreements. Diaconis and Graham \citep{diaconis1977footrule} established Spearman's footrule as a closely related metric, proving that footrule and Kendall tau distance are within a constant factor. ArrowFlow uses Spearman's footrule ($\ell_1$ norm of positional displacements) as its core distance. Fagin et al.\ \citep{fagin2003topk} extended these metrics to partial rankings, relevant to ArrowFlow's handling of receptive fields and variable-length inputs.
@@ -239,13 +239,13 @@ The motion $m_j[p]$ measures how many positions element $\pi_x[p]$ must move to 
 
 A distance is computed via the $\ell_q$ norm:
 \begin{equation}
-D_j = \norm{m_j}_q, \quad q \in \{1, 2\} \ \text{(with an optional $\ell_0$-style count, $q=0$, which is a pseudonorm)}.
+D_j = \norm{m_j}_q, \quad q \in \{1, 2\} \ \text{(with an optional $\ell_0$-style count, $q=0$, not a true norm)}.
 \label{eq:distance}
 \end{equation}
 With $q = 1$, this is Spearman's footrule distance \citep{diaconis1977footrule}: the total positional displacement between the input and the filter. All experiments in this paper use $q=1$.
 
 \paragraph{Missing data and receptive fields.}
-If $\pi_x$ omits items present in $r_j$, the experiments in this paper assign each missing item the central position $mV$ (with $m=0.5$) and down-weight its update contribution by $w=0.5$ (Section~\ref{sec:supervised-training}); an alternative variant instead displaces missing items to the end of the list and charges a deletion penalty. We use the central-imputation rule throughout unless stated otherwise. If $r_j$ has a restricted receptive field (subset of items), the average motion is subtracted to promote translation invariance---analogous to zero-centering in convolutional layers.
+If $\pi_x$ omits items present in $r_j$, missing items are assigned the central position $mV$ (with $m=0.5$), and a deletion-cost weight $w=0.5$ scales their contribution to this partial-input distance (the weight enters the distance term, not the filter-update vote); an alternative variant instead displaces missing items to the end of the list and charges a deletion penalty. We use the central-imputation rule throughout unless stated otherwise. (The masking experiments of Section~\ref{sec:missing} impute by column mean \emph{before} encoding, producing complete permutations, so they do not exercise this partial-input path; it applies when vocabulary items are genuinely absent from an input.) If $r_j$ has a restricted receptive field (subset of items), the average motion is subtracted to promote translation invariance---analogous to zero-centering in convolutional layers.
 
 \subsection{Forward Pass: From Distances to Output Ranking}
 The layer aggregates $N$ filter responses into a new ranking. The simplest and most effective aggregation is:
@@ -552,7 +552,7 @@ For low-dimensional data, we first expand the feature space via polynomial featu
 \begin{equation}
 x \in \R^d \;\mapsto\; \phi(x) \in \R^{\binom{d+k}{k}-1},
 \end{equation}
-where $k$ is the polynomial degree. For $d = 4$ (Iris) at degree 3, this expands from 4 to 34 features, creating interaction terms $x_i x_j$, $x_i x_j x_k$ that dramatically increase the diversity of achievable rankings. This expansion is critical: on Iris, polynomial expansion alone reduces error by about 1.5$\times$ (21.3\%$\to$14.7\%; Table~\ref{tab:progression}), and contributes to a larger reduction in combination with the multi-view ensemble.
+where $k$ is the polynomial degree. For $d = 4$ (Iris) at degree 3, this expands from 4 to 34 non-constant features (the implementation retains the degree-0 constant column as well, for $\binom{4+3}{3}=35$ columns in total; a constant feature occupies a fixed argsort position and does not affect the ranking), creating interaction terms $x_i x_j$, $x_i x_j x_k$ that dramatically increase the diversity of achievable rankings. This expansion is critical: on Iris, polynomial expansion alone reduces error by about 1.5$\times$ (21.3\%$\to$14.7\%; Table~\ref{tab:progression}), and contributes to a larger reduction in combination with the multi-view ensemble.
 
 \subsection{Random Projection and Argsort}
 After optional polynomial expansion and standardization, features are projected to a target embedding dimension $e$ via a random projection matrix $W \in \R^{d' \times e}$:
@@ -682,7 +682,7 @@ output & $N_L$ & $C$ & $\hat{y}=\arg\min_c D^{(L)}_c$ \\
 \bottomrule
 \end{tabular}
 \end{center}
-An item absent from an input (e.g.\ under feature masking) is assigned the central position $mV$ with $m=0.5$, so it contributes a moderate, bounded displacement rather than an extreme one; in filter updates its displacement is additionally down-weighted by the deletion-cost weight $w=0.5$.
+An item genuinely absent from an input is assigned the central position $mV$ with $m=0.5$, so it contributes a moderate, bounded displacement rather than an extreme one, and a deletion-cost weight $w=0.5$ scales its contribution to the partial-input distance (Section~\ref{sec:ranking-layer}).
 
 \subsection{Supervised Training of Sort Layers}
 \label{sec:supervised-training}
@@ -750,7 +750,7 @@ The strongest empirical setting (Table~\ref{tab:llu}) freezes the output layer. 
 \end{algorithm}
 
 \paragraph{Remaining details.}
-Filters are initialized as uniform random permutations of their vocabulary; training presents data over $200$--$500$ iterations (the forward pass is batched and updates accumulate per example). Ties in $\argsort$---rare for integer footrule distances---are broken by index, making the forward pass deterministic given the filters. All experiments use the footrule norm $q = 1$; the $q \in \{0, 2\}$ variants of Eq.~\eqref{eq:distance} are available but unused. The default constants are collected for reference: $\eta = 0.1$ (rate), $\rho = 0.5$ (fraction of filters updated per layer), $c = 0.125$ (motion renormalization), $p_c = 0.01$ (correct-example update probability), $m = 0.5$ (missing-item position), $w = 0.5$ (deletion-cost weight).
+Filters are initialized as uniform random permutations of their vocabulary; training presents data over $100$--$400$ iterations (the forward pass is batched and updates accumulate per example). Ties in $\argsort$---rare for integer footrule distances---are broken by index, making the forward pass deterministic given the filters. All experiments use the footrule norm $q = 1$; the $q \in \{0, 2\}$ variants of Eq.~\eqref{eq:distance} are available but unused. The default constants are collected for reference: $\eta = 0.1$ (rate), $\rho = 0.5$ (fraction of filters updated per layer), $c = 0.125$ (motion renormalization), $p_c = 0.01$ (correct-example update probability), $m = 0.5$ (missing-item position), $w = 0.5$ (deletion-cost weight).
 
 
 % ============================================================================
@@ -965,7 +965,7 @@ Let $\pi_1, \dots, \pi_T \in S_V$ be i.i.d.\ samples from the footrule-Mallows m
 $\hat{\pi}^*_{\mathrm{MLE}} = \arg\min_{\sigma \in S_V} \sum_{t=1}^{T} d_F(\pi_t, \sigma)$.
 \item ArrowFlow's accumulation rule (Eqs.~\ref{eq:accum-update}--\ref{eq:accum-reorder}) instead computes the \emph{positional} (Borda) aggregate
 $r_T = \argsort\!\bigl(\tfrac1T\sum_t \pi_t(1), \dots, \tfrac1T\sum_t \pi_t(V)\bigr)$.
-\item Both estimators are consistent for the same target: $\hat{\pi}^*_{\mathrm{MLE}} \to \pi^*$ and $r_T \to \pi^*$ almost surely as $T \to \infty$.
+\item Both estimators are consistent for the same target: $\hat{\pi}^*_{\mathrm{MLE}} \to \pi^*$ and $r_T \to \pi^*$ almost surely as $T \to \infty$, the latter under the regularity condition that the expected positions order consistently with the mode, $\argsort(\E[\pi(\cdot)]) = \pi^*$ (which holds for the footrule-Mallows model at sufficiently large concentration $\lambda$; see proof).
 \end{enumerate}
 \end{theorem}
 
@@ -1020,7 +1020,7 @@ the minimum footrule perturbation of the input that changes the output ranking. 
 \]
 If $d_F(\pi, \pi') < \tfrac12 g_{\min}$, then every $D_j$ moves by less than $\tfrac12 g_{\min}$, so for any consecutive pair $D_{(k)} < D_{(k+1)}$ (gap $\ge g_{\min}$) we still have $D_{(k)}(\pi') < D_{(k+1)}(\pi')$.  No adjacent pair in the sorted-distance order crosses, hence $f(\pi') = \argsort(D) $ is unchanged and $\Delta^*(\pi) \ge \tfrac12 g_{\min}(\pi)$.
 
-\textit{Upper bound.}  Let $\phi_{(2)}$ be the second-nearest filter.  Choosing $\pi' = \phi_{(2)}$ makes $d_F(\pi', \phi_{(2)}) = 0$, so $\phi_{(2)}$ becomes the (weakly) nearest filter; since the original top filter was $\phi_{(1)} \neq \phi_{(2)}$, the output ranking changes.  Therefore $\Delta^*(\pi) \le d_F(\pi, \phi_{(2)}) = D_{(2)}(\pi)$.
+\textit{Upper bound.}  Let $\phi_{(2)}$ be the second-nearest filter.  Choosing $\pi' = \phi_{(2)}$ makes $d_F(\pi', \phi_{(2)}) = 0$; since the filters are distinct, no other filter lies at distance $0$, so $\phi_{(2)}$ becomes the strictly nearest filter, and as the original top filter was $\phi_{(1)} \neq \phi_{(2)}$, the output ranking changes.  Therefore $\Delta^*(\pi) \le d_F(\pi, \phi_{(2)}) = D_{(2)}(\pi)$.
 \end{proof}
 
 \begin{remark}
@@ -1047,7 +1047,7 @@ For $V \geq 3$ and $m \geq 2$, the accumulation aggregation $A$ of Definition~\r
 
 \item \textbf{(Forced IIA violation.)} By Arrow's theorem, a social welfare function with universal domain over $V \geq 3$ alternatives cannot satisfy Pareto, non-dictatorship, and IIA simultaneously; since $A$ has the first two, it must violate IIA, i.e.\ $\mathcal{I}(A) > 0$.
 
-\item \textbf{(Explicit witness.)} The violation is concrete, not merely abstract: there is an explicit two-voter profile pair, preserving every voter's $a$-vs-$b$ order and changing only $c$'s position, on which the consensus $a$-vs-$b$ order reverses.
+\item \textbf{(Explicit witness.)} The violation is concrete, not merely abstract: there is an explicit two-voter profile pair, preserving every voter's $a$-vs-$b$ order while only relocating the irrelevant alternative $c$, on which the consensus $a$-vs-$b$ order reverses.
 \end{enumerate}
 \end{proposition}
 
@@ -1058,7 +1058,7 @@ For $V \geq 3$ and $m \geq 2$, the accumulation aggregation $A$ of Definition~\r
 \[
 \Pi = \{\,abc,\; bca\,\}, \qquad \Pi' = \{\,acb,\; bac\,\}.
 \]
-Every voter's $a$-vs-$b$ order is identical in $\Pi$ and $\Pi'$ (voter~1 places $a$ before $b$; voter~2 places $b$ before $a$); only $c$'s rank changes between the profiles.  The summed positions $(\sum_t\pi_t(a),\sum_t\pi_t(b),\sum_t\pi_t(c))$ are $(4,3,5)$ for $\Pi$ and $(3,4,5)$ for $\Pi'$, so $A(\Pi)$ ranks $b$ before $a$ while $A(\Pi')$ ranks $a$ before $b$: the relative order reverses despite the preserved pairwise preferences, exhibiting an IIA violation directly.  (A broader search over random $V=6$ profiles finds such reversals abundantly.)
+Every voter's $a$-vs-$b$ order is identical in $\Pi$ and $\Pi'$ (voter~1 places $a$ before $b$; voter~2 places $b$ before $a$); the profiles differ only in where the irrelevant alternative $c$ is placed (which shifts the absolute rank of $a$ or $b$ within a ballot, but never their relative order).  The summed positions $(\sum_t\pi_t(a),\sum_t\pi_t(b),\sum_t\pi_t(c))$ are $(4,3,5)$ for $\Pi$ and $(3,4,5)$ for $\Pi'$, so $A(\Pi)$ ranks $b$ before $a$ while $A(\Pi')$ ranks $a$ before $b$: the relative order reverses despite the preserved pairwise preferences, exhibiting an IIA violation directly.  (A broader search over random $V=6$ profiles finds such reversals abundantly.)
 \end{proof}
 
 \begin{remark}
@@ -1106,22 +1106,22 @@ Empirically, the hybrid tensor$\to$sort architecture significantly underperforms
 \section{Experiments: UCI Tabular Benchmarks}
 \label{sec:experiments}
 
-Having established the theoretical foundations, we now evaluate ArrowFlow empirically. The central question is: \emph{can a system with zero floating-point parameters in its core layers compete with heavily tuned gradient-based classifiers?} We first test clean classification accuracy on standard UCI datasets, then systematically probe ArrowFlow's structural advantages and limitations across noise, privacy, missing data, sample efficiency, natively ordinal data, gene expression, and MNIST.
+Having established the theoretical foundations, we now evaluate ArrowFlow empirically. The central question is: \emph{can a system with zero floating-point parameters in its core layers compete with heavily tuned gradient-based classifiers?} We first test clean classification accuracy on standard UCI datasets \citep{dua2019uci}, then systematically probe ArrowFlow's structural advantages and limitations across noise, privacy, missing data, sample efficiency, natively ordinal data, gene expression, and MNIST.
 
-\paragraph{Experimental protocol.} All experiments use 80/20 train/test splits (random\_state=42), 5 independent simulations. Baselines use \textbf{GridSearchCV(cv=3)} with comprehensive hyperparameter grids (RF: 54, SVM: 25, MLP: 24, KNN: 24, XGBoost: 72 combinations). ArrowFlow configs sweep width, depth, embedding dimension, views, augmentation, projection strategy, and learning rate.
+\paragraph{Experimental protocol.} All experiments use 80/20 train/test splits (random\_state=42), 5 independent simulations. Baselines use \textbf{GridSearchCV(cv=3)} with comprehensive hyperparameter grids (RF: 54, SVM: 25, MLP: 24, KNN: 24, GBM: 72 combinations), where GBM denotes scikit-learn's \texttt{GradientBoostingClassifier} (a gradient-boosted decision-tree ensemble). ArrowFlow configs sweep width, depth, embedding dimension, views, augmentation, projection strategy, and learning rate.
 
-\paragraph{Model selection and statistical caveats.} We are explicit about two limitations of this protocol. \emph{(i) Single split.} Results are reported on one fixed 80/20 split; the $\pm$ standard deviations for ArrowFlow reflect its internal randomness (random projections and filter initialization) over 5 simulations on that split, not split-to-split variance. Baselines are deterministic after \texttt{GridSearchCV} and appear as single-split point estimates, so we attach no confidence intervals to head-to-head differences and read small margins as ties---on Iris in particular, one test error equals $3.3\%$, so the $0.6$pp gap is below a single sample. \emph{(ii) Asymmetric model selection.} Baselines select hyperparameters by 3-fold cross-validation on the \emph{training} fold only, whereas the ArrowFlow ``best configuration'' in Table~\ref{tab:uci-main} is the best over our sweep \emph{as scored on the test split}. The ArrowFlow entries are therefore an optimistic, best-found estimate rather than a validation-selected one, and the comparison is not symmetric; we report them transparently as an upper bound on what the architecture attains under tuning, not as a fairly-tuned head-to-head, and a deployment estimate would require nested validation. All fitted preprocessing---standardization, polynomial expansion, LDA/PCA projections, and mutual-information gene selection---is learned on the training fold only and applied unchanged to test data. Unless stated otherwise, the robustness experiments of Section~\ref{sec:utility} use a single fixed configuration per dataset (not the tuned best of Table~\ref{tab:uci-main}), which is why a dataset's clean error can differ slightly across tables.
+\paragraph{Model selection and statistical caveats.} We are explicit about two limitations of this protocol. \emph{(i) Single split.} Results are reported on one fixed 80/20 split; the $\pm$ values for ArrowFlow are standard errors of the mean over 5 simulations and reflect only its internal randomness (random projections and filter initialization) on that split, not split-to-split variance. Baselines are deterministic after \texttt{GridSearchCV} and appear as single-split point estimates, so we attach no confidence intervals to head-to-head differences and read small margins as ties---on Iris in particular, one test error equals $3.3\%$, so the $0.6$pp gap is below a single sample. \emph{(ii) Asymmetric model selection.} Baselines select hyperparameters by 3-fold cross-validation on the \emph{training} fold only, whereas the ArrowFlow ``best configuration'' in Table~\ref{tab:uci-main} is the best over our sweep \emph{as scored on the test split}. The ArrowFlow entries are therefore an optimistic, best-found estimate rather than a validation-selected one, and the comparison is not symmetric; we report them transparently as an upper bound on what the architecture attains under tuning, not as a fairly-tuned head-to-head, and a deployment estimate would require nested validation. All fitted preprocessing---standardization, polynomial expansion, LDA/PCA projections, and mutual-information gene selection---is learned on the training fold only and applied unchanged to test data. Unless stated otherwise, the robustness experiments of Section~\ref{sec:utility} use a single fixed configuration per dataset (not the tuned best of Table~\ref{tab:uci-main}), which is why a dataset's clean error can differ slightly across tables.
 
 \subsection{Main Results}
 
 \begin{table}[ht]
 \centering
-\caption{Best ArrowFlow configuration vs.\ GridSearchCV-tuned baselines. Test error (\%), mean $\pm$ std over 5 simulations. Bold = best overall. ArrowFlow entries are the best configuration found over the sweep, selected on the test split (an optimistic estimate); baselines are CV-tuned on the training fold (see the model-selection caveats above).}
+\caption{Best ArrowFlow configuration vs.\ GridSearchCV-tuned baselines. Test error (\%), mean $\pm$ standard error of the mean (s.e.m.) over 5 simulations. Bold = best overall. ArrowFlow entries are the best configuration found over the sweep, selected on the test split (an optimistic estimate); baselines are CV-tuned on the training fold (see the model-selection caveats above).}
 \label{tab:uci-main}
 \footnotesize
 \begin{tabular}{lrrrlcccccc}
 \toprule
-Dataset & $N$ & Feat & Cls & ArrowFlow Config & AF Err & RF & SVM & MLP & KNN & XGB \\
+Dataset & $N$ & Feat & Cls & ArrowFlow Config & AF Err & RF & SVM & MLP & KNN & GBM \\
 \midrule
 Iris & 150 & 4 & 3 & {[64,128] e=16 p=3} & \textbf{2.7\tiny{$\pm$0.6}} & 3.3 & 3.3 & 3.3 & 3.3 & 3.3 \\
 Wine & 178 & 13 & 3 & {[128] e=64 p=1} & 2.8\tiny{$\pm$0.0} & \textbf{0.0} & 2.8 & 2.8 & \textbf{0.0} & 2.8 \\
@@ -1129,16 +1129,16 @@ Breast C. & 569 & 30 & 2 & {[64,128] e=32 p=2} & 2.8\tiny{$\pm$0.3} & 4.4 & \tex
 Wine Q. & 1599 & 11 & 3 & {[128] e=16 p=3} & 35.9\tiny{$\pm$1.3} & 25.9 & 30.6 & 30.3 & 29.7 & \textbf{24.1} \\
 Vehicle & 846 & 18 & 4 & {[64] e=32 p=2} & 17.4\tiny{$\pm$0.6} & 27.1 & 14.1 & \textbf{12.4} & 27.1 & 21.8 \\
 Segment & 2310 & 19 & 7 & {[128,256] e=32 p=2} & 5.2\tiny{$\pm$0.3} & 2.8 & 3.2 & 3.7 & 4.1 & \textbf{2.6} \\
-Digits & 5620 & 64 & 10 & {[256] e=64 p=1 lr=0.2} & 4.6\tiny{$\pm$0.3} & 2.8 & \textbf{1.7} & 1.9 & 2.2 & 4.2 \\
+Digits & 1{,}797 & 64 & 10 & {[128] e=64 p=1 lr=0.2} & 4.6\tiny{$\pm$0.3} & 2.8 & \textbf{1.7} & 1.9 & 2.2 & 4.2 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-ArrowFlow \textbf{edges out every tuned baseline on Iris} (2.7\% vs.\ 3.3\%). We report this with deliberate caution: the Iris test set has only 30 samples, so 3.3\% is a single misclassification and the 0.6pp margin is smaller than one test sample; moreover the baselines are single-split point estimates without variance (Section~\ref{sec:experiments}, protocol). The result is therefore best read as ArrowFlow \emph{reaching parity with}---and on average slightly bettering---the best tuned classical methods, which is, to our knowledge, the first time a pure permutation-distance network attains this on a tuned benchmark, rather than as a decisive win. On Wine (2.8\%), Breast Cancer (2.8\%), and Digits (4.6\%), ArrowFlow is competitive but does not match the best baseline. The gap grows with task complexity, confirming that argsort encoding loss limits performance on magnitude-sensitive tasks. Wine Quality is the weakest result (35.9\% vs.\ 24.1\%)---this binned regression task depends on subtle magnitude differences that argsort discards.
+ArrowFlow \textbf{reaches parity with the best tuned baselines on Iris} (2.7\% vs.\ 3.3\%). We report this with deliberate caution: the Iris test set has only 30 samples, so 3.3\% is a single misclassification and the 0.6pp margin is smaller than one test sample; moreover the baselines are single-split point estimates without variance (Section~\ref{sec:experiments}, protocol). The result is therefore best read as ArrowFlow \emph{reaching parity with}---and on average slightly bettering---the best tuned classical methods, which is, to our knowledge, the first time a pure permutation-distance network attains this on a tuned benchmark, rather than as a decisive win. On Wine (2.8\%), Breast Cancer (2.8\%), and Digits (4.6\%), ArrowFlow is competitive but does not match the best baseline. The gap grows with task complexity, confirming that argsort encoding loss limits performance on magnitude-sensitive tasks. Wine Quality is the weakest result (35.9\% vs.\ 24.1\%)---this binned regression task depends on subtle magnitude differences that argsort discards.
 
 \subsection{Does Learning Help? ArrowFlow vs.\ kNN}
 
-A critical question is whether ArrowFlow's permutation-matrix filter updates improve classification beyond simple distance lookup. We compare ArrowFlow to \textbf{kNN with Manhattan distance} (= Spearman footrule on the encoded permutations) on the \emph{exact same encoded permutations}---same polynomial expansion, the same per-view diverse projections, and the same 7-view majority vote, with kNN substituted for the sort-layer network in each view. kNN uses uniform weights and the neighborhood size $k$ is swept over $\{1,3,5,7\}$ with the best reported (so, like ArrowFlow, its $k$ is selected on test---the comparison between the two is therefore symmetric). This isolates the contribution of learned filters from the encoding pipeline. We note that kNN must store all training permutations, whereas ArrowFlow stores only its $N$ filters per layer, so the comparison also favors ArrowFlow on memory.
+A critical question is whether ArrowFlow's permutation-matrix filter updates improve classification beyond simple distance lookup. We compare ArrowFlow to \textbf{kNN with Manhattan distance} (= Spearman footrule on the encoded permutations) through the \emph{same encoding pipeline}---same polynomial expansion, the same per-view diverse projection strategies, and the same 7-view majority vote, with kNN substituted for the sort-layer network in each view. kNN uses uniform weights and the neighborhood size $k$ is swept over $\{1,3,5,7\}$ with the best reported (so, like ArrowFlow, its $k$ is selected on test---the comparison between the two is therefore symmetric in tuning). Two pipeline asymmetries remain and modestly favor ArrowFlow: it applies permutation augmentation during training on most datasets (kNN does not), and the two use independent random seeds, so the per-view encodings are produced by the same pipeline rather than being bitwise identical. This isolates the contribution of learned filters from the encoding pipeline. We note that kNN must store all training permutations, whereas ArrowFlow stores only its $N$ filters per layer, so the comparison also favors ArrowFlow on memory.
 
 \begin{table}[ht]
 \centering
@@ -1315,7 +1315,7 @@ Table~\ref{tab:progression} traces the cumulative impact of each architectural c
 
 \begin{table}[ht]
 \centering
-\caption{Cumulative error reduction (\%) as components are added.}
+\caption{Cumulative error reduction (\%) as components are added. Each row reports the best configuration at that stage drawn from the same sweep that produces Table~\ref{tab:uci-main}; the rows isolate the marginal contribution of each component rather than coming from a single end-to-end ablation run.}
 \label{tab:progression}
 \begin{tabular}{lcccc}
 \toprule
@@ -1361,7 +1361,7 @@ ArrowFlow   & 4.6 & 5.0  & 5.7  & 7.8  & 13.9 & 29.1 \\
 SVM-RBF     & 2.8 & 2.8  & 5.6  & 6.7  & 29.4 & 59.4 \\
 RF          & 0.0 & 0.0  & 1.7  & 7.2  & 10.6 & 31.1 \\
 MLP         & 2.8 & 2.8  & 3.3  & 6.1  & 10.6 & 25.6 \\
-XGBoost     & 2.8 & 2.8  & 6.7  & 12.2 & 18.3 & 36.7 \\
+GBM     & 2.8 & 2.8  & 6.7  & 12.2 & 18.3 & 36.7 \\
 KNN         & 0.0 & 0.6  & 1.7  & 5.6  & 10.6 & 25.0 \\
 \bottomrule
 \end{tabular}
@@ -1380,7 +1380,7 @@ ArrowFlow   & 4.8  & 4.4  & 5.8  & 10.0 & 25.8 & 54.6 \\
 SVM-RBF     & 1.7  & 1.7  & 1.9  & 3.9  & 17.2 & 87.3 \\
 RF          & 2.8  & 2.7  & 3.3  & 6.6  & 18.0 & 49.7 \\
 MLP         & 1.9  & 2.3  & 2.3  & 5.2  & 14.6 & 46.8 \\
-XGBoost     & 4.2  & 4.7  & 7.2  & 12.9 & 30.5 & 58.4 \\
+GBM     & 4.2  & 4.7  & 7.2  & 12.9 & 30.5 & 58.4 \\
 KNN         & 2.2  & 2.1  & 2.4  & 3.9  & 10.9 & 41.0 \\
 \bottomrule
 \end{tabular}
@@ -1393,7 +1393,7 @@ KNN         & 2.2  & 2.1  & 2.4  & 3.9  & 10.9 & 41.0 \\
 \small
 \begin{tabular}{lccrrrrrr}
 \toprule
-Dataset & pol\_deg & AF & SVM & RF & MLP & XGB & KNN & Avg BL \\
+Dataset & pol\_deg & AF & SVM & RF & MLP & GBM & KNN & Avg BL \\
 \midrule
 \textbf{Wine} & \textbf{1} & \textbf{24.5} & 56.6 & 31.1 & 22.8 & 33.9 & 25.0 & 33.9 \\
 \textbf{Digits} & \textbf{1} & \textbf{49.8} & 85.6 & 46.9 & 44.9 & 54.2 & 38.8 & 54.1 \\
@@ -1416,14 +1416,14 @@ Segment & 2 & 74.1 & 55.4 & 61.1 & 59.7 & 63.6 & 50.6 & 58.1 \\
 
 \begin{table}[ht]
 \centering
-\caption{Privacy via rank transform: error on raw vs.\ ranked features. $\Delta$ = degradation in pp.}
+\caption{Privacy via rank transform: error on raw vs.\ ranked features. $\Delta$ = degradation in pp (negative = improvement). Bold marks ArrowFlow's $\Delta$ in each block.}
 \label{tab:privacy}
 \small
 \begin{tabular}{llccc}
 \toprule
 Dataset & Method & Raw & Ranked & $\Delta$ \\
 \midrule
-\multirow{4}{*}{Iris} & ArrowFlow & 4.4 & \textbf{2.2} & $-$2.2 \\
+\multirow{4}{*}{Iris} & ArrowFlow & 4.4 & 2.2 & \textbf{$-$2.2} \\
  & RF & 3.3 & 3.3 & +0.0 \\
  & SVM-RBF & 3.3 & 3.3 & +0.0 \\
  & KNN & 3.3 & 6.7 & +3.3 \\
@@ -1438,8 +1438,8 @@ Dataset & Method & Raw & Ranked & $\Delta$ \\
  & MLP & 1.9 & 3.3 & +1.4 \\
  & RF & 2.8 & 3.9 & +1.1 \\
 \midrule
-\multirow{3}{*}{Vehicle} & ArrowFlow & 18.4 & 22.6 & +4.1 \\
- & MLP & 12.3 & 22.4 & \textbf{+10.0} \\
+\multirow{3}{*}{Vehicle} & ArrowFlow & 18.4 & 22.6 & \textbf{+4.1} \\
+ & MLP & 12.3 & 22.4 & +10.0 \\
  & SVM-RBF & 14.1 & 17.6 & +3.5 \\
 \bottomrule
 \end{tabular}
@@ -1467,7 +1467,7 @@ RF        & 3.3  & 9.3  & 10.0 & 29.3 \\
 SVM-RBF   & 3.3  & 10.7 & 15.3 & 36.0 \\
 MLP       & 3.3  & 15.3 & 20.7 & 33.3 \\
 KNN       & 3.3  & 10.7 & 14.0 & 37.3 \\
-XGBoost   & 3.3  & 15.3 & 14.7 & 34.7 \\
+GBM   & 3.3  & 15.3 & 14.7 & 34.7 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1485,7 +1485,7 @@ SVM-RBF   & 1.7  & 2.3  & 7.3  & 25.0 \\
 RF        & 2.8  & 4.2  & 12.2 & 34.7 \\
 MLP       & 1.9  & 3.3  & 6.3  & \textbf{13.4} \\
 KNN       & 2.2  & 2.7  & 5.8  & 16.6 \\
-XGBoost   & 4.2  & 7.8  & 19.4 & 38.9 \\
+GBM   & 4.2  & 7.8  & 19.4 & 38.9 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1497,7 +1497,7 @@ XGBoost   & 4.2  & 7.8  & 19.4 & 38.9 \\
 \small
 \begin{tabular}{lcrrrrrr}
 \toprule
-Dataset & Feat & AF & RF & SVM & MLP & XGB & Avg BL \\
+Dataset & Feat & AF & RF & SVM & MLP & GBM & Avg BL \\
 \midrule
 \textbf{Iris} & 4 & \textbf{20.3} & 26.0 & 32.7 & 30.0 & 31.4 & 30.8 \\
 Wine & 13 & 6.5 & 7.2 & 8.9 & 9.4 & 7.2 & 8.8 \\
@@ -1509,7 +1509,7 @@ Segment & 19 & 46.5 & 37.6 & 45.9 & 36.7 & 36.8 & 38.1 \\
 \end{tabular}
 \end{table}
 
-On Iris at 50\% masking (2 of 4 features zeroed), ArrowFlow achieves \textbf{24.7\%---beating all baselines} (29.3--37.3\%). On Digits, ArrowFlow degrades only 18.9pp vs.\ RF (31.9pp) and XGBoost (34.7pp). The advantage is strongest at dimensional extremes (very low or very high) and weakest in the mid-range where polynomial expansion amplifies the imputation effect.
+On Iris at 50\% masking (2 of 4 features zeroed), ArrowFlow achieves \textbf{24.7\%---beating all baselines} (29.3--37.3\%). On Digits, ArrowFlow degrades only 18.9pp vs.\ RF (31.9pp) and GBM (34.7pp). The advantage is strongest at dimensional extremes (very low or very high) and weakest in the mid-range where polynomial expansion amplifies the imputation effect.
 
 \subsection{Sample Efficiency}
 \label{sec:sample-eff}
@@ -1530,7 +1530,7 @@ ArrowFlow & 8.8  & 7.3  & \textbf{4.7} & \textbf{3.5} & 2.9 \\
 SVM-RBF   & 6.1  & 7.9  & 3.5  & 3.5  & 1.8 \\
 RF        & 7.0  & 8.8  & 8.8  & 8.8  & 4.4 \\
 MLP       & 9.7  & 7.0  & 2.6  & 7.9  & 4.4 \\
-XGBoost   & 7.9  & 7.0  & 7.9  & 11.4 & 4.4 \\
+GBM   & 7.9  & 7.0  & 7.9  & 11.4 & 4.4 \\
 KNN       & 7.9  & 6.1  & 5.3  & 6.1  & 1.8 \\
 \bottomrule
 \end{tabular}
@@ -1548,20 +1548,20 @@ ArrowFlow & 58.1 & 26.1 & 17.4 & 14.7 & 4.8 \\
 SVM-RBF   & \textbf{27.2} & \textbf{21.9} & \textbf{13.6} & \textbf{10.6} & \textbf{1.7} \\
 RF        & 29.2 & 26.7 & 13.3 & 10.6 & 3.6 \\
 MLP       & 31.1 & 25.0 & 13.9 & 15.0 & 2.5 \\
-XGBoost   & 62.8 & 56.1 & 28.9 & 19.2 & 3.6 \\
+GBM   & 62.8 & 56.1 & 28.9 & 19.2 & 3.6 \\
 KNN       & 26.9 & 22.5 & 14.4 & 14.4 & 3.3 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-On Breast Cancer ($N$=100--200), ArrowFlow achieves 3.5--4.7\%---beating RF (8.8\%), XGBoost (7.9--11.4\%), and matching SVM (3.5\%). The ordinal inductive bias compensates for limited data when ordinal structure is informative. However, ArrowFlow does \emph{not} have a universal small-$N$ advantage: on Digits at $N$=20, it scores 58.1\% (second worst) while KNN achieves 26.9\%.
+On Breast Cancer ($N$=100--200), ArrowFlow achieves 3.5--4.7\%---beating RF (8.8\%), GBM (7.9--11.4\%), and matching SVM (3.5\%). The ordinal inductive bias compensates for limited data when ordinal structure is informative. However, ArrowFlow does \emph{not} have a universal small-$N$ advantage: on Digits at $N$=20, it scores 58.1\% (second worst) while KNN achieves 26.9\%.
 
 \subsection{Natively Ordinal Data: Sushi Preferences}
 \label{sec:sushi}
 
 \textbf{Rationale.} All previous experiments encode real-valued features into permutations via argsort. A natural question is: does ArrowFlow excel when the data is \emph{already} ordinal? Preference rankings are the purest test case---no encoding loss, no projection needed.
 
-\textbf{Dataset:} 5000 users ranking 10 sushi types. Task: predict region (East/West Japan). ArrowFlow hyperparameters tuned via systematic grid search over 2016 configurations.
+\textbf{Dataset:} the SUSHI preference dataset \citep{kamishima2003sushi}---5000 users ranking 10 sushi types. The task is a binary East/West Japan region label, derived by thresholding each user's prefecture-of-residence field (a proxy for the geographic split rather than the dataset's own region attribute). ArrowFlow hyperparameters are tuned in two phases: a first-phase screen over 2016 nominal grid points (of which only $\sim$504 are distinct, since the embedding-dimension axis is inert for natively-encoded rankings) at a single view and seed, followed by re-evaluation of the top configurations at 7 views and 5 seeds.
 
 \begin{table}[ht]
 \centering
@@ -1573,23 +1573,23 @@ Method & Encoding & Error \\
 \midrule
 Random Forest       & numeric    & \textbf{35.2\%} \\
 SVM-RBF             & numeric    & 35.3\% \\
-XGBoost             & numeric    & 35.9\% \\
+GBM             & numeric    & 35.9\% \\
 KNN                 & numeric    & 37.6\% \\
-ArrowFlow (native)  & native     & 38.6 $\pm$ 0.4\% \\
+ArrowFlow (native)  & native     & 37.9 $\pm$ 0.4\% \\
 MLP                 & numeric    & 38.7\% \\
 ArrowFlow (proj.)   & projection & 48.9\% \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Random Forest (35.2\%) beats ArrowFlow's grid-searched best (38.6\%). This 3.4pp gap persists despite exhaustive tuning, confirming an \textbf{architectural limitation}: Spearman's footrule compares \emph{whole permutations}, which is too holistic when only a few item positions are predictive. Baselines can exploit individual rank positions via tree splits or kernel distances. The multi-view ensemble does not help on native-encoded data---all views see identical permutations, so diversity comes only from random filter initialization.
+Random Forest (35.2\%) beats ArrowFlow's grid-searched best (37.9\%). This 2.7pp gap persists despite exhaustive tuning, confirming an \textbf{architectural limitation}: Spearman's footrule compares \emph{whole permutations}, which is too holistic when only a few item positions are predictive. Baselines can exploit individual rank positions via tree splits or kernel distances. The multi-view ensemble does not help on native-encoded data---all views see identical permutations, so diversity comes only from random filter initialization.
 
 \subsection{Gene Expression Cancer Classification}
 \label{sec:gene}
 
 \textbf{Motivation.} Gene expression absolute values vary across laboratories, platforms, and batches (the ``batch effect'' problem), but the \emph{relative ordering} of gene expression levels is conserved. This is the principle behind Top Scoring Pairs (TSP), an established rank-based classification method in bioinformatics. ArrowFlow's ordinal processing is natively batch-effect invariant: monotone transformations of expression values cannot change within-sample gene rankings.
 
-\textbf{Dataset.} UCI Gene Expression Cancer RNA-Seq (TCGA PANCAN): 801 samples, 20{,}531 genes, 5 cancer types (BRCA, KIRC, COAD, LUAD, PRAD). We select the top $K$ genes by mutual information, rank-transform each sample to obtain a permutation of $K$ items, and split 80/20 stratified.
+\textbf{Dataset.} UCI Gene Expression Cancer RNA-Seq \citep{dua2019uci}, derived from the TCGA Pan-Cancer project \citep{weinstein2013cancer}: 801 samples, 20{,}531 genes, 5 cancer types (BRCA, KIRC, COAD, LUAD, PRAD). We select the top $K$ genes by mutual information, rank-transform each sample to obtain a permutation of $K$ items, and split 80/20 stratified.
 
 \paragraph{Clean classification.}
 Table~\ref{tab:gene-clean} compares ArrowFlow (native rank encoding and projection encoding) against GridSearchCV-tuned baselines on raw and rank-transformed expression values.
@@ -1607,13 +1607,13 @@ RF         & raw      & 1.2  & \textbf{0.6}  & 0.6 \\
 SVM-RBF    & raw      & 1.9  & \textbf{0.6}  & \textbf{0.0} \\
 MLP        & raw      & 2.5  & 1.2  & \textbf{0.0} \\
 KNN        & raw      & 1.9  & 1.2  & \textbf{0.0} \\
-XGBoost    & raw      & 1.2  & 1.2  & 2.5 \\
+GBM    & raw      & 1.2  & 1.2  & 2.5 \\
 \midrule
 RF         & ranked   & 3.7  & 1.9  & \textbf{0.0} \\
 SVM-RBF    & ranked   & 3.1  & 2.5  & 0.6 \\
 MLP        & ranked   & 3.1  & 0.6  & 0.6 \\
 KNN        & ranked   & 3.1  & 3.1  & 0.6 \\
-XGBoost    & ranked   & 4.3  & \textbf{0.0}  & \textbf{0.0} \\
+GBM    & ranked   & 4.3  & \textbf{0.0}  & \textbf{0.0} \\
 \midrule
 AF native [64,32] 7v  & native & 3.6 & 2.4 & 1.1 \\
 AF proj [128] p2 7v   & projection & \textbf{2.4} & \textbf{1.9} & \textbf{0.4} \\
@@ -1671,14 +1671,14 @@ $\sigma$ & SVM (raw) & RF (raw) & SVM (ranked) & RF (ranked) & AF native \\
 
 In the realistic operating range ($\sigma \leq 0.5$), rank-based methods are essentially unaffected while SVM on raw values jumps from 0.6\% to 16.8\%. At $\sigma = 0.7$ (cross-platform), SVM-raw catastrophically fails (59.0\%), while all rank-based methods remain under 11\%. At extreme $\sigma \geq 1.0$, per-gene scaling overwhelms the minimum gap $\delta_{\min}$ and even rank-based methods degrade---consistent with the stability bound of Theorem~\ref{thm:stability}.
 
-\paragraph{Honest assessment.} ArrowFlow native and SVM on rank-transformed data provide \emph{comparable} batch-effect robustness---both benefit from the rank transform, and SVM-ranked is slightly more accurate at every operating point. The robustness advantage belongs to the \emph{ordinal representation principle}, not to ArrowFlow specifically. However, ArrowFlow embodies this principle architecturally: it \emph{cannot} use magnitude information even if present, making batch-effect invariance a structural guarantee rather than a preprocessing choice that could be accidentally omitted. For clinical genomics pipelines, where data from heterogeneous sources must be classified reliably, this architectural guarantee has engineering value.
+\paragraph{Honest assessment.} ArrowFlow native and SVM on rank-transformed data provide \emph{comparable} batch-effect robustness---both benefit from the rank transform, and SVM-ranked is marginally more accurate across the realistic operating range ($\sigma \le 1.0$); only at the extreme $\sigma = 1.5$ do the rank methods separate appreciably (SVM-ranked $43.5\%$, RF-ranked $34.2\%$, ArrowFlow native $60.8\%$), where all are well outside any realistic batch-effect regime. The robustness advantage belongs to the \emph{ordinal representation principle}, not to ArrowFlow specifically. However, ArrowFlow embodies this principle architecturally: it \emph{cannot} use magnitude information even if present, making batch-effect invariance a structural guarantee rather than a preprocessing choice that could be accidentally omitted. For clinical genomics pipelines, where data from heterogeneous sources must be classified reliably, this architectural guarantee has engineering value.
 
 \subsection{MNIST via PCA: Isolating the Sort-Layer Classifier}
 \label{sec:mnist-pca}
 
-\textbf{Rationale.} The preceding experiments test ArrowFlow on small tabular datasets (150--5620 samples) and domain-specific data. Two questions remain: (1)~does ArrowFlow scale to a larger, harder image classification task? (2)~how much of ArrowFlow's performance comes from the sort-layer \emph{classifier} versus the argsort \emph{encoding}? To answer both, we give ArrowFlow and baselines the \emph{exact same} PCA-reduced MNIST features---baselines receive PCA vectors directly, while ArrowFlow receives them through projection $\to$ argsort. Any accuracy difference is purely due to ArrowFlow's ordinal learning versus conventional classifiers on identical information.
+\textbf{Rationale.} The preceding experiments test ArrowFlow on small tabular datasets (150--2310 samples) and domain-specific data. Two questions remain: (1)~does ArrowFlow scale to a larger, harder image classification task? (2)~how much of ArrowFlow's performance comes from the sort-layer \emph{classifier} versus the argsort \emph{encoding}? To answer both, we give ArrowFlow and baselines the \emph{exact same} PCA-reduced MNIST features---baselines receive PCA vectors directly, while ArrowFlow receives them through projection $\to$ argsort. Any accuracy difference is purely due to ArrowFlow's ordinal learning versus conventional classifiers on identical information.
 
-\textbf{Setup.} MNIST (60{,}000 train / 10{,}000 test, 10 classes). Pipeline: 784 pixels $\to$ StandardScaler $\to$ PCA($n$, whitened) $\to$ baselines or ArrowFlow. PCA dimensions: $\{16, 32, 64\}$; training sizes: $\{1{,}000, 5{,}000, 10{,}000\}$. Baselines use GridSearchCV (RF, SVM-RBF, MLP, KNN, XGBoost). ArrowFlow uses 7-view ensemble with diverse projections; architectures sweep width $\{128, 256, 512, 1024\}$ and depth $\{2, 3\}$ layers. ArrowFlow results are mean $\pm$ SE over 3 simulations.
+\textbf{Setup.} MNIST \citep{lecun1998mnist} (60{,}000 train / 10{,}000 test, 10 classes). Pipeline: 784 pixels $\to$ StandardScaler $\to$ PCA($n$, whitened) $\to$ baselines or ArrowFlow. PCA dimensions: $\{16, 32, 64\}$; training sizes: $\{1{,}000, 5{,}000, 10{,}000\}$. Baselines use GridSearchCV (RF, SVM-RBF, MLP, KNN, GBM). ArrowFlow uses 7-view ensemble with diverse projections; architectures sweep width $\{128, 256, 512, 1024\}$ and depth $\{2, 3\}$ layers. ArrowFlow results are mean $\pm$ SE over 3 simulations. For computational tractability the baseline GridSearchCV grids are reduced and use $\mathrm{cv}=2$ at the largest training sizes.
 
 \begin{table}[ht]
 \centering
@@ -2016,7 +2016,7 @@ The argsort encoding is simultaneously ArrowFlow's greatest strength and its mos
   \item \textbf{Natively ordinal data:} ArrowFlow's whole-permutation distance is too holistic when only local ordinal features are predictive (Sushi experiment, Section~\ref{sec:sushi}).
   \item \textbf{Rank-transform baseline:} On gene expression data (Section~\ref{sec:gene}), SVM on rank-transformed features achieves comparable or better batch-effect robustness than ArrowFlow native. The robustness advantage belongs to the ordinal representation principle, not to ArrowFlow specifically---though ArrowFlow provides this guarantee architecturally rather than as a preprocessing choice.
   \item \textbf{Hybrid architecture failure:} The tensor$\to$sort interface (Section~\ref{sec:hybrid}) destroys continuous representations via argsort discretization, preventing effective hybrid architectures.
-  \item \textbf{Slow convergence:} The permutation-matrix accumulation makes conservative updates, requiring 200--500 iterations vs.\ $\sim$50 epochs for gradient-based methods.
+  \item \textbf{Slow convergence:} The permutation-matrix accumulation makes conservative updates, requiring 100--400 iterations vs.\ $\sim$50 epochs for gradient-based methods.
 \end{itemize}
 
 \subsection{Future Directions}
@@ -2029,7 +2029,7 @@ The argsort encoding is simultaneously ArrowFlow's greatest strength and its mos
   \item \textbf{Position-wise attention:} For natively ordinal data, a mechanism that weights individual item positions (rather than whole-permutation distances) could address the holistic-distance limitation exposed by the Sushi experiment.
   \item \textbf{Neuromorphic implementation:} ArrowFlow's integer-only arithmetic is 15--150$\times$ cheaper per operation than FP32 MACs (Section~\ref{sec:energy}). A custom ASIC implementing sort layers as comparator arrays and index tables could make inference dramatically cheaper than conventional networks, particularly on neuromorphic platforms \citep{davies2018loihi, merolla2014million} where spike-order coding is native.
   \item \textbf{Mode selection framework:} The polynomial trade-off (Section~\ref{sec:tradeoff}) suggests a practical deployment strategy: automatically select $\mathrm{pol\_deg}$=1 when the data is noisy, privacy-constrained, or incomplete; $\mathrm{pol\_deg}>1$ when clean accuracy is paramount.
-  \item \textbf{Text and sequence domains:} The CountVectorizer nonzero encoding (converting word presence to native permutations) opens a path for applying ArrowFlow to text classification without the projection pipeline. Initial IMDB experiments are underway.
+  \item \textbf{Text and sequence domains:} A word-presence (count-vectorizer) encoding that converts documents to native permutations opens a path for applying ArrowFlow to text classification without the projection pipeline.
   \item \textbf{Broader combinatorial primitives:} Displacement-accumulation generalizes beyond permutations to other discrete structures---matchings, partial orders, lattice elements---potentially yielding a family of combinatorial learning architectures.
 \end{enumerate}
 
@@ -2044,10 +2044,10 @@ ArrowFlow demonstrates that machine learning can operate effectively in the spac
 
 The key empirical findings, across 7 UCI datasets, MNIST, gene expression cancer classification, and preference data, with GridSearchCV-tuned baselines, are:
 \begin{enumerate}[leftmargin=2em]
-  \item ArrowFlow \textbf{matches or slightly edges every tuned baseline on Iris} (2.7\% vs.\ 3.3\%; a sub-sample margin, see Section~\ref{sec:experiments}) and is competitive on 5 of 7 UCI datasets, showing that zero-floating-point-parameter architectures can rival gradient-trained networks.
+  \item ArrowFlow \textbf{reaches parity with the best tuned baselines on Iris} (2.7\% vs.\ 3.3\%; a sub-sample margin, see Section~\ref{sec:experiments}) and is competitive on 5 of 7 UCI datasets, showing that zero-floating-point-parameter architectures can rival gradient-trained networks.
   \item The \textbf{polynomial degree acts as a master switch} between accuracy and robustness. At degree~1, ArrowFlow provides measurable noise robustness (8--28\% less degradation), near-zero-cost rank-only (magnitude-hiding) operation (+0.5pp under rank transforms), and superior missing-feature handling (lowest error on Iris at 50\% masking). At higher degrees, clean accuracy improves but perturbation amplification erases these advantages.
   \item On gene expression data, ordinal encoding provides \textbf{exact invariance to within-sample monotone batch effects}: SVM on raw values collapses from 0.6\% to 82.6\% under $\log$, $\sqrt{}$, or global scaling, while rank-based methods remain stable at 2.5\%. Under realistic per-gene batch effects ($\sigma \leq 0.5$), rank methods are unaffected while raw-input SVM error increases $28\times$. ArrowFlow embodies this ordinal robustness architecturally.
-  \item On \textbf{MNIST via PCA}, ArrowFlow achieves 9.1\% error using only ordinal comparisons. It \textbf{scales strongly} with width and depth (18.7\%$\to$9.1\%), and the scaling curve has not plateaued, suggesting capacity is the bottleneck.
+  \item On \textbf{MNIST via PCA}, ArrowFlow achieves 9.1\% error using only ordinal comparisons. It \textbf{scales strongly} with width and depth (18.7\%$\to$9.1\%), and the scaling curve has not plateaued, suggesting limited capacity is at least one bottleneck (though the learning rule may also limit attainable accuracy).
   \item The \textbf{multi-view ensemble} with diverse projections is the single most impactful component, reducing error by up to $\sim$3$\times$ (1.3--3.3$\times$ across datasets).
   \item \textbf{Freezing the output layer} consistently improves performance, a novel training strategy analogous to fixing classifier heads in transfer learning.
   \item ArrowFlow's \textbf{learning genuinely helps}: 2.5--12.5$\times$ improvement over kNN on the same encoded features proves that filter updates learn discriminative ordinal structure.
