@@ -1,0 +1,132 @@
+{
+  "aggregation": "fitting seeds averaged within outer fold, then outer-fold mean and SD; within-fold seed SD reported separately",
+  "confidence": 0.95,
+  "datasets": [
+    "iris",
+    "wine",
+    "breast_cancer",
+    "wine_quality",
+    "vehicle",
+    "segment",
+    "digits"
+  ],
+  "depth_split": {
+    "definition": "per dataset, untrained minus views7 accuracy (fitting seeds averaged within fold), grouped by the hidden widths of the reconstructed selection; per group the folds, n, mean, SD, min, max and the corrected resampled t interval over the group's folds when n >= 2; pooled across datasets per group: n, mean and SD",
+    "depths": [
+      [
+        128
+      ],
+      [
+        64,
+        128
+      ]
+    ],
+    "status": "descriptive; no p values"
+  },
+  "dropped_variants": {
+    "borda_views7": "Borda view aggregation is not defined for the kNN readout",
+    "multiview_footrule_knn": "replaced by input_knn, whose readout is tuned inside every fit exactly as ArrowFlow-kNN tunes its own",
+    "single_view_no_checkpoint_no_augment": "not among the variants of the Task 20B ruling"
+  },
+  "failure_policy": "log_all_failures; a failed variant fit leaves an explicit failed row; failed jobs are never omitted from the summary; no adaptive stopping on any score; a views7 reproduction failure is an integrity failure: its job fails, the pending jobs are cancelled and the summary refuses",
+  "fit_reuse": "views7 is fitted once per seed and fold; views1 and views3 are majorities over its first one and three per-view kNN votes (view v depends only on derive_seed(seed, \"view\", v)); prototype_readout is the majority of the output rule of the same seven trained networks; no_checkpoint and no_augment are fitted separately unless their parameters coincide with views7 (no_augment where the resolved augment is already false), in which case the record says identical_to_views7; untrained and input_knn are fitted separately and train nothing; reused fits carry zero timings and name their source fit",
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "frozen": true,
+  "frozen_at_utc": "2026-09-13T09:44:49.008991+00:00",
+  "historical_results": "exploratory_only",
+  "inner_folds": 3,
+  "knn_readout": {
+    "aggregation": "majority",
+    "applies_to": [
+      "views7",
+      "views1",
+      "views3",
+      "no_checkpoint",
+      "no_augment",
+      "untrained",
+      "input_knn"
+    ],
+    "grid": {
+      "n_neighbors": [
+        1,
+        3,
+        5,
+        11,
+        21
+      ],
+      "weights": [
+        "uniform",
+        "distance"
+      ]
+    },
+    "selection": "mean accuracy over StratifiedKFold(3, shuffle=True, random_state=derive_seed(view_seed, \"readout_selection\")) splits of the training partition inside every fit; fewer splits only if the smallest class has fewer rows; one neighbour cache per split at the largest k; ties lowest_canonical_config_id; refit on the full training representation",
+    "selection_folds": 3,
+    "source": "identical to arrowflow_full_knn (bridge_knn.json knn_readout)"
+  },
+  "max_workers": 16,
+  "numeric_threads_per_worker": 1,
+  "outer_folds": 5,
+  "outer_repeats": 3,
+  "parallelism": "spawned single-thread process per dataset and outer fold under the shared execution lock",
+  "pilot_datasets": [
+    "iris",
+    "wine_quality",
+    "segment",
+    "digits"
+  ],
+  "production_family": "knn_ablation",
+  "protocol_id": "arrowflow-v3-knn-ablation-1",
+  "reference_source": {
+    "code_revision": "70fb9bf31092cb64e2bd349403ad090699a3494d",
+    "directory": "supplied by --reference-source at prepare and recorded in manifest.json",
+    "family": "bridge_knn",
+    "model_id": "arrowflow_full_knn",
+    "protocol_file": "experiments/make_revision/protocols/2026-09-12/bridge_knn.json",
+    "protocol_id": "arrowflow-v3-bridge-knn-1",
+    "protocol_sha256": "6335d8c4a1b16fb4044c3badb1fff1448f4083d4cc89611cd54b276d60057ff1",
+    "reproduction": "views7 must reproduce the reference outer predictions exactly for every dataset, outer fold and fitting seed (the same labels in the sealed test-sample order); checked inside every job, again for every record by the summary, and every sealed selection is re-derived from the reference run at summary time",
+    "selected_configuration": "results/<dataset>__arrowflow_full_knn__r<repeat>f<fold>.json selection block, reconstructed from the complete inner fit history at prepare time (reporting.validate_result_records) and resolved to embed_dim, degree and augment from the outer training partition shape (bridge.resolve_selected); sealed in reference_selected_configurations.csv and reference_selections.json with the reference per-example predictions",
+    "summary_sha256": "f5f0c7016864ce354c70f148bfecc31f8dbdbff5bc4f41d74e63e22a6ff36fda"
+  },
+  "report_metrics": [
+    "accuracy",
+    "error",
+    "balanced_accuracy",
+    "macro_f1"
+  ],
+  "reporting": {
+    "change_from_views7": "per dataset and variant, variant minus views7 in accuracy and error: fitting seeds averaged within outer fold, corrected resampled t interval over the 15 outer folds (q = test_train_ratio, 14 df); descriptive; no p values; no Holm adjustment",
+    "outputs": "knn_ablation_summary.json (metrics, intervals, depth split, reproduction counts, model rows) and knn_ablation_summary.csv (metrics per dataset, variant and metric)"
+  },
+  "resource_decision": "Task 20B (ruling 2026-09-13, kNN-anchored component ablation): drafted from ablation.json; prepare 2026-09-13T09:38:58Z at c10966bf9 (105 per-fold selections reconstructed from arrowflow-v3-bridge-knn-1 and sealed with the reference predictions; selected widths [128] in 80 folds, [64, 128] in 25); synthetic smoke 2026-09-13T09:39:02Z ok (views7 reproduced 9/9); training-only pilot 2026-09-13T09:39:09Z (iris, wine_quality, segment, digits; first outer training partition, seed 8129; every variant fit ok) projected 7.12 serial h, 0.44 h at 16 workers (idle pilot seconds, unpiloted datasets at the slowest piloted) and 10.94 serial h, 0.68 h at 16 workers calibrated on the reference run's realized outer fit and predict seconds of every fold and seed times the piloted all-variants/views7 ratio; reproduction probe: results/iris__arrowflow_full_knn__r0f0.json inner fit b5b2cf609efe12eb seed 8129 inner fold 0 refitted exactly (inner score 1.000000 and every view's readout selection identical); cap 4 h at 16 single-thread workers; frozen after the pilot",
+  "selection_metric": "accuracy",
+  "source_template_sha256": "6fa3d0aff655eabb2a45f44392ccf4d4b02839d4cd113123d8628f85c75460ee",
+  "split_seed": 27183,
+  "status": "reviewed_and_piloted_before_confirmatory_scoring",
+  "test_train_ratio": 0.25,
+  "variant_definitions": {
+    "input_knn": "the same seven encoders with the kNN readout tuned on the encoded input positions (knn_controls.MultiViewInputKNN)",
+    "no_augment": "augment false; kNN readout; identical_to_views7 where the resolved augment is already false",
+    "no_checkpoint": "validation_ratio 0: networks trained on all training rows without the validation checkpoint; kNN readout",
+    "prototype_readout": "the output rule of the same seven trained networks (ArrowFlowEstimator.predict_orders per view), majority vote; derived from the views7 fit without retraining",
+    "untrained": "the selected widths, embed_dim, degree and seeds with every network at its seeded initial filters and the same kNN readout selection (knn_controls.UntrainedMultiViewArrowFlowKNN)",
+    "views1": "n_views 1: the first per-view kNN vote of views7 (what MultiViewArrowFlowKNN with n_views 1 predicts)",
+    "views3": "n_views 3: the majority of the first three per-view kNN votes of views7",
+    "views7": "ArrowFlow-kNN (MultiViewArrowFlowKNN, seven views) at the reconstructed selection; must reproduce the reference outer predictions exactly"
+  },
+  "variants": [
+    "views7",
+    "views1",
+    "views3",
+    "no_checkpoint",
+    "no_augment",
+    "prototype_readout",
+    "untrained",
+    "input_knn"
+  ],
+  "wallclock_cap_hours": 4
+}

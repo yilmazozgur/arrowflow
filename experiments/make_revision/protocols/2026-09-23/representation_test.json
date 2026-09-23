@@ -1,0 +1,1110 @@
+{
+  "aggregation": "per arm, the seven per-view predictions are combined by plurality vote with ArrowFlow's own tie rule (secondary_studies.majority: among the tied classes, the lowest class label)",
+  "analysis": {
+    "declared": "frozen with this protocol, before any outer score of these readouts exists",
+    "descriptive": {
+      "development_datasets": {
+        "contrasts": [
+          "svc_trained minus svc_untrained",
+          "svc_trained minus svc_input"
+        ],
+        "datasets": [
+          "iris",
+          "wine",
+          "breast_cancer",
+          "wine_quality",
+          "vehicle",
+          "segment",
+          "digits"
+        ],
+        "label": "screened before this protocol",
+        "why": "an exploratory screen already read these datasets (screening_disclosure)"
+      },
+      "knn_contrasts": {
+        "contrasts": [
+          "knn_trained minus knn_untrained",
+          "knn_trained minus knn_input"
+        ],
+        "datasets": [
+          "iris",
+          "wine",
+          "breast_cancer",
+          "wine_quality",
+          "vehicle",
+          "segment",
+          "digits",
+          "balance_scale",
+          "ionosphere",
+          "diabetes",
+          "banknote_authentication",
+          "qsar_biodeg",
+          "mfeat_zernike",
+          "vertebra_column",
+          "steel_plates_fault",
+          "climate_model_simulation_crashes",
+          "hcv_egyptian_patients"
+        ],
+        "meaning": "the same comparisons under the kNN readout; knn_untrained and knn_input equal the component ablation's untrained and input_knn variants prediction for prediction"
+      },
+      "metrics_table": "per dataset and arm: the mean outer accuracy, error, balanced accuracy and macro-F1 (the mean over outer folds of the fitting-seed averages), the outer-fold SD and the mean within-fold seed SD",
+      "other_metrics": {
+        "contrasts": [
+          "svc_trained minus svc_untrained",
+          "svc_trained minus svc_input"
+        ],
+        "datasets": [
+          "iris",
+          "wine",
+          "breast_cancer",
+          "wine_quality",
+          "vehicle",
+          "segment",
+          "digits",
+          "balance_scale",
+          "ionosphere",
+          "diabetes",
+          "banknote_authentication",
+          "qsar_biodeg",
+          "mfeat_zernike",
+          "vertebra_column",
+          "steel_plates_fault",
+          "climate_model_simulation_crashes",
+          "hcv_egyptian_patients"
+        ],
+        "metrics": [
+          "balanced_accuracy",
+          "macro_f1"
+        ]
+      },
+      "readout_comparison": {
+        "contrasts": [
+          "svc_input minus knn_input",
+          "svc_untrained minus knn_untrained",
+          "svc_trained minus knn_trained"
+        ],
+        "datasets": [
+          "iris",
+          "wine",
+          "breast_cancer",
+          "wine_quality",
+          "vehicle",
+          "segment",
+          "digits",
+          "balance_scale",
+          "ionosphere",
+          "diabetes",
+          "banknote_authentication",
+          "qsar_biodeg",
+          "mfeat_zernike",
+          "vertebra_column",
+          "steel_plates_fault",
+          "climate_model_simulation_crashes",
+          "hcv_egyptian_patients"
+        ],
+        "meaning": "the SVC against the kNN readout on each representation"
+      },
+      "readout_settings": "per dataset and arm: the selected C (SVC) or neighbour count and weighting (kNN) counted over views, folds and seeds, the mean training-partition selection score, the libsvm fit status and every warning",
+      "status": "descriptive: corrected resampled t intervals without p values and without multiplicity adjustment"
+    },
+    "interpretation": {
+      "development_datasets": [
+        "iris",
+        "wine",
+        "breast_cancer",
+        "wine_quality",
+        "vehicle",
+        "segment",
+        "digits"
+      ],
+      "primary": {
+        "alpha": 0.05,
+        "contrast": "svc_trained minus svc_untrained, accuracy",
+        "if_met": "the paper states that training improves the representation itself",
+        "most_threshold": 6,
+        "otherwise": "the paper states that training improves the nearest-neighbour neighbourhoods but not the representation read by a strong fixed readout",
+        "rule": "met when BOTH hold on the 10 further datasets: (1) at least one contrast is Holm-significant in favour of model_a (Holm-adjusted p < 0.05, two-sided corrected resampled t, with a positive mean difference), and (2) model_a has the higher mean accuracy (a positive mean difference over the 15 outer folds) on at least 6 of the 10, i.e. on most of them",
+        "statements": {
+          "met": "training improves the representation itself",
+          "not_met": "training improves the nearest-neighbour neighbourhoods but not the representation read by a strong fixed readout"
+        }
+      },
+      "reporting": "every Holm-significant difference of either family is reported with its sign, whichever way it points; the development datasets are descriptive and never change either statement; no dataset, arm, fold, seed or contrast is added, dropped or reweighted after an outer score is seen",
+      "secondary": {
+        "alpha": 0.05,
+        "contrast": "svc_trained minus svc_input, accuracy",
+        "if_met": "the paper states that under the same strong fixed readout, the trained hidden rankings are a better representation than the encoded input rankings",
+        "most_threshold": 6,
+        "otherwise": "the paper states that under the same strong fixed readout, the trained hidden rankings are not shown to be a better representation than the encoded input rankings",
+        "rule": "met when BOTH hold on the 10 further datasets: (1) at least one contrast is Holm-significant in favour of model_a (Holm-adjusted p < 0.05, two-sided corrected resampled t, with a positive mean difference), and (2) model_a has the higher mean accuracy (a positive mean difference over the 15 outer folds) on at least 6 of the 10, i.e. on most of them",
+        "statements": {
+          "met": "under the same strong fixed readout, the trained hidden rankings are a better representation than the encoded input rankings",
+          "not_met": "under the same strong fixed readout, the trained hidden rankings are not shown to be a better representation than the encoded input rankings"
+        },
+        "status": "reported in full beside the primary family; it never changes the primary statement"
+      },
+      "status": "fixed in advance and recorded in this protocol before any outer score of these readouts exists; neither outcome is softened after the fact"
+    },
+    "interval": "corrected resampled t (evaluation.paired_corrected_interval): fitting seeds averaged within each outer fold, standard error sqrt((1/15 + q) * variance (ddof 1) of the fold differences), q = test_train_ratio = 0.25, t quantile with 14 df, 95%; the p value is two-sided",
+    "metric": "accuracy",
+    "primary_family": {
+      "adjustment": "Holm across the 10 further datasets (evaluation.holm_adjust)",
+      "alpha": 0.05,
+      "contrast": "svc_trained minus svc_untrained",
+      "datasets": [
+        "balance_scale",
+        "ionosphere",
+        "diabetes",
+        "banknote_authentication",
+        "qsar_biodeg",
+        "mfeat_zernike",
+        "vertebra_column",
+        "steel_plates_fault",
+        "climate_model_simulation_crashes",
+        "hcv_egyptian_patients"
+      ],
+      "direction": "positive favours the trained hidden rankings",
+      "metric": "accuracy",
+      "model_a": "svc_trained",
+      "model_b": "svc_untrained",
+      "scope": "the ten further datasets only: they were never screened for this question",
+      "size": 10
+    },
+    "secondary_family": {
+      "adjustment": "Holm across the same 10 further datasets, separately from the primary family",
+      "alpha": 0.05,
+      "contrast": "svc_trained minus svc_input",
+      "datasets": [
+        "balance_scale",
+        "ionosphere",
+        "diabetes",
+        "banknote_authentication",
+        "qsar_biodeg",
+        "mfeat_zernike",
+        "vertebra_column",
+        "steel_plates_fault",
+        "climate_model_simulation_crashes",
+        "hcv_egyptian_patients"
+      ],
+      "direction": "positive favours the trained hidden rankings",
+      "metric": "accuracy",
+      "model_a": "svc_trained",
+      "model_b": "svc_input",
+      "size": 10
+    },
+    "verification": "compare_representation.analyse refuses (exit 2, nothing written) until the run is complete, then re-verifies every reference production run with compare_runs.load_run and compare_runs.verify_run and this run with representation_test.summary, and requires the published summary to equal the re-verified one, before any score is read"
+  },
+  "arm_sources": {
+    "knn_input": "knn_controls.MultiViewInputKNN at the selection (the ablation's input_knn variant)",
+    "knn_trained": "multiview.MultiViewArrowFlowKNN at the selection, refitted by run_knn_ablation.fit_views7 (ArrowFlow-kNN)",
+    "knn_untrained": "knn_controls.UntrainedMultiViewArrowFlowKNN at the selection (the ablation's untrained variant)",
+    "svc_input": "neighbour_baselines.kendall_kernel SVC on the input control's encoded rankings",
+    "svc_trained": "neighbour_baselines.kendall_kernel SVC on the trained networks' last hidden rankings",
+    "svc_untrained": "neighbour_baselines.kendall_kernel SVC on the untrained networks' last hidden rankings"
+  },
+  "arms": [
+    "svc_input",
+    "svc_untrained",
+    "svc_trained",
+    "knn_input",
+    "knn_untrained",
+    "knn_trained"
+  ],
+  "checks": {
+    "encoder_identity": "every job, fitting seed and view: the untrained and input controls encode every training and test row exactly as the trained view does",
+    "initial_state": "every job, fitting seed and view: ArrowFlowEstimator(**trained network parameters).initialize_orders on the view's encoded training rows has the initial_state_hash_ the trained network recorded before training, and every layer's filters (index matrices and orders) equal the untrained network's",
+    "input_knn_reproduced": "every job and fitting seed: knn_input's predictions have the prediction hash of the ablation's input_knn variant (its sealed summary)",
+    "kernel_cap": "every job, fitting seed, view and representation: the Kendall kernel is within the declared cap; a larger kernel fails the job and is never computed on a subsample",
+    "readout_representation": "every job, fitting seed and view: each kNN readout stores exactly the training representation the SVC reads",
+    "reference_predictions": "every job and fitting seed: knn_trained's seven-view predictions equal the registered run's recorded outer predictions exactly, in the sealed test order (the component ablation's views7 check)",
+    "reference_views": "every job and fitting seed: knn_trained's seven per-view predictions have the array hash the component ablation recorded for its views7 fit (knn_views_hash)",
+    "untrained_knn_reproduced": "every job and fitting seed: knn_untrained's predictions have the prediction hash of the ablation's untrained variant (its sealed summary)",
+    "untrained_unchanged": "every job, fitting seed and view: the untrained network never updated (update_iter 0) and its state_hash() is still its initial_state_hash_"
+  },
+  "confidence": 0.95,
+  "dataset_loading": "the reference run prepared data (hash-checked) must equal the ablation copy, its splits the declared nested splits, and in production a fresh load by the reference loader (run_revision.load_dataset or newdata.load_newdata with every pin) must return the same arrays and dataset hash",
+  "datasets": [
+    "iris",
+    "wine",
+    "breast_cancer",
+    "wine_quality",
+    "vehicle",
+    "segment",
+    "digits",
+    "balance_scale",
+    "ionosphere",
+    "diabetes",
+    "banknote_authentication",
+    "qsar_biodeg",
+    "mfeat_zernike",
+    "vertebra_column",
+    "steel_plates_fault",
+    "climate_model_simulation_crashes",
+    "hcv_egyptian_patients"
+  ],
+  "decision_rule": "freeze only if the calibrated projection at 16 single-thread workers is at most 4 h: the simulated first-free-worker makespan of the planned jobs in planned order, each job priced at the reference run's realized outer fit and predict seconds of its fold and its three fitting seeds times the piloted job/views7 time ratio (the dataset's own ratio when it was piloted, the largest piloted ratio otherwise)",
+  "development_datasets": [
+    "iris",
+    "wine",
+    "breast_cancer",
+    "wine_quality",
+    "vehicle",
+    "segment",
+    "digits"
+  ],
+  "development_reference": "bridge_knn",
+  "failure_policy": "log_all_failures; a failed check or fit fails its job, cancels the pending jobs and blocks the summary; failures are never omitted; no adaptive stopping on any score",
+  "fit_reuse": "per outer fold and fitting seed: one seven-view ArrowFlow-kNN fit (knn_trained and svc_trained read its networks), one untrained seven-view fit (initialization only; knn_untrained and svc_untrained read its networks), one input control fit (knn_input and svc_input read its encoders) and 21 SVC readouts",
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "frozen": true,
+  "frozen_at_utc": "2026-09-23T10:45:26.993251+00:00",
+  "further_datasets": [
+    "balance_scale",
+    "ionosphere",
+    "diabetes",
+    "banknote_authentication",
+    "qsar_biodeg",
+    "mfeat_zernike",
+    "vertebra_column",
+    "steel_plates_fault",
+    "climate_model_simulation_crashes",
+    "hcv_egyptian_patients"
+  ],
+  "inner_folds": 3,
+  "max_workers": 16,
+  "measures": "per arm, dataset, outer fold and fitting seed: outer-test accuracy, error, balanced accuracy and macro-F1 of the seven-view plurality; each view's predictions (artifacts); each view's readout setting and training-partition selection score; each SVC fit's libsvm status, support vectors and warnings",
+  "numeric_threads_per_worker": 1,
+  "outer_folds": 5,
+  "outer_repeats": 3,
+  "parallelism": "one spawned single-thread process per dataset and outer fold under the shared execution lock",
+  "pilot": "training-only: every arm on the first outer training partition of each pilot dataset at the first fitting seed, predicting on every fourth training row (the outer test fold is never touched, so the four checks against stored outer predictions are not performed there), plus one reproduction probe (run_knn_ablation.reproduction_probe) per reference",
+  "pilot_datasets": [
+    "wine",
+    "digits",
+    "segment"
+  ],
+  "pilot_projection": {
+    "calibrated": {
+      "longest_job_hours": 0.2654818171132582,
+      "serial_hours": 19.089318422648518,
+      "serial_hours_over_workers": 1.1930824014155323,
+      "simulated_makespan_hours": 1.2932758438360474
+    },
+    "calibrated_per_dataset_hours": {
+      "balance_scale": 0.6217978439112475,
+      "banknote_authentication": 0.9668571037395156,
+      "breast_cancer": 0.7722854855150351,
+      "climate_model_simulation_crashes": 1.392879088287931,
+      "diabetes": 1.1274577345095087,
+      "digits": 1.0172623536648275,
+      "hcv_egyptian_patients": 1.6626989042145548,
+      "ionosphere": 1.3157980194168026,
+      "iris": 0.7894432638450104,
+      "mfeat_zernike": 1.772014556434482,
+      "qsar_biodeg": 1.2433709548841985,
+      "segment": 1.05118120158748,
+      "steel_plates_fault": 1.3181724066928862,
+      "vehicle": 1.1113761404279376,
+      "vertebra_column": 1.0533160085944566,
+      "wine": 0.5537329664002146,
+      "wine_quality": 1.3196743905224293
+    },
+    "cap_hours": 4,
+    "decision_hours": 1.2932758438360474,
+    "decision_rule": "freeze only if the calibrated projection at 16 single-thread workers is at most 4 h: the simulated first-free-worker makespan of the planned jobs in planned order, each job priced at the reference run's realized outer fit and predict seconds of its fold and its three fitting seeds times the piloted job/views7 time ratio (the dataset's own ratio when it was piloted, the largest piloted ratio otherwise)",
+    "pilot_code_revision": "4924320d7557d25874d1bdb975443192fab7793f",
+    "pilot_ratios": {
+      "digits": 1.3606608319334137,
+      "segment": 1.6207804849104535,
+      "wine": 1.0345826546991594
+    },
+    "pilot_seconds_by_part": {
+      "digits": {
+        "input_seconds": 1.2313549630016496,
+        "representation_seconds": 0.8352506560004258,
+        "svc_input_seconds": 4.9931778039936034,
+        "svc_trained_seconds": 4.9514620730005845,
+        "svc_untrained_seconds": 5.109691000998282,
+        "untrained_seconds": 1.7292748050022055,
+        "views7_seconds": 52.6531461850027
+      },
+      "segment": {
+        "input_seconds": 1.3658675320002658,
+        "representation_seconds": 0.5853417989965237,
+        "svc_input_seconds": 2.3796451809939754,
+        "svc_trained_seconds": 7.321467909994681,
+        "svc_untrained_seconds": 7.471411556998646,
+        "untrained_seconds": 1.9877693639973586,
+        "views7_seconds": 34.25093610999829
+      },
+      "wine": {
+        "input_seconds": 0.048252193999360316,
+        "representation_seconds": 0.3057946039989474,
+        "svc_input_seconds": 0.04513231899909442,
+        "svc_trained_seconds": 0.1291907469931175,
+        "svc_untrained_seconds": 0.1379798720117833,
+        "untrained_seconds": 0.3177134430006845,
+        "views7_seconds": 29.836420250998344
+      }
+    },
+    "pilot_sha256": "92e249afeadf1ab4092fa28eed3bde076e647954bca72e860f11f9b2a87cf529",
+    "reproduction_probes": {
+      "bridge_knn": {
+        "config_id": "b5b2cf609efe12eb",
+        "dataset_id": "iris",
+        "inner_fold": 0,
+        "model_seed": 8129,
+        "readout_selections_identical": true,
+        "reference_score": 1.0,
+        "refit_score": 1.0,
+        "reproduced": true,
+        "result_file": "results/iris__arrowflow_full_knn__r0f0.json"
+      },
+      "newdata_batch1": {
+        "config_id": "b5b2cf609efe12eb",
+        "dataset_id": "ionosphere",
+        "inner_fold": 0,
+        "model_seed": 8129,
+        "readout_selections_identical": true,
+        "reference_score": 0.925531914893617,
+        "refit_score": 0.925531914893617,
+        "reproduced": true,
+        "result_file": "results/ionosphere__arrowflow_full_knn__r0f0.json"
+      },
+      "newdata_batch2": {
+        "config_id": "b5b2cf609efe12eb",
+        "dataset_id": "vertebra_column",
+        "inner_fold": 0,
+        "model_seed": 8129,
+        "readout_selections_identical": true,
+        "reference_score": 0.7951807228915663,
+        "refit_score": 0.7951807228915663,
+        "reproduced": true,
+        "result_file": "results/vertebra_column__arrowflow_full_knn__r0f0.json"
+      }
+    },
+    "stages": {
+      "code_revision": "4924320d7557d25874d1bdb975443192fab7793f",
+      "ended_utc": "2026-09-23T10:44:50Z",
+      "pilot": {
+        "calibrated": {
+          "longest_job_hours": 0.2654818171132582,
+          "serial_hours": 19.089318422648518,
+          "serial_hours_over_workers": 1.1930824014155323,
+          "simulated_makespan_hours": 1.2932758438360474
+        },
+        "checks": {
+          "digits": {
+            "encoder_identity": true,
+            "initial_state": true,
+            "input_knn_reproduced": null,
+            "kernel_cap": true,
+            "readout_representation": true,
+            "reference_predictions": null,
+            "reference_views": null,
+            "untrained_knn_reproduced": null,
+            "untrained_unchanged": true
+          },
+          "segment": {
+            "encoder_identity": true,
+            "initial_state": true,
+            "input_knn_reproduced": null,
+            "kernel_cap": true,
+            "readout_representation": true,
+            "reference_predictions": null,
+            "reference_views": null,
+            "untrained_knn_reproduced": null,
+            "untrained_unchanged": true
+          },
+          "wine": {
+            "encoder_identity": true,
+            "initial_state": true,
+            "input_knn_reproduced": null,
+            "kernel_cap": true,
+            "readout_representation": true,
+            "reference_predictions": null,
+            "reference_views": null,
+            "untrained_knn_reproduced": null,
+            "untrained_unchanged": true
+          }
+        },
+        "datasets": [
+          "wine",
+          "digits",
+          "segment"
+        ],
+        "decision": {
+          "cap_hours": 4,
+          "checks_passed": true,
+          "hours": 1.2932758438360474,
+          "probes_reproduced": true,
+          "rule": "freeze only if the calibrated projection at 16 single-thread workers is at most 4 h: the simulated first-free-worker makespan of the planned jobs in planned order, each job priced at the reference run's realized outer fit and predict seconds of its fold and its three fitting seeds times the piloted job/views7 time ratio (the dataset's own ratio when it was piloted, the largest piloted ratio otherwise)",
+          "within_cap": true,
+          "workers": 16
+        },
+        "hidden_layers": {
+          "digits": 1,
+          "segment": 1,
+          "wine": 2
+        },
+        "job_seconds": {
+          "digits": 71.64307369199742,
+          "segment": 55.51324883699999,
+          "wine": 30.86824286999763
+        },
+        "job_to_views7_ratio": {
+          "digits": 1.3606608319334137,
+          "segment": 1.6207804849104535,
+          "wine": 1.0345826546991594
+        },
+        "reproduction_probes": {
+          "bridge_knn": {
+            "dataset_id": "iris",
+            "readout_selections_identical": true,
+            "reference_score": 1.0,
+            "refit_score": 1.0,
+            "reproduced": true
+          },
+          "newdata_batch1": {
+            "dataset_id": "ionosphere",
+            "readout_selections_identical": true,
+            "reference_score": 0.925531914893617,
+            "refit_score": 0.925531914893617,
+            "reproduced": true
+          },
+          "newdata_batch2": {
+            "dataset_id": "vertebra_column",
+            "readout_selections_identical": true,
+            "reference_score": 0.7951807228915663,
+            "refit_score": 0.7951807228915663,
+            "reproduced": true
+          }
+        },
+        "seconds_by_part": {
+          "digits": {
+            "input_seconds": 1.2313549630016496,
+            "representation_seconds": 0.8352506560004258,
+            "svc_input_seconds": 4.9931778039936034,
+            "svc_trained_seconds": 4.9514620730005845,
+            "svc_untrained_seconds": 5.109691000998282,
+            "untrained_seconds": 1.7292748050022055,
+            "views7_seconds": 52.6531461850027
+          },
+          "segment": {
+            "input_seconds": 1.3658675320002658,
+            "representation_seconds": 0.5853417989965237,
+            "svc_input_seconds": 2.3796451809939754,
+            "svc_trained_seconds": 7.321467909994681,
+            "svc_untrained_seconds": 7.471411556998646,
+            "untrained_seconds": 1.9877693639973586,
+            "views7_seconds": 34.25093610999829
+          },
+          "wine": {
+            "input_seconds": 0.048252193999360316,
+            "representation_seconds": 0.3057946039989474,
+            "svc_input_seconds": 0.04513231899909442,
+            "svc_trained_seconds": 0.1291907469931175,
+            "svc_untrained_seconds": 0.1379798720117833,
+            "untrained_seconds": 0.3177134430006845,
+            "views7_seconds": 29.836420250998344
+          }
+        }
+      },
+      "prepare": {
+        "datasets": [
+          "iris",
+          "wine",
+          "breast_cancer",
+          "wine_quality",
+          "vehicle",
+          "segment",
+          "digits",
+          "balance_scale",
+          "ionosphere",
+          "diabetes",
+          "banknote_authentication",
+          "qsar_biodeg",
+          "mfeat_zernike",
+          "vertebra_column",
+          "steel_plates_fault",
+          "climate_model_simulation_crashes",
+          "hcv_egyptian_patients"
+        ],
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/runs/2026-09-23-representation-test-pilot",
+        "fresh_loads": [
+          "balance_scale",
+          "banknote_authentication",
+          "breast_cancer",
+          "climate_model_simulation_crashes",
+          "diabetes",
+          "digits",
+          "hcv_egyptian_patients",
+          "ionosphere",
+          "iris",
+          "mfeat_zernike",
+          "qsar_biodeg",
+          "segment",
+          "steel_plates_fault",
+          "vehicle",
+          "vertebra_column",
+          "wine",
+          "wine_quality"
+        ],
+        "panels": {
+          "development": 105,
+          "further": 150
+        },
+        "planned_jobs": 255,
+        "references": {
+          "bridge_knn": {
+            "ablation": "arrowflow-v3-knn-ablation-1",
+            "datasets": [
+              "iris",
+              "wine",
+              "breast_cancer",
+              "wine_quality",
+              "vehicle",
+              "segment",
+              "digits"
+            ],
+            "run": "arrowflow-v3-bridge-knn-1"
+          },
+          "newdata_batch1": {
+            "ablation": "arrowflow-v3-newdata-ablation-1",
+            "datasets": [
+              "balance_scale",
+              "ionosphere",
+              "diabetes",
+              "banknote_authentication",
+              "qsar_biodeg"
+            ],
+            "run": "arrowflow-v3-newdata-batch1-1"
+          },
+          "newdata_batch2": {
+            "ablation": "arrowflow-v3-newdata-ablation-1",
+            "datasets": [
+              "mfeat_zernike",
+              "vertebra_column",
+              "steel_plates_fault",
+              "climate_model_simulation_crashes",
+              "hcv_egyptian_patients"
+            ],
+            "run": "arrowflow-v3-newdata-batch2-1"
+          }
+        },
+        "selected_widths": {
+          "[128]": 185,
+          "[64, 128]": 70
+        },
+        "stored_prediction_hashes": "every planned job carries, per fitting seed, the ablation's per-view views7 hash and its views7, untrained and input_knn prediction hashes; the views7 hash equals the registered run's for every job"
+      },
+      "smoke": {
+        "analysis_outputs": [
+          "representation_development.csv",
+          "representation_knn_contrasts.csv",
+          "representation_metrics.csv",
+          "representation_other_metrics.csv",
+          "representation_primary_family.csv",
+          "representation_readout_comparison.csv",
+          "representation_readout_settings.csv",
+          "representation_secondary_family.csv"
+        ],
+        "analysis_rehearsed": "compare_representation.analyse wrote every output on the synthetic run after re-verifying the three synthetic reference runs and every job",
+        "check_totals": {
+          "encoder_identity": {
+            "True": 9
+          },
+          "initial_state": {
+            "True": 9
+          },
+          "input_knn_reproduced": {
+            "True": 9
+          },
+          "kernel_cap": {
+            "True": 9
+          },
+          "readout_representation": {
+            "True": 9
+          },
+          "reference_predictions": {
+            "True": 9
+          },
+          "reference_views": {
+            "True": 9
+          },
+          "untrained_knn_reproduced": {
+            "True": 9
+          },
+          "untrained_unchanged": {
+            "True": 9
+          }
+        },
+        "datasets": [
+          "synthetic",
+          "synthetic_b1",
+          "synthetic_b2"
+        ],
+        "development_datasets": [
+          "synthetic"
+        ],
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/runs/2026-09-23-representation-test-smoke",
+        "further_datasets": [
+          "synthetic_b1",
+          "synthetic_b2"
+        ],
+        "planned_jobs": 9,
+        "reproduction": {
+          "synthetic": {
+            "input_knn_reproduced": {
+              "matching_fold_seeds": 9,
+              "total_fold_seeds": 9
+            },
+            "reference_predictions": {
+              "matching_fold_seeds": 9,
+              "total_fold_seeds": 9
+            },
+            "reference_views": {
+              "matching_fold_seeds": 9,
+              "total_fold_seeds": 9
+            },
+            "untrained_knn_reproduced": {
+              "matching_fold_seeds": 9,
+              "total_fold_seeds": 9
+            }
+          },
+          "synthetic_b1": {
+            "input_knn_reproduced": {
+              "matching_fold_seeds": 9,
+              "total_fold_seeds": 9
+            },
+            "reference_predictions": {
+              "matching_fold_seeds": 9,
+              "total_fold_seeds": 9
+            },
+            "reference_views": {
+              "matching_fold_seeds": 9,
+              "total_fold_seeds": 9
+            },
+            "untrained_knn_reproduced": {
+              "matching_fold_seeds": 9,
+              "total_fold_seeds": 9
+            }
+          },
+          "synthetic_b2": {
+            "input_knn_reproduced": {
+              "matching_fold_seeds": 9,
+              "total_fold_seeds": 9
+            },
+            "reference_predictions": {
+              "matching_fold_seeds": 9,
+              "total_fold_seeds": 9
+            },
+            "reference_views": {
+              "matching_fold_seeds": 9,
+              "total_fold_seeds": 9
+            },
+            "untrained_knn_reproduced": {
+              "matching_fold_seeds": 9,
+              "total_fold_seeds": 9
+            }
+          }
+        },
+        "status": "ok",
+        "timing_seconds": {
+          "input_seconds": 1.1846646169942687,
+          "job_seconds": 13.337121058000776,
+          "representation_seconds": 0.3383243449789006,
+          "svc_input_seconds": 1.2418297499789333,
+          "svc_trained_seconds": 1.3155188710079528,
+          "svc_untrained_seconds": 1.4138998539965542,
+          "untrained_seconds": 1.3827124829876993,
+          "views7_seconds": 6.200434587008203
+        },
+        "two_hidden_layer_folds": {
+          "synthetic": 3,
+          "synthetic_b1": 0,
+          "synthetic_b2": 0
+        }
+      },
+      "stage_times_utc": {
+        "pilot": "10:41:19Z",
+        "smoke": "10:40:46Z"
+      },
+      "started_utc": "2026-09-23T10:40:44Z",
+      "summary": "smoke and pilot at 4924320d7 (2026-09-23T10:40:44Z to 2026-09-23T10:44:50Z): synthetic smoke 10:40:46Z ok (9 jobs over three synthetic references, 3 at two-hidden-layer selections; every check passed in every job; the refit reproduced every stored prediction (registered seven-view, ablation per-view, untrained and input_knn) on every fold and seed; the prespecified analysis wrote all 8 tables and its JSON record); training-only pilot 10:41:19Z: prepare of all 17 datasets (255 per-fold selections reconstructed from the three reference runs, each equal to its sealed record and the ablation plan, with every stored prediction hash read; selected widths [128] in 185 folds and [64, 128] in 70; a fresh load with every pin for all 17 datasets), then wine, digits, segment first outer fold with training query rows (every performed check passed; job/views7 time ratios wine 1.03, digits 1.36, segment 1.62); reproduction probes: iris reproduced, ionosphere reproduced, vertebra_column reproduced"
+    },
+    "workers": 16
+  },
+  "production_family": "representation_test",
+  "protocol_id": "arrowflow-v3-representation-test-1",
+  "purpose": "the readout-matched representation test: does training produce a better representation, or only neighbourhoods that suit the nearest-neighbour readout?",
+  "question": "ArrowFlow predicts with a nearest-neighbour (kNN) readout on its last hidden ranking, and training improves that readout over an untrained network. Here the same representations are also read by a strong fixed readout, a support vector machine on the Kendall kernel, at ArrowFlow-kNN's own per-fold selections: (a) the encoded input rankings, (b) the untrained hidden rankings (the seeded initial filters) and (c) the trained hidden rankings (the checkpoint filters). If training improves the representation itself, (c) beats (b) under the fixed readout too.",
+  "readouts": {
+    "knn": {
+      "estimator": "the registered ArrowFlow-kNN readout: StableFootruleKNN on the representation's position vectors, chosen by multiview.select_knn_readout on the same stratified splits (ties to the lowest canonical config_id), refitted on every outer training row",
+      "grid": {
+        "n_neighbors": [
+          1,
+          3,
+          5,
+          11,
+          21
+        ],
+        "weights": [
+          "uniform",
+          "distance"
+        ]
+      },
+      "identities": {
+        "knn_input": "the component ablation's input_knn variant",
+        "knn_trained": "ArrowFlow-kNN itself (the reference)",
+        "knn_untrained": "the component ablation's untrained variant"
+      },
+      "selection_folds": 3
+    },
+    "svc": {
+      "cap": {
+        "max_feature_entries": 50000000,
+        "max_training_rows": 3000,
+        "rule": "kendall_svc refuses a training partition with more than max_training_rows rows, or whose per-view concordance feature matrix (training rows x V(V-1)/2 for the resolved vocabulary V) holds more than max_feature_entries entries; the refusal is recorded in this protocol and in the fit log, and the kernel is never computed on a subsample of the training partition"
+      },
+      "capacity": {
+        "balance_scale": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 16256000,
+          "feature_entries": 4064000,
+          "kernel_bytes": 2000000,
+          "kernel_entries": 250000,
+          "pairs": 8128,
+          "training_rows": 500,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "banknote_authentication": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 35698176,
+          "feature_entries": 8924544,
+          "kernel_bytes": 9644832,
+          "kernel_entries": 1205604,
+          "pairs": 8128,
+          "training_rows": 1098,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "breast_cancer": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 14825472,
+          "feature_entries": 3706368,
+          "kernel_bytes": 1663488,
+          "kernel_entries": 207936,
+          "pairs": 8128,
+          "training_rows": 456,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "climate_model_simulation_crashes": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 14045184,
+          "feature_entries": 3511296,
+          "kernel_bytes": 1492992,
+          "kernel_entries": 186624,
+          "pairs": 8128,
+          "training_rows": 432,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "diabetes": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 19994880,
+          "feature_entries": 4998720,
+          "kernel_bytes": 3025800,
+          "kernel_entries": 378225,
+          "pairs": 8128,
+          "training_rows": 615,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "digits": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 46752256,
+          "feature_entries": 11688064,
+          "kernel_bytes": 16542752,
+          "kernel_entries": 2067844,
+          "pairs": 8128,
+          "training_rows": 1438,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "hcv_egyptian_patients": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 36023296,
+          "feature_entries": 9005824,
+          "kernel_bytes": 9821312,
+          "kernel_entries": 1227664,
+          "pairs": 8128,
+          "training_rows": 1108,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "ionosphere": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 9135872,
+          "feature_entries": 2283968,
+          "kernel_bytes": 631688,
+          "kernel_entries": 78961,
+          "pairs": 8128,
+          "training_rows": 281,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "iris": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 3901440,
+          "feature_entries": 975360,
+          "kernel_bytes": 115200,
+          "kernel_entries": 14400,
+          "pairs": 8128,
+          "training_rows": 120,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "mfeat_zernike": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 52019200,
+          "feature_entries": 13004800,
+          "kernel_bytes": 20480000,
+          "kernel_entries": 2560000,
+          "pairs": 8128,
+          "training_rows": 1600,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "qsar_biodeg": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 27440128,
+          "feature_entries": 6860032,
+          "kernel_bytes": 5698688,
+          "kernel_entries": 712336,
+          "pairs": 8128,
+          "training_rows": 844,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "segment": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 60082176,
+          "feature_entries": 15020544,
+          "kernel_bytes": 27320832,
+          "kernel_entries": 3415104,
+          "pairs": 8128,
+          "training_rows": 1848,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "steel_plates_fault": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 50491136,
+          "feature_entries": 12622784,
+          "kernel_bytes": 19294472,
+          "kernel_entries": 2411809,
+          "pairs": 8128,
+          "training_rows": 1553,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "vehicle": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 22010624,
+          "feature_entries": 5502656,
+          "kernel_bytes": 3666632,
+          "kernel_entries": 458329,
+          "pairs": 8128,
+          "training_rows": 677,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "vertebra_column": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 8062976,
+          "feature_entries": 2015744,
+          "kernel_bytes": 492032,
+          "kernel_entries": 61504,
+          "pairs": 8128,
+          "training_rows": 248,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "wine": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 4649216,
+          "feature_entries": 1162304,
+          "kernel_bytes": 163592,
+          "kernel_entries": 20449,
+          "pairs": 8128,
+          "training_rows": 143,
+          "vocabulary": 128,
+          "within_cap": true
+        },
+        "wine_quality": {
+          "basis": "training rows n - n // outer_folds; vocabulary max(largest resolved embed_dim, largest last hidden width)",
+          "feature_bytes": 41615360,
+          "feature_entries": 10403840,
+          "kernel_bytes": 13107200,
+          "kernel_entries": 1638400,
+          "pairs": 8128,
+          "training_rows": 1280,
+          "vocabulary": 128,
+          "within_cap": true
+        }
+      },
+      "estimator": "sklearn SVC(kernel=\"precomputed\", C, probability=False, max_iter=1000000) on the Kendall kernel of the view's representation of the outer training rows; the outer test rows are predicted from their kernel against the training rows",
+      "final_fit": "on every outer training row at the selected C",
+      "grid": {
+        "C": [
+          0.1,
+          1,
+          10,
+          100
+        ]
+      },
+      "grid_source": "the kendall_svc baseline's grid (neighbour_baselines.SVC_C, the svc_rbf comparator's)",
+      "kernel": "K(s, s\u2032) = (concordant - discordant) / (V choose 2) over the (V choose 2) unordered item pairs of two encoded rankings of the same V-item vocabulary: a pair {i, j} is concordant when both rankings place the same item first and discordant otherwise. The encoded rankings are total orders, so concordant + discordant = (V choose 2) and K = 1 - 2 * Kendall-tau-distance / (V choose 2), K(s, s) = 1 and K takes values in [-1, 1]; K is exactly Kendall\u2019s tau between the two rankings. This is the Kendall kernel of Jiao and Vert (2015); it is positive semi-definite because K(s, s\u2032) = <phi(s), phi(s\u2032)> for the explicit feature map phi(s)_{i<j} = sign(position_j - position_i) / sqrt(V choose 2). neighbour_baselines.kendall_features builds that +-1 feature matrix from arrowflow.ranking.inverse_positions and kendall_kernel is the inner product: the partial sums are integers of modulus at most (V choose 2) < 2**24, so the float32 matrix product is exact, and the division by (V choose 2) is float64.",
+      "kernel_items": "the kernel reads a ranking as the order of its items: the embed_dim coordinate IDs for the input representation, the last hidden layer's filter IDs for a hidden one (so K counts, over pairs of filters, whether two rows rank the pair the same way); neighbour_baselines.kendall_kernel is applied to the ranking orders, for a hidden ranking arrowflow.ranking.inverse_positions of the positions transform_orders_by_depth returns",
+      "selection": "mean accuracy over StratifiedKFold(3, shuffle=True, random_state=derive_seed(view seed, \"readout_selection\")) of the outer training rows only, fewer splits when the smallest class has fewer than three rows: the very splits on which the view's kNN readout is chosen. The training Gram matrix is computed once and each split reads its blocks (the kernel is elementwise, so this equals recomputing it per split). Ties go to the smallest C."
+    }
+  },
+  "reference_argument": "--reference NAME=RUN_DIR,ABLATION_DIR, one per protocol reference",
+  "reference_arm": "knn_trained",
+  "references": {
+    "bridge_knn": {
+      "ablation": {
+        "code_revision": "08cf39cd23fe0745a0de3c7a982b0c1d297500c5",
+        "family": "knn_ablation",
+        "manifest_sha256": "615868f286be02f8d32068bb2e27ee016f530c08aa6b22ce49bbd21365a8bf9e",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/knn_ablation.json",
+        "protocol_id": "arrowflow-v3-knn-ablation-1",
+        "protocol_sha256": "126cf6d72a2842751a04b5994f7f4b3e9b3b3f5261407d1f1345295b043a1ba5",
+        "reference_selections_sha256": "809d725c60dd1548d120c7b8534b6446c948ead0ec3563baf7b98c6f5ca029e2",
+        "summary_file": "knn_ablation_summary.json",
+        "summary_sha256": "53cebfacb52ab2de6d33ef869344f9753dee7d12a8176fdb48df0fe75dc8cde7"
+      },
+      "datasets": [
+        "iris",
+        "wine",
+        "breast_cancer",
+        "wine_quality",
+        "vehicle",
+        "segment",
+        "digits"
+      ],
+      "loader": "experiments.make_revision.run_revision:load_dataset",
+      "run": {
+        "code_revision": "70fb9bf31092cb64e2bd349403ad090699a3494d",
+        "family": "bridge_knn",
+        "model_id": "arrowflow_full_knn",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/bridge_knn.json",
+        "protocol_id": "arrowflow-v3-bridge-knn-1",
+        "protocol_sha256": "6335d8c4a1b16fb4044c3badb1fff1448f4083d4cc89611cd54b276d60057ff1",
+        "summary_sha256": "f5f0c7016864ce354c70f148bfecc31f8dbdbff5bc4f41d74e63e22a6ff36fda"
+      }
+    },
+    "newdata_batch1": {
+      "ablation": {
+        "code_revision": "be41fa9626e634bb0adb6c9caada5fe4aa5d0424",
+        "family": "newdata_ablation",
+        "manifest_sha256": "14d6c377f5afc78f9b7407ab4dc3940cfc4e77fccb497f556ad013b42d70fdbb",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_ablation.json",
+        "protocol_id": "arrowflow-v3-newdata-ablation-1",
+        "protocol_sha256": "3c4efe43eea7151c568a64a883f834e6d2f8d849aef34d0e45f24bb42e962c8c",
+        "reference_selections_sha256": "fa6933cd9dc0be3c786849d816922422ed3d9fe8dccf3ec83faeebfba02722d8",
+        "summary_file": "newdata_ablation_summary.json",
+        "summary_sha256": "2775b79d3a524e526ee1bdf937bdea783ebf0e22d14e9f4531ecd1c013c91246"
+      },
+      "datasets": [
+        "balance_scale",
+        "ionosphere",
+        "diabetes",
+        "banknote_authentication",
+        "qsar_biodeg"
+      ],
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "run": {
+        "code_revision": "6022f9b5e2312f80a96e96b2d0607c72b7d52138",
+        "family": "newdata",
+        "model_id": "arrowflow_full_knn",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_batch1.json",
+        "protocol_id": "arrowflow-v3-newdata-batch1-1",
+        "protocol_sha256": "f715ec2808b4b08c10e49ae23696070a471d7ea88eb351d63b059eecccc0d011",
+        "summary_sha256": "f3ab23c5eeccbe36f036325fe94c4c28ce69bc9d35fa16e62cea813e977ec843"
+      }
+    },
+    "newdata_batch2": {
+      "ablation": {
+        "code_revision": "be41fa9626e634bb0adb6c9caada5fe4aa5d0424",
+        "family": "newdata_ablation",
+        "manifest_sha256": "14d6c377f5afc78f9b7407ab4dc3940cfc4e77fccb497f556ad013b42d70fdbb",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_ablation.json",
+        "protocol_id": "arrowflow-v3-newdata-ablation-1",
+        "protocol_sha256": "3c4efe43eea7151c568a64a883f834e6d2f8d849aef34d0e45f24bb42e962c8c",
+        "reference_selections_sha256": "fa6933cd9dc0be3c786849d816922422ed3d9fe8dccf3ec83faeebfba02722d8",
+        "summary_file": "newdata_ablation_summary.json",
+        "summary_sha256": "2775b79d3a524e526ee1bdf937bdea783ebf0e22d14e9f4531ecd1c013c91246"
+      },
+      "datasets": [
+        "mfeat_zernike",
+        "vertebra_column",
+        "steel_plates_fault",
+        "climate_model_simulation_crashes",
+        "hcv_egyptian_patients"
+      ],
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "run": {
+        "code_revision": "6022f9b5e2312f80a96e96b2d0607c72b7d52138",
+        "family": "newdata",
+        "model_id": "arrowflow_full_knn",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_batch2.json",
+        "protocol_id": "arrowflow-v3-newdata-batch2-1",
+        "protocol_sha256": "188ff1e946b6dc8df712c5a5cfb01e9cf2f9e7022a7776d98ec95ae1f66fca49",
+        "summary_sha256": "50ebfbef88616f8ecd20737f45b3ef840ed19f75a5e5a3f8ceeb120e386d49db"
+      }
+    }
+  },
+  "report_metrics": [
+    "accuracy",
+    "error",
+    "balanced_accuracy",
+    "macro_f1"
+  ],
+  "reporting": {
+    "intervals": "the summary's intervals are descriptive (no p values); the tested families live in compare_representation.analyse",
+    "outputs": "representation_test_summary.json (metrics, descriptive intervals, readout settings, reproduction counts, check totals and model rows) and representation_test_summary.csv (metrics per dataset, arm and metric), written all or none by the summary stage; the prespecified analysis is compare_representation.analyse"
+  },
+  "representations": {
+    "hidden_width": "the last hidden layer has 128 filters at every candidate of the registered grid, so every hidden representation is a ranking of 128 items (8128 item pairs)",
+    "input": "each view's encoded input ranking: OrdinalEncoder(view_strategy(strategy, v), embed_dim, degree, lda_ratio, derive_seed(seed, \"view\", v)) fitted on the outer training rows, whose transform ranks the embed_dim items the first ranking layer receives. It is the encoder of the input-kNN control (knn_controls.MultiViewInputKNN) and must equal the trained view's encoder on every training and test row (encoder_identity).",
+    "trained": "each view's last hidden ranking at its checkpoint filters: MultiViewArrowFlowKNN at the selection, refitted deterministically by run_knn_ablation.fit_views7 (the core restores the checkpoint filters at the end of training), read the same way. This is the representation ArrowFlow's own kNN readout reads.",
+    "untrained": "each view's last hidden ranking at its seeded initial filters, never updated: the networks of knn_controls.UntrainedMultiViewArrowFlowKNN at the selection (ArrowFlowEstimator(embed_dim, degree, widths, seed=view seed).initialize_orders on the view's encoded training ranking), read by ArrowFlowEstimator.transform_orders_by_depth (its last layer): the last hidden layer's filters ordered by ascending footrule distance to the row, ties by filter index. These are exactly the filters the trained view network started training from (initial_state)."
+  },
+  "resource_decision": "Readout-matched representation test (simulated referee panel of 2026-09-23, workstream 3, approved by the author): drafted over all seventeen datasets with the primary family on the ten further datasets; smoke and pilot at 4924320d7 (2026-09-23T10:40:44Z to 2026-09-23T10:44:50Z): synthetic smoke 10:40:46Z ok (9 jobs over three synthetic references, 3 at two-hidden-layer selections; every check passed in every job; the refit reproduced every stored prediction (registered seven-view, ablation per-view, untrained and input_knn) on every fold and seed; the prespecified analysis wrote all 8 tables and its JSON record); training-only pilot 10:41:19Z: prepare of all 17 datasets (255 per-fold selections reconstructed from the three reference runs, each equal to its sealed record and the ablation plan, with every stored prediction hash read; selected widths [128] in 185 folds and [64, 128] in 70; a fresh load with every pin for all 17 datasets), then wine, digits, segment first outer fold with training query rows (every performed check passed; job/views7 time ratios wine 1.03, digits 1.36, segment 1.62); reproduction probes: iris reproduced, ionosphere reproduced, vertebra_column reproduced; projected at 16 single-thread workers: calibrated simulated makespan 1.29 h (serial 19.09 h, serial over workers 1.19 h, longest job 0.27 h); cap 4 h; reproduction probes held on iris, ionosphere, vertebra_column; frozen after the pilot",
+  "screening_disclosure": {
+    "committed_at": "878a0cc9c5883df97637113a103f06bae8ac5325",
+    "files": {
+      "arrowflow_repo/manuscript/v3/review/simulated-referees-2026-09-23/verification/v4/V4-report.md": "fa81f816ba7bf28dea9bb985314ba5b2374a0a76334e6c47a8ef093e7c22ba29",
+      "arrowflow_repo/manuscript/v3/review/simulated-referees-2026-09-23/verification/v4/screen_readouts.py": "06328d26f3c092849788c78d1f78bb5577de63a2420f0199eb43afc6a9cbcb7a"
+    },
+    "further_datasets": "The screen scored no outer fold of the ten further datasets with any readout; on them it read only training-partition readout scores, vote counts and displacements (V4 report, section 0).",
+    "screen": "Simulated-referee verification V4 (2026-09-23), section 1.4c: a Kendall-kernel SVC and a footrule kNN read the encoded input rankings and the untrained and trained hidden rankings of the matched study's STORED single-view networks (random projection, a fixed configuration, hidden widths [128]; 15 outer folds x 3 fitting seeds) on the seven development datasets only. Under the SVC the trained hidden rankings had 0.54 pp more error than the untrained ones on average and less on only 2 of the 7.",
+    "status": "The seven development datasets were screened for this question before this protocol was written, so they are descriptive only and every table labels them \"screened before this protocol\". The ten further datasets were never screened for it and are the only confirmatory scope."
+  },
+  "selection_metric": "accuracy",
+  "selection_statement": "Nothing is selected on an outer-fold score. Every representation is built at the per-fold selection sealed by the reference ablation run (reconstructed from the registered run's complete inner fit history); every readout setting (the SVC penalty C, the kNN neighbour count and weighting) is chosen on stratified splits of the outer training rows only; the analysis is frozen with this protocol, before any outer score of these readouts exists.",
+  "split_seed": 27183,
+  "status": "reviewed_and_piloted_before_any_outer_score",
+  "test_train_ratio": 0.25,
+  "unit_of_work": "every protocol dataset x every outer fold (5 folds x 3 repeats) x every fitting seed; one job per dataset and outer fold fits its three fitting seeds in sequence",
+  "wallclock_cap_hours": 4,
+  "workers": 16
+}

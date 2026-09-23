@@ -1,0 +1,342 @@
+{
+  "aggregation": "fitting seeds averaged within outer fold, then outer-fold mean and SD; within-fold seed SD reported separately",
+  "confidence": 0.95,
+  "dataset_loading": "newdata.load_newdata (every OpenML pin: identity, shape, missing and infinite cells, labels, class counts, sha256 of X, y and feature names, harness fingerprint); the loaded arrays must equal the batch run's prepared data.npz, and its dataset and splits hashes must equal newdata.PINS; the prepared data are copied from the batch run",
+  "datasets": [
+    "balance_scale",
+    "mfeat_zernike",
+    "ionosphere",
+    "vertebra_column",
+    "diabetes",
+    "banknote_authentication",
+    "qsar_biodeg",
+    "steel_plates_fault",
+    "climate_model_simulation_crashes",
+    "hcv_egyptian_patients"
+  ],
+  "decision_rule": "freeze only if the calibrated projection at 16 single-thread workers is at most 3 h: the simulated first-free-worker makespan of the planned jobs in planned order, each job priced at the batch run's realized outer fit and predict seconds of its fold and seeds times the piloted all-variants/views7 time ratio (the pilot dataset of the same no_augment fit source; the largest piloted ratio otherwise)",
+  "depth_split": {
+    "definition": "per dataset, untrained minus views7 accuracy (fitting seeds averaged within fold), grouped by the hidden widths of the reconstructed selection; per group the folds, n, mean, SD, min, max and the corrected resampled t interval over the group's folds when n >= 2; pooled across datasets per group: n, mean and SD",
+    "depths": [
+      [
+        128
+      ],
+      [
+        64,
+        128
+      ]
+    ],
+    "status": "descriptive; no p values"
+  },
+  "design_source": {
+    "added": "reference_sources (the two batch runs), probe_datasets, reproduction, selected_configuration, dataset_loading, decision_rule, design_source",
+    "changed": "protocol_id, production_family, datasets, pilot_datasets, knn_readout.source, reporting.outputs, wallclock_cap_hours, frozen, status, resource_decision, source_template_sha256",
+    "identical_to_template": "aggregation, confidence, depth_split, dropped_variants, failure_policy, fit_reuse, fit_seeds, historical_results, inner_folds, max_workers, numeric_threads_per_worker, outer_folds, outer_repeats, parallelism, report_metrics, selection_metric, split_seed, test_train_ratio, variant_definitions, variants",
+    "removed": "reference_source (one bridge_knn run) and frozen_at_utc until the freeze",
+    "template": "protocols/2026-09-12/knn_ablation.json (sha256 in source_template_sha256)"
+  },
+  "dropped_variants": {
+    "borda_views7": "Borda view aggregation is not defined for the kNN readout",
+    "multiview_footrule_knn": "replaced by input_knn, whose readout is tuned inside every fit exactly as ArrowFlow-kNN tunes its own",
+    "single_view_no_checkpoint_no_augment": "not among the variants of the Task 20B ruling"
+  },
+  "failure_policy": "log_all_failures; a failed variant fit leaves an explicit failed row; failed jobs are never omitted from the summary; no adaptive stopping on any score; a views7 reproduction failure is an integrity failure: its job fails, the pending jobs are cancelled and the summary refuses",
+  "fit_reuse": "views7 is fitted once per seed and fold; views1 and views3 are majorities over its first one and three per-view kNN votes (view v depends only on derive_seed(seed, \"view\", v)); prototype_readout is the majority of the output rule of the same seven trained networks; no_checkpoint and no_augment are fitted separately unless their parameters coincide with views7 (no_augment where the resolved augment is already false), in which case the record says identical_to_views7; untrained and input_knn are fitted separately and train nothing; reused fits carry zero timings and name their source fit",
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "frozen": true,
+  "frozen_at_utc": "2026-09-14T09:44:12.697938+00:00",
+  "historical_results": "exploratory_only",
+  "inner_folds": 3,
+  "knn_readout": {
+    "aggregation": "majority",
+    "applies_to": [
+      "views7",
+      "views1",
+      "views3",
+      "no_checkpoint",
+      "no_augment",
+      "untrained",
+      "input_knn"
+    ],
+    "grid": {
+      "n_neighbors": [
+        1,
+        3,
+        5,
+        11,
+        21
+      ],
+      "weights": [
+        "uniform",
+        "distance"
+      ]
+    },
+    "selection": "mean accuracy over StratifiedKFold(3, shuffle=True, random_state=derive_seed(view_seed, \"readout_selection\")) splits of the training partition inside every fit; fewer splits only if the smallest class has fewer rows; one neighbour cache per split at the largest k; ties lowest_canonical_config_id; refit on the full training representation",
+    "selection_folds": 3,
+    "source": "identical to arrowflow_full_knn (newdata_batch1.json and newdata_batch2.json models.arrowflow_full_knn.readout)"
+  },
+  "max_workers": 16,
+  "numeric_threads_per_worker": 1,
+  "outer_folds": 5,
+  "outer_repeats": 3,
+  "parallelism": "spawned single-thread process per dataset and outer fold under the shared execution lock",
+  "pilot_datasets": [
+    "mfeat_zernike",
+    "vertebra_column"
+  ],
+  "pilot_projection": {
+    "calibrated": {
+      "longest_job_hours": 0.4728005689584192,
+      "serial_hours": 19.302344217332674,
+      "serial_hours_over_workers": 1.2063965135832921,
+      "simulated_makespan_hours": 1.4005034640162017
+    },
+    "calibrated_per_dataset_hours": {
+      "balance_scale": 1.1073691508331716,
+      "banknote_authentication": 1.7218903867699311,
+      "climate_model_simulation_crashes": 2.4805993592844424,
+      "diabetes": 2.0079064703902265,
+      "hcv_egyptian_patients": 2.961125535704052,
+      "ionosphere": 1.4582330665674625,
+      "mfeat_zernike": 1.963835013049298,
+      "qsar_biodeg": 1.377965777167931,
+      "steel_plates_fault": 2.3475531041879436,
+      "vertebra_column": 1.8758663533782158
+    },
+    "cap_hours": 3,
+    "decision_hours": 1.4005034640162017,
+    "decision_rule": "freeze only if the calibrated projection at 16 single-thread workers is at most 3 h: the simulated first-free-worker makespan of the planned jobs in planned order, each job priced at the batch run's realized outer fit and predict seconds of its fold and seeds times the piloted all-variants/views7 time ratio (the pilot dataset of the same no_augment fit source; the largest piloted ratio otherwise)",
+    "harness": {
+      "hours_at_16_workers_ideal": 0.9054364870638892,
+      "serial_hours": 14.486983793022228
+    },
+    "pilot_ratios": {
+      "mfeat_zernike": 1.796229863449123,
+      "vertebra_column": 2.886472391046835
+    },
+    "pilot_sha256": "280cf0d81d95cfbd639b922b9a07b032787033d999097ce631ccf90251edeebd",
+    "reproduction_probes": {
+      "1": {
+        "config_id": "b5b2cf609efe12eb",
+        "dataset_id": "ionosphere",
+        "inner_fold": 0,
+        "model_seed": 8129,
+        "readout_selections_identical": true,
+        "reference_score": 0.925531914893617,
+        "refit_score": 0.925531914893617,
+        "reproduced": true,
+        "result_file": "results/ionosphere__arrowflow_full_knn__r0f0.json"
+      },
+      "2": {
+        "config_id": "b5b2cf609efe12eb",
+        "dataset_id": "vertebra_column",
+        "inner_fold": 0,
+        "model_seed": 8129,
+        "readout_selections_identical": true,
+        "reference_score": 0.7951807228915663,
+        "refit_score": 0.7951807228915663,
+        "reproduced": true,
+        "result_file": "results/vertebra_column__arrowflow_full_knn__r0f0.json"
+      }
+    },
+    "stages": {
+      "code_revision": "901b2d5d6b4ad3e3b8cfa0fd1b3910a010b3a656",
+      "ended_utc": "2026-09-14T09:43:28Z",
+      "pilot": {
+        "all_variants_to_views7_ratio": {
+          "mfeat_zernike": 1.796229863449123,
+          "vertebra_column": 2.886472391046835
+        },
+        "datasets": [
+          "mfeat_zernike",
+          "vertebra_column"
+        ],
+        "decision": {
+          "cap_hours": 3,
+          "hours": 1.4005034640162017,
+          "probes_reproduced": true,
+          "rule": "freeze only if the calibrated projection at 16 single-thread workers is at most 3 h: the simulated first-free-worker makespan of the planned jobs in planned order, each job priced at the batch run's realized outer fit and predict seconds of its fold and seeds times the piloted all-variants/views7 time ratio (the pilot dataset of the same no_augment fit source; the largest piloted ratio otherwise)",
+          "within_cap": true
+        },
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/runs/2026-09-14-newdata-ablation-pilot",
+        "failed": [],
+        "reproduction_probes": {
+          "1": {
+            "dataset_id": "ionosphere",
+            "readout_selections_identical": true,
+            "reference_score": 0.925531914893617,
+            "refit_score": 0.925531914893617,
+            "reproduced": true
+          },
+          "2": {
+            "dataset_id": "vertebra_column",
+            "readout_selections_identical": true,
+            "reference_score": 0.7951807228915663,
+            "refit_score": 0.7951807228915663,
+            "reproduced": true
+          }
+        },
+        "seconds_by_variant": {
+          "mfeat_zernike": {
+            "input_knn": 1.4443375219998416,
+            "no_augment": 0.0,
+            "no_checkpoint": 44.530273518990725,
+            "untrained": 1.8270198260142934,
+            "views7": 60.034963596990565
+          },
+          "vertebra_column": {
+            "input_knn": 0.07618146698223427,
+            "no_augment": 39.801667510997504,
+            "no_checkpoint": 36.18820492899977,
+            "untrained": 0.26367277701501735,
+            "views7": 40.46161875798134
+          }
+        }
+      },
+      "prepare": {
+        "datasets": [
+          "balance_scale",
+          "mfeat_zernike",
+          "ionosphere",
+          "vertebra_column",
+          "diabetes",
+          "banknote_authentication",
+          "qsar_biodeg",
+          "steel_plates_fault",
+          "climate_model_simulation_crashes",
+          "hcv_egyptian_patients"
+        ],
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/runs/2026-09-14-newdata-ablation-prepare",
+        "no_augment_identical_to_views7": [
+          "ionosphere",
+          "mfeat_zernike",
+          "qsar_biodeg"
+        ],
+        "pins_checked": true,
+        "reference_sources": {
+          "1": {
+            "code_revision": "6022f9b5e2312f80a96e96b2d0607c72b7d52138",
+            "protocol_id": "arrowflow-v3-newdata-batch1-1",
+            "selected_folds": 75,
+            "summary_sha256": "f3ab23c5eeccbe36f036325fe94c4c28ce69bc9d35fa16e62cea813e977ec843"
+          },
+          "2": {
+            "code_revision": "6022f9b5e2312f80a96e96b2d0607c72b7d52138",
+            "protocol_id": "arrowflow-v3-newdata-batch2-1",
+            "selected_folds": 75,
+            "summary_sha256": "50ebfbef88616f8ecd20737f45b3ef840ed19f75a5e5a3f8ceeb120e386d49db"
+          }
+        },
+        "selected_folds": 150,
+        "selected_widths": {
+          "[128]": 105,
+          "[64, 128]": 45
+        }
+      },
+      "smoke": {
+        "datasets": [
+          "synthetic_b1",
+          "synthetic_b2"
+        ],
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/runs/2026-09-14-newdata-ablation-smoke",
+        "views7_reproduced_fold_seeds": [
+          18,
+          18
+        ]
+      },
+      "stage_times_utc": {
+        "pilot": "09:39:06Z",
+        "prepare": "09:38:50Z",
+        "smoke": "09:38:56Z"
+      },
+      "started_utc": "2026-09-14T09:38:50Z",
+      "summary": "prepare, smoke and pilot at 901b2d5d6 (2026-09-14T09:38:50Z to 2026-09-14T09:43:28Z): prepare 09:38:50Z of all 10 further datasets (every newdata pin held; 150 per-fold selections reconstructed from arrowflow-v3-newdata-batch1-1 and -batch2-1 and sealed with the reference predictions; selected widths [128] in 105 folds and [64, 128] in 45; no_augment identical to views7 on ionosphere, mfeat_zernike, qsar_biodeg); synthetic two-reference smoke 09:38:56Z ok (views7 reproduced 18/18 fold-seeds); training-only pilot 09:39:06Z on mfeat_zernike and vertebra_column (first outer training partition, seed 8129, every variant fit ok; all-variants/views7 time ratios mfeat_zernike 1.80, vertebra_column 2.89); reproduction probes: ionosphere reproduced, vertebra_column reproduced"
+    },
+    "workers": 16
+  },
+  "probe_datasets": {
+    "1": "ionosphere",
+    "2": "vertebra_column"
+  },
+  "production_family": "newdata_ablation",
+  "protocol_id": "arrowflow-v3-newdata-ablation-1",
+  "reference_sources": {
+    "1": {
+      "code_revision": "6022f9b5e2312f80a96e96b2d0607c72b7d52138",
+      "datasets": [
+        "balance_scale",
+        "ionosphere",
+        "diabetes",
+        "banknote_authentication",
+        "qsar_biodeg"
+      ],
+      "directory": "supplied by --batch1/--batch2 at prepare and recorded in manifest.json",
+      "family": "newdata",
+      "model_id": "arrowflow_full_knn",
+      "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_batch1.json",
+      "protocol_id": "arrowflow-v3-newdata-batch1-1",
+      "protocol_sha256": "f715ec2808b4b08c10e49ae23696070a471d7ea88eb351d63b059eecccc0d011",
+      "summary_sha256": "f3ab23c5eeccbe36f036325fe94c4c28ce69bc9d35fa16e62cea813e977ec843"
+    },
+    "2": {
+      "code_revision": "6022f9b5e2312f80a96e96b2d0607c72b7d52138",
+      "datasets": [
+        "mfeat_zernike",
+        "vertebra_column",
+        "steel_plates_fault",
+        "climate_model_simulation_crashes",
+        "hcv_egyptian_patients"
+      ],
+      "directory": "supplied by --batch1/--batch2 at prepare and recorded in manifest.json",
+      "family": "newdata",
+      "model_id": "arrowflow_full_knn",
+      "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_batch2.json",
+      "protocol_id": "arrowflow-v3-newdata-batch2-1",
+      "protocol_sha256": "188ff1e946b6dc8df712c5a5cfb01e9cf2f9e7022a7776d98ec95ae1f66fca49",
+      "summary_sha256": "50ebfbef88616f8ecd20737f45b3ef840ed19f75a5e5a3f8ceeb120e386d49db"
+    }
+  },
+  "report_metrics": [
+    "accuracy",
+    "error",
+    "balanced_accuracy",
+    "macro_f1"
+  ],
+  "reporting": {
+    "change_from_views7": "per dataset and variant, variant minus views7 in accuracy and error: fitting seeds averaged within outer fold, corrected resampled t interval over the 15 outer folds (q = test_train_ratio, 14 df); descriptive; no p values; no Holm adjustment",
+    "outputs": "newdata_ablation_summary.json (metrics, intervals, depth split, reproduction counts, model rows) and newdata_ablation_summary.csv (metrics per dataset, variant and metric)"
+  },
+  "reproduction": "views7 must reproduce the outer predictions of the batch run holding the dataset exactly for every dataset, outer fold and fitting seed (the same labels in the sealed test-sample order); checked inside every job, again for every record by the summary, and every sealed selection is re-derived from its batch run at summary time",
+  "resource_decision": "Task 24 Part 2 (author decision 3 and its scope ruling, 2026-09-14): drafted from knn_ablation.json with the references the two newdata batch runs; prepare, smoke and pilot at 901b2d5d6 (2026-09-14T09:38:50Z to 2026-09-14T09:43:28Z): prepare 09:38:50Z of all 10 further datasets (every newdata pin held; 150 per-fold selections reconstructed from arrowflow-v3-newdata-batch1-1 and -batch2-1 and sealed with the reference predictions; selected widths [128] in 105 folds and [64, 128] in 45; no_augment identical to views7 on ionosphere, mfeat_zernike, qsar_biodeg); synthetic two-reference smoke 09:38:56Z ok (views7 reproduced 18/18 fold-seeds); training-only pilot 09:39:06Z on mfeat_zernike and vertebra_column (first outer training partition, seed 8129, every variant fit ok; all-variants/views7 time ratios mfeat_zernike 1.80, vertebra_column 2.89); reproduction probes: ionosphere reproduced, vertebra_column reproduced; projected at 16 single-thread workers: calibrated simulated makespan 1.40 h (serial 19.30 h, serial over workers 1.21 h), harness 0.91 h; cap 3 h; reproduction probes held on ionosphere, vertebra_column; frozen after the pilot",
+  "selected_configuration": "results/<dataset>__arrowflow_full_knn__r<repeat>f<fold>.json selection block of the batch run holding the dataset, reconstructed from the complete inner fit history at prepare time (reporting.validate_result_records) and resolved to embed_dim, degree and augment from the outer training partition shape (bridge.resolve_selected); sealed in reference_selected_configurations.csv and reference_selections.json with the reference per-example predictions",
+  "selection_metric": "accuracy",
+  "source_template_sha256": "126cf6d72a2842751a04b5994f7f4b3e9b3b3f5261407d1f1345295b043a1ba5",
+  "split_seed": 27183,
+  "status": "reviewed_and_piloted_before_confirmatory_scoring",
+  "test_train_ratio": 0.25,
+  "variant_definitions": {
+    "input_knn": "the same seven encoders with the kNN readout tuned on the encoded input positions (knn_controls.MultiViewInputKNN)",
+    "no_augment": "augment false; kNN readout; identical_to_views7 where the resolved augment is already false",
+    "no_checkpoint": "validation_ratio 0: networks trained on all training rows without the validation checkpoint; kNN readout",
+    "prototype_readout": "the output rule of the same seven trained networks (ArrowFlowEstimator.predict_orders per view), majority vote; derived from the views7 fit without retraining",
+    "untrained": "the selected widths, embed_dim, degree and seeds with every network at its seeded initial filters and the same kNN readout selection (knn_controls.UntrainedMultiViewArrowFlowKNN)",
+    "views1": "n_views 1: the first per-view kNN vote of views7 (what MultiViewArrowFlowKNN with n_views 1 predicts)",
+    "views3": "n_views 3: the majority of the first three per-view kNN votes of views7",
+    "views7": "ArrowFlow-kNN (MultiViewArrowFlowKNN, seven views) at the reconstructed selection; must reproduce the reference outer predictions exactly"
+  },
+  "variants": [
+    "views7",
+    "views1",
+    "views3",
+    "no_checkpoint",
+    "no_augment",
+    "prototype_readout",
+    "untrained",
+    "input_knn"
+  ],
+  "wallclock_cap_hours": 3
+}

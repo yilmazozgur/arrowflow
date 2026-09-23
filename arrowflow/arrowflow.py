@@ -23,6 +23,7 @@ import torch.nn.functional as F
 import torch.nn as nn
 import json
 from arrowflow.config import sortnet_config
+from arrowflow.ranking import numeric_ids, score_order, validate_permutation
 
 device = 'cuda' if torch.cuda.is_available() else sortnet_config.device
 
@@ -311,26 +312,10 @@ class DataGraph:
                              pol_deg=5, no_dimensions=32, n_views=1):
         """Encode real-valued feature vectors as sorted lists (permutations).
 
-        Pipeline: X → (optional poly expansion) → StandardScaler → random projection → argsort
-
-        This is the core encoding that maps continuous feature vectors into the
-        permutation space where ArrowFlow operates. The key insight is that argsort
-        preserves relative ordering information, which is exactly what the edit-distance
-        based sort layers exploit. By the Johnson-Lindenstrauss lemma, the random
-        projection approximately preserves pairwise distances in the projected space,
-        and argsort then captures the ordinal structure of those distances.
-
-        Polynomial expansion (when enabled) creates interaction and higher-order terms
-        before projection, which is critical for low-dimensional data (n_features <= 30)
-        where the raw features don't provide enough diversity for meaningful rankings.
-        Experimentally, polynomial expansion provides 3-5x error reduction on datasets
-        like iris (4 features) and wine (13 features).
-
-        Multi-view encoding (n_views > 1) splits the output into n_views independent
-        blocks, each of size dim_per_view = no_dimensions // n_views. Each block is an
-        independent argsort of a different random projection of the input features.
-        This dramatically improves encoding quality for high-dimensional data by avoiding
-        the curse of dimensionality in permutation space.
+        Pipeline: optional polynomial expansion, fitted standardization, random
+        projection, then ascending coordinate ranking with numeric-ID ties.
+        Inputs must be finite; fit any imputation on the training partition first.
+        Each view has a separate random projection and a disjoint coordinate block.
 
         Args:
             X: Feature matrix (N x D).
@@ -356,11 +341,7 @@ class DataGraph:
 
             return data_net, input_vertices, W_random
 
-        # --- Polynomial expansion ---
-        # For low-dimensional data, polynomial features create interaction terms
-        # and nonlinear combinations that enrich the feature space before projection.
-        # Without this, datasets like iris (4 features) produce permutations with
-        # very limited diversity, leading to high classification error.
+        # Optional polynomial features before scaling and projection.
         if poly_expansion:
             trans_pol = PolynomialFeatures(degree=pol_deg)
             X = trans_pol.fit_transform(X)
@@ -383,8 +364,7 @@ class DataGraph:
             # projection, ensuring all dimensions contribute equally to the ranking.
             scaler = StandardScaler()
             X = scaler.fit_transform(X)
-            # One random projection matrix per view — each view captures different
-            # ordinal relationships in the data, improving robustness.
+            # One random projection matrix per view.
             W_views = [np.random.randn(X.shape[1], dim_per_view) for _ in range(n_views)]
             W_random = [W_views, scaler, n_views, dim_per_view]
         else:
@@ -393,13 +373,11 @@ class DataGraph:
             if len(W_random) > 1 and W_random[1] is not None:
                 X = W_random[1].transform(X)
 
-        # Multi-view argsort: each view is an independent projection + argsort.
-        # Different random projections capture different ordinal aspects of the data,
-        # which increases the information content of the resulting permutation.
+        # Rank each projection separately and offset its coordinate IDs.
         X_index = np.empty((X.shape[0], total_length), dtype=int)
         for v in range(n_views):
             proj = X @ W_views[v]
-            view_perm = np.argsort(proj, axis=1)
+            view_perm = score_order(proj)
             X_index[:, v * dim_per_view:(v + 1) * dim_per_view] = view_perm + v * dim_per_view + 1
 
         for idx, data_row in enumerate(X_index):
@@ -414,27 +392,8 @@ class DataGraph:
     # ------------------------------------------------------------------
     # Target-Aware Encoding (LDA + Random Projection)
     # ------------------------------------------------------------------
-    # Standard random projection is unsupervised — it preserves pairwise
-    # distances (Johnson-Lindenstrauss) but ignores class structure. For
-    # multi-class problems (n_classes >= 3), injecting supervised signal
-    # via Linear Discriminant Analysis (LDA) dramatically improves the
-    # quality of the resulting permutations.
-    #
-    # LDA finds the linear subspace that maximizes between-class variance
-    # relative to within-class variance. By dedicating a fraction of the
-    # embedding dimensions to LDA components and the rest to random
-    # projection, we get the best of both worlds:
-    #   - LDA components capture the most discriminative directions
-    #   - Random components capture complementary ordinal structure
-    #
-    # The two parts are scale-normalized before concatenation so that
-    # argsort treats them equally. This hybrid approach reduces error by
-    # ~30% on multi-class datasets like digits (10 classes).
-    #
-    # For binary classification, LDA yields only 1 component, which is
-    # insufficient for meaningful diversity — use standard random projection
-    # instead.
-    # ------------------------------------------------------------------
+    # Concatenate fitted LDA coordinates and random projection coordinates,
+    # rescale using training statistics, then rank coordinate IDs.
 
     @staticmethod
     def target_aware_encode(X_train, y_train, X_test, embed_dim=32,
@@ -447,9 +406,6 @@ class DataGraph:
             X_test: Test features (N_test x D), already polynomial-expanded.
             embed_dim: Target permutation length.
             lda_ratio: Fraction of embed_dim dimensions allocated to LDA components.
-                Higher values inject more supervised signal but reduce diversity.
-                0.3 is a good default — enough for class separation without
-                over-relying on the linear discriminant assumption.
             seed: Random seed for reproducibility.
 
         Returns:
@@ -482,10 +438,7 @@ class DataGraph:
             proj_rand_train = X_tr @ W_rand
             proj_rand_test = X_te @ W_rand
 
-            # Normalize both parts to similar scale so that argsort treats
-            # LDA and random dimensions equally. Without this, the LDA
-            # components (which tend to have higher variance) would dominate
-            # the ranking and reduce the contribution of random components.
+            # Rescale each block using its training standard deviation.
             lda_scale = np.std(proj_lda_train) + 1e-10
             rand_scale = np.std(proj_rand_train) + 1e-10
             proj_lda_train /= lda_scale
@@ -499,37 +452,23 @@ class DataGraph:
             proj_train = proj_lda_train
             proj_test = proj_lda_test
 
-        perm_train = np.argsort(proj_train, axis=1).astype(float)
-        perm_test = np.argsort(proj_test, axis=1).astype(float)
+        perm_train = score_order(proj_train).astype(float)
+        perm_test = score_order(proj_test).astype(float)
         return perm_train, perm_test
 
     # ------------------------------------------------------------------
     # Calibrated Encoding
     # ------------------------------------------------------------------
-    # Standard random projection followed by argsort can produce biased
-    # permutations when the projected dimensions have very different
-    # variances — high-variance dimensions dominate the ranking, while
-    # low-variance dimensions contribute little ordinal signal.
-    #
-    # Calibrated encoding applies StandardScaler to the projected
-    # dimensions (after projection, before argsort) to equalize variance
-    # across all dimensions. This ensures every dimension contributes
-    # equally to the ranking, producing more informative permutations.
-    #
-    # This is particularly useful as a diversity mechanism in multi-view
-    # ensembles: mixing calibrated and uncalibrated views increases
-    # ensemble diversity because they produce systematically different
-    # rankings from the same underlying projection.
-    # ------------------------------------------------------------------
+    # Optionally standardize projected coordinates with training statistics
+    # before ranking coordinate IDs.
 
     @staticmethod
     def calibrated_encode(X_train, y_train, X_test, embed_dim=32,
                           seed=42, calibration='standardize'):
         """Encode with post-projection calibration before argsort.
 
-        The idea is to equalize the variance of each projected dimension
-        so that argsort produces rankings where all dimensions contribute
-        equally, rather than being dominated by high-variance directions.
+        Project standardized features, optionally standardize the projected
+        coordinates, then rank them with numeric-ID ties.
 
         Args:
             X_train: Training features (N_train x D), already polynomial-expanded.
@@ -556,15 +495,14 @@ class DataGraph:
         proj_train = X_tr @ W_proj
         proj_test = X_te @ W_proj
 
-        # Post-projection calibration: equalize variance across dimensions
-        # so that argsort treats all projected dimensions equally
+        # Fit post-projection calibration on training coordinates only.
         if calibration == 'standardize':
             proj_scaler = StandardScaler()
             proj_train = proj_scaler.fit_transform(proj_train)
             proj_test = proj_scaler.transform(proj_test)
 
-        perm_train = np.argsort(proj_train, axis=1).astype(float)
-        perm_test = np.argsort(proj_test, axis=1).astype(float)
+        perm_train = score_order(proj_train).astype(float)
+        perm_test = score_order(proj_test).astype(float)
         return perm_train, perm_test
 
     # ------------------------------------------------------------------
@@ -736,7 +674,7 @@ class Vertex:
         self.adjacency_list_dict = self.list_2_dict(self.adjacency_list)
         self.adjacency_list_dict_flat = {item: pos for pos, item in enumerate(self.adjacency_list)}
         self.adjacency_list_set = set(self.adjacency_list)
-        self._adj_sort_index = np.argsort(self.adjacency_list_np)
+        self._adj_sort_index = np.argsort(numeric_ids(self.adjacency_list_np), kind="stable")
         self._adj_sort_index_list = self._adj_sort_index.tolist()
         self._sorted_adj = self.adjacency_list_np[self._adj_sort_index]
         self.len_list = len(self.adjacency_list)
@@ -957,7 +895,7 @@ class Vertex:
             self.adjacency_list_dict_flat = {item: pos for pos, item in enumerate(self.adjacency_list)}
             self.adjacency_list_set = set(self.adjacency_list)
             self.adjacency_list_np = np.asarray(adjacency_list_clean)
-            self._adj_sort_index = np.argsort(self.adjacency_list_np)
+            self._adj_sort_index = np.argsort(numeric_ids(self.adjacency_list_np), kind="stable")
             self._adj_sort_index_list = self._adj_sort_index.tolist()
             self._sorted_adj = self.adjacency_list_np[self._adj_sort_index]
             self.clean_motion_accumulation(adjacency_list_clean)
@@ -974,8 +912,8 @@ class Vertex:
         locations = np.asarray(list(range(len(self.adjacency_list))))
 
         weighted_locations = np.multiply(locations, self.permutation_matrix_accumulate)
-        decimal_idx = np.sum(weighted_locations, axis=1) / np.sum(self.permutation_matrix_accumulate, axis=0)
-        adjacency_list_clean = self.adjacency_list_np[np.argsort(decimal_idx)].tolist()
+        decimal_idx = np.sum(weighted_locations, axis=1) / np.sum(self.permutation_matrix_accumulate, axis=1)
+        adjacency_list_clean = self.adjacency_list_np[score_order(decimal_idx, self.adjacency_list)].tolist()
 
         return adjacency_list_clean
 
@@ -1021,6 +959,8 @@ class VertexFilters:
                  data_initial, frequenct_dict, sortnet_config):
 
         self.adj_list_items = list(adj_list_items)
+        self.missing_data_loc_mult = sortnet_config.missing_data_loc_mult
+        self.device = sortnet_config.device
         self.item_to_idx = {item: i for i, item in enumerate(adj_list_items)}
         self.id = id_key
         self.network_type = sortnet_config.network_type
@@ -1086,7 +1026,7 @@ class VertexFilters:
         self._index_matrix_gpu = None
 
     def update_index_matrix(self):
-        missing_data_loc = sortnet_config.missing_data_loc_mult * len(self.adj_list_items)
+        missing_data_loc = self.missing_data_loc_mult * len(self.adj_list_items)
         for vertex_iter in self.graph:
             idx_vertex = int(vertex_iter.id.split('_')[-1])
             adj_dict = vertex_iter.adjacency_list_dict
@@ -1102,7 +1042,7 @@ class VertexFilters:
         """Lazy GPU tensor — created on first access to avoid CUDA init in forked processes."""
         if self._index_matrix_gpu is None:
             try:
-                self._index_matrix_gpu = torch.tensor(self.index_matrix, dtype=torch.float32, device=device)
+                self._index_matrix_gpu = torch.tensor(self.index_matrix, dtype=torch.float32, device=self.device)
             except RuntimeError:
                 # Forked subprocess — return CPU tensor as fallback
                 self._index_matrix_gpu = torch.tensor(self.index_matrix, dtype=torch.float32)
@@ -1158,6 +1098,31 @@ class VertexFilters:
 class SortFlowHybridNetwork:
     def __init__(self, id_key, adj_list_items, number_of_classes, file_name, sortnet_config, pretrained_model=None):
         self.id = id_key
+        self.device = sortnet_config.device
+        self.motion_normalization_mult = sortnet_config.motion_normalization_mult
+        self.missing_data_loc_mult = sortnet_config.missing_data_loc_mult
+        self.evaluate_train_data = sortnet_config.evaluate_train_data
+        self.multistep_lr = sortnet_config.multistep_lr
+        self.no_of_iters = sortnet_config.no_of_iters
+        if all(t == 'sort' for t in sortnet_config.layer_types[:len(sortnet_config.no_of_filters)]):
+            validate_permutation(adj_list_items, adj_list_items)
+            if (not sortnet_config.no_of_filters or any(m <= 0 for m in sortnet_config.no_of_filters)
+                    or (sortnet_config.problem == 'classification'
+                        and sortnet_config.no_of_filters[-1] != number_of_classes)):
+                raise ValueError('Expected positive layer counts and one output filter per class')
+            if sortnet_config.initial_filter_with_data and sortnet_config.data_initial is not None:
+                for sample in sortnet_config.data_initial:
+                    validate_permutation(sample[0], adj_list_items)
+            if (any(rf is not None for rf in sortnet_config.filter_rfs[:len(sortnet_config.no_of_filters)])
+                    or sortnet_config.frequency_based_filter
+                    or sortnet_config.distance_computation_metric != 'l1'
+                    or sortnet_config.average_method_motion != 'mean'
+                    or sortnet_config.average_method_position != 'mean'):
+                raise ValueError('Supported sort-only path requires full permutation filters, l1 distance and means')
+            if (not 0 <= sortnet_config.ratio_data_backprop <= 1
+                    or not np.isfinite(sortnet_config.learning_rate)
+                    or sortnet_config.learning_rate <= 0):
+                raise ValueError('Expected positive finite learning rate and top fraction in [0, 1]')
         self.data_graph = DataGraph('cn_data')
         self.network_type = sortnet_config.network_type
         self.file_name = file_name
@@ -1292,7 +1257,10 @@ class SortFlowHybridNetwork:
                 self.update_network(data_train_, data_validation, train_type, problem)
 
         # Test error on completely separate data. Use the best model during training.
-        self.graph = copy.deepcopy(self.optimal_model)
+        if data_validation:
+            self.graph = copy.deepcopy(self.optimal_model)
+        else:
+            self.optimal_model = copy.deepcopy(self.graph)
         error_test, prediction = self.evaluate(data_test, train_type, problem)
         errors_update.append(error_test)
 
@@ -1315,7 +1283,7 @@ class SortFlowHybridNetwork:
                                                     motion_last_layer)
         tb_total = datetime.now() - tb_init
 
-        if sortnet_config.evaluate_train_data:
+        if self.evaluate_train_data:
             error_train, prediction = self.evaluate(data_train, train_type, problem)
         else:
             error_train = 0
@@ -1346,10 +1314,6 @@ class SortFlowHybridNetwork:
         return motion_last_layer, [error_train, error_val, self.min_error_val]
 
     def evaluate(self, data, train_type, problem='classification', return_dict=None, network_id_moe=None):
-        if return_dict is not None:
-            seed_no = (os.getpid() * int(time.time() * 1000)) % 123456
-            np.random.seed(seed_no)
-
         # Almost identical to forward computation, only for evaluating after batch update. No gradient/error computation
         error_forwardprop = self.forward_propagate(data, train_type, problem, True)
 
@@ -1385,9 +1349,9 @@ class SortFlowHybridNetwork:
         n_data = len(data)
         # Detect GPU availability (gracefully handle forked subprocesses where CUDA can't init)
         use_gpu = False
-        if device != 'cpu' and torch.cuda.is_available():
+        if self.device != 'cpu' and torch.cuda.is_available():
             try:
-                torch.tensor(0.0, device=device)  # probe CUDA init
+                torch.tensor(0.0, device=self.device)  # probe CUDA init
                 use_gpu = True
             except RuntimeError:
                 pass  # forked subprocess — fall back to CPU
@@ -1398,10 +1362,17 @@ class SortFlowHybridNetwork:
         layer0 = self.graph.vertex_list[layer0_name]
         item_to_col = layer0.item_to_idx
         n_vocab_0 = len(layer0.adj_list_items)
-        missing_data_loc = sortnet_config.missing_data_loc_mult * n_vocab_0
+        missing_data_loc = self.missing_data_loc_mult * n_vocab_0
 
         positions = np.full((n_data, n_vocab_0), missing_data_loc, dtype=np.float32)
         for i, data_point in enumerate(data):
+            validate_permutation(data_point[0], layer0.adj_list_items)
+            if problem == 'classification':
+                label, weight = float(data_point[1]), float(data_point[2])
+                if (not np.isfinite(label) or not label.is_integer()
+                        or not 0 <= label < self.no_of_classes
+                        or not np.isfinite(weight) or weight < 0):
+                    raise ValueError('Expected a valid class ID and a finite nonnegative sample weight')
             for pos, item in enumerate(data_point[0]):
                 col = item_to_col.get(item)
                 if col is not None:
@@ -1429,13 +1400,13 @@ class SortFlowHybridNetwork:
 
             # Compute L1 distances: positions (N_data, N_vocab) vs index_matrix (N_filters, N_vocab)
             if use_gpu:
-                pos_gpu = torch.tensor(positions, dtype=torch.float32, device=device)
+                pos_gpu = torch.tensor(positions, dtype=torch.float32, device=self.device)
                 dist_gpu = torch.cdist(pos_gpu, layer.index_matrix_gpu, p=1)
-                sort_indices = torch.argsort(dist_gpu, dim=1).cpu().numpy()
+                sort_indices = torch.argsort(dist_gpu, dim=1, stable=True).cpu().numpy()
             else:
                 from scipy.spatial.distance import cdist
                 dist_batch = cdist(positions, layer.index_matrix, metric='cityblock')
-                sort_indices = np.argsort(dist_batch, axis=1)
+                sort_indices = score_order(dist_batch)
 
             # Backprop bookkeeping: store the INPUT string lists for this layer
             if not evaluate_only:
@@ -1459,6 +1430,9 @@ class SortFlowHybridNetwork:
             # Save for classification's accumulate_motion (needs input to last layer)
             if h == n_layers - 2:
                 prev_sort_indices = sort_indices
+
+        # Output-layer class ranking (nearest class filter first); read by predict_class_ranking.
+        self.last_output_rankings_ = np.asarray(sort_indices, dtype=int).copy()
 
         # --- Error evaluation using integer sort_indices (minimal string ops) ---
         layer = last_layer
@@ -1515,7 +1489,7 @@ class SortFlowHybridNetwork:
                         if self.backprop_signal_replication == 1:
                             if len(motion_last_layer_cumulative) > 0:
                                 avg_motion_vertex = np.mean(np.asarray(motion_last_layer_cumulative), axis=0)
-                                avg_motion_vertex = (avg_motion_vertex.shape[0] * sortnet_config.motion_normalization_mult) * \
+                                avg_motion_vertex = (avg_motion_vertex.shape[0] * self.motion_normalization_mult) * \
                                                     avg_motion_vertex / np.max(np.abs(avg_motion_vertex) + 0.00001)
                                 sort_index_motion = np.argsort(-np.abs(avg_motion_vertex))
                                 motion_last_layer.append(
@@ -1533,7 +1507,7 @@ class SortFlowHybridNetwork:
                     magnitude = data_point[2]
                     if predicted_class != gt_class:
                         error_decision += 1
-                    elif np.random.rand() > self.change_probability_when_decision_correct:
+                    elif not evaluate_only and np.random.rand() >= self.change_probability_when_decision_correct:
                         magnitude = 0
                     prediction_list.append(int(predicted_class))
 
@@ -1544,7 +1518,7 @@ class SortFlowHybridNetwork:
                         motion_data_point_last_layer = \
                             vertex_.accumulate_motion(
                                 prev_sort_str[data_idx], magnitude=magnitude_update)
-                        sort_index_motion = np.argsort(-np.abs(motion_data_point_last_layer))
+                        sort_index_motion = score_order(-np.abs(motion_data_point_last_layer), vertex_.adjacency_list)
                         motion_last_layer.append(
                             [vertex_.adjacency_list_np[sort_index_motion].tolist(),
                              motion_data_point_last_layer[sort_index_motion]])
@@ -1786,6 +1760,7 @@ class SortFlowHybridNetwork:
                     last_layer_vertex = layer.graph.vertex_list[last_layer_vertex_key]
                     error_layer= \
                         last_layer_vertex.apply_motion()
+                layer.update_index_matrix()
         else:  # Reset gradients
             if layer.layer_type == 'tensor':
                 layer.optimizer_hybrid.zero_grad()
@@ -1824,7 +1799,7 @@ class SortFlowHybridNetwork:
 
                 for vertex_idx, motion_vertex in enumerate(motion_data_point[1]):
                     # Only use the backprop data with large motions (errors)
-                    if vertex_idx > self.ratio_data_backprop * len(motion_data_point[0]):
+                    if vertex_idx >= int(np.ceil(self.ratio_data_backprop * len(motion_data_point[0]))):
                         break
 
                     count_loop += 1
@@ -1889,10 +1864,10 @@ class SortFlowHybridNetwork:
                 else: # default is 'mean'
                     avg_motion_vertex = np.mean(np.asarray(cumulative_motion_dict_filtered), axis=0)
 
-                avg_motion_vertex = (avg_motion_vertex.shape[0] * sortnet_config.motion_normalization_mult) * \
+                avg_motion_vertex = (avg_motion_vertex.shape[0] * self.motion_normalization_mult) * \
                                     avg_motion_vertex / np.max(np.abs(avg_motion_vertex) + 0.00001)
                 # Sort the motion (error) according to amplitude (for partial processing)
-                sort_index_motion = np.argsort(-np.abs(avg_motion_vertex))
+                sort_index_motion = score_order(-np.abs(avg_motion_vertex), sorted_adj_vertices)
                 motion_last_layer_next.append([sorted_adj_vertices[sort_index_motion].tolist(),
                                                avg_motion_vertex[sort_index_motion]])
 
@@ -1915,7 +1890,7 @@ class SortFlowHybridNetwork:
 
     def compute_motion_mat(self, forward_input_sort, layer):
         # The forward layer response with numpy array
-        missing_data_loc = sortnet_config.missing_data_loc_mult * len(layer.adj_list_items)
+        missing_data_loc = self.missing_data_loc_mult * len(layer.adj_list_items)
 
         forward_input_dict = {item: idx for idx, item in enumerate(forward_input_sort)}
         forward_input_index_vec = np.array([
@@ -2050,8 +2025,8 @@ class SortFlowHybridNetwork:
         if self.num_of_epochs == 1:
             self.learning_rate_original = self.learning_rate
 
-        if sortnet_config.multistep_lr:
-            if self.num_of_epochs > 2 and self.num_of_epochs % (sortnet_config.no_of_iters / 4) == 1:
+        if self.multistep_lr:
+            if self.num_of_epochs > 2 and self.num_of_epochs % (self.no_of_iters / 4) == 1:
                 self.learning_rate = self.learning_rate * 0.7
         else:
             self.learning_rate = self.learning_rate * 0.993

@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "arrowflow"
 version = "0.1.0"
-description = "ArrowFlow: Hierarchical Machine Learning in the Space of Permutations"
+description = "ArrowFlow: Training Ranking Filters with Position Votes"
 authors = ["Ozgur Yilmaz <ozguryilmaz@atu.edu.tr>"]
 readme = "README.md"
 license = "MIT"
@@ -11,10 +11,16 @@ python = "^3.11"
 numpy = "^1.26"
 scipy = "^1.12"
 scikit-learn = "^1.4"
+pandas = "^2.2"
+joblib = "^1.4"
+threadpoolctl = "^3.5"
 torch = "^2.2"
-torchvision = "^0.17"
+torchvision = {version = "^0.17", optional = true}
 matplotlib = "^3.8"
-seaborn = "^0.13"
+seaborn = {version = "^0.13", optional = true}
+
+[tool.poetry.extras]
+legacy = ["torchvision", "seaborn"]
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,0 +1,1292 @@
+{
+  "aggregation_integrity": "explicit_expected_folds_and_model_seeds; reconcile_every_planned_job_result_and_fit_log",
+  "analysis": {
+    "command": "python -m experiments.make_revision.compare_newdata analyse --batch1 <batch 1 run> --batch2 <batch 2 run> --output <directory>",
+    "comparator_intervals": {
+      "definition": "per dataset and comparator, arrowflow_full_knn minus the comparator accuracy: fitting seeds averaged within each outer fold; corrected resampled t over the outer folds (evaluation.paired_corrected_interval, q = test_train_ratio = 0.25, 95%, df = outer folds - 1 = 14); two-sided p, unadjusted; the comparator with the lowest mean outer error is flagged for display",
+      "models": [
+        "numeric_knn",
+        "svc_rbf",
+        "random_forest",
+        "mlp",
+        "gradient_boosting",
+        "dummy"
+      ],
+      "status": "descriptive; no multiplicity adjustment"
+    },
+    "datasets": [
+      "balance_scale",
+      "mfeat_zernike",
+      "ionosphere",
+      "vertebra_column",
+      "diabetes",
+      "banknote_authentication",
+      "qsar_biodeg",
+      "steel_plates_fault",
+      "climate_model_simulation_crashes",
+      "hcv_egyptian_patients"
+    ],
+    "duplicate_audit": {
+      "definition": "exact duplicate raw feature rows of the prepared data (float64 equality of every feature; referee_analyses.duplicate_groups): rows, distinct rows, duplicate rows, duplicate groups, label-conflicting groups and the largest group; per outer fold the test rows with an exact duplicate in the training partition",
+      "expected": {
+        "balance_scale": {
+          "duplicate_groups": 0,
+          "duplicate_rows": 0,
+          "label_conflicting_groups": 0
+        },
+        "banknote_authentication": {
+          "duplicate_groups": 11,
+          "duplicate_rows": 24,
+          "label_conflicting_groups": 0
+        },
+        "climate_model_simulation_crashes": {
+          "duplicate_groups": 0,
+          "duplicate_rows": 0,
+          "label_conflicting_groups": 0
+        },
+        "diabetes": {
+          "duplicate_groups": 0,
+          "duplicate_rows": 0,
+          "label_conflicting_groups": 0
+        },
+        "hcv_egyptian_patients": {
+          "duplicate_groups": 0,
+          "duplicate_rows": 0,
+          "label_conflicting_groups": 0
+        },
+        "ionosphere": {
+          "duplicate_groups": 1,
+          "duplicate_rows": 1,
+          "label_conflicting_groups": 0
+        },
+        "mfeat_zernike": {
+          "duplicate_groups": 6,
+          "duplicate_rows": 6,
+          "label_conflicting_groups": 0
+        },
+        "qsar_biodeg": {
+          "duplicate_groups": 3,
+          "duplicate_rows": 3,
+          "label_conflicting_groups": 0
+        },
+        "steel_plates_fault": {
+          "duplicate_groups": 0,
+          "duplicate_rows": 0,
+          "label_conflicting_groups": 0
+        },
+        "vertebra_column": {
+          "duplicate_groups": 0,
+          "duplicate_rows": 0,
+          "label_conflicting_groups": 0
+        }
+      },
+      "status": "descriptive"
+    },
+    "ladder": [
+      {
+        "model_id": "numeric_knn",
+        "rung": "raw_numeric_knn"
+      },
+      {
+        "model_id": "projected_numeric_knn",
+        "rung": "unsorted_projected_knn"
+      },
+      {
+        "model_id": "input_footrule_knn",
+        "rung": "encoded_ranking_knn"
+      },
+      {
+        "model_id": "arrowflow_knn_untrained",
+        "rung": "untrained_arrowflow_knn"
+      },
+      {
+        "model_id": "arrowflow_full_knn",
+        "rung": "arrowflow_knn"
+      }
+    ],
+    "ladder_table": "per dataset, mean outer error, outer-fold SD (ddof 1) and mean within-fold seed SD of every rung, from the verified summary.json of the batch run holding the dataset",
+    "metric": "accuracy",
+    "moderator_test": {
+      "alpha": 0.05,
+      "effect": "the primary family mean_difference of each dataset",
+      "effect_sizes": "per stratum: n, mean, SD (ddof 1), median, min and max of the dataset effects, with every dataset effect and its stratum",
+      "hypothesis": "the dataset-level mean training effect is larger in stratum H than in the other datasets",
+      "null_distribution": "all 210 assignments of the 10 datasets to a group of 4 and a group of 6, every dataset effect held fixed",
+      "p_value": "the number of assignments whose statistic is at least the observed statistic (the observed assignment included; a value within 1e-12 of the observed counts as at least the observed) divided by 210",
+      "sided": "one-sided, H greater",
+      "smallest_attainable_p": 0.004761904761904762,
+      "splits": 210,
+      "statistic": "mean effect over H minus mean effect over C",
+      "strata": {
+        "C": [
+          "diabetes",
+          "banknote_authentication",
+          "qsar_biodeg",
+          "steel_plates_fault",
+          "climate_model_simulation_crashes",
+          "hcv_egyptian_patients"
+        ],
+        "H": [
+          "balance_scale",
+          "mfeat_zernike",
+          "ionosphere",
+          "vertebra_column"
+        ]
+      }
+    },
+    "notes": {
+      "ceiling_or_floor": {
+        "banknote_authentication": "near ceiling: every external model family reaches 99.9 to 100% accuracy",
+        "climate_model_simulation_crashes": "majority class 91.5% (494 of 540 rows)",
+        "hcv_egyptian_patients": "no external evidence; excluded from the Spearman correlation"
+      },
+      "headroom": "stratum H was selected for at least 5 points of external headroom above tuned kNN, so a stratum difference does not separate metric quality from headroom",
+      "low_power": "ten datasets, four against six: the exact null distribution has 210 values, the smallest attainable p is 1/210, and p <= 0.05 needs the observed statistic among the ten largest; a dataset-level test this small has low power, so a non-significant result is not evidence that the strata do not differ"
+    },
+    "primary_family": {
+      "alpha": 0.05,
+      "contrast": "arrowflow_full_knn_vs_arrowflow_knn_untrained",
+      "definition": "per dataset, arrowflow_full_knn minus arrowflow_knn_untrained accuracy (the training effect)",
+      "interval": "fitting seeds averaged within each outer fold; corrected resampled t over the outer folds (evaluation.paired_corrected_interval, q = test_train_ratio = 0.25, 95%, df = outer folds - 1 = 14); two-sided p",
+      "model_a": "arrowflow_full_knn",
+      "model_b": "arrowflow_knn_untrained",
+      "multiplicity": "Holm across the 10 datasets (evaluation.holm_adjust)",
+      "size": 10
+    },
+    "requires_both_batches_complete": true,
+    "secondary_family": {
+      "alpha": 0.05,
+      "contrast": "arrowflow_full_knn_vs_input_footrule_knn",
+      "definition": "per dataset, arrowflow_full_knn minus input_footrule_knn accuracy",
+      "interval": "fitting seeds averaged within each outer fold; corrected resampled t over the outer folds (evaluation.paired_corrected_interval, q = test_train_ratio = 0.25, 95%, df = outer folds - 1 = 14); two-sided p",
+      "model_a": "arrowflow_full_knn",
+      "model_b": "input_footrule_knn",
+      "multiplicity": "Holm across the 10 datasets, adjusted separately from the primary family",
+      "size": 10
+    },
+    "spearman": {
+      "datasets": [
+        "balance_scale",
+        "mfeat_zernike",
+        "ionosphere",
+        "vertebra_column",
+        "diabetes",
+        "banknote_authentication",
+        "qsar_biodeg",
+        "steel_plates_fault",
+        "climate_model_simulation_crashes"
+      ],
+      "effect": "the primary family mean_difference of each dataset",
+      "excluded": [
+        "hcv_egyptian_patients"
+      ],
+      "gap": "panel external_gap.points (frozen before any run)",
+      "p_value": "exact over all 362880 permutations of the effects against the fixed gaps: one-sided in the direction of the hypothesis (rho at least the observed) and two-sided (|rho| at least |observed|); a value within 1e-12 of the observed counts as at least the observed",
+      "rho": "Pearson correlation of the average ranks of the gaps and of the effects (ties share their average rank)",
+      "status": "secondary; descriptive"
+    },
+    "status": "prespecified before any outer score on these datasets exists; computed only by compare_newdata analyse, which refuses unless both batch runs are complete"
+  },
+  "augmentation": {
+    "max_swaps": 2,
+    "n_augmentations": 1,
+    "rule": "adaptive_from_training_partition: n_features<=30 and n_train>=150"
+  },
+  "batch": 2,
+  "batch_projection": {
+    "batches": {
+      "1": [
+        "balance_scale",
+        "ionosphere",
+        "diabetes",
+        "banknote_authentication",
+        "qsar_biodeg"
+      ],
+      "2": [
+        "mfeat_zernike",
+        "vertebra_column",
+        "steel_plates_fault",
+        "climate_model_simulation_crashes",
+        "hcv_egyptian_patients"
+      ]
+    },
+    "calibration_factors": {
+      "arrowflow_full_knn": {
+        "max": 1.5970334667893344,
+        "pooled": 1.409211135243505
+      },
+      "arrowflow_knn_untrained": {
+        "max": 1.311992244882457,
+        "pooled": 0.7126080008098654
+      },
+      "dummy": {
+        "max": 0.17098602376732105,
+        "pooled": 0.14843753252336903
+      },
+      "gradient_boosting": {
+        "max": 1.7674768449818572,
+        "pooled": 1.3853768079997215
+      },
+      "input_footrule_knn": {
+        "max": 1.6166438508663716,
+        "pooled": 0.61432546173492
+      },
+      "mlp": {
+        "max": 2.170359002383683,
+        "pooled": 2.0502793274621864
+      },
+      "numeric_knn": {
+        "max": 0.8714577086482292,
+        "pooled": 0.49706085412182144
+      },
+      "random_forest": {
+        "max": 1.6204396046527907,
+        "pooled": 1.2976839910265852
+      },
+      "svc_rbf": {
+        "max": 0.6853567355615126,
+        "pooled": 0.6698471993948194
+      }
+    },
+    "cap_hours": 9,
+    "decision": "calibrated central simulated makespan of each batch at 16 workers",
+    "decision_hours": {
+      "1": 8.990821613535386,
+      "2": 8.898950638873274
+    },
+    "harness_max_based_hours": {
+      "1": 10.499901014910886,
+      "2": 10.499901014910886
+    },
+    "per_batch": {
+      "1": {
+        "central": {
+          "serial_hours": 129.90274629309758,
+          "serial_over_workers_hours": 8.118921643318599,
+          "simulated_makespan_hours": 8.990821613535386
+        },
+        "upper": {
+          "serial_hours": 183.6119059446341,
+          "serial_over_workers_hours": 11.47574412153963,
+          "simulated_makespan_hours": 12.738311900496527
+        }
+      },
+      "2": {
+        "central": {
+          "serial_hours": 130.34666979029063,
+          "serial_over_workers_hours": 8.146666861893165,
+          "simulated_makespan_hours": 8.898950638873274
+        },
+        "upper": {
+          "serial_hours": 173.18615349643903,
+          "serial_over_workers_hours": 10.82413459352744,
+          "simulated_makespan_hours": 11.922187039468772
+        }
+      }
+    },
+    "per_dataset": {
+      "balance_scale": {
+        "arrowflow_job_minutes": {
+          "central": 59.772171144193884,
+          "upper": 86.10691563202928
+        },
+        "basis": "research estimate re-anchored (ArrowFlow-kNN); slowest piloted dataset (other models)",
+        "central_serial_hours": 23.097608253124783,
+        "upper_serial_hours": 32.568904265159325
+      },
+      "banknote_authentication": {
+        "arrowflow_job_minutes": {
+          "central": 74.44896171762163,
+          "upper": 107.25188906211835
+        },
+        "basis": "research estimate re-anchored (ArrowFlow-kNN); slowest piloted dataset (other models)",
+        "central_serial_hours": 26.766805896481713,
+        "upper_serial_hours": 37.85514762268159
+      },
+      "climate_model_simulation_crashes": {
+        "arrowflow_job_minutes": {
+          "central": 65.01388206327522,
+          "upper": 93.65869185706109
+        },
+        "basis": "research estimate re-anchored (ArrowFlow-kNN); slowest piloted dataset (other models)",
+        "central_serial_hours": 24.408035982895115,
+        "upper_serial_hours": 34.456848321417276
+      },
+      "diabetes": {
+        "arrowflow_job_minutes": {
+          "central": 59.772171144193884,
+          "upper": 86.10691563202928
+        },
+        "basis": "research estimate re-anchored (ArrowFlow-kNN); slowest piloted dataset (other models)",
+        "central_serial_hours": 23.097608253124783,
+        "upper_serial_hours": 32.568904265159325
+      },
+      "hcv_egyptian_patients": {
+        "arrowflow_job_minutes": {
+          "central": 81.78735700433549,
+          "upper": 117.82437577716289
+        },
+        "basis": "research estimate re-anchored (ArrowFlow-kNN); slowest piloted dataset (other models)",
+        "central_serial_hours": 28.60140471816018,
+        "upper_serial_hours": 40.498269301442726
+      },
+      "ionosphere": {
+        "arrowflow_job_minutes": {
+          "central": 69.20725079854029,
+          "upper": 99.70011283708655
+        },
+        "basis": "research estimate re-anchored (ArrowFlow-kNN); slowest piloted dataset (other models)",
+        "central_serial_hours": 25.456378166711378,
+        "upper_serial_hours": 35.96720356642364
+      },
+      "mfeat_zernike": {
+        "arrowflow_job_minutes": {
+          "central": 100.39252050273154,
+          "upper": 113.77080458443902
+        },
+        "basis": "pilot",
+        "central_serial_hours": 33.252695592759196,
+        "upper_serial_hours": 39.48487650326176
+      },
+      "qsar_biodeg": {
+        "arrowflow_job_minutes": {
+          "central": 93.31912102631442,
+          "upper": 134.43828347223285
+        },
+        "basis": "research estimate re-anchored (ArrowFlow-kNN); slowest piloted dataset (other models)",
+        "central_serial_hours": 31.484345723654915,
+        "upper_serial_hours": 44.65174622521022
+      },
+      "steel_plates_fault": {
+        "arrowflow_job_minutes": {
+          "central": 90.17409447486563,
+          "upper": 129.90721773721378
+        },
+        "basis": "research estimate re-anchored (ArrowFlow-kNN); slowest piloted dataset (other models)",
+        "central_serial_hours": 30.698089085792716,
+        "upper_serial_hours": 43.51897979145546
+      },
+      "vertebra_column": {
+        "arrowflow_job_minutes": {
+          "central": 52.48996399243958,
+          "upper": 59.48370453361206
+        },
+        "basis": "pilot",
+        "central_serial_hours": 13.386444410683426,
+        "upper_serial_hours": 15.227179578861808
+      }
+    },
+    "projection_sha256": "697dd20d6ce944f760d42d8b8cf894b5ee18b149bae7ec1e1894aeebaebbae6a",
+    "research_anchor": {
+      "central": 1.048342183816267,
+      "upper": 1.5103552450063618
+    },
+    "simulation_check": {
+      "jobs": 735,
+      "run": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/runs/2026-09-12-bridge-knn",
+      "serial_hours": 119.3006859489277,
+      "simulated_makespan_hours": 7.980251601462411
+    },
+    "stages": {
+      "code_revision": "e1155437dad091776d9e07deff9c10f829cadee8",
+      "ended_utc": "2026-09-13T15:43:48Z",
+      "pilot": {
+        "datasets": [
+          "mfeat_zernike",
+          "vertebra_column"
+        ],
+        "failed": [],
+        "fits": 56,
+        "peak_process_rss_kib": 1088852,
+        "slowest_fit_seconds_by_model": {
+          "arrowflow_full_knn": 89.31503956000961,
+          "arrowflow_knn_untrained": 2.782951918998151,
+          "dummy": 0.0016067280084826052,
+          "gradient_boosting": 14.304892262996873,
+          "input_footrule_knn": 2.203852584003471,
+          "mlp": 0.4171927940042224,
+          "numeric_knn": 0.03131774999201298,
+          "projected_numeric_knn": 2.8100736549968133,
+          "random_forest": 2.4874419910047436,
+          "svc_rbf": 0.16512290699756704
+        }
+      },
+      "prepare": {
+        "datasets": [
+          "balance_scale",
+          "banknote_authentication",
+          "climate_model_simulation_crashes",
+          "diabetes",
+          "hcv_egyptian_patients",
+          "ionosphere",
+          "mfeat_zernike",
+          "qsar_biodeg",
+          "steel_plates_fault",
+          "vertebra_column"
+        ],
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/task-23b-stages/prepare"
+      },
+      "real_data_fit_check": {
+        "datasets": [
+          "balance_scale",
+          "mfeat_zernike",
+          "ionosphere",
+          "vertebra_column",
+          "diabetes",
+          "banknote_authentication",
+          "qsar_biodeg",
+          "steel_plates_fault",
+          "climate_model_simulation_crashes",
+          "hcv_egyptian_patients"
+        ],
+        "failed": [],
+        "fits": 100
+      },
+      "smoke": {
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/task-23b-stages/smoke",
+        "outputs": [
+          "newdata_comparators.csv",
+          "newdata_duplicates.csv",
+          "newdata_families.csv",
+          "newdata_ladder.csv"
+        ],
+        "purpose": "synthetic_smoke_only_not_paper_evidence"
+      },
+      "stage_times_utc": {
+        "draft": "15:36:03Z",
+        "pilot": "15:37:54Z",
+        "prepare": "15:36:05Z",
+        "project": "15:43:44Z",
+        "smoke": "15:36:06Z"
+      },
+      "started_utc": "2026-09-13T15:36:03Z",
+      "summary": "stage draft, prepare, smoke and pilot at e1155437d (2026-09-13T15:36:03Z to 2026-09-13T15:43:48Z): prepare 15:36:05Z of all 10 datasets with every pin held (OpenML identity, shape, missing cells, labels, class counts, sha256 of X, y and feature names, harness fingerprint, splits hash); synthetic two-batch smoke 15:36:06Z ok (run_revision worker and reporting, compare_newdata analyse); real-data fit check of every model at its first candidate on the first outer training partition of all ten datasets (100 fits, 0 failed); training-only pilot 15:37:54Z on mfeat_zernike and vertebra_column (all ten models at three candidates each, 56 fits, 0 failed; slowest fit 89.3 s, arrowflow_full_knn on mfeat_zernike)"
+    },
+    "workers": 16
+  },
+  "batches": {
+    "1": [
+      "balance_scale",
+      "ionosphere",
+      "diabetes",
+      "banknote_authentication",
+      "qsar_biodeg"
+    ],
+    "2": [
+      "mfeat_zernike",
+      "vertebra_column",
+      "steel_plates_fault",
+      "climate_model_simulation_crashes",
+      "hcv_egyptian_patients"
+    ]
+  },
+  "candidate_budget": 24,
+  "candidate_seed": 41071,
+  "candidate_tie_rule": "lowest_canonical_config_id",
+  "confidence": 0.95,
+  "datasets": [
+    "mfeat_zernike",
+    "vertebra_column",
+    "steel_plates_fault",
+    "climate_model_simulation_crashes",
+    "hcv_egyptian_patients"
+  ],
+  "design_source": {
+    "identical_to_template": "aggregation_integrity, augmentation, candidate_budget, candidate_seed, candidate_tie_rule, confidence, device, failure_policy, fit_seeds, freeze_requirement, full_method, historical_results, inner_folds, internal_validation_ratio, numeric_threads_per_worker, outer_folds, outer_repeats, paired_interval, parallelism, report_metrics, selection_metric, split_seed, stochastic_finalists, test_train_ratio",
+    "model_templates": "models.arrowflow_knn_untrained and models.input_footrule_knn as knn_training.json declares them, models.projected_numeric_knn as knn_projected.json declares it (sha256 in model_template_sha256)",
+    "removed_from_template": {
+      "knn_readout": "its readout declaration moved to models.arrowflow_full_knn; its reference to the bridge run does not apply, because every model is fitted afresh on these datasets",
+      "secondary_studies": "not applicable to this family"
+    },
+    "template": "protocols/2026-09-12/bridge_knn.json (sha256 in source_template_sha256)"
+  },
+  "device": "cpu",
+  "failure_policy": "log_all_failures; incomplete_candidates_ineligible; failed_outer_fits_and_terminal_selection_failures_retained; no_adaptive_stopping",
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "freeze_requirement": "complete_model_registry_and_candidates_reviewed; attainable_training_only_pilot; leakage_checks_pass; freeze_before_outer_scores",
+  "frozen": true,
+  "frozen_at_utc": "2026-09-13T15:47:21.573693+00:00",
+  "full_method": {
+    "adaptive_encoding_defaults": {
+      "n_features<=10": {
+        "augment": true,
+        "degree": 3,
+        "embed_dim": 16
+      },
+      "n_features<=30": {
+        "augment": true,
+        "degree": 2,
+        "embed_dim": 32
+      },
+      "n_features>30": {
+        "augment": false,
+        "degree": 1,
+        "embed_dim": 64
+      }
+    },
+    "aggregation": "majority",
+    "candidate_grid": {
+      "degree_offset": [
+        0,
+        -1
+      ],
+      "embed_scale": [
+        1,
+        2
+      ],
+      "learning_rate": [
+        0.1,
+        0.2
+      ],
+      "widths": [
+        [
+          128
+        ],
+        [
+          64,
+          128
+        ]
+      ]
+    },
+    "checkpoint": "validation_ratio_0.1_inside_every_fit",
+    "fixed": {
+      "batch_size": 32,
+      "iterations": 200,
+      "validation_ratio": 0.1
+    },
+    "model_id": "arrowflow_full",
+    "n_views": 7,
+    "resolution": "embed_dim=clip(round(base*embed_scale),8,128); degree=max(1,base+degree_offset) lowered while comb(n_features+degree,degree)>10000; augment=base_augment and n_train>=150; resolved at fit time from the training partition only",
+    "view_strategy_cycle": [
+      "target_aware",
+      "random",
+      "calibrated"
+    ]
+  },
+  "historical_results": "exploratory_only",
+  "inner_folds": 3,
+  "internal_validation_ratio": 0.1,
+  "model_order": [
+    "arrowflow_full_knn",
+    "arrowflow_knn_untrained",
+    "input_footrule_knn",
+    "projected_numeric_knn",
+    "dummy",
+    "svc_rbf",
+    "random_forest",
+    "mlp",
+    "numeric_knn",
+    "gradient_boosting"
+  ],
+  "model_template_sha256": {
+    "knn_projected.json": "a7e24a3b43393caf37ab070c637f3262c687e51a0a4c837fd722279665745cd7",
+    "knn_training.json": "9de4bbaacf3197b8e050a37970f6fdd035b34ec804459ca2c0f98956af503803"
+  },
+  "models": {
+    "arrowflow_full_knn": {
+      "candidate_source": "bridge.bridge_candidates (full_method.candidate_grid)",
+      "candidates": 16,
+      "estimator": "experiments.make_revision.multiview:MultiViewArrowFlowKNN via bridge.AdaptiveMultiViewKNN",
+      "network": "seven views trained with full_method.fixed (checkpoint validation_ratio 0.1) and the augmentation rule; each view reseeds from derive_seed(fit seed, \"view\", v)",
+      "readout": {
+        "aggregation": "majority",
+        "grid": {
+          "n_neighbors": [
+            1,
+            3,
+            5,
+            11,
+            21
+          ],
+          "weights": [
+            "uniform",
+            "distance"
+          ]
+        },
+        "representation": "inverse positions of the final hidden ranking of each view",
+        "selection": "mean accuracy over StratifiedKFold(3, shuffle=True, random_state=derive_seed(view_seed, \"readout_selection\")) splits of the training partition inside every fit; ties lowest_canonical_config_id; refit on the full training representation",
+        "selection_folds": 3
+      },
+      "registry": "bridge.bridge_knn_registry",
+      "stochastic": true,
+      "template": "bridge_knn.json knn_readout without its reference block"
+    },
+    "arrowflow_knn_untrained": {
+      "candidate_keys": [
+        "n_views",
+        "strategy",
+        "aggregation",
+        "widths",
+        "embed_scale",
+        "degree_offset"
+      ],
+      "candidates": 8,
+      "estimator": "experiments.make_revision.knn_controls:UntrainedMultiViewArrowFlowKNN via AdaptiveUntrainedKNN",
+      "stochastic": true,
+      "template": "knn_training.json training_controls.models.arrowflow_knn_untrained"
+    },
+    "dummy": {
+      "candidates": 1,
+      "estimator": "sklearn DummyClassifier(strategy=\"most_frequent\") (run_revision.dummy_factory)",
+      "stochastic": false,
+      "template": "bridge_knn.json registry"
+    },
+    "gradient_boosting": {
+      "candidates": 24,
+      "estimator": "comparisons.conventional_factory (NumericImputer, StandardScaler for svc_rbf, mlp and numeric_knn, classifier)",
+      "grid": {
+        "learning_rate": [
+          0.03,
+          0.1
+        ],
+        "max_depth": [
+          1,
+          2,
+          3
+        ],
+        "min_samples_leaf": [
+          1,
+          5
+        ],
+        "n_estimators": [
+          100,
+          200
+        ]
+      },
+      "stochastic": true,
+      "template": "bridge_knn.json registry (comparisons.conventional_registry)"
+    },
+    "input_footrule_knn": {
+      "candidate_keys": [
+        "n_views",
+        "strategy",
+        "aggregation",
+        "embed_scale",
+        "degree_offset"
+      ],
+      "candidates": 4,
+      "estimator": "experiments.make_revision.knn_controls:MultiViewInputKNN via AdaptiveInputKNN",
+      "stochastic": true,
+      "template": "knn_training.json training_controls.models.input_footrule_knn"
+    },
+    "mlp": {
+      "candidates": 24,
+      "estimator": "comparisons.conventional_factory (NumericImputer, StandardScaler for svc_rbf, mlp and numeric_knn, classifier)",
+      "grid": {
+        "alpha": [
+          0.0001,
+          0.01
+        ],
+        "hidden_layer_sizes": [
+          [
+            64
+          ],
+          [
+            128
+          ],
+          [
+            64,
+            32
+          ]
+        ],
+        "learning_rate_init": [
+          0.001,
+          0.01
+        ],
+        "max_iter": [
+          200,
+          400
+        ]
+      },
+      "stochastic": true,
+      "template": "bridge_knn.json registry (comparisons.conventional_registry)"
+    },
+    "numeric_knn": {
+      "candidates": 20,
+      "estimator": "comparisons.conventional_factory (NumericImputer, StandardScaler for svc_rbf, mlp and numeric_knn, classifier)",
+      "grid": {
+        "n_neighbors": [
+          1,
+          3,
+          5,
+          11,
+          21
+        ],
+        "p": [
+          1,
+          2
+        ],
+        "weights": [
+          "uniform",
+          "distance"
+        ]
+      },
+      "stochastic": false,
+      "template": "bridge_knn.json registry (comparisons.conventional_registry)"
+    },
+    "projected_numeric_knn": {
+      "candidate_keys": [
+        "n_views",
+        "strategy",
+        "aggregation",
+        "embed_scale",
+        "degree_offset"
+      ],
+      "candidates": 4,
+      "estimator": "experiments.make_revision.projected_knn:MultiViewProjectedKNN via AdaptiveProjectedKNN",
+      "readout_grid": {
+        "n_neighbors": [
+          1,
+          3,
+          5,
+          11,
+          21
+        ],
+        "p": [
+          1,
+          2
+        ],
+        "weights": [
+          "uniform",
+          "distance"
+        ]
+      },
+      "stochastic": true,
+      "template": "knn_projected.json projected_control.model"
+    },
+    "random_forest": {
+      "candidates": 24,
+      "estimator": "comparisons.conventional_factory (NumericImputer, StandardScaler for svc_rbf, mlp and numeric_knn, classifier)",
+      "grid": {
+        "max_depth": [
+          null,
+          10
+        ],
+        "max_features": [
+          "sqrt",
+          0.5,
+          1.0
+        ],
+        "min_samples_leaf": [
+          1,
+          2,
+          5
+        ],
+        "n_estimators": [
+          100,
+          300
+        ]
+      },
+      "stochastic": true,
+      "template": "bridge_knn.json registry (comparisons.conventional_registry)"
+    },
+    "svc_rbf": {
+      "candidates": 16,
+      "estimator": "comparisons.conventional_factory (NumericImputer, StandardScaler for svc_rbf, mlp and numeric_knn, classifier)",
+      "grid": {
+        "C": [
+          0.1,
+          1,
+          10,
+          100
+        ],
+        "gamma": [
+          "scale",
+          0.01,
+          0.1,
+          1
+        ]
+      },
+      "stochastic": false,
+      "template": "bridge_knn.json registry (comparisons.conventional_registry)"
+    }
+  },
+  "multiplicity": "Holm_across_the_10_datasets_within_each_family; the primary and secondary families are adjusted separately",
+  "numeric_threads_per_worker": 1,
+  "outer_folds": 5,
+  "outer_repeats": 3,
+  "paired_interval": "seed_average_within_fold_then_corrected_resampled_t",
+  "panel": [
+    {
+      "class_counts": [
+        49,
+        288,
+        288
+      ],
+      "data_id": 11,
+      "dataset_hash": "498096feb1f6776ec20ae7b0a57cce39f12ad06c0afb1f62243c825423417e5f",
+      "default_target": "class",
+      "duplicates": {
+        "duplicate_groups": 0,
+        "duplicate_rows": 0,
+        "label_conflicting_groups": 0
+      },
+      "external_gap": {
+        "points": 9.5,
+        "sources": {
+          "fernandez_delgado_2014": 9.1,
+          "openml_task_11": 9.9
+        }
+      },
+      "feature_names_sha256": "dd07babe6ad083770e5ea00c9e95e2885ff09411c345ceb3bde9ae3b31079cf8",
+      "file_id": "11",
+      "ignore_attributes": null,
+      "label_map": [
+        "B",
+        "L",
+        "R"
+      ],
+      "md5_checksum": "76938608d472f620c170cef9c8c1fa65",
+      "n_infinite": 0,
+      "n_missing": 0,
+      "name": "balance_scale",
+      "openml_name": "balance-scale",
+      "sha256_X": "d8d20b9bd4e5be6bff5a3ca6a6d81d4fb061084808008d5eac5abd31f8015cb4",
+      "sha256_y": "3b6759b01b84ce5b3470db3c17458cc2b2e54fe51d7daca8f2274c4f39a659c7",
+      "shape": [
+        625,
+        4
+      ],
+      "splits_hash": "989fbe54fa5292b3",
+      "stratum": "H",
+      "version": 1
+    },
+    {
+      "class_counts": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "data_id": 22,
+      "dataset_hash": "5160d61c6e084dec230157fd910afb97e8d1fd0c7f4611f025040e2f0cd472d1",
+      "default_target": "class",
+      "duplicates": {
+        "duplicate_groups": 6,
+        "duplicate_rows": 6,
+        "label_conflicting_groups": 0
+      },
+      "external_gap": {
+        "points": 8.7,
+        "sources": {
+          "openml_task_22": 8.7
+        }
+      },
+      "feature_names_sha256": "f9194d17c68d63f056514d1f9187a24bfc39d570e718c36e6888744d0b913b47",
+      "file_id": "22",
+      "ignore_attributes": null,
+      "label_map": [
+        "1",
+        "10",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "md5_checksum": "590fe11f6c0eeacd456609f22c4eaf6d",
+      "n_infinite": 0,
+      "n_missing": 0,
+      "name": "mfeat_zernike",
+      "openml_name": "mfeat-zernike",
+      "sha256_X": "50fabead84e7c390f4f4e06957cb5c0f7fcc99e17b44fc6df9f59b0f7c300d66",
+      "sha256_y": "c67eb11583409b87ed18ed985fe8a480d983f641448c500226dfab7e93a1b952",
+      "shape": [
+        2000,
+        47
+      ],
+      "splits_hash": "3d403360286afa26",
+      "stratum": "H",
+      "version": 1
+    },
+    {
+      "class_counts": [
+        126,
+        225
+      ],
+      "data_id": 59,
+      "dataset_hash": "dda052743b36e2698a87124a36c26b9c2c9ea58bcce6fa9fda1d3e5def492be5",
+      "default_target": "class",
+      "duplicates": {
+        "duplicate_groups": 1,
+        "duplicate_rows": 1,
+        "label_conflicting_groups": 0
+      },
+      "external_gap": {
+        "points": 7.9,
+        "sources": {
+          "fernandez_delgado_2014": 9.5,
+          "openml_task_57": 6.3
+        }
+      },
+      "feature_names_sha256": "6722aa2893c657c079f3ef90a14cb988a2383cb78c48cd5f9df1fce7e43327c5",
+      "file_id": "59",
+      "ignore_attributes": null,
+      "label_map": [
+        "b",
+        "g"
+      ],
+      "md5_checksum": "23dd3c8b5693e2848901fd1a0248ef42",
+      "n_infinite": 0,
+      "n_missing": 0,
+      "name": "ionosphere",
+      "openml_name": "ionosphere",
+      "sha256_X": "69468e18f3a97d2ed2709a0ad1fb4263f1dbd16f658b15500513ef06ccd7af71",
+      "sha256_y": "a62d1716a49fbef04a2c3de4da87f36baf1ca894776175eeeb715a3395f31c2f",
+      "shape": [
+        351,
+        34
+      ],
+      "splits_hash": "231ab272ec6a79b5",
+      "stratum": "H",
+      "version": 1
+    },
+    {
+      "class_counts": [
+        60,
+        100,
+        150
+      ],
+      "data_id": 1523,
+      "dataset_hash": "3770457475ec7d53e2368490358f146fdea80804b34305b33cd0a795e153bb4a",
+      "default_target": "Class",
+      "duplicates": {
+        "duplicate_groups": 0,
+        "duplicate_rows": 0,
+        "label_conflicting_groups": 0
+      },
+      "external_gap": {
+        "points": 7.25,
+        "sources": {
+          "fernandez_delgado_2014": 7.1,
+          "openml_task_9939": 7.4
+        }
+      },
+      "feature_names_sha256": "eddf50c45b00547572581b2e5aff4c2fb3020ae18b0cfdb6e6c47a5ae5cfe491",
+      "file_id": "1593719",
+      "ignore_attributes": null,
+      "label_map": [
+        "1",
+        "2",
+        "3"
+      ],
+      "md5_checksum": "78913b1453c43b7b9e0623b0d295b1cb",
+      "n_infinite": 0,
+      "n_missing": 0,
+      "name": "vertebra_column",
+      "openml_name": "vertebra-column",
+      "sha256_X": "a3ac0ae0d50c6b916be247218266a02a886acd1ab4d4930660a7d06ca6bf44ec",
+      "sha256_y": "0cbe50613e61df7cc4b00e7e54f4f5e05f77d4a40931e6a729c8981a0723835d",
+      "shape": [
+        310,
+        6
+      ],
+      "splits_hash": "d1c530e96235c8c2",
+      "stratum": "H",
+      "version": 1
+    },
+    {
+      "class_counts": [
+        500,
+        268
+      ],
+      "data_id": 37,
+      "dataset_hash": "26f50df6731663a5ad1f8c2a7181668f7e727637323927012c079a3f7b289a96",
+      "default_target": "class",
+      "duplicates": {
+        "duplicate_groups": 0,
+        "duplicate_rows": 0,
+        "label_conflicting_groups": 0
+      },
+      "external_gap": {
+        "points": 1.95,
+        "sources": {
+          "fernandez_delgado_2014": 0.4,
+          "openml_task_37": 3.5
+        }
+      },
+      "feature_names_sha256": "3c97dbf919f1287d51e0899eaafca323df36f9eaf1a9798af92e6a8e475735ac",
+      "file_id": "37",
+      "ignore_attributes": null,
+      "label_map": [
+        "tested_negative",
+        "tested_positive"
+      ],
+      "md5_checksum": "3cbaa3e54586aa88cf6aacb4033e4470",
+      "n_infinite": 0,
+      "n_missing": 0,
+      "name": "diabetes",
+      "openml_name": "diabetes",
+      "sha256_X": "db6367d8ed67a9f06f9276bd075617c0240bd36838c34d7b921f6b21df60036c",
+      "sha256_y": "4dc5a2259526cd11dde0ec7308b7c2f430574be817132ccaf98aa5390a9e6eb6",
+      "shape": [
+        768,
+        8
+      ],
+      "splits_hash": "c791ebf248362e45",
+      "stratum": "C",
+      "version": 1
+    },
+    {
+      "class_counts": [
+        762,
+        610
+      ],
+      "data_id": 1462,
+      "dataset_hash": "50f2701a1e1215b7ba70de3b0bb2adaaf03ac37aaec76a8f76252622ee389f7b",
+      "default_target": "Class",
+      "duplicates": {
+        "duplicate_groups": 11,
+        "duplicate_rows": 24,
+        "label_conflicting_groups": 0
+      },
+      "external_gap": {
+        "points": 0.1,
+        "sources": {
+          "openml_task_10093": 0.1
+        }
+      },
+      "feature_names_sha256": "b717eda3f7cc66dd82852dd00bb3eae70c3b39ecc454a7479c22f6abc3eb9984",
+      "file_id": "1586223",
+      "ignore_attributes": null,
+      "label_map": [
+        "1",
+        "2"
+      ],
+      "md5_checksum": "baa2dc5b745775a943ebeb9c276401f8",
+      "n_infinite": 0,
+      "n_missing": 0,
+      "name": "banknote_authentication",
+      "openml_name": "banknote-authentication",
+      "sha256_X": "f153ac742c3ec415cb4b672731908d9902f67c831d45f74941bf8538d8621642",
+      "sha256_y": "e6fb532213c8ead8829f17bb8bf24425040a3392b612e5e5f68983c174cb99ac",
+      "shape": [
+        1372,
+        4
+      ],
+      "splits_hash": "7a0628abd290e42c",
+      "stratum": "C",
+      "version": 1
+    },
+    {
+      "class_counts": [
+        699,
+        356
+      ],
+      "data_id": 1494,
+      "dataset_hash": "d98d99ce1cb59785a3376398c16d9db78635f77cb6f707856d24dcc07db06c9f",
+      "default_target": "Class",
+      "duplicates": {
+        "duplicate_groups": 3,
+        "duplicate_rows": 3,
+        "label_conflicting_groups": 0
+      },
+      "external_gap": {
+        "points": 2.3,
+        "sources": {
+          "openml_task_9957": 2.3
+        }
+      },
+      "feature_names_sha256": "5e039b594f67268c76ac43add2dc2f53d41fae97bcd5a53ec09a7cd5fc4acf7e",
+      "file_id": "1592286",
+      "ignore_attributes": null,
+      "label_map": [
+        "1",
+        "2"
+      ],
+      "md5_checksum": "a2c189cd65511103fa540d7186155c24",
+      "n_infinite": 0,
+      "n_missing": 0,
+      "name": "qsar_biodeg",
+      "openml_name": "qsar-biodeg",
+      "sha256_X": "584e72d06483246d8ec69bb570035e491182e0144e40dd069e8d9ecda76187d0",
+      "sha256_y": "c9b656957085b059c1caffd2808deb3cabd906a181f6f7d7b18bf2be7b894d02",
+      "shape": [
+        1055,
+        41
+      ],
+      "splits_hash": "9c9cd4a11834c63b",
+      "stratum": "C",
+      "version": 1
+    },
+    {
+      "class_counts": [
+        402,
+        55,
+        391,
+        673,
+        158,
+        72,
+        190
+      ],
+      "data_id": 40982,
+      "dataset_hash": "f4408a76aa4aef6665368c99de713b9f7ba84bfbc0af24d2a458acd0e09ea924",
+      "default_target": "target",
+      "duplicates": {
+        "duplicate_groups": 0,
+        "duplicate_rows": 0,
+        "label_conflicting_groups": 0
+      },
+      "external_gap": {
+        "points": 6.0,
+        "sources": {
+          "fernandez_delgado_2014": 4.6,
+          "openml_task_146817": 7.4
+        }
+      },
+      "feature_names_sha256": "8bd0e3f66a0b19fee8df05634a3434512c47d9d907b051c4961ad6c33c2e6046",
+      "file_id": "18151921",
+      "ignore_attributes": null,
+      "label_map": [
+        "Bumps",
+        "Dirtiness",
+        "K_Scratch",
+        "Other_Faults",
+        "Pastry",
+        "Stains",
+        "Z_Scratch"
+      ],
+      "md5_checksum": "7ccdabeb01749cce9fa3b1d4a702fb8c",
+      "n_infinite": 0,
+      "n_missing": 0,
+      "name": "steel_plates_fault",
+      "openml_name": "steel-plates-fault",
+      "sha256_X": "92e432d6860deb12dd15b6b07ab9767e25b7812595d0745f5916288c19164c68",
+      "sha256_y": "bc4253c02101741b9cebe9329c507745ed71721d89ceedde22c94ebbe78c177c",
+      "shape": [
+        1941,
+        27
+      ],
+      "splits_hash": "56e1c8a731816b1e",
+      "stratum": "C",
+      "version": 3
+    },
+    {
+      "class_counts": [
+        46,
+        494
+      ],
+      "data_id": 40994,
+      "dataset_hash": "6c76b66184fc0e45b09e2b3a27fa5d94a94b77a934811eaa805ac295b56509bd",
+      "default_target": "outcome",
+      "duplicates": {
+        "duplicate_groups": 0,
+        "duplicate_rows": 0,
+        "label_conflicting_groups": 0
+      },
+      "external_gap": {
+        "points": 4.1,
+        "sources": {
+          "openml_task_146819": 4.1
+        }
+      },
+      "feature_names_sha256": "c512fa59dc654b6bcb204b9524bfeb0bebf1cf6be7cdfd3bbe8558c5f2963343",
+      "file_id": "18237248",
+      "ignore_attributes": [
+        "Study",
+        "Run"
+      ],
+      "label_map": [
+        "0",
+        "1"
+      ],
+      "md5_checksum": "f7c55d9a11782a5ff980cee371787edd",
+      "n_infinite": 0,
+      "n_missing": 0,
+      "name": "climate_model_simulation_crashes",
+      "openml_name": "climate-model-simulation-crashes",
+      "sha256_X": "f7f6b2ae9a618cfc6a493cc351cbd5f5cb7ed5a1edab3bda524c0487e8de4e44",
+      "sha256_y": "8f74bf1bf64762681b5cffdec0892a17c663ec69fa2c51afe42bb2f32dc9fe9d",
+      "shape": [
+        540,
+        18
+      ],
+      "splits_hash": "9c9deb85963bf183",
+      "stratum": "C",
+      "version": 4
+    },
+    {
+      "class_counts": [
+        336,
+        332,
+        355,
+        362
+      ],
+      "data_id": 46850,
+      "dataset_hash": "284048565b76499ea5a35ce555bc937b165e1be197d9f520bfe64ddc9d4ebfd5",
+      "default_target": "Baselinehistological_staging",
+      "duplicates": {
+        "duplicate_groups": 0,
+        "duplicate_rows": 0,
+        "label_conflicting_groups": 0
+      },
+      "external_gap": {
+        "points": null,
+        "sources": {}
+      },
+      "feature_names_sha256": "7828d47b92465a3a4a0fd4f2467957920ef19b5878bb968c8d83ec0b9d380ea3",
+      "file_id": "22124413",
+      "ignore_attributes": null,
+      "label_map": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "md5_checksum": "496acf3c6daf0ee7e124dc1802afb14f",
+      "n_infinite": 0,
+      "n_missing": 0,
+      "name": "hcv_egyptian_patients",
+      "openml_name": "hepatitis_c_virus_hcv_for_egyptian_patients",
+      "sha256_X": "0174a199281d484d8ca60dcfae7e192a31c6ff6b951bb904a798cef2686d8335",
+      "sha256_y": "1aec6b85ddbdcc6dbca49d13c6af1313606a2b0b4159dae70e99419a6f3760f2",
+      "shape": [
+        1385,
+        28
+      ],
+      "splits_hash": "c6d05b187035a507",
+      "stratum": "C",
+      "version": 2
+    }
+  ],
+  "parallelism": "spawned_processes_by_outer_fold_and_model",
+  "primary_contrasts": [
+    "arrowflow_full_knn_vs_arrowflow_knn_untrained"
+  ],
+  "primary_family_size": 10,
+  "production_family": "newdata",
+  "protocol_id": "arrowflow-v3-newdata-batch2-1",
+  "registry": "experiments.make_revision.newdata:newdata_registry",
+  "report_metrics": [
+    "accuracy",
+    "error",
+    "balanced_accuracy",
+    "macro_f1"
+  ],
+  "resource_decision": "Task 23B (ruling 2026-09-13, selection frozen): drafted from bridge_knn.json with the identical nested design; stage draft, prepare, smoke and pilot at e1155437d (2026-09-13T15:36:03Z to 2026-09-13T15:43:48Z): prepare 15:36:05Z of all 10 datasets with every pin held (OpenML identity, shape, missing cells, labels, class counts, sha256 of X, y and feature names, harness fingerprint, splits hash); synthetic two-batch smoke 15:36:06Z ok (run_revision worker and reporting, compare_newdata analyse); real-data fit check of every model at its first candidate on the first outer training partition of all ten datasets (100 fits, 0 failed); training-only pilot 15:37:54Z on mfeat_zernike and vertebra_column (all ten models at three candidates each, 56 fits, 0 failed; slowest fit 89.3 s, arrowflow_full_knn on mfeat_zernike); projected at 16 single-thread workers as the calibrated central simulated makespan: batch 1 8.99 h (upper 12.74 h, harness max-based 10.50 h), batch 2 8.90 h (upper 11.92 h, harness max-based 10.50 h); batches balanced by projected serial time; cap 9 h per batch; frozen after the pilot",
+  "secondary_contrasts": [
+    "arrowflow_full_knn_vs_input_footrule_knn"
+  ],
+  "secondary_family_size": 10,
+  "selection_metric": "accuracy",
+  "selection_ruling": "progress.md \"RULING (Task 23B selection frozen)\", recorded 2026-09-13 before any ArrowFlow or comparator fit on these datasets: all ten eligible datasets, reported whatever the result; strata, identity and external gaps from task-23-dataset-selection.md",
+  "source_template_sha256": "6335d8c4a1b16fb4044c3badb1fff1448f4083d4cc89611cd54b276d60057ff1",
+  "split_seed": 27183,
+  "status": "reviewed_and_piloted_before_confirmatory_scoring",
+  "stochastic_finalists": 3,
+  "test_train_ratio": 0.25,
+  "wallclock_cap_hours": 9
+}

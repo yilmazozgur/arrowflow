@@ -1,0 +1,99 @@
+{
+  "architectures": [
+    [
+      64
+    ],
+    [
+      64,
+      32
+    ],
+    [
+      128
+    ]
+  ],
+  "augmentation": false,
+  "batch_size": 32,
+  "datasets": [
+    "iris",
+    "wine",
+    "breast_cancer",
+    "wine_quality",
+    "vehicle",
+    "segment",
+    "digits",
+    "sushi_childhood_east_west_v2"
+  ],
+  "degree": 2,
+  "embed_dim": 32,
+  "encoder_seed": 51047,
+  "failure_policy": "persist_terminal_failed_model_matrix; no_missing_fold_or_seed_inference",
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "frozen": true,
+  "frozen_at_utc": "2026-09-11T14:58:57.903446+00:00",
+  "hdc_dimensions": [
+    1024,
+    10000
+  ],
+  "hdc_selection": "mean_over_inner_folds_and_three_seeds",
+  "inner_folds": 3,
+  "iterations": 200,
+  "last_layer_update": true,
+  "learning_rate": 0.5,
+  "max_workers": 16,
+  "motion_normalization_mult": 0.125,
+  "multistep_lr": true,
+  "native_architectures": [
+    [
+      64
+    ],
+    [
+      64,
+      32
+    ],
+    [
+      230
+    ]
+  ],
+  "outer_folds": 5,
+  "outer_repeats": 3,
+  "p_correct": 0.01,
+  "primary_architecture_index": 1,
+  "primary_datasets": [
+    "iris",
+    "wine",
+    "breast_cancer",
+    "wine_quality",
+    "vehicle",
+    "segment",
+    "digits"
+  ],
+  "primary_tabular_comparisons": 14,
+  "probe_neighbors": [
+    1,
+    3,
+    5,
+    11,
+    21
+  ],
+  "probe_selection": "symmetric_mean_over_trained_untrained_inner_folds_and_three_seeds",
+  "probe_weights": [
+    "uniform",
+    "distance"
+  ],
+  "production_family": "matched",
+  "protocol_id": "arrowflow-make-matched-v1",
+  "ratio_data_backprop": 0.5,
+  "resource_decision": "retain_complete_prespecified_design; at_most_16_single_thread_workers",
+  "selection_metric": "accuracy",
+  "shuffle_seed": 109387,
+  "source_template_sha256": "000c9a444790e8a4e6a83b753937fbf152ea0984e315280c89dd955dedecffbf",
+  "split_seed": 27183,
+  "status": "reviewed_and_piloted_before_confirmatory_scoring",
+  "strategy": "random",
+  "test_train_ratio": 0.25,
+  "view_id": 0
+}

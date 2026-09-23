@@ -1,0 +1,130 @@
+{
+  "adoption_rule": "adopt when the mean inner accuracy improves on at least 5 of 7 datasets and no dataset worsens by more than 1 percentage point; not_applicable when fewer than 5 datasets are scored; otherwise reject",
+  "aggregation": "mean inner-validation accuracy over outer folds x inner folds x fitting seeds of the outer repeat; paired changes are per-unit differences against the reference",
+  "bridge_source": {
+    "directory": "supplied by --bridge-source at pilot and prepare and recorded in manifest.json",
+    "family": "bridge",
+    "model_id": "arrowflow_full",
+    "protocol_file": "experiments/make_revision/protocols/2026-09-12/bridge.json",
+    "protocol_id": "arrowflow-v3-bridge-1",
+    "selected_configuration": "results/<dataset>__arrowflow_full__r<repeat>f<fold>.json selection block, verified through run_bridge.selection_record and resolved through run_bridge.planned_job from the outer training partition; outer-test numbers are not copied into the laboratory"
+  },
+  "datasets": [
+    "iris",
+    "wine",
+    "breast_cancer",
+    "wine_quality",
+    "vehicle",
+    "segment",
+    "digits"
+  ],
+  "evidence": "inner-fold development only; no outer test fold is scored; never manuscript evidence",
+  "families": {
+    "permlvq": {
+      "budget": "iterations, batch_size and learning_rate of the bridge-selected configuration; p_correct and repulsion below; the fitting seed of the unit; prototypes_per_class (prototype_grid) and, for the plurality and borda readouts, the readout size k (readout_k_grid) are selected jointly one level deeper on the selection splits of the inner training partition",
+      "comparison": "knn_hidden mean inner accuracy from readouts_summary.json in the same output directory when present and produced from the same bridge selections",
+      "p_correct": 0.01,
+      "phase": "B2",
+      "prototype_grid": {
+        "prototypes_per_class": [
+          4,
+          8,
+          16
+        ]
+      },
+      "purpose": "inner_fold_laboratory_permlvq",
+      "readout_k_grid": [
+        1,
+        3,
+        5,
+        9
+      ],
+      "reference": "output_rule",
+      "representation": "view-0 encodings (target-aware OrdinalEncoder.transform of the fitted single view) as inverse positions; the permutation LVQ stack replaces the ArrowFlow network on the same encodings, seeds and budget",
+      "repulsion": true,
+      "update": "arrowflow.permlvq.PermutationLVQ: labeled permutation prototypes; footrule distances; a sample is accepted when the nearest prototype has the wrong label or with probability p_correct; accepted samples vote learning_rate for the nearest same-label prototype toward the sample and, with repulsion, for the nearest other-label prototype toward the reversed sample; votes accumulate in ArrowFlow's per-prototype V x V matrix (identity prior of weight prior_weight, 1 unless the variant says otherwise) and every voted-on prototype is reordered after the batch by the aggregation rule",
+      "variant_definitions": {
+        "lvq1_borda_borda": "one layer; Borda aggregation; Borda readout (score k-j for the j-th nearest prototype, lowest label on ties); prototypes_per_class and k selected jointly",
+        "lvq1_borda_nearest": "one layer; Borda aggregation; label of the nearest prototype; prototypes_per_class selected",
+        "lvq1_borda_plurality": "one layer; Borda aggregation (row means, ties by item ID; identity prior weight 1); plurality among the k nearest prototypes (lowest label on ties); prototypes_per_class and k selected jointly",
+        "lvq1_median_plurality": "one layer; footrule-median aggregation (minimum-cost assignment, Dwork et al. 2001) with the identity prior of weight 1 (the literal brief: an item moves only when the vote mass on it exceeds 1); plurality readout; prototypes_per_class and k selected jointly",
+        "lvq1_median_priorlr_plurality": "one layer; footrule-median aggregation with prior_weight = learning_rate (one consistent vote ties the prior, two consistent votes move an item); plurality readout; prototypes_per_class and k selected jointly",
+        "lvq2_borda_plurality": "two layers with the same prototypes_per_class, the second fitted on the first layer's frozen prototype ranking; Borda aggregation; plurality readout; prototypes_per_class and k selected jointly",
+        "output_rule": "reference: the fitted single view predicts with its own output rule"
+      },
+      "variants": [
+        "output_rule",
+        "lvq1_borda_plurality",
+        "lvq1_median_plurality",
+        "lvq2_borda_plurality",
+        "lvq1_borda_nearest",
+        "lvq1_borda_borda",
+        "lvq1_median_priorlr_plurality"
+      ],
+      "wallclock_cap_hours": 2
+    },
+    "readouts": {
+      "knn_grid": {
+        "n_neighbors": [
+          1,
+          3,
+          5,
+          11,
+          21
+        ],
+        "weights": [
+          "uniform",
+          "distance"
+        ]
+      },
+      "kproto_grid": {
+        "k": [
+          2,
+          4,
+          8
+        ]
+      },
+      "phase": "B1",
+      "purpose": "inner_fold_laboratory_readouts",
+      "readout_definitions": {
+        "borda1": "comparisons.BordaClassifier on the hidden positions (one Borda prototype per class); no hyperparameter",
+        "knn_hidden": "comparisons.StableFootruleKNN(input_kind=positions) on the hidden positions; n_neighbors x weights chosen on the selection splits of the inner training partition",
+        "kproto_borda": "arrowflow.readouts.KPrototypeBorda on the hidden positions; k chosen on the selection splits of the inner training partition; k-means seeded by the fitting seed",
+        "output_rule": "reference: the fitted single view predicts with its own output rule"
+      },
+      "readouts": [
+        "output_rule",
+        "knn_hidden",
+        "borda1",
+        "kproto_borda"
+      ],
+      "reference": "output_rule",
+      "representation": "ArrowFlowEstimator.transform_orders: inverse positions of the final hidden ranking",
+      "wallclock_cap_hours": 1
+    }
+  },
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "frozen": false,
+  "inner_folds": 3,
+  "max_workers": 16,
+  "model": "bridge-selected configuration of each outer fold, resolved from the outer training partition (run_bridge.planned_job), n_views=1 (view 0: target-aware encoding), fitted on the inner training partition with the selected validation_ratio",
+  "numeric_threads_per_worker": 1,
+  "outer_repeat": 0,
+  "pilot": "one cell per requested dataset (first outer fold of the outer repeat, inner fold 0, first fit seed) evaluated in a single process under the execution lock; pilot.json records the cell seconds and the projection planned_cells x mean_cell_seconds (serial hours), divided by the worker count for the ideal wall-clock; the readouts and permlvq commands refuse --workers > 1 without a pilot.json of their family in the laboratory root unless --skip-pilot-check is passed",
+  "protocol_id": "arrowflow-v3-devlab-1",
+  "selection": {
+    "folds": 3,
+    "rule": "hyperparameters chosen on up to `folds` stratified splits of the inner training partition (split seed derived from `seed`, the dataset and the folds); mean accuracy, ties by lowest canonical config_id; the scored inner validation fold never enters a selection and no outer test fold is touched",
+    "seed": 20260912
+  },
+  "status": "development laboratory; not frozen; adoption verdicts are read at gate G3 and adopted variants are re-evaluated once on the outer folds under a separate protocol",
+  "verdict_rule": {
+    "minimum_datasets": 5,
+    "minimum_improved": 5,
+    "tolerance_pp": 1.0
+  }
+}

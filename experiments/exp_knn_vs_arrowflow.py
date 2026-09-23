@@ -1,18 +1,14 @@
 """
 kNN vs ArrowFlow on Encoded Permutations
 =========================================
-Tests whether ArrowFlow's learned sort filters improve over a simple kNN
-baseline operating in the SAME permutation space with the SAME encoding.
+Compare sort filters with kNN on the same encoded rankings. Distances use
+Manhattan differences of inverse positions (Spearman footrule).
 
-If ArrowFlow beats kNN-on-encoded, it proves that the sort-layer learning
-(permutation-matrix filter updates) genuinely learns better representations
-than mere nearest-neighbor lookup in permutation distance space.
-
-Uses the best config per dataset from the UCI sweep (embed_dim, pol_deg,
-projection_strategy, n_views) to ensure a fair comparison.
+The configurations below are legacy test-selected candidates, not an unbiased
+comparison protocol. All saved legacy errors predate MAKE v2 and require reruns.
 
 Run:
-    python -m test.experiments.exp_knn_vs_arrowflow
+    python -m experiments.exp_knn_vs_arrowflow
 """
 
 import os
@@ -31,6 +27,7 @@ from arrowflow.benchmark import (
     ArrowFlowConfig, load_dataset, run_arrowflow_experiment,
 )
 from arrowflow.arrowflow import DataGraph
+from arrowflow.ranking import score_order, inverse_positions, impute_numeric
 
 
 # ---------------------------------------------------------------------------
@@ -40,6 +37,7 @@ from arrowflow.arrowflow import DataGraph
 def encode_view(X_tr_poly, y_train, X_te_poly, strategy, embed_dim,
                 lda_ratio, seed):
     """Encode one view using the same pipeline as ArrowFlow."""
+    X_tr_poly, X_te_poly = impute_numeric(X_tr_poly, X_te_poly)
     if strategy == 'target_aware':
         perm_train, perm_test = DataGraph.target_aware_encode(
             X_tr_poly, y_train, X_te_poly,
@@ -56,9 +54,27 @@ def encode_view(X_tr_poly, y_train, X_te_poly, strategy, embed_dim,
         X_tr_s = scaler.fit_transform(X_tr_poly)
         X_te_s = scaler.transform(X_te_poly)
         W = rng.randn(X_tr_s.shape[1], embed_dim)
-        perm_train = np.argsort(X_tr_s @ W, axis=1).astype(float)
-        perm_test = np.argsort(X_te_s @ W, axis=1).astype(float)
+        perm_train = score_order(X_tr_s @ W).astype(float)
+        perm_test = score_order(X_te_s @ W).astype(float)
     return perm_train, perm_test
+
+
+class OrdinalKNN:
+    """Manhattan neighbors in inverse-position space; query API accepts item orders."""
+    def __init__(self, orders, labels, k):
+        self.model = KNeighborsClassifier(n_neighbors=min(k, len(orders)),
+                                          metric='manhattan', n_jobs=1)
+        self.model.fit(inverse_positions(orders), labels)
+
+    def predict(self, orders):
+        return self.model.predict(inverse_positions(orders))
+
+    def kneighbors(self, orders, return_distance=True):
+        return self.model.kneighbors(inverse_positions(orders), return_distance=return_distance)
+
+
+def fit_ordinal_knn(orders, labels, k):
+    return OrdinalKNN(orders, labels, k)
 
 
 def get_strategies(n_views, projection_strategy):
@@ -73,6 +89,7 @@ def knn_multiview_ensemble(X_train, y_train, X_test, y_test, n_classes,
                             embed_dim, pol_deg, projection_strategy,
                             lda_ratio, n_views, k, seed):
     """Multi-view kNN ensemble with majority vote on encoded permutations."""
+    X_train, X_test = impute_numeric(X_train, X_test)
     # Polynomial expansion (shared, same as ArrowFlow)
     if pol_deg > 1:
         poly = PolynomialFeatures(degree=pol_deg)
@@ -91,11 +108,7 @@ def knn_multiview_ensemble(X_train, y_train, X_test, y_test, n_classes,
             X_tr_poly, y_train, X_te_poly, strategies[v],
             embed_dim, lda_ratio, view_seed
         )
-        knn = KNeighborsClassifier(
-            n_neighbors=min(k, len(perm_train) - 1),
-            metric='manhattan', n_jobs=1
-        )
-        knn.fit(perm_train, y_train)
+        knn = fit_ordinal_knn(perm_train, y_train, k)
         all_predictions.append(knn.predict(perm_test))
 
     # Majority vote (same as ArrowFlow ensemble)

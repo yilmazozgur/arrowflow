@@ -1,0 +1,503 @@
+{
+  "checks": {
+    "checkpoint_orders": "every job: the final network equals the copy at its checkpoint, and the core final minimum equals the validation error there",
+    "checkpoint_readout": "every job: the refitted kNN at each view checkpoint equals the view final kNN predictions, their majority equals the job predictions, and identity relabeling changes nothing",
+    "forward_reimplementation": "every job: at the final network, network_forward equals transform_orders_by_depth on training and test rows and predict_orders on test rows",
+    "network_unchanged_by_diagnostics": "every job: each view state_hash() is the same before and after the diagnostics",
+    "reference_predictions": "every job: the 7-view kNN predictions on the outer test rows equal the reference run recorded predictions for seed 8129 exactly, in the sealed test order",
+    "rng_untouched": "every job: every guarded read left the global numpy and Python RNG states unchanged",
+    "snapshot_schedule": "every job: the captured scheduled iterations equal the declared schedule",
+    "training_record": "every job: T updates recorded in order, the network state at the first update equals the copy taken after initialize_orders, validation rows exist, the core running minimum and checkpoint replacements equal those derived from the validation curve",
+    "uninstrumented_state_hash": "first outer fold of every dataset: each view final state_hash() and kNN predictions equal those of MultiViewArrowFlowKNN(**selected, seed=8129).fit on the same rows",
+    "validation_error_recomputed": "every job: the numpy output rule on the core validation samples reproduces the core validation error at every snapshot",
+    "wrapper_removed": "every job: no view network keeps an instance-level update_network"
+  },
+  "dataset_loading": "the reference run prepared data (hash-checked) must equal the ablation copy, its splits the declared nested splits, and in production a fresh load by the reference loader (run_revision.load_dataset or newdata.load_newdata with every pin) must return the same arrays and dataset hash",
+  "datasets": [
+    "iris",
+    "wine",
+    "breast_cancer",
+    "wine_quality",
+    "vehicle",
+    "segment",
+    "digits",
+    "balance_scale",
+    "ionosphere",
+    "diabetes",
+    "banknote_authentication",
+    "qsar_biodeg",
+    "mfeat_zernike",
+    "vertebra_column",
+    "steel_plates_fault",
+    "climate_model_simulation_crashes",
+    "hcv_egyptian_patients"
+  ],
+  "decision_rule": "freeze only if the calibrated projection at 8 single-thread workers is at most 4 h: the simulated first-free-worker makespan of the planned jobs in planned order, each job priced at the reference run realized outer fit and predict seconds of its fold and seed 8129 times the piloted (job minus uninstrumented fit) / uninstrumented fit ratio (its own ratio for a pilot dataset, the largest piloted ratio otherwise), plus the realized seconds once more for the uninstrumented fit of a first fold",
+  "failure_policy": "a failed check fails its job; a failed job cancels the pending jobs and no table is written; failures are never omitted; no adaptive stopping on any value",
+  "fit": "MultiViewArrowFlowKNN at bridge.resolve_selected(sealed config, n_features, n_train) on the outer training rows: for view v, OrdinalEncoder(view_strategy, embed_dim, degree, lda_ratio, derive_seed(8129, \"view\", v)), ArrowFlowEstimator.initialize_orders then train_initialized (the steps of fit_orders), then MultiViewArrowFlowKNN._fit_view_readout (select_knn_readout on the trained hidden ranking); majority vote",
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "frozen": true,
+  "frozen_at_utc": "2026-09-14T16:17:31.133962+00:00",
+  "inner_folds": 3,
+  "instrumentation": "an instance-level update_network wrapper on each view network, installed after initialize_orders and removed after train_initialized; after the core update it only reads the core validation error, min_error_val and whether optimal_model was replaced, and copies index matrices (and adjacency orders at the initial state and at every replacement); every read runs inside a guard that saves and restores the global numpy and Python RNG states and records whether they changed; no evaluation runs during training; every diagnostic evaluation runs after training in pure numpy on the copies (network_forward: cityblock responses, stable ranking by ascending response then filter index, inverse positions)",
+  "max_workers": 16,
+  "measures": {
+    "checkpoint_iteration": "the last iteration whose validation error is strictly below the running minimum before it; 0 means the initial filters were returned; verified by comparing the final network orders and index matrices with the copy taken when the core replaced its checkpoint",
+    "displacement": "per layer (each hidden layer and the output layer), at every snapshot: the mean over filters of footrule(filter_t, filter_0) / floor(n^2 / 2), n the permutation length, and the share of filters that differ; the same against the previous snapshot",
+    "learning_curves": "at every snapshot, on the outer test rows: the view kNN readout accuracy with the view final selected setting refitted on the training rows hidden rankings at that snapshot; the 7-view majority of those at every scheduled iteration and with each view at its checkpoint; the output rule (prototype readout) accuracy; and its accuracy on the outer training rows (descriptive)",
+    "relabel": "at the checkpoint network, R draws; each draw permutes each hidden layer filter IDs uniformly (np.random.RandomState(derive_seed(seed, dataset_id, outer_repeat, outer_fold, model_seed, view, draw, layer)).permutation) and relabels the following layer coordinates consistently, so that without ties every response is unchanged up to the relabeling; the kNN readout is refitted with the same setting on the relabeled training hidden rankings; per view and for the 7-view majority: the share of outer test predictions that change and the accuracy change, mean and extremes over draws",
+    "ties": "on the outer test rows with the initial filters and the checkpoint filters: per hidden layer the share of (row, filter) responses equal to another filter response in the same row and the mean over rows of the number of distinct responses / number of filters; for the output layer the share of rows whose nearest class filter is tied",
+    "validation_curve": "the core validation error of the initial filters (iteration 0) and after every update 1..T, with the running minimum; the validation rows are the first int(val_data_ratio * n) samples the core holds out"
+  },
+  "model_seed": 8129,
+  "n_views": 7,
+  "numeric_threads_per_worker": 1,
+  "outer_folds": 5,
+  "outer_repeats": 3,
+  "outputs": {
+    "job_records": "jobs/<dataset>__r<repeat>f<fold>.json with every measure and check, artifacts/<stem>.npz with the kNN, output-rule and relabeled predictions (sha256 in the record)",
+    "overwrite": "an existing file with different content is never replaced",
+    "summary": "diagnostics_summary.json by the summary stage after re-verifying the run and re-deriving every selection",
+    "tables": "validation_curves.csv, snapshots.csv, checkpoints.csv, ties.csv, relabel.csv and provenance.json, written only after every planned job succeeded and verified (all or none)"
+  },
+  "parallelism": "one spawned single-thread process per dataset and outer fold under the shared execution lock",
+  "pilot": "training-only: the first outer fold of each pilot dataset with the outer test rows replaced by every fourth outer training row (the outer test fold is never touched), every measure and check except the reference predictions; one reproduction probe (run_knn_ablation.reproduction_probe) of the smallest dataset per reference",
+  "pilot_datasets": [
+    "iris",
+    "segment"
+  ],
+  "pilot_projection": {
+    "calibrated": {
+      "longest_job_hours": 0.1438276064983893,
+      "serial_hours": 6.812080486619462,
+      "serial_hours_over_workers": 0.8515100608274327,
+      "simulated_makespan_hours": 0.893506214808194
+    },
+    "calibrated_per_dataset_hours": {
+      "balance_scale": 0.21713167875198067,
+      "banknote_authentication": 0.3496789760731407,
+      "breast_cancer": 0.275710821478235,
+      "climate_model_simulation_crashes": 0.4742734605012541,
+      "diabetes": 0.3811638302234262,
+      "digits": 0.4553438008988896,
+      "hcv_egyptian_patients": 0.6143270914049751,
+      "ionosphere": 0.46582936358107097,
+      "iris": 0.17959964092571545,
+      "mfeat_zernike": 0.6270937282926501,
+      "qsar_biodeg": 0.43050932724205737,
+      "segment": 0.3713926534763141,
+      "steel_plates_fault": 0.439874450306966,
+      "vehicle": 0.3963101890302388,
+      "vertebra_column": 0.352843788151991,
+      "wine": 0.3152265800767712,
+      "wine_quality": 0.4657711062037863
+    },
+    "cap_hours": 4,
+    "decision_hours": 0.893506214808194,
+    "decision_rule": "freeze only if the calibrated projection at 8 single-thread workers is at most 4 h: the simulated first-free-worker makespan of the planned jobs in planned order, each job priced at the reference run realized outer fit and predict seconds of its fold and seed 8129 times the piloted (job minus uninstrumented fit) / uninstrumented fit ratio (its own ratio for a pilot dataset, the largest piloted ratio otherwise), plus the realized seconds once more for the uninstrumented fit of a first fold",
+    "harness": {
+      "hours_at_workers_ideal": 0.5001507742596812,
+      "serial_hours": 4.00120619407745
+    },
+    "pilot_code_revision": "dbcecc56320db1973824f459b89ecb4fd9579c1a",
+    "pilot_ratios": {
+      "iris": 1.0958421598936434,
+      "segment": 1.6381378377354203
+    },
+    "pilot_seconds": {
+      "iris": {
+        "diagnostics_seconds": 0.5672904819948599,
+        "instrumented_fit_seconds": 9.776191048003966,
+        "job_seconds": 19.81498088198714,
+        "uninstrumented_fit_seconds": 9.454424221999943
+      },
+      "segment": {
+        "diagnostics_seconds": 23.559830048005097,
+        "instrumented_fit_seconds": 33.411288959003286,
+        "job_seconds": 91.81333701897529,
+        "uninstrumented_fit_seconds": 34.80232749998686
+      }
+    },
+    "pilot_sha256": "750c91da1afdf4642f2ca20fefe85540bc044a420873243cf1d0c288ad0f701c",
+    "reproduction_probes": {
+      "bridge_knn": {
+        "config_id": "b5b2cf609efe12eb",
+        "dataset_id": "iris",
+        "inner_fold": 0,
+        "model_seed": 8129,
+        "readout_selections_identical": true,
+        "reference_score": 1.0,
+        "refit_score": 1.0,
+        "reproduced": true,
+        "result_file": "results/iris__arrowflow_full_knn__r0f0.json"
+      },
+      "newdata_batch1": {
+        "config_id": "b5b2cf609efe12eb",
+        "dataset_id": "ionosphere",
+        "inner_fold": 0,
+        "model_seed": 8129,
+        "readout_selections_identical": true,
+        "reference_score": 0.925531914893617,
+        "refit_score": 0.925531914893617,
+        "reproduced": true,
+        "result_file": "results/ionosphere__arrowflow_full_knn__r0f0.json"
+      },
+      "newdata_batch2": {
+        "config_id": "b5b2cf609efe12eb",
+        "dataset_id": "vertebra_column",
+        "inner_fold": 0,
+        "model_seed": 8129,
+        "readout_selections_identical": true,
+        "reference_score": 0.7951807228915663,
+        "refit_score": 0.7951807228915663,
+        "reproduced": true,
+        "result_file": "results/vertebra_column__arrowflow_full_knn__r0f0.json"
+      }
+    },
+    "stages": {
+      "code_revision": "dbcecc56320db1973824f459b89ecb4fd9579c1a",
+      "ended_utc": "2026-09-14T16:16:51Z",
+      "pilot": {
+        "checkpoints": {
+          "iris": [
+            2,
+            4,
+            7,
+            35,
+            1,
+            1,
+            7
+          ],
+          "segment": [
+            71,
+            170,
+            146,
+            142,
+            119,
+            88,
+            80
+          ]
+        },
+        "datasets": [
+          "iris",
+          "segment"
+        ],
+        "decision": {
+          "cap_hours": 4,
+          "checks_passed": true,
+          "hours": 0.893506214808194,
+          "probes_reproduced": true,
+          "rule": "freeze only if the calibrated projection at 8 single-thread workers is at most 4 h: the simulated first-free-worker makespan of the planned jobs in planned order, each job priced at the reference run realized outer fit and predict seconds of its fold and seed 8129 times the piloted (job minus uninstrumented fit) / uninstrumented fit ratio (its own ratio for a pilot dataset, the largest piloted ratio otherwise), plus the realized seconds once more for the uninstrumented fit of a first fold",
+          "within_cap": true,
+          "workers": 8
+        },
+        "job_to_fit_ratio": {
+          "iris": 1.0958421598936434,
+          "segment": 1.6381378377354203
+        },
+        "reproduction_probes": {
+          "bridge_knn": {
+            "dataset_id": "iris",
+            "readout_selections_identical": true,
+            "reference_score": 1.0,
+            "refit_score": 1.0,
+            "reproduced": true
+          },
+          "newdata_batch1": {
+            "dataset_id": "ionosphere",
+            "readout_selections_identical": true,
+            "reference_score": 0.925531914893617,
+            "refit_score": 0.925531914893617,
+            "reproduced": true
+          },
+          "newdata_batch2": {
+            "dataset_id": "vertebra_column",
+            "readout_selections_identical": true,
+            "reference_score": 0.7951807228915663,
+            "refit_score": 0.7951807228915663,
+            "reproduced": true
+          }
+        },
+        "timing": {
+          "iris": {
+            "diagnostics_seconds": 0.5672904819948599,
+            "instrumented_fit_seconds": 9.776191048003966,
+            "job_seconds": 19.81498088198714,
+            "uninstrumented_fit_seconds": 9.454424221999943
+          },
+          "segment": {
+            "diagnostics_seconds": 23.559830048005097,
+            "instrumented_fit_seconds": 33.411288959003286,
+            "job_seconds": 91.81333701897529,
+            "uninstrumented_fit_seconds": 34.80232749998686
+          }
+        }
+      },
+      "prepare": {
+        "datasets": [
+          "iris",
+          "wine",
+          "breast_cancer",
+          "wine_quality",
+          "vehicle",
+          "segment",
+          "digits",
+          "balance_scale",
+          "ionosphere",
+          "diabetes",
+          "banknote_authentication",
+          "qsar_biodeg",
+          "mfeat_zernike",
+          "vertebra_column",
+          "steel_plates_fault",
+          "climate_model_simulation_crashes",
+          "hcv_egyptian_patients"
+        ],
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/runs/2026-09-14-training-diagnostics-pilot",
+        "fresh_loads": [
+          "balance_scale",
+          "banknote_authentication",
+          "breast_cancer",
+          "climate_model_simulation_crashes",
+          "diabetes",
+          "digits",
+          "hcv_egyptian_patients",
+          "ionosphere",
+          "iris",
+          "mfeat_zernike",
+          "qsar_biodeg",
+          "segment",
+          "steel_plates_fault",
+          "vehicle",
+          "vertebra_column",
+          "wine",
+          "wine_quality"
+        ],
+        "planned_jobs": 255,
+        "references": {
+          "bridge_knn": {
+            "ablation": "arrowflow-v3-knn-ablation-1",
+            "datasets": [
+              "iris",
+              "wine",
+              "breast_cancer",
+              "wine_quality",
+              "vehicle",
+              "segment",
+              "digits"
+            ],
+            "run": "arrowflow-v3-bridge-knn-1"
+          },
+          "newdata_batch1": {
+            "ablation": "arrowflow-v3-newdata-ablation-1",
+            "datasets": [
+              "balance_scale",
+              "ionosphere",
+              "diabetes",
+              "banknote_authentication",
+              "qsar_biodeg"
+            ],
+            "run": "arrowflow-v3-newdata-batch1-1"
+          },
+          "newdata_batch2": {
+            "ablation": "arrowflow-v3-newdata-ablation-1",
+            "datasets": [
+              "mfeat_zernike",
+              "vertebra_column",
+              "steel_plates_fault",
+              "climate_model_simulation_crashes",
+              "hcv_egyptian_patients"
+            ],
+            "run": "arrowflow-v3-newdata-batch2-1"
+          }
+        },
+        "selected_widths": {
+          "[128]": 185,
+          "[64, 128]": 70
+        }
+      },
+      "smoke": {
+        "check_totals": {
+          "checkpoint_orders": {
+            "passed": 9,
+            "performed": 9
+          },
+          "checkpoint_readout": {
+            "passed": 9,
+            "performed": 9
+          },
+          "forward_reimplementation": {
+            "passed": 9,
+            "performed": 9
+          },
+          "network_unchanged_by_diagnostics": {
+            "passed": 9,
+            "performed": 9
+          },
+          "reference_predictions": {
+            "passed": 9,
+            "performed": 9
+          },
+          "rng_untouched": {
+            "passed": 9,
+            "performed": 9
+          },
+          "snapshot_schedule": {
+            "passed": 9,
+            "performed": 9
+          },
+          "training_record": {
+            "passed": 9,
+            "performed": 9
+          },
+          "uninstrumented_state_hash": {
+            "passed": 3,
+            "performed": 3
+          },
+          "validation_error_recomputed": {
+            "passed": 9,
+            "performed": 9
+          },
+          "wrapper_removed": {
+            "passed": 9,
+            "performed": 9
+          }
+        },
+        "datasets": [
+          "synthetic",
+          "synthetic_b1",
+          "synthetic_b2"
+        ],
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/runs/2026-09-14-training-diagnostics-smoke/diagnostics",
+        "planned_jobs": 9,
+        "status": "ok"
+      },
+      "stage_times_utc": {
+        "pilot": "16:14:07Z",
+        "smoke": "16:13:38Z"
+      },
+      "started_utc": "2026-09-14T16:13:37Z",
+      "summary": "smoke and pilot at dbcecc563 (2026-09-14T16:13:37Z to 2026-09-14T16:16:51Z): synthetic smoke 16:13:38Z ok (9 jobs over three synthetic references; every check passed in every job, the uninstrumented state-hash check on 3 first folds); training-only pilot 16:14:07Z: prepare of all 17 datasets (255 per-fold selections reconstructed from the three reference runs, each equal to its sealed record and ablation plan; selected widths [128] in 185 folds and [64, 128] in 70; a fresh load with every pin for all 17 datasets), then iris and segment first outer fold with training query rows (every check passed; job/fit time ratios iris 1.10, segment 1.64); reproduction probes: iris reproduced, ionosphere reproduced, vertebra_column reproduced"
+    },
+    "workers": 8
+  },
+  "production_family": "training_diagnostics",
+  "protocol_id": "arrowflow-v3-training-diagnostics-1",
+  "purpose": "descriptive training diagnostics of ArrowFlow-kNN: how the non-gradient rule changes the layers",
+  "reference_argument": "--reference NAME=RUN_DIR,ABLATION_DIR, one per protocol reference used; further references (for example the deduplicated and artificial families) are declared per dataset in a new protocol made by draft_protocol(references=...) and frozen after its own pilot",
+  "references": {
+    "bridge_knn": {
+      "ablation": {
+        "code_revision": "08cf39cd23fe0745a0de3c7a982b0c1d297500c5",
+        "family": "knn_ablation",
+        "manifest_sha256": "615868f286be02f8d32068bb2e27ee016f530c08aa6b22ce49bbd21365a8bf9e",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/knn_ablation.json",
+        "protocol_id": "arrowflow-v3-knn-ablation-1",
+        "protocol_sha256": "126cf6d72a2842751a04b5994f7f4b3e9b3b3f5261407d1f1345295b043a1ba5",
+        "reference_selections_sha256": "809d725c60dd1548d120c7b8534b6446c948ead0ec3563baf7b98c6f5ca029e2",
+        "summary_file": "knn_ablation_summary.json",
+        "summary_sha256": "53cebfacb52ab2de6d33ef869344f9753dee7d12a8176fdb48df0fe75dc8cde7"
+      },
+      "datasets": [
+        "iris",
+        "wine",
+        "breast_cancer",
+        "wine_quality",
+        "vehicle",
+        "segment",
+        "digits"
+      ],
+      "loader": "experiments.make_revision.run_revision:load_dataset",
+      "run": {
+        "code_revision": "70fb9bf31092cb64e2bd349403ad090699a3494d",
+        "family": "bridge_knn",
+        "model_id": "arrowflow_full_knn",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/bridge_knn.json",
+        "protocol_id": "arrowflow-v3-bridge-knn-1",
+        "protocol_sha256": "6335d8c4a1b16fb4044c3badb1fff1448f4083d4cc89611cd54b276d60057ff1",
+        "summary_sha256": "f5f0c7016864ce354c70f148bfecc31f8dbdbff5bc4f41d74e63e22a6ff36fda"
+      }
+    },
+    "newdata_batch1": {
+      "ablation": {
+        "code_revision": "be41fa9626e634bb0adb6c9caada5fe4aa5d0424",
+        "family": "newdata_ablation",
+        "manifest_sha256": "14d6c377f5afc78f9b7407ab4dc3940cfc4e77fccb497f556ad013b42d70fdbb",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_ablation.json",
+        "protocol_id": "arrowflow-v3-newdata-ablation-1",
+        "protocol_sha256": "3c4efe43eea7151c568a64a883f834e6d2f8d849aef34d0e45f24bb42e962c8c",
+        "reference_selections_sha256": "fa6933cd9dc0be3c786849d816922422ed3d9fe8dccf3ec83faeebfba02722d8",
+        "summary_file": "newdata_ablation_summary.json",
+        "summary_sha256": "2775b79d3a524e526ee1bdf937bdea783ebf0e22d14e9f4531ecd1c013c91246"
+      },
+      "datasets": [
+        "balance_scale",
+        "ionosphere",
+        "diabetes",
+        "banknote_authentication",
+        "qsar_biodeg"
+      ],
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "run": {
+        "code_revision": "6022f9b5e2312f80a96e96b2d0607c72b7d52138",
+        "family": "newdata",
+        "model_id": "arrowflow_full_knn",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_batch1.json",
+        "protocol_id": "arrowflow-v3-newdata-batch1-1",
+        "protocol_sha256": "f715ec2808b4b08c10e49ae23696070a471d7ea88eb351d63b059eecccc0d011",
+        "summary_sha256": "f3ab23c5eeccbe36f036325fe94c4c28ce69bc9d35fa16e62cea813e977ec843"
+      }
+    },
+    "newdata_batch2": {
+      "ablation": {
+        "code_revision": "be41fa9626e634bb0adb6c9caada5fe4aa5d0424",
+        "family": "newdata_ablation",
+        "manifest_sha256": "14d6c377f5afc78f9b7407ab4dc3940cfc4e77fccb497f556ad013b42d70fdbb",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_ablation.json",
+        "protocol_id": "arrowflow-v3-newdata-ablation-1",
+        "protocol_sha256": "3c4efe43eea7151c568a64a883f834e6d2f8d849aef34d0e45f24bb42e962c8c",
+        "reference_selections_sha256": "fa6933cd9dc0be3c786849d816922422ed3d9fe8dccf3ec83faeebfba02722d8",
+        "summary_file": "newdata_ablation_summary.json",
+        "summary_sha256": "2775b79d3a524e526ee1bdf937bdea783ebf0e22d14e9f4531ecd1c013c91246"
+      },
+      "datasets": [
+        "mfeat_zernike",
+        "vertebra_column",
+        "steel_plates_fault",
+        "climate_model_simulation_crashes",
+        "hcv_egyptian_patients"
+      ],
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "run": {
+        "code_revision": "6022f9b5e2312f80a96e96b2d0607c72b7d52138",
+        "family": "newdata",
+        "model_id": "arrowflow_full_knn",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_batch2.json",
+        "protocol_id": "arrowflow-v3-newdata-batch2-1",
+        "protocol_sha256": "188ff1e946b6dc8df712c5a5cfb01e9cf2f9e7022a7776d98ec95ae1f66fca49",
+        "summary_sha256": "50ebfbef88616f8ecd20737f45b3ef840ed19f75a5e5a3f8ceeb120e386d49db"
+      }
+    }
+  },
+  "relabel": {
+    "draws": 20,
+    "seed": 20260914
+  },
+  "resource_decision": "Training diagnostics (author decision 5b and the controller ruling of 2026-09-14): smoke and pilot at dbcecc563 (2026-09-14T16:13:37Z to 2026-09-14T16:16:51Z): synthetic smoke 16:13:38Z ok (9 jobs over three synthetic references; every check passed in every job, the uninstrumented state-hash check on 3 first folds); training-only pilot 16:14:07Z: prepare of all 17 datasets (255 per-fold selections reconstructed from the three reference runs, each equal to its sealed record and ablation plan; selected widths [128] in 185 folds and [64, 128] in 70; a fresh load with every pin for all 17 datasets), then iris and segment first outer fold with training query rows (every check passed; job/fit time ratios iris 1.10, segment 1.64); reproduction probes: iris reproduced, ionosphere reproduced, vertebra_column reproduced; projected at 8 single-thread workers: calibrated simulated makespan 0.89 h (serial 6.81 h, serial over workers 0.85 h), harness 0.50 h; cap 4 h; reproduction probes held on iris, ionosphere, vertebra_column; frozen after the pilot",
+  "selection_statement": "Nothing is selected. Every configuration is the per-fold selection sealed by the reference ablation run; every kNN readout setting is the one the fit chose on training rows; no diagnostic value feeds back into any fit, readout, checkpoint, dataset, fold or later analysis choice; no significance test is made.",
+  "snapshots": {
+    "every": 10,
+    "previous_snapshot": "the largest scheduled iteration below the snapshot iteration (none at iteration 0)",
+    "schedule": "iteration 0 (initial filters), every 10 iterations up to T, T, and the view checkpoint"
+  },
+  "split_seed": 27183,
+  "status": "reviewed_and_piloted_before_any_diagnostic_result",
+  "summary": "per dataset: median and IQR (numpy percentile, linear) of the checkpoint iteration over views and folds; the share of views with checkpoint 0; the mean displacement at the checkpoint per widths and layer; the 7-view kNN test accuracy at iteration 0 and at the checkpoint (mean and SD over folds); the mean tie shares with initial and checkpoint filters; the relabel change shares and accuracy changes",
+  "unit_of_work": "every protocol dataset x every outer fold (5 folds x 3 repeats) x fitting seed 8129 x all seven views",
+  "wallclock_cap_hours": 4,
+  "workers": 8
+}

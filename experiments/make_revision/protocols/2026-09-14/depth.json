@@ -1,0 +1,572 @@
+{
+  "analysis": {
+    "alpha": 0.05,
+    "command": "python -m experiments.make_revision.interventions analyse --run <run> --output <directory>",
+    "definition": "per dataset and variant arm, depth1 minus the variant arm accuracy, the fitting seeds averaged within each outer fold (one seed here, so the fold value is that seed's)",
+    "descriptive": "per arm and dataset: accuracy, balanced accuracy, macro-F1 and the neighbourhood purity of the last hidden ranking (outer-fold mean and SD); the depth probe at each hidden layer; the movement rates; no p value and no adjustment for these",
+    "families": [
+      {
+        "arm": "depth2",
+        "size": 17
+      },
+      {
+        "arm": "depth2_untrained_second",
+        "size": 17
+      },
+      {
+        "arm": "depth2_first_only",
+        "size": 17
+      }
+    ],
+    "interpretation": "if the second hidden layer does not help at a matched configuration, the paper says so and keeps the stack as a construction rather than an empirical benefit",
+    "interval": "corrected resampled t over the 15 outer folds (evaluation.paired_corrected_interval, q = 0.25, 95 per cent, 14 degrees of freedom)",
+    "limits": "a controlled comparison at one configuration per fold, at one fitting seed, with the learning rate and the iteration count not re-tuned; it cannot estimate the best attainable model of any arm, and it cannot separate an arm that does not move from an arm that moves and does not help unless the movement rates are read with it",
+    "metric": "accuracy",
+    "multiplicity": "Holm across the seventeen datasets within each variant arm (evaluation.holm_adjust); the arms are adjusted separately and no adjustment crosses the two families",
+    "named_subset": {
+      "caveat": "the fold sets differ by dataset and are chosen by the selection itself, so the subsets describe where the two-layer selection happened and never carry an inferential claim. The prespecified depth1-minus-variant contrast is defined on all fifteen outer folds of every dataset and is unaffected by this",
+      "definition": "the same depth1 minus variant differences restricted to the outer folds whose own reconstructed selection was two hidden layers, and to those whose selection was one (knn_controls.depth_split with depths [[128],[64,128]])",
+      "folds": "no dataset selected two hidden layers on all fifteen outer folds: seven of the seventeen selected them on none and the rest on three to eleven of fifteen (70 of 255 folds). Every subset row carries its own fold count, its degrees of freedom are n - 1, and a corrected resampled t interval is reported only where the subset has at least three folds",
+      "status": "a named subset of the same family, reported beside it; descriptive, not a new family, no p value and no place in any Holm family"
+    },
+    "reference_arm": "depth1",
+    "status": "prespecified before any outer score of this family exists; computed only by the analyse stage, which refuses (exit 2, nothing written) until the run is complete, then re-verifies every job record, re-derives every sealed selection from its reference run and re-renders every table before any score is read",
+    "variant_arms": [
+      "depth2",
+      "depth2_untrained_second",
+      "depth2_first_only"
+    ]
+  },
+  "arm_definitions": {
+    "depth1": "the single hidden layer [128]: the unmodified rule and the unmodified architecture",
+    "depth2": "two hidden layers [64, 128]: the unmodified rule, one more ranking layer",
+    "depth2_first_only": "[64, 128] with only the first hidden layer updated: the second hidden layer is frozen as above and the output layer is held at its initial filters through the library's last_layer_update=False, which still generates the error signal",
+    "depth2_untrained_second": "[64, 128] with the second hidden layer frozen at its initial filters (its votes are accumulated and discarded, its error signal to the first layer is unchanged), so the extra layer adds structure without learning",
+    "note": "the four arms share the fold's encoder, view identities, initial seeds, learning rate, vocabulary, degree, augmentation, checkpoint and readout rule; only the hidden widths and which layers are updated differ"
+  },
+  "arm_rules": {
+    "depth1": {
+      "frozen_hidden": [],
+      "last_layer_update": true,
+      "prior_rule": "unit",
+      "rule": "borda",
+      "widths_key": "depth1"
+    },
+    "depth2": {
+      "frozen_hidden": [],
+      "last_layer_update": true,
+      "prior_rule": "unit",
+      "rule": "borda",
+      "widths_key": "depth2"
+    },
+    "depth2_first_only": {
+      "frozen_hidden": [
+        1
+      ],
+      "last_layer_update": false,
+      "prior_rule": "unit",
+      "rule": "borda",
+      "widths_key": "depth2"
+    },
+    "depth2_untrained_second": {
+      "frozen_hidden": [
+        1
+      ],
+      "last_layer_update": true,
+      "prior_rule": "unit",
+      "rule": "borda",
+      "widths_key": "depth2"
+    }
+  },
+  "arm_widths": {
+    "depth1": [
+      128
+    ],
+    "depth2": [
+      64,
+      128
+    ]
+  },
+  "arms": [
+    "depth1",
+    "depth2",
+    "depth2_untrained_second",
+    "depth2_first_only"
+  ],
+  "checks": {
+    "arm_parameters": "every job: the fitted parameters equal the planned ones",
+    "depth_probe_matches_readout": "every job: the last depth probe equals the view readout",
+    "frozen_layers_unchanged": "every job: a frozen hidden layer's filters equal their initial ones and its recorded movement is exactly zero",
+    "instrumentation_removed": "every job: no vertex of any reachable graph keeps an instance-level wrapper",
+    "reference_predictions": "every job: the own arm's seven-view predictions on the outer test rows equal the reference run's recorded predictions for seed 8129 exactly, in the sealed order",
+    "rng_untouched": "every job: every guarded read left the global numpy and Python RNG states unchanged",
+    "uninstrumented_state_hash": "first outer fold of every dataset: the own arm's view state hashes and predictions equal MultiViewArrowFlowKNN(**selected, seed=8129).fit's on the same rows"
+  },
+  "confidence": 0.95,
+  "dataset_loading": "the reference run prepared data (hash-checked) must equal the ablation copy, its splits the declared nested splits, and in production a fresh load by the reference loader must return the same arrays and dataset hash",
+  "datasets": [
+    "iris",
+    "wine",
+    "breast_cancer",
+    "wine_quality",
+    "vehicle",
+    "segment",
+    "digits",
+    "balance_scale",
+    "ionosphere",
+    "diabetes",
+    "banknote_authentication",
+    "qsar_biodeg",
+    "mfeat_zernike",
+    "vertebra_column",
+    "steel_plates_fault",
+    "climate_model_simulation_crashes",
+    "hcv_egyptian_patients"
+  ],
+  "decision_rule": "freeze only if the calibrated projection at 16 single-thread workers is at most 4.0 h: the simulated first-free-worker makespan of the planned jobs in planned order, each job priced at the reference run's realized outer fit and predict seconds of its fold and seed 8129 times the piloted job / uninstrumented-fit ratio (its own ratio for a pilot dataset, the largest piloted ratio otherwise), plus the realized seconds once more for the uninstrumented fit of a first fold. Both sides of the ratio are measured in the same pilot, so machine contention largely cancels in it while the realized reference seconds carry the absolute scale",
+  "failure_policy": "a failed check fails its job; a failed job cancels the pending jobs and no table is written; failures are never omitted; no adaptive stopping on any value",
+  "fit": "MultiViewArrowFlowKNN at bridge.resolve_selected(sealed config, n_features, n_train) on the outer training rows with the arm's hidden widths and update rule: for view v, OrdinalEncoder(view_strategy, embed_dim, degree, lda_ratio, derive_seed(8129, \"view\", v)), ArrowFlowEstimator.initialize_orders then train_initialized, then MultiViewArrowFlowKNN._fit_view_readout (select_knn_readout on the trained hidden ranking); majority vote over the seven per-view kNN readouts",
+  "fit_seed_statement": "The reference design fits three seeds per outer fold; these controlled arms are fitted at seed 8129 alone, because four (depth) and three (aggregation) full seven-view fits per outer fold at three seeds project beyond the approved budget for this follow-up. The arms of one fold therefore share one encoder draw and one initial state, so the comparison is paired within seed; no within-fold seed spread is estimated and every interval is over the fifteen outer folds of that one seed.",
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "frozen": true,
+  "frozen_at_utc": "2026-09-14T21:13:33.842869+00:00",
+  "inner_folds": 3,
+  "instrumentation": "instance-level wrappers installed on each view network between initialize_orders and train_initialized and removed afterwards (update_rules.ArmInstrumentation): Vertex.accumulate_motion counts the eligible votes and their mass, Vertex.apply_motion records the movement of the filter and freezes it in a frozen layer, and in a median arm Vertex.compute_adj_list_with_permutation returns the footrule-median order of the same accumulator. The signal generation, the eligibility gate, the initial state, the data, the randomization, the batch resets and the readout protocol are untouched; the wrapper around update_network only closes the per-batch record inside a guard that restores the global numpy and Python RNG states",
+  "mass_matching": {
+    "ladder": [
+      1,
+      2,
+      4,
+      8,
+      16
+    ],
+    "problem": "matching the step size alone is not a fair control: the accumulator carries the prior at weight exactly one while one batch of votes carries a mass of order 0.1, so the footrule median can be frozen at the prior while Borda, being a mean, still moves",
+    "reporting": "the movement rates of every arm are reported, so a moving-against-inert comparison is never read as evidence about independence of irrelevant alternatives",
+    "rule": "median keeps the accumulator as the core builds it (prior weight 1, the plain substitution). median_mass_matched gives the prior m times the mean incoming ballot weight (mass / votes), so the incoming-to-prior mass ratio is votes / m to 1",
+    "selection": "m is the ladder value whose mean per-batch changed-filter share over the hidden layers, on the training-only pilot fits of the pilot datasets, is closest to the borda arm's on the same partitions; ties to the smallest m. No outer-fold score takes part",
+    "status": "not applicable to this family"
+  },
+  "mass_matching_choice": null,
+  "max_workers": 16,
+  "measures": {
+    "depth_probe": "per arm, view and hidden layer, the representation after that layer (models.transform_orders_by_depth) read out by a footrule kNN at the view's own selected setting refitted on the training rows at that depth, scored on the outer test rows, with its neighbourhood purity and the seven-view majority at each depth; at the last hidden layer the probe must equal the view readout",
+    "inertness": "an arm is flagged effectively inert on a fold when its changed-filter share over the hidden layers is below 0.01; a contrast against an effectively inert arm is never read as evidence about the aggregation rule",
+    "movement": "per arm, view and hidden layer, over the training batches: the share of filters that changed and the mean normalised footrule displacement (footrule / floor(V^2 / 2)), with the number of eligible votes, the incoming vote mass and the realised incoming-to-prior mass ratio",
+    "neighborhood_purity": "per arm, the mean over views of the share of same-class neighbours of the outer test rows in the last hidden ranking: the k nearest training rows under the footrule distance, k the view readout's own n_neighbors",
+    "outer_metrics": "per arm, the seven-view majority on the outer test rows: accuracy, error, balanced accuracy and macro-F1 (evaluation.metric_values)"
+  },
+  "median_rule": {
+    "computation": "the footrule median is the linear assignment on C = A D with D[q, p] = |q - p| (scipy.optimize.linear_sum_assignment), the exact minimiser over all orders",
+    "objective": "the hidden-layer update minimises, over the V! orders of the filter, the weighted sum of rank distances to the prior (weight 1) and to each vote (weight |a_t|); the core uses the squared rank distance, whose minimiser is the accumulator row mean (a weighted Borda count, verified in review-math-actions.md section 2(a)), and the median arm uses the footrule distance",
+    "scope": "hidden layers only; the output layer keeps the core rule, so the checkpoint and the output rule are unchanged",
+    "ties": "the solver's optimum is canonicalised by zero-cost transpositions toward the lexicographically smallest position vector read in ascending item order; what remains is the deterministic choice of the pinned solver among exactly tied optima. On 400 random small accumulators the returned order attained the minimum in every case and equalled the lexicographically smallest minimiser in 393 (66 instances had tied optima); the brute-force test records this"
+  },
+  "model_seed": 8129,
+  "n_views": 7,
+  "not_retuned": "the learning rate, the iteration count, the batch size, the checkpoint ratio, the encoder, the vocabulary, the degree and the augmentation are the fold's own selection and are not re-tuned for any arm; this is a controlled comparison at one configuration and not an estimate of the best attainable model of any arm",
+  "numeric_threads_per_worker": 1,
+  "outer_folds": 5,
+  "outer_repeats": 3,
+  "outputs": {
+    "analysis": "depth_contrasts.csv and depth_analysis.json by the analyse stage",
+    "job_records": "jobs/<dataset>__r<repeat>f<fold>.json with every measure and check, artifacts/<stem>.npz with the per-arm view, depth and majority predictions and the per-batch movement series, predictions/<stem>.jsonl with the per-example outer predictions of every arm",
+    "overwrite": "an existing file with different content is never replaced",
+    "summary": "depth_summary.json and depth_summary.csv by the summary stage",
+    "tables": "arms.csv, depth_probe.csv, movement.csv and provenance.json, written only after every planned job succeeded and verified (all or none)"
+  },
+  "own_arm": "the arm whose parameters are the fold's own reconstructed selection (in the depth family depth1 or depth2 according to the selected widths, in the aggregation family always borda); it must reproduce the reference run's outer predictions for seed 8129 exactly",
+  "parallelism": "one spawned single-thread process per dataset and outer fold under the shared execution lock",
+  "pilot": "training-only: the first outer fold of each pilot dataset with the outer test rows replaced by every fourth outer training row (the outer test fold is never touched), every arm, measure and check except the reference predictions; one reproduction probe (run_knn_ablation.reproduction_probe) of the smallest dataset per reference; in the aggregation family the mass-matching ladder",
+  "pilot_datasets": [
+    "iris",
+    "ionosphere"
+  ],
+  "pilot_projection": {
+    "calibrated": {
+      "longest_job_hours": 0.7365402529568145,
+      "serial_hours": 49.482038313149914,
+      "serial_hours_over_workers": 3.0926273945718696,
+      "simulated_makespan_hours": 3.3889245649906194
+    },
+    "calibrated_per_dataset_hours": {
+      "balance_scale": 1.620387163685591,
+      "banknote_authentication": 2.5803186812745422,
+      "breast_cancer": 2.0598964594017395,
+      "climate_model_simulation_crashes": 3.538700720823547,
+      "diabetes": 2.652351381688855,
+      "digits": 3.2474781091490477,
+      "hcv_egyptian_patients": 4.329580625446987,
+      "ionosphere": 2.475044731218887,
+      "iris": 2.0155625296347006,
+      "mfeat_zernike": 4.640933344187666,
+      "qsar_biodeg": 3.2160620935300606,
+      "segment": 2.7243110290511017,
+      "steel_plates_fault": 3.2861856020859057,
+      "vehicle": 2.779551274807066,
+      "vertebra_column": 2.594856836624432,
+      "wine": 2.3274762948628407,
+      "wine_quality": 3.393341435676946
+    },
+    "cap_hours": 4.0,
+    "decision_hours": 3.3889245649906194,
+    "decision_rule": "freeze only if the calibrated projection at 16 single-thread workers is at most 4.0 h: the simulated first-free-worker makespan of the planned jobs in planned order, each job priced at the reference run's realized outer fit and predict seconds of its fold and seed 8129 times the piloted job / uninstrumented-fit ratio (its own ratio for a pilot dataset, the largest piloted ratio otherwise), plus the realized seconds once more for the uninstrumented fit of a first fold. Both sides of the ratio are measured in the same pilot, so machine contention largely cancels in it while the realized reference seconds carry the absolute scale",
+    "harness": {
+      "hours_at_workers_ideal": 1.3418807251520306,
+      "serial_hours": 21.47009160243249
+    },
+    "pilot_code_revision": "bb263956b3add3c6b2873c45d72517acb21c2d1c",
+    "pilot_movement": {
+      "ionosphere": {
+        "depth1": {
+          "changed_share": 0.7704017857142857,
+          "effectively_inert": false,
+          "hidden_updates": 179200,
+          "mean_displacement": 0.15533942086356026
+        },
+        "depth2": {
+          "changed_share": 0.8788541666666667,
+          "effectively_inert": false,
+          "hidden_updates": 268800,
+          "mean_displacement": 0.23867683773949033
+        },
+        "depth2_first_only": {
+          "changed_share": 0.26114583333333335,
+          "effectively_inert": false,
+          "hidden_updates": 268800,
+          "mean_displacement": 0.003680023919968378
+        },
+        "depth2_untrained_second": {
+          "changed_share": 0.23034970238095237,
+          "effectively_inert": false,
+          "hidden_updates": 268800,
+          "mean_displacement": 0.004252526419503348
+        }
+      },
+      "iris": {
+        "depth1": {
+          "changed_share": 0.05584263392857143,
+          "effectively_inert": false,
+          "hidden_updates": 179200,
+          "mean_displacement": 0.004713570731026785
+        },
+        "depth2": {
+          "changed_share": 0.13905877976190475,
+          "effectively_inert": false,
+          "hidden_updates": 268800,
+          "mean_displacement": 0.004789831978934152
+        },
+        "depth2_first_only": {
+          "changed_share": 0.009992559523809523,
+          "effectively_inert": false,
+          "hidden_updates": 268800,
+          "mean_displacement": 0.00023658389136904762
+        },
+        "depth2_untrained_second": {
+          "changed_share": 0.000665922619047619,
+          "effectively_inert": true,
+          "hidden_updates": 268800,
+          "mean_displacement": 1.772925967261905e-05
+        }
+      }
+    },
+    "pilot_ratios": {
+      "ionosphere": 8.845957484053606,
+      "iris": 12.509886993512268
+    },
+    "pilot_seconds": {
+      "ionosphere": {
+        "depth1_seconds": 46.62535046899575,
+        "depth2_first_only_seconds": 68.78555435498129,
+        "depth2_seconds": 107.68919123298838,
+        "depth2_untrained_second_seconds": 85.79136970097898,
+        "job_seconds": 344.7554370019934,
+        "uninstrumented_fit_seconds": 35.01492237401544
+      },
+      "iris": {
+        "depth1_seconds": 17.756224846991245,
+        "depth2_first_only_seconds": 72.11700702700182,
+        "depth2_seconds": 39.26030484001967,
+        "depth2_untrained_second_seconds": 29.23239021599875,
+        "job_seconds": 171.4705804719997,
+        "uninstrumented_fit_seconds": 12.692229072999908
+      }
+    },
+    "pilot_sha256": "6b57be1b73f038f044f7d62533f240606fb8b060829375a4a2e35322096c642f",
+    "reproduction_probes": {
+      "bridge_knn": {
+        "config_id": "b5b2cf609efe12eb",
+        "dataset_id": "iris",
+        "inner_fold": 0,
+        "model_seed": 8129,
+        "readout_selections_identical": true,
+        "reference_score": 1.0,
+        "refit_score": 1.0,
+        "reproduced": true,
+        "result_file": "results/iris__arrowflow_full_knn__r0f0.json"
+      },
+      "newdata_batch1": {
+        "config_id": "b5b2cf609efe12eb",
+        "dataset_id": "ionosphere",
+        "inner_fold": 0,
+        "model_seed": 8129,
+        "readout_selections_identical": true,
+        "reference_score": 0.925531914893617,
+        "refit_score": 0.925531914893617,
+        "reproduced": true,
+        "result_file": "results/ionosphere__arrowflow_full_knn__r0f0.json"
+      },
+      "newdata_batch2": {
+        "config_id": "b5b2cf609efe12eb",
+        "dataset_id": "vertebra_column",
+        "inner_fold": 0,
+        "model_seed": 8129,
+        "readout_selections_identical": true,
+        "reference_score": 0.7951807228915663,
+        "refit_score": 0.7951807228915663,
+        "reproduced": true,
+        "result_file": "results/vertebra_column__arrowflow_full_knn__r0f0.json"
+      }
+    },
+    "stages": {
+      "code_revision": "2cfc80b79827252f33ca20c2f0648d6f0b5f2443",
+      "machine": "two production runs (dedup and artificial) held 32 workers throughout the smoke and the pilot, so every pilot second is inflated by contention; only the job / uninstrumented-fit ratio carries into the projection, and the cap is set above the projection for that reason",
+      "pilot": {
+        "code_revision": "bb263956b3add3c6b2873c45d72517acb21c2d1c",
+        "command": "python -m experiments.make_revision.interventions pilot --protocol experiments/make_revision/protocols/2026-09-14/depth.json --output <pilot>",
+        "datasets": [
+          "iris",
+          "ionosphere"
+        ],
+        "decision": {
+          "cap_hours": 4.0,
+          "checks_passed": true,
+          "hours": 3.3889245649906194,
+          "probes_reproduced": true,
+          "rule": "freeze only if the calibrated projection at 16 single-thread workers is at most 4.0 h: the simulated first-free-worker makespan of the planned jobs in planned order, each job priced at the reference run's realized outer fit and predict seconds of its fold and seed 8129 times the piloted job / uninstrumented-fit ratio (its own ratio for a pilot dataset, the largest piloted ratio otherwise), plus the realized seconds once more for the uninstrumented fit of a first fold. Both sides of the ratio are measured in the same pilot, so machine contention largely cancels in it while the realized reference seconds carry the absolute scale",
+          "within_cap": true,
+          "workers": 16
+        },
+        "directory": "/tmp/claude-1000/-home-ozgur-Desktop-Lechler-Code-Playground-sortflow/742677ef-fe4c-4ff1-a976-cbaee17d38d0/scratchpad/final3-pilot-depth",
+        "mass_matching": null,
+        "movement": {
+          "ionosphere": {
+            "depth1": {
+              "changed_share": 0.7704017857142857,
+              "effectively_inert": false,
+              "hidden_updates": 179200,
+              "mean_displacement": 0.15533942086356026
+            },
+            "depth2": {
+              "changed_share": 0.8788541666666667,
+              "effectively_inert": false,
+              "hidden_updates": 268800,
+              "mean_displacement": 0.23867683773949033
+            },
+            "depth2_first_only": {
+              "changed_share": 0.26114583333333335,
+              "effectively_inert": false,
+              "hidden_updates": 268800,
+              "mean_displacement": 0.003680023919968378
+            },
+            "depth2_untrained_second": {
+              "changed_share": 0.23034970238095237,
+              "effectively_inert": false,
+              "hidden_updates": 268800,
+              "mean_displacement": 0.004252526419503348
+            }
+          },
+          "iris": {
+            "depth1": {
+              "changed_share": 0.05584263392857143,
+              "effectively_inert": false,
+              "hidden_updates": 179200,
+              "mean_displacement": 0.004713570731026785
+            },
+            "depth2": {
+              "changed_share": 0.13905877976190475,
+              "effectively_inert": false,
+              "hidden_updates": 268800,
+              "mean_displacement": 0.004789831978934152
+            },
+            "depth2_first_only": {
+              "changed_share": 0.009992559523809523,
+              "effectively_inert": false,
+              "hidden_updates": 268800,
+              "mean_displacement": 0.00023658389136904762
+            },
+            "depth2_untrained_second": {
+              "changed_share": 0.000665922619047619,
+              "effectively_inert": true,
+              "hidden_updates": 268800,
+              "mean_displacement": 1.772925967261905e-05
+            }
+          }
+        },
+        "ratios": {
+          "ionosphere": 8.845957484053606,
+          "iris": 12.509886993512268
+        },
+        "status": "ok"
+      },
+      "smoke": {
+        "arms": [
+          "depth1",
+          "depth2",
+          "depth2_untrained_second",
+          "depth2_first_only"
+        ],
+        "check_totals": {
+          "arm_parameters": {
+            "passed": 3,
+            "performed": 3
+          },
+          "depth_probe_matches_readout": {
+            "passed": 3,
+            "performed": 3
+          },
+          "frozen_layers_unchanged": {
+            "passed": 3,
+            "performed": 3
+          },
+          "instrumentation_removed": {
+            "passed": 3,
+            "performed": 3
+          },
+          "reference_predictions": {
+            "passed": 3,
+            "performed": 3
+          },
+          "rng_untouched": {
+            "passed": 3,
+            "performed": 3
+          },
+          "uninstrumented_state_hash": {
+            "passed": 1,
+            "performed": 1
+          }
+        },
+        "command": "python -m experiments.make_revision.interventions smoke --protocol experiments/make_revision/protocols/2026-09-14/depth.json --output <smoke> --workers 3",
+        "directory": "/tmp/claude-1000/-home-ozgur-Desktop-Lechler-Code-Playground-sortflow/742677ef-fe4c-4ff1-a976-cbaee17d38d0/scratchpad/final4-smoke-depth",
+        "jobs": 3,
+        "note": "a synthetic ArrowFlow-kNN reference run at both smoke depths, its component ablation, a complete intervention run, its tables, its summary and its analysis; never evidence",
+        "status": "ok"
+      },
+      "summary": "the synthetic smoke passed every check on 3 jobs and 4 arms; the training-only pilot on iris and ionosphere passed every check and its reproduction probes; 46 passed (tests/make_revision/test_update_rules.py and test_interventions.py)",
+      "tests": {
+        "command": "python -m pytest tests/make_revision/test_update_rules.py tests/make_revision/test_interventions.py",
+        "result": "46 passed (tests/make_revision/test_update_rules.py and test_interventions.py)"
+      }
+    },
+    "workers": 16
+  },
+  "production_family": "depth",
+  "protocol_id": "arrowflow-v3-depth-1",
+  "purpose": "a controlled depth comparison of ArrowFlow-kNN at one fixed configuration per outer fold",
+  "reference_arm": "depth1",
+  "references": {
+    "bridge_knn": {
+      "ablation": {
+        "code_revision": "08cf39cd23fe0745a0de3c7a982b0c1d297500c5",
+        "family": "knn_ablation",
+        "manifest_sha256": "615868f286be02f8d32068bb2e27ee016f530c08aa6b22ce49bbd21365a8bf9e",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/knn_ablation.json",
+        "protocol_id": "arrowflow-v3-knn-ablation-1",
+        "protocol_sha256": "126cf6d72a2842751a04b5994f7f4b3e9b3b3f5261407d1f1345295b043a1ba5",
+        "reference_selections_sha256": "809d725c60dd1548d120c7b8534b6446c948ead0ec3563baf7b98c6f5ca029e2",
+        "summary_file": "knn_ablation_summary.json",
+        "summary_sha256": "53cebfacb52ab2de6d33ef869344f9753dee7d12a8176fdb48df0fe75dc8cde7"
+      },
+      "datasets": [
+        "iris",
+        "wine",
+        "breast_cancer",
+        "wine_quality",
+        "vehicle",
+        "segment",
+        "digits"
+      ],
+      "loader": "experiments.make_revision.run_revision:load_dataset",
+      "run": {
+        "code_revision": "70fb9bf31092cb64e2bd349403ad090699a3494d",
+        "family": "bridge_knn",
+        "model_id": "arrowflow_full_knn",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/bridge_knn.json",
+        "protocol_id": "arrowflow-v3-bridge-knn-1",
+        "protocol_sha256": "6335d8c4a1b16fb4044c3badb1fff1448f4083d4cc89611cd54b276d60057ff1",
+        "summary_sha256": "f5f0c7016864ce354c70f148bfecc31f8dbdbff5bc4f41d74e63e22a6ff36fda"
+      }
+    },
+    "newdata_batch1": {
+      "ablation": {
+        "code_revision": "be41fa9626e634bb0adb6c9caada5fe4aa5d0424",
+        "family": "newdata_ablation",
+        "manifest_sha256": "14d6c377f5afc78f9b7407ab4dc3940cfc4e77fccb497f556ad013b42d70fdbb",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_ablation.json",
+        "protocol_id": "arrowflow-v3-newdata-ablation-1",
+        "protocol_sha256": "3c4efe43eea7151c568a64a883f834e6d2f8d849aef34d0e45f24bb42e962c8c",
+        "reference_selections_sha256": "fa6933cd9dc0be3c786849d816922422ed3d9fe8dccf3ec83faeebfba02722d8",
+        "summary_file": "newdata_ablation_summary.json",
+        "summary_sha256": "2775b79d3a524e526ee1bdf937bdea783ebf0e22d14e9f4531ecd1c013c91246"
+      },
+      "datasets": [
+        "balance_scale",
+        "ionosphere",
+        "diabetes",
+        "banknote_authentication",
+        "qsar_biodeg"
+      ],
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "run": {
+        "code_revision": "6022f9b5e2312f80a96e96b2d0607c72b7d52138",
+        "family": "newdata",
+        "model_id": "arrowflow_full_knn",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_batch1.json",
+        "protocol_id": "arrowflow-v3-newdata-batch1-1",
+        "protocol_sha256": "f715ec2808b4b08c10e49ae23696070a471d7ea88eb351d63b059eecccc0d011",
+        "summary_sha256": "f3ab23c5eeccbe36f036325fe94c4c28ce69bc9d35fa16e62cea813e977ec843"
+      }
+    },
+    "newdata_batch2": {
+      "ablation": {
+        "code_revision": "be41fa9626e634bb0adb6c9caada5fe4aa5d0424",
+        "family": "newdata_ablation",
+        "manifest_sha256": "14d6c377f5afc78f9b7407ab4dc3940cfc4e77fccb497f556ad013b42d70fdbb",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_ablation.json",
+        "protocol_id": "arrowflow-v3-newdata-ablation-1",
+        "protocol_sha256": "3c4efe43eea7151c568a64a883f834e6d2f8d849aef34d0e45f24bb42e962c8c",
+        "reference_selections_sha256": "fa6933cd9dc0be3c786849d816922422ed3d9fe8dccf3ec83faeebfba02722d8",
+        "summary_file": "newdata_ablation_summary.json",
+        "summary_sha256": "2775b79d3a524e526ee1bdf937bdea783ebf0e22d14e9f4531ecd1c013c91246"
+      },
+      "datasets": [
+        "mfeat_zernike",
+        "vertebra_column",
+        "steel_plates_fault",
+        "climate_model_simulation_crashes",
+        "hcv_egyptian_patients"
+      ],
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "run": {
+        "code_revision": "6022f9b5e2312f80a96e96b2d0607c72b7d52138",
+        "family": "newdata",
+        "model_id": "arrowflow_full_knn",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_batch2.json",
+        "protocol_id": "arrowflow-v3-newdata-batch2-1",
+        "protocol_sha256": "188ff1e946b6dc8df712c5a5cfb01e9cf2f9e7022a7776d98ec95ae1f66fca49",
+        "summary_sha256": "50ebfbef88616f8ecd20737f45b3ef840ed19f75a5e5a3f8ceeb120e386d49db"
+      }
+    }
+  },
+  "resource_decision": "Review response E4 (depth; author decision of 2026-09-14 and the E4 aggregation ruling): the synthetic smoke passed every check on 3 jobs and 4 arms; the training-only pilot on iris and ionosphere passed every check and its reproduction probes; 46 passed (tests/make_revision/test_update_rules.py and test_interventions.py); projected at 16 single-thread workers: calibrated simulated makespan 3.39 h (serial 49.48 h, serial over workers 3.09 h), harness 1.34 h; cap 4.0 h. The pilot ran while two production runs held 32 workers, so its absolute seconds are inflated by contention and only the job / uninstrumented-fit ratio carries forward (ionosphere 8.85, iris 12.51); the rule prices every unpiloted dataset at the largest of those, measured on the smallest training partition, where the per-arm bookkeeping weighs most. The cap is set above the projection for both reasons and no outer score of this family exists. Reproduction probes held on iris, ionosphere, vertebra_column; frozen after the pilot",
+  "selection_statement": "Nothing is selected on outer-fold results. Every configuration is the per-fold selection sealed by the reference ablation run; every kNN readout setting is the one the fit chose on training rows; the mass-matching multiplier is chosen on the training-only pilot before the run; no outer score feeds back into any fit, arm, dataset, fold or analysis choice.",
+  "split_seed": 27183,
+  "status": "reviewed_and_piloted_before_any_outer_score",
+  "test_train_ratio": 0.25,
+  "unit_of_work": "every protocol dataset x every outer fold (5 folds x 3 repeats) x fitting seed 8129 x every arm",
+  "wallclock_cap_hours": 4.0,
+  "workers": 16
+}
