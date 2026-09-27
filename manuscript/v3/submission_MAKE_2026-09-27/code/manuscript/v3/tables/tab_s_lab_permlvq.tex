@@ -1,0 +1,40 @@
+% Rendered by render_tables.py from run files; do not edit by hand.
+\begin{table}[!htbp]
+\caption{\textbf{Inner-fold laboratory, update stage.} First block: mean inner-validation accuracy in percent over 45 units per dataset (five outer folds of the first repeat $\times$ three inner folds $\times$ three fitting seeds). Each variant is a permutation learning vector quantization (LVQ) layer that replaces the ranking layers on the same first-view encodings, seeds and budget, with 4, 8 or 16 labeled permutation prototypes per class. An accepted sample votes for the nearest prototype of its class toward the sample and for the nearest prototype of another class toward the reversed sample. The votes are aggregated by the Borda count or by the exact footrule median with a unit prior or a prior of weight $\eta$. The prediction is the class of the nearest prototype or a plurality or Borda count over the 1, 3, 5 or 9 nearest. The reference is the prototype readout of the fitted first view. Every unit fits the configuration the prototype readout chose on that outer fold on the inner training partition; each variant's own settings are chosen one level deeper, on splits of the inner training partition. Second block: mean paired change from the reference in percentage points per dataset, its mean over datasets, the number of datasets improved, and the verdict of the adoption rule. The rule adopts a variant when at least 5 of 7 datasets improve and none worsens by more than 1 point. Third block: the SD of the paired change over the 45 units of each dataset, in percentage points; it describes dispersion across units and is not a confidence interval. None of the six variants meets the rule. No outer test fold is scored; the laboratory is exploratory. Protocol \texttt{arrowflow-v3-devlab-1}, code \texttt{9c3fc5214546}.}
+\label{tab:s-lab-permlvq}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lrrrrrrrrrr}
+\toprule
+Variant & Iris & Wine & Breast cancer & Wine quality & Vehicle & Segment & Digits & Mean & Improved & Verdict \\
+\midrule
+\multicolumn{11}{l}{\emph{Mean inner-validation accuracy, \%}} \\
+Prototype readout (reference) & 88.6 & 90.1 & 94.1 & 51.6 & 80.0 & 93.0 & 90.6 & -- & -- & -- \\
+Permutation LVQ, Borda update, nearest prototype & 92.3 & 92.7 & 95.5 & 54.5 & 73.3 & 83.7 & 92.2 & -- & -- & -- \\
+Permutation LVQ, Borda update, plurality of the nearest & 91.3 & 91.3 & 95.6 & 54.9 & 73.2 & 83.7 & 92.3 & -- & -- & -- \\
+Permutation LVQ, Borda update, Borda readout & 92.9 & 91.7 & 95.8 & 56.6 & 73.8 & 83.6 & 92.2 & -- & -- & -- \\
+Permutation LVQ, two layers, Borda update, plurality & 93.4 & 91.5 & 94.9 & 55.1 & 76.0 & 83.6 & 91.4 & -- & -- & -- \\
+Permutation LVQ, footrule-median update, unit prior, plurality & 86.6 & 78.5 & 82.2 & 42.6 & 32.2 & 57.0 & 56.0 & -- & -- & -- \\
+Permutation LVQ, footrule-median update, prior $\eta$, plurality & 75.6 & 87.3 & 94.1 & 46.5 & 49.3 & 60.9 & 69.6 & -- & -- & -- \\
+\midrule
+\multicolumn{11}{l}{\emph{Mean paired change from the reference, pp}} \\
+Permutation LVQ, Borda update, nearest prototype & +3.7 & +2.6 & +1.5 & +2.9 & $-$6.7 & $-$9.3 & +1.7 & $-$0.5 & 5 / 7 & reject \\
+Permutation LVQ, Borda update, plurality of the nearest & +2.7 & +1.2 & +1.5 & +3.3 & $-$6.8 & $-$9.3 & +1.7 & $-$0.8 & 5 / 7 & reject \\
+Permutation LVQ, Borda update, Borda readout & +4.3 & +1.5 & +1.8 & +5.0 & $-$6.2 & $-$9.3 & +1.7 & $-$0.2 & 5 / 7 & reject \\
+Permutation LVQ, two layers, Borda update, plurality & +4.8 & +1.4 & +0.8 & +3.6 & $-$3.9 & $-$9.4 & +0.8 & $-$0.3 & 5 / 7 & reject \\
+Permutation LVQ, footrule-median update, unit prior, plurality & $-$2.1 & $-$11.7 & $-$11.9 & $-$9.0 & $-$47.7 & $-$36.0 & $-$34.6 & $-$21.8 & 0 / 7 & reject \\
+Permutation LVQ, footrule-median update, prior $\eta$, plurality & $-$13.0 & $-$2.8 & +0.1 & $-$5.1 & $-$30.7 & $-$32.1 & $-$21.0 & $-$14.9 & 1 / 7 & reject \\
+\midrule
+\multicolumn{11}{l}{\emph{SD of the paired change over the 45 units of a dataset, pp}} \\
+Permutation LVQ, Borda update, nearest prototype & 10.3 & 5.2 & 2.8 & 5.9 & 3.3 & 6.9 & 2.2 & -- & -- & -- \\
+Permutation LVQ, Borda update, plurality of the nearest & 11.7 & 4.8 & 2.7 & 5.7 & 3.4 & 6.9 & 2.2 & -- & -- & -- \\
+Permutation LVQ, Borda update, Borda readout & 10.6 & 4.5 & 2.5 & 5.3 & 3.9 & 6.9 & 2.2 & -- & -- & -- \\
+Permutation LVQ, two layers, Borda update, plurality & 8.7 & 5.9 & 3.2 & 5.1 & 3.1 & 5.8 & 2.6 & -- & -- & -- \\
+Permutation LVQ, footrule-median update, unit prior, plurality & 10.5 & 8.0 & 10.3 & 5.7 & 5.4 & 18.5 & 5.7 & -- & -- & -- \\
+Permutation LVQ, footrule-median update, prior $\eta$, plurality & 15.2 & 7.3 & 3.7 & 8.0 & 7.4 & 7.6 & 6.1 & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

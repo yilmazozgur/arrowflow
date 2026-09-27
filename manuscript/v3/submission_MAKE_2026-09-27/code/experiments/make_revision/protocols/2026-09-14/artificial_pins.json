@@ -1,0 +1,161 @@
+{
+  "approval": {
+    "path": "artificial-data-approved.md",
+    "sha256": "83666885ae68e782a878f8781b3a5dc3fc65a8a39a9f990c89c9c761c92953cc"
+  },
+  "datasets": {
+    "ranks16": {
+      "class_counts": [
+        45,
+        45,
+        45,
+        45,
+        45,
+        45,
+        45
+      ],
+      "dataset_hash": "67b43496def4b8f32238bf4b3b00176e92b4539ed76162418d8d159acbfea70c",
+      "duplicates": {
+        "duplicate_groups": 7,
+        "duplicate_rows": 23,
+        "label_conflicting_groups": 0
+      },
+      "feature_names": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4",
+        "item_5",
+        "item_6",
+        "item_7",
+        "item_8",
+        "item_9",
+        "item_10",
+        "item_11",
+        "item_12",
+        "item_13",
+        "item_14",
+        "item_15",
+        "item_16"
+      ],
+      "feature_names_sha256": "d58cfaa9931e1a06a2bc24c1b78d8fa6fdf026f9b13a09e17c7a3c392a92907a",
+      "generator_sha256": "1a426c61a9ee13bb45be92f835e6f478faca91361c43c4561e3a876ba5dd0e2a",
+      "label_map": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "n_missing": 534,
+      "sha256_X": "c358842d80d48693d2a59328ab681a3d104bc2ea6406d32cdb996dcca192cba4",
+      "sha256_y": "8f775caddfedb37afb6a722a0b4acb90a19290f07ac7783470034c281907c901",
+      "shape": [
+        315,
+        16
+      ],
+      "splits_hash": "1a9d02126d9db5db"
+    },
+    "ranks8": {
+      "class_counts": [
+        45,
+        45,
+        45,
+        45,
+        45,
+        45,
+        45
+      ],
+      "dataset_hash": "4570b16626b7a14297f396d84f58fd6da2973068a74eabecf409d1c7615a2750",
+      "duplicates": {
+        "duplicate_groups": 23,
+        "duplicate_rows": 38,
+        "label_conflicting_groups": 1
+      },
+      "feature_names": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4",
+        "item_5",
+        "item_6",
+        "item_7",
+        "item_8"
+      ],
+      "feature_names_sha256": "a45470c94f9737f610f56e7e9060c1e1f1b26bfee28a0626db0dcc87f8c1c3e3",
+      "generator_sha256": "1a426c61a9ee13bb45be92f835e6f478faca91361c43c4561e3a876ba5dd0e2a",
+      "label_map": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "n_missing": 259,
+      "sha256_X": "92e2b67eb070062defa7a3402edb9f8fc781ef1c837f44d08974036a56fb23ce",
+      "sha256_y": "8f775caddfedb37afb6a722a0b4acb90a19290f07ac7783470034c281907c901",
+      "shape": [
+        315,
+        8
+      ],
+      "splits_hash": "1a9d02126d9db5db"
+    },
+    "ranks8_original": {
+      "class_counts": [
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "dataset_hash": "9545c8d56cceeebe455b44f11471b3db9c57552dcf74b11ccc186cd0f694dfaf",
+      "duplicates": {
+        "duplicate_groups": 3,
+        "duplicate_rows": 3,
+        "label_conflicting_groups": 0
+      },
+      "feature_names": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4",
+        "item_5",
+        "item_6",
+        "item_7",
+        "item_8"
+      ],
+      "feature_names_sha256": "a45470c94f9737f610f56e7e9060c1e1f1b26bfee28a0626db0dcc87f8c1c3e3",
+      "generator_sha256": "1a426c61a9ee13bb45be92f835e6f478faca91361c43c4561e3a876ba5dd0e2a",
+      "label_map": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "n_missing": 59,
+      "sha256_X": "3e63448c1daf480ee3d685cf2c52f4a112c460374e4fb5a0cbe139cb9a23c032",
+      "sha256_y": "69c894479916fffa1d4cd7a5a4befa8eb1bfc1727a51f6c0b175915492d02a64",
+      "shape": [
+        77,
+        8
+      ],
+      "splits_hash": "996b378b652b9504"
+    }
+  },
+  "generator": {
+    "commit": "c4d5280c69a42c0cfffc042a33946ef95467c198",
+    "path": "experiments/make_revision/artificial_ranks.py",
+    "sha256": "1a426c61a9ee13bb45be92f835e6f478faca91361c43c4561e3a876ba5dd0e2a"
+  },
+  "loader": "experiments.make_revision.artificial_ranks:load_artificial",
+  "purpose": "artificial_dataset_pins"
+}

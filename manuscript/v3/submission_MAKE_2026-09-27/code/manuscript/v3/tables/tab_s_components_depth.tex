@@ -1,0 +1,59 @@
+% Rendered by render_tables.py from run files; do not edit by hand.
+\begin{table}[!htbp]
+\caption{\textbf{ArrowFlow minus the untrained networks by selected depth.} ArrowFlow's accuracy minus that of the untrained networks in percentage points, positive when ArrowFlow is more accurate, with fitting seeds averaged within each outer fold. The folds are grouped by the hidden widths that ArrowFlow chose on their inner folds. For every dataset and depth, the table gives the number of outer folds and the mean, SD, minimum and maximum of the fold differences, with an interval for groups of at least two folds. Intervals are 95\% corrected resampled-$t$ intervals over the $n$ folds of a row, with the variance of the fold differences multiplied by $1/n+0.25$ and $n-1$ degrees of freedom, where $n$ is the number of folds of the group. The last block pools the folds of each depth. These untrained networks sit at ArrowFlow's configuration, unlike the tuned untrained ArrowFlow of Table~\ref{tab:s-training-depth}. The split is descriptive and confounded with dataset. HCV: hepatitis C virus.}
+\label{tab:s-components-depth}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+Dataset, depth & Folds & Mean (pp) & SD & Min & Max & 95\% interval \\
+\midrule
+\multicolumn{7}{l}{\emph{Benchmark datasets}} \\
+Iris, $[128]$ & 8 & +0.69 & 2.14 & $-$1.11 & +5.56 & [$-$2.40, +3.79] \\
+Iris, $[64,128]$ & 7 & +0.32 & 1.53 & $-$1.11 & +3.33 & [$-$2.03, +2.67] \\
+Wine, $[128]$ & 4 & +0.23 & 0.90 & $-$0.95 & +0.95 & [$-$1.81, +2.27] \\
+Wine, $[64,128]$ & 11 & +0.84 & 2.61 & $-$3.70 & +5.56 & [$-$2.56, +4.24] \\
+Breast cancer, $[128]$ & 11 & +0.85 & 1.17 & $-$0.29 & +3.80 & [$-$0.66, +2.37] \\
+Breast cancer, $[64,128]$ & 4 & +0.80 & 0.91 & +0.00 & +2.05 & [$-$1.23, +2.84] \\
+Wine quality, $[128]$ & 15 & +0.02 & 0.87 & $-$2.50 & +0.94 & [$-$1.03, +1.08] \\
+Wine quality, $[64,128]$ & 0 & -- & -- & -- & -- & -- \\
+Vehicle, $[128]$ & 12 & +4.14 & 1.61 & +1.18 & +7.69 & [+2.10, +6.18] \\
+Vehicle, $[64,128]$ & 3 & +1.50 & 2.44 & +0.00 & +4.31 & [$-$6.50, +9.51] \\
+Segment, $[128]$ & 15 & +1.20 & 0.55 & +0.22 & +2.31 & [+0.54, +1.86] \\
+Segment, $[64,128]$ & 0 & -- & -- & -- & -- & -- \\
+Digits, $[128]$ & 15 & +0.15 & 0.86 & $-$1.21 & +1.30 & [$-$0.89, +1.19] \\
+Digits, $[64,128]$ & 0 & -- & -- & -- & -- & -- \\
+\midrule
+\multicolumn{7}{l}{\emph{Further datasets}} \\
+balance-scale, $[128]$ & 15 & +5.35 & 1.62 & +2.40 & +8.00 & [+3.39, +7.31] \\
+balance-scale, $[64,128]$ & 0 & -- & -- & -- & -- & -- \\
+mfeat-zernike, $[128]$ & 15 & +2.47 & 0.84 & +1.33 & +4.08 & [+1.45, +3.49] \\
+mfeat-zernike, $[64,128]$ & 0 & -- & -- & -- & -- & -- \\
+ionosphere, $[128]$ & 11 & $-$0.04 & 3.06 & $-$5.16 & +3.81 & [$-$4.02, +3.94] \\
+ionosphere, $[64,128]$ & 4 & +0.83 & 0.71 & +0.48 & +1.90 & [$-$0.77, +2.44] \\
+vertebra-column, $[128]$ & 4 & $-$0.40 & 2.72 & $-$3.76 & +2.69 & [$-$6.52, +5.72] \\
+vertebra-column, $[64,128]$ & 11 & +1.03 & 2.86 & $-$3.23 & +6.45 & [$-$2.69, +4.75] \\
+diabetes, $[128]$ & 10 & +0.13 & 1.44 & $-$1.53 & +2.81 & [$-$1.80, +2.05] \\
+diabetes, $[64,128]$ & 5 & $-$0.69 & 0.80 & $-$1.73 & +0.43 & [$-$2.19, +0.80] \\
+banknote-authentication, $[128]$ & 6 & +0.00 & 0.08 & $-$0.12 & +0.12 & [$-$0.13, +0.13] \\
+banknote-authentication, $[64,128]$ & 9 & $-$0.03 & 0.25 & $-$0.61 & +0.24 & [$-$0.37, +0.32] \\
+qsar-biodeg, $[128]$ & 15 & +1.26 & 0.78 & $-$0.79 & +2.53 & [+0.32, +2.21] \\
+qsar-biodeg, $[64,128]$ & 0 & -- & -- & -- & -- & -- \\
+steel-plates-fault, $[128]$ & 15 & +0.96 & 1.66 & $-$1.12 & +4.04 & [$-$1.04, +2.96] \\
+steel-plates-fault, $[64,128]$ & 0 & -- & -- & -- & -- & -- \\
+climate-model-simulation-crashes, $[128]$ & 10 & +0.09 & 0.39 & $-$0.31 & +0.93 & [$-$0.42, +0.61] \\
+climate-model-simulation-crashes, $[64,128]$ & 5 & +0.00 & 0.00 & +0.00 & +0.00 & [+0.00, +0.00] \\
+HCV, $[128]$ & 4 & $-$1.38 & 0.99 & $-$2.77 & $-$0.60 & [$-$3.62, +0.85] \\
+HCV, $[64,128]$ & 11 & +0.48 & 1.30 & $-$2.41 & +2.41 & [$-$1.21, +2.18] \\
+\midrule
+\multicolumn{7}{l}{\emph{Pooled over datasets, without range or interval}} \\
+All datasets, $[128]$ & 185 & +1.25 & 2.15 & -- & -- & -- \\
+All datasets, $[64,128]$ & 70 & +0.51 & 1.78 & -- & -- & -- \\
+Benchmark datasets, $[128]$ & 80 & +1.08 & 1.77 & -- & -- & -- \\
+Benchmark datasets, $[64,128]$ & 25 & +0.77 & 2.04 & -- & -- & -- \\
+Further datasets, $[128]$ & 105 & +1.38 & 2.40 & -- & -- & -- \\
+Further datasets, $[64,128]$ & 45 & +0.36 & 1.63 & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}

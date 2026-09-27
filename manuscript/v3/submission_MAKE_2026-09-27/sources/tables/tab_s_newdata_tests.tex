@@ -1,0 +1,23 @@
+% Rendered by render_tables.py from run files; do not edit by hand.
+\begin{table}[!htbp]
+\caption{\textbf{Prespecified stratum test and descriptive correlation on the further datasets.} The training effect of a dataset is its mean paired accuracy difference, ArrowFlow minus the untrained ArrowFlow (Table~\ref{tab:s-training}). The exact one-sided permutation test compares the mean effect of the four marked datasets with that of the other six over every split of the ten datasets into groups of those sizes, the effects held fixed. Its $p$ value is the share of splits whose difference is at least the observed one, so $p\le0.05$ requires the observed difference to be among the 10 largest. The Spearman correlation, the Pearson correlation of the ranks of the external gaps and the effects, is descriptive; its exact $p$ values enumerate every order of the effects against the gaps. HCV has no gap.}
+\label{tab:s-newdata-tests}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{ll}
+\toprule
+Quantity & Value \\
+\midrule
+Mean training effect, four marked datasets (pp) & +2.14 (SD 2.09; median +1.71; +0.16 to +4.98) \\
+Mean training effect, other six datasets (pp) & +0.34 (SD 0.51; median +0.37; $-$0.37 to +0.92) \\
+Difference of the two means (pp) & +1.80 \\
+Splits of the ten datasets into four and six & 210 \\
+Splits whose difference is at least the observed one & 7 \\
+Exact one-sided $p$ (smallest attainable) & 0.033 (0.005) \\
+Spearman correlation of external gap and training effect & 0.67 (nine datasets, HCV excluded) \\
+Exact $p$ of the correlation, one-sided and two-sided & 0.029 and 0.059 \\
+Orders of the effects enumerated & 362,880 \\
+\bottomrule
+\end{tabular}
+\end{table}

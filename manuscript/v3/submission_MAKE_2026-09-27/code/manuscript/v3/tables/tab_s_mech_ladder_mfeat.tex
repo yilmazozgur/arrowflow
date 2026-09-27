@@ -1,0 +1,21 @@
+% Rendered by render_tables.py from run files; do not edit by hand.
+\begin{table}[!htbp]
+\caption{\textbf{Mechanism: the representation ladder on mfeat-zernike.} Mean outer-fold error in percent (outer-fold SD) of the five rungs, and the recall of each class in percent, pooled over the outer folds, repeats and fitting seeds. Neighboring rungs differ in more than one component. Descriptive: the pooled recalls repeat the same test rows, so none of them carries an interval or a test.}
+\label{tab:s-mech-ladder-mfeat}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lrrrrrrrrrrrr}
+\toprule
+Rung & Seeds & \begin{tabular}[b]{@{}r@{}}Error \%\\(SD)\end{tabular} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+\midrule
+Numeric kNN on the raw features & 1 & 19.6 (1.7) & 96.3 & 96.0 & 96.0 & 86.0 & 94.3 & 82.7 & 29.5 & 95.3 & 92.5 & 34.8 \\
+Numeric kNN on the projected scores & 3 & 19.0 (1.4) & 96.7 & 96.3 & 97.2 & 86.2 & 96.2 & 85.6 & 24.8 & 95.7 & 93.7 & 37.8 \\
+Tuned input footrule kNN & 3 & 21.5 (1.2) & 97.8 & 96.9 & 94.2 & 82.1 & 95.8 & 74.4 & 28.7 & 97.8 & 92.0 & 25.3 \\
+The untrained ArrowFlow & 3 & 21.6 (1.4) & 97.6 & 97.2 & 95.2 & 82.1 & 96.3 & 73.6 & 26.2 & 97.6 & 92.0 & 26.1 \\
+ArrowFlow & 3 & 19.3 (1.0) & 97.8 & 97.1 & 96.7 & 85.0 & 97.2 & 79.6 & 34.4 & 96.2 & 95.4 & 27.6 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

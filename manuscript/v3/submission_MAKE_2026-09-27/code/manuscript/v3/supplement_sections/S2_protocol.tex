@@ -1,0 +1,176 @@
+\section{Method Details, Worked Example and Protocol}\label{supp:protocol}
+
+This section gives the method details that Sections~\ref{sec:ranking-layer} and~\ref{sec:encoding} of the main text leave out. It also works through Algorithm~\ref{alg:training} by hand on a four-item example. It then lists every setting of ArrowFlow with its symbol and value. Last, it gives the protocol of Section~\ref{sec:protocol} in full, with the way intervals and tests are computed.
+
+\subsection{Details for Section~\ref*{sec:ranking-layer}: Conventions of the Ranking Layer}\label{supp:layer}
+
+Section~\ref{sec:ranking-layer} defines the ranking layer, its update and its readout. This subsection collects the conventions that make each step deterministic, such as the rule that breaks ties.
+
+\paragraph{Ties and positions.} Every sort in the method breaks ties by ascending item identifier. For example, $\argsort(z)$ lists the coordinates of a score vector $z$ in increasing order of score, with equal scores in identifier order. The forward pass likewise sorts the filters by $(D_j,j)$, that is, by distance and then by filter identifier. A ranking can be stored in two ways, as the list of its items by position or as the position of each item. The two lists are inverse permutations of each other. The footrule is the Manhattan distance between position vectors, so it adds up how far each item moves between the two rankings. That is why every footrule nearest-neighbor classifier in this paper compares positions rather than lists of items.
+
+\paragraph{Votes.} A negative vote attracts the filter toward the reversed target. It never subtracts counts from the accumulator. But in the objective of Section~\ref{supp:borda}, it subtracts squared disagreement with its own target. Reversal sends position $q$ to $V+1-q$. So the items near the middle of $\tau$ get targets close to their positions in $\tau$, and a negative vote changes the target positions most for items near the ends. The identity prior gives every row one vote for its current position, so every denominator of~\eqref{eq:rowmean} is positive.
+
+\paragraph{Training.} A training batch runs the forward pass and then updates the layers from the top down. During the forward pass every filter is held fixed, and each layer's input is saved for the update. The gate accepts a correctly classified example when a uniform draw $\xi$ falls below $p_c$. Otherwise the example's weight is zero, and it sends no signal. The signal list $\mathcal{M}^{(L-1)}$ lists the entries of the returned motion by decreasing $|m|$ and then identifier.
+
+At a hidden layer with a hidden layer below it, each selected filter with a nonzero vote $a_j$ relays $\operatorname{sign}(a_j)\,m_{r_j\to\pi^{(\ell-1)}}$. This is its motion toward the unreversed input, negated for a repelling vote. These motions are aligned by item identifier and averaged without weights into $u$, which is zero if there are none. Every experiment except the corrected arms of Section~\ref{supp:controlled} used the earlier relay, which did not carry the sign of the vote. It averaged the motions toward the targets actually used, $m_{r_j\to\tilde\tau}$. For a repelling vote, that is the motion toward the reversed input (Section~\ref{supp:worked-example}). The entries of $\tilde u$ in~\eqref{eq:signal} are listed by decreasing $|\tilde u|$ and then identifier.
+
+After all votes of a layer, each of its filters is reordered by~\eqref{eq:rowmean} and its accumulator reset. With a frozen output layer, the output votes are discarded and the class filters keep their initial permutations. Their motions still drive the hidden layers. The learning rate follows a multistep or a geometric schedule (Algorithm~\ref{alg:training}, line~\ref{alg:line-schedule}). When several filter sets have equal validation error, the checkpoint keeps the earliest.
+
+\paragraph{Readout.} Under distance weighting, a neighbor's vote weighs the inverse of its distance. Neighbors at distance zero, if any, take all the weight. Equally distant neighbors are taken in the order of the training rows, and a tie between classes goes to the lower class identifier. The neighbor count and weighting are chosen by cross-validation over the stored training rankings. Then the readout is refitted on all of them (Table~\ref{tab:settings-readout}).
+
+\subsection{Worked Example}\label{supp:worked-example}
+
+This subsection runs Algorithm~\ref{alg:training} by hand on a network with four items and two classes. It follows a trace of the code's intermediate values, and the test suite checks this trace. The example shows what each update does, and it says nothing about predictive performance. It traces training only, in which the gate and the checkpoint use the prototype readout. The nearest-neighbor readout of Section~\ref{sec:prediction} is fitted after training.
+
+The trace runs two batches on the same single example. In the first, the network misclassifies the example, and the update reorders two hidden filters. In the second, it classifies the example correctly, so the gate rejects it and nothing changes.
+
+\paragraph{Setting.} The vocabulary is $\{1,2,3,4\}$. The network has one hidden layer with $N_1=3$ filters, written $h_j=r^{(1)}_j$, and an output layer with $C=2$ class filters, written $o_y=r^{(2)}_y$. The filters start in these orders:
+\begin{gather*}
+h_1=[1,2,3,4],\qquad h_2=[4,3,2,1],\qquad h_3=[2,1,4,3],\\
+o_1=[h_3,h_2,h_1],\qquad o_2=[h_1,h_2,h_3].
+\end{gather*}
+Every accumulator is the identity ($4\times4$ for $h_j$, $3\times3$ for $o_y$). The training set is the single ranking $\pi=[1,3,2,4]$ with class $y=1$ and weight $w=1$. The settings are $\eta=1$, $\rho=1/2$ and $p_c=0$, with a trainable output layer, the whole training set as the batch and no validation set ($\nu=0$). The multistep schedule changes $\eta$ only after iteration $3$ or later, so $\eta=1$ throughout. Positions are numbered from $1$ as in the main text. The trace file numbers positions from $0$ and names the filters H0, H1, H2, C0, C1. Its row means are therefore exactly one less than those below, and every ordering is the same.
+
+\paragraph{Batch 1, forward pass.} First, the hidden layer compares the input with each of its filters. The input has $\operatorname{pos}_\pi(1)=1$, $\operatorname{pos}_\pi(2)=3$, $\operatorname{pos}_\pi(3)=2$, $\operatorname{pos}_\pi(4)=4$. By~\eqref{eq:footrule}, summing over the items $1,2,3,4$,
+\[
+d_F(\pi,h_1)=0+1+1+0=2,\qquad d_F(\pi,h_2)=3+0+0+3=6,\qquad d_F(\pi,h_3)=1+2+2+1=6 .
+\]
+The filters $h_2$ and $h_3$ tie at distance $6$, and $h_2$ has the lower ID. So the hidden output is $\pi^{(1)}=[h_1,h_2,h_3]$. Second, the output layer compares this hidden output with its two class filters. The distances are $d_F(\pi^{(1)},o_1)=2+0+2=4$ and $d_F(\pi^{(1)},o_2)=0$, so the class ranking is $\pi^{(2)}=[o_2,o_1]$ and $\hat y=2\neq y$. The example is misclassified, so the gate accepts it and $g=1$.
+
+\paragraph{Output vote.} The output layer now updates the filter of the true class. The class-$1$ filter $o_1$ receives the vote $a=g\,w\,\eta/C=1/2$ toward the saved input $\pi^{(1)}=[h_1,h_2,h_3]$. Its rows hold $h_3,h_2,h_1$ at positions $1,2,3$, and their target positions are $3,2,1$. So~\eqref{eq:vote} adds $|a|=1/2$ at the entries $(1,3)$, $(2,2)$, $(3,1)$, and~\eqref{eq:rowmean} gives
+\[
+A(o_1)=\begin{pmatrix}1&0&\tfrac12\\[2pt]0&\tfrac32&0\\[2pt]\tfrac12&0&1\end{pmatrix},\qquad
+s=\Bigl(\tfrac53,\;2,\;\tfrac73\Bigr).
+\]
+Sorting the rows by $s$ keeps $o_1=[h_3,h_2,h_1]$. The filter $o_2$ received no vote and is unchanged. The returned motion is $(3-1,\;2-2,\;1-3)=(2,0,-2)$ by row, that is $h_1\!:-2$, $h_2\!:0$, $h_3\!:+2$ by item. Listed by $(-|m|,\mathrm{ID})$, it is $\mathcal{M}^{(1)}=[(h_1,-2),(h_3,+2),(h_2,0)]$, the signal list of the hidden layer.
+
+\paragraph{Hidden layer.} The hidden layer reads this list from the top. The selection takes the first $\lceil\rho N_1\rceil=\lceil1.5\rceil=2$ entries, $h_1$ and $h_3$. By~\eqref{eq:hidden-vote} their votes are $a_1=2\eta(-2)/3=-4/3$ and $a_3=2\eta(2)/3=4/3$, both toward the saved input $\pi=[1,3,2,4]$.
+
+The vote on $h_1$ is negative, so its target is $\operatorname{rev}(\pi)=[4,2,3,1]$. In this target the items $1,2,3,4$ sit at positions $4,2,3,1$. The rows of $h_1=[1,2,3,4]$ therefore vote for the columns $4,2,3,1$ with weight $4/3$, which gives
+\[
+A(h_1)=\begin{pmatrix}1&0&0&\tfrac43\\[2pt]0&\tfrac73&0&0\\[2pt]0&0&\tfrac73&0\\[2pt]\tfrac43&0&0&1\end{pmatrix},\qquad
+s=\Bigl(\tfrac{19}{7},\;2,\;3,\;\tfrac{16}{7}\Bigr).
+\]
+Sorting the items by $(s,\mathrm{ID})$ gives $2$ ($s=2$), $4$ ($16/7$), $1$ ($19/7$), $3$ ($3$), so $h_1\leftarrow[2,4,1,3]$.
+
+The vote on $h_3$ is positive, so its target is $\pi$ itself. In $\pi$ the items $1,2,3,4$ sit at positions $1,3,2,4$. The rows of $h_3=[2,1,4,3]$ vote for the columns $3,1,4,2$ with weight $4/3$, which gives
+\[
+A(h_3)=\begin{pmatrix}1&0&\tfrac43&0\\[2pt]\tfrac43&1&0&0\\[2pt]0&0&1&\tfrac43\\[2pt]0&\tfrac43&0&1\end{pmatrix},\qquad
+s=\Bigl(\tfrac{15}{7},\;\tfrac{10}{7},\;\tfrac{25}{7},\;\tfrac{20}{7}\Bigr).
+\]
+Sorting gives $1$ ($10/7$), $2$ ($15/7$), $3$ ($20/7$), $4$ ($25/7$), so $h_3\leftarrow[1,2,3,4]$. The filter $h_2$ was not selected and keeps $[4,3,2,1]$. No layer precedes the hidden layer, so nothing is relayed. Every accumulator is reset to the identity in its new order.
+
+\paragraph{Illustration of the relay.} This illustration is not part of the checked trace. It shows what the hidden layer would pass down if another hidden layer preceded it. Each selected filter would then relay $\operatorname{sign}(a_j)\,m_{h_j\to\pi}$, aligned by item. For the repelled $h_1$ this is $-(0,1,-1,0)=(0,-1,1,0)$ for the items $1,2,3,4$. It asks item $3$ to move earlier in $\pi$ and item $2$ later, away from their order in $h_1=[1,2,3,4]$. For the attracted $h_3$ it is $(-1,2,-2,1)$. It asks items $2$ and $4$ to move earlier and items $1$ and $3$ later, toward $h_3=[2,1,4,3]$. Their unweighted mean is $u=(-\tfrac12,\tfrac12,-\tfrac12,\tfrac12)$ with $\max_v|u_v|=\tfrac12$. By~\eqref{eq:signal} with the protocol's $c=0.125$ and this layer's vocabulary size $V_\ell=4$, the signal is $\tilde u=0.5\,u/(\tfrac12+10^{-5})\approx(-0.5,0.5,-0.5,0.5)$. Its entries are keyed by the preceding layer's filters, whose IDs are $1,2,3,4$. The four entries have equal magnitude, so the ID rule for ties keeps them in that order.
+
+The earlier relay passed down $h_1$'s motion toward the reversed input, $(3,0,0,-3)$, instead. That motion is orthogonal to $(0,-1,1,0)$, which means that their dot product is zero. So it did not ask the layer below to move away from $h_1$. The motions of a filter toward a ranking and toward its reversal are orthogonal in this way for every pair of rankings. The earlier relay's mean was $u=(1,1,-1,-1)$.
+
+\paragraph{Evaluation after batch 1.} After this update, the network classifies the example correctly. With $h_1=[2,4,1,3]$ the items $1,2,3,4$ sit at positions $3,1,4,2$, so $d_F(\pi,h_1)=2+2+2+2=8$. The distance $d_F(\pi,h_2)=6$ is as before, and $h_3=[1,2,3,4]$ gives $d_F(\pi,h_3)=2$. Now $\pi^{(1)}=[h_3,h_2,h_1]$, with $d_F(\pi^{(1)},o_1)=0$ and $d_F(\pi^{(1)},o_2)=4$. So $\pi^{(2)}=[o_1,o_2]$ and $\hat y=1=y$. This evaluation makes no random draw and casts no vote.
+
+\paragraph{Batch 2, the same example.} This time the prediction is correct. With $p_c=0$, no draw $\xi$ satisfies $\xi<0$, so the gate rejects the example and $g=0$. The output vote has weight $0$ and adds nothing. The returned motion is zero, and $\mathcal{M}^{(1)}=[(h_1,0),(h_2,0),(h_3,0)]$ in ID order. The selection still names $h_1$ and $h_2$, but their votes are $0$ and add nothing. Every row mean equals the row's current position, so every filter is unchanged. Every accumulator is again the identity in its current order.
+
+\subsection{Details for Section~\ref*{sec:encoding}: Encoding, Views and Augmentation}\label{supp:encoder}
+
+Section~\ref{sec:encoding} describes the encoder, the views and augmentation in words. This subsection gives their exact rules.
+
+\paragraph{Encoder.} Every statistic of the encoder is fitted on the training rows and reused unchanged on held-out rows. The encoder runs four steps. First, imputation replaces a missing value by the training mean of its column, or by zero for a column that is entirely missing. Second, polynomial expansion of degree $p$ takes every product of at most $p$ coordinates, and a product may repeat a coordinate. For $p>1$ the expansion has $d'=\binom{d+p}{p}$ columns, including the constant. For $p=1$, $\phi(x)=x$ and $d'=d$, with no constant. For Iris ($d=4$) at $p=3$, $d'=35$. The products change which rankings the encoder reaches from $\R^d$, but the possible rankings still number at most $e!$, the number of orderings of $e$ items. Third, standardization scales each nonconstant column to unit variance. Constant columns become zero and never move a ranking. Fourth, a projection turns the standardized columns into $e$ scores.
+
+A target-aware projection takes its first coordinates from a linear discriminant analysis (LDA) of the training rows. LDA is a linear map fitted to separate the classes. The linear-discriminant fraction $\lambda$ sets their share, which is at most $C-1$ coordinates. The other coordinates are random, and each of the two blocks is divided by its standard deviation (Table~\ref{tab:settings}). A calibrated projection standardizes its $e$ coordinates with training statistics before the argsort, which lists equal scores in identifier order.
+
+\paragraph{Scale at degree one.} At degree one, sliding an example toward the training mean or away from it, along the ray from the mean through the example, leaves all of its rankings unchanged. At $p=1$ there is no expansion, so $q(x)=(x-\mu)/s$ with the training mean $\mu$ and scale $s$ of each column. Every block of scores is then linear in $q$ with no offset. First, the random block is $qW$ up to a constant factor. Second, the discriminant block centers at the training mean of $q$, which is zero. Third, a calibrated view standardizes projected scores whose training mean is also zero. Replacing $x$ by $\mu+\lambda(x-\mu)$ with any factor $\lambda>0$ therefore multiplies every score by $\lambda$. This leaves every ranking unchanged, in every view. So the encoding keeps the direction of $x-\mu$ and ignores its length. At $p\ge2$ the squared monomials remove this property. ArrowFlow selected degree one on 120 of the 255 outer folds, on 11 of the 17 datasets (Tables~\ref{tab:s-knn-selected} and~\ref{tab:s-knn-selected-further}).
+
+\paragraph{Views.} Each view's seed is derived from the run seed and its index $k$. The seed draws the projection matrix, the initial filters, the batches and the gate of Algorithm~\ref{alg:training}. The majority vote across views is a plurality. The class predicted by the most views wins, and it need not be predicted by more than half of them.
+
+\paragraph{Augmentation.} Augmentation is applied after the validation split and before the iterations of Algorithm~\ref{alg:training}. Each training ranking receives $n_{\mathrm{aug}}$ copies. Each copy is produced by between $1$ and $s_{\max}$ random adjacent transpositions, that is, swaps of two neighboring items. The swap count and every swapped pair are drawn uniformly. An adjacent transposition moves a ranking by footrule distance exactly two, the smallest positive distance. A copy made by at most $s_{\max}$ swaps therefore lies within footrule distance $2s_{\max}$ of its original. A copy can also coincide with its original.
+
+\paragraph{Checkpoint.} The filter-checkpoint subset of a view is a validation fraction $\nu$ of its training rankings, chosen by the view's seed. It is drawn after the encoder is fitted on all of the view's training rows. Algorithm~\ref{alg:training} returns the filters attaining the lowest validation error on it, the earliest on a tie.
+
+\subsection{Complete Settings of ArrowFlow}\label{supp:settings}
+
+{\raggedright Tables~\ref{tab:settings} and~\ref{tab:settings-readout} list every setting of ArrowFlow with its symbol and its value under the protocol \texttt{arrowflow-v3-bridge-knn-1}. The prototype readout of protocol \texttt{arrowflow-v3-bridge-1} shares every setting except the readout. The protocol files are \texttt{bridge\_knn.json} and \texttt{bridge.json} in \texttt{experiments/make\_revision/}\allowbreak\texttt{protocols/2026-09-12/}.\par}
+
+Four settings have alternatives: the widths, the initial learning rate $\eta$, the scale $s_e$ of the encoded vocabulary size and the offset $\delta_p$ of the polynomial degree. Their $2\times2\times2\times2=16$ combinations are the candidates. The experiment harness allows a candidate budget of $24$, of which the grid uses $16$. A pilot run timed only the training work of the first benchmark. It projected 6.8 to 12.7 h at 16 workers, so the grid dropped the vocabulary scale 0.5 and kept 16 of its 24 candidates. The base values of $e$, $p$ and the augmentation switch are set by a rule. They depend only on the number of features $d$ and the number of training rows $n_{\mathrm{tr}}$, both read from the training partition being fitted.
+
+The settings of the learning rule itself, $\rho$, $c$, $p_c$, $T$ and $B$, were fixed during development and are not varied in any experiment reported here but one. The exception is an arm of the depth study with the corrected relay. It makes the votes of the first hidden layer eight times larger, as an eightfold $c$ would in a network with two hidden layers (Section~\ref{supp:controlled}). Otherwise, we did not measure how sensitive the results are to these settings.
+
+One candidate is chosen on the inner folds by accuracy, and a tie goes to the lowest candidate ID. No outer-fold score enters the choice (Section~\ref{sec:experiments}). Inner-fold mean accuracies are compared as computed in double precision. So two candidates whose means are equal in exact arithmetic can be ordered by round-off rather than by ID. For a stochastic model, the three best candidates on one seed are rescored with all seeds, and round-off can change which three these are. In ArrowFlow's runs, comparing the one-seed means in double precision changed which three candidates were rescored on 7 of the 105 outer folds of the benchmark datasets and on 2 of the 150 of the further datasets, each time by one candidate. Among the candidates that were rescored, exact arithmetic with the ID rule picks the configuration that was chosen on every benchmark fold and on all but one of the further folds.
+
+\paragraph{Which rows a step is fitted on.} Four splits in this paper are called held out, and they are nested. First, the outer fold holds out a test partition that no fitting step of that fold sees. Second, the inner folds of the outer training partition carry every selection of a candidate configuration. Third and fourth, the filter-checkpoint subset and the readout-selection splits are drawn inside one fit, from the outer training rows. They are drawn after the encoder has been fitted on all of these rows. So neither is held out from the encoder, and the checkpoint criterion is optimistic in the same way as the readout selection. Here optimistic means that a criterion can make a choice look better than it would on rows the encoder never saw. The readout selection also reads hidden rankings produced by a network fitted on those same rows. Section~\ref{supp:statistics} notes this, and no experiment measures how large this optimism is.
+
+\paragraph{Implementation.} The code calls the ranking layer a sort layer. It stores filters as integer permutations, while votes, accumulators and the batched distance tensors are floating point. Distances come from a cached table of filter positions. After each update, this table is refreshed for every changed layer, the output layer included. The sample weight $w$ enters only the output vote. A returned motion depends on the sign of the vote but not on its size, so for $w>0$ the hidden votes do not depend on $w$. Table~\ref{tab:s-grids} lists the candidate grid of every model of Table~\ref{tab:main} and of every control and baseline.
+
+\begin{table}[!htbp]
+\caption{\textbf{Settings of the encoder, the networks and training of ArrowFlow.} Here $d$ counts the raw features and $n_{\mathrm{tr}}$ the training rows of the partition being fitted.}
+\label{tab:settings}
+\centering
+\small
+\begin{tabular}{@{}l p{0.30\textwidth} p{0.54\textwidth}@{}}
+\toprule
+Symbol & Meaning & Value \\
+\midrule
+$K$ & number of views & $7$ \\
+-- & projection strategy of view $k$ & target-aware, random, calibrated, repeating with $k$ \\
+$\lambda$ & cap on the share of $e$ from a linear discriminant analysis (LDA) in a target-aware view & $0.3$; the first $e_{\mathrm{LDA}}=\max\{1,\min(\lfloor\lambda e\rfloor,C-1,d',e)\}$ coordinates come from the LDA and the other $e-e_{\mathrm{LDA}}$ are random, each block divided by its standard deviation over all training entries (plus $10^{-10}$); on all seventeen datasets the class cap binds, so a target-aware view takes $C-1$ coordinates from the LDA \\
+$e$ & encoded vocabulary size & base $16$ ($d\le10$), $32$ ($d\le30$), $64$ ($d>30$); times $s_e\in\{1,2\}$, rounded and clipped to $[8,128]$ \\
+$p$ & polynomial degree & base $3$ ($d\le10$), $2$ ($d\le30$), $1$ ($d>30$); plus $\delta_p\in\{0,-1\}$, at least $1$, lowered by one while $\binom{d+p}{p}>10{,}000$ \\
+$L$, $N_\ell$ & layers and widths & one hidden layer with $N_1=128$, or two with $N_1=64$ and $N_2=128$; $N_L=C$ \\
+$\eta$ & initial learning rate & $0.1$ or $0.2$ \\
+-- & schedule & multistep: $\eta\leftarrow0.7\,\eta$ after iterations $51$, $101$ and $151$ \\
+$T$ & iterations (batch updates) & $200$ \\
+$B$ & batch size & $32$ \\
+$\rho$ & selected fraction per hidden layer & $0.5$ \\
+$c$ & signal scale & $0.125$ \\
+$p_c$ & acceptance probability of a correct example & $0.01$ \\
+$w$ & sample weight & $1$ \\
+$\nu$ & validation fraction per view & $0.1$ of the view's training rows, drawn after the encoder has been fitted on all of them; the validation error is checked after every iteration and the filters with the lowest such error are returned, the earliest on a tie \\
+$n_{\mathrm{aug}}$, $s_{\max}$ & augmented copies per training ranking; maximum adjacent swaps per copy & $1$; $2$; augmentation is on when $d\le30$ and $n_{\mathrm{tr}}\ge150$, otherwise off \\
+-- & initial filters & uniform random permutations drawn from the view's seed \\
+-- & ties & ascending ID in every sort; row means $s_p$ are compared as computed in double precision, so the ID decides only between exactly equal computed values, and two row means that are equal in exact arithmetic but differ by round-off are ordered by their computed values \\
+-- & seeds & each view's seed is derived from the run seed and its index $k$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htbp]
+\caption{\textbf{Settings of the output layer, the readout, the vote across views and the candidate grid of ArrowFlow.}}
+\label{tab:settings-readout}
+\centering
+\small
+\begin{tabular}{@{}l p{0.30\textwidth} p{0.54\textwidth}@{}}
+\toprule
+Symbol & Meaning & Value \\
+\midrule
+-- & output layer & trainable; the class of its nearest filter, the prototype readout, serves the gate and the checkpoint \\
+-- & readout & footrule nearest-neighbor vote between the last hidden ranking of a query and the stored last hidden rankings of every training row of the view, validation rows included \\
+-- & readout candidates & $\{1,3,5,11,21\}$ neighbors with uniform or inverse-distance weights (neighbors at distance zero, if any, take all the weight); chosen inside every fit by mean accuracy over three stratified splits of the stored rankings (fewer when the smallest class has fewer rows), ties to the lowest candidate ID, then refitted on all stored rankings; outside the candidate budget \\
+-- & readout ties & equally distant neighbors in training-row order; tied classes to the lowest class ID \\
+-- & aggregation & majority vote over the views' readout predictions; with the prototype readout, the Borda count is the alternative rule: each class ranking awards $C-1$ points to its first class, $C-2$ to its second and so on down to zero, and the highest total wins, the lowest class ID on a tie \\
+-- & candidate grid & widths $\times$ $\eta$ $\times$ $s_e$ $\times$ $\delta_p$: $16$ candidates of a harness budget of $24$, chosen on inner folds \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\input{tables/tab_s_grids}
+
+\subsection{Details for Section~\ref*{sec:protocol}: Protocol, Intervals and Tests}\label{supp:statistics}
+
+This subsection gives the protocol of Section~\ref{sec:protocol} in full. It first explains how the data are split and how the models are set up and tuned. It then shows how two models are compared on one dataset and how the $p$ values of many comparisons are corrected together. Last, it says when each group of comparisons was fixed.
+
+\paragraph{Partitions and selection.} All selection runs inside nested cross-validation, so no test row influences a choice. Ordinary cross-validation cuts the data into parts. Each part serves once as the test set, while the model is fitted on the rest. Nested cross-validation runs a second cross-validation inside each training part. The inner one chooses the settings, and the outer one measures how well the chosen settings do. The protocol has four steps, and Figure~\ref{fig:s-nested-cv} draws them.
+
+First, each dataset is split into five stratified outer folds, which keep the class proportions. The split is repeated three times, so every model is tested on the same 15 held-out partitions. Second, the data outside each test fold, its outer training partition, are split again into three stratified inner folds, where all selection happens. Third, each model chooses one of at most 24 candidates, sampled with a fixed seed from larger grids (Table~\ref{tab:s-grids}). Candidates are scored on the inner folds with one fitting seed. A stochastic model is one whose fit depends on a random seed, and its three best candidates are rescored with all seeds. Fourth, the choice is refitted on the outer training partition with three fitting seeds, or once for deterministic models, and then scored on the test fold.
+
+\input{figures/figS_nested_cv}
+
+ArrowFlow additionally chooses the neighbor count and weighting of each view's nearest-neighbor readout inside every fit, outside this budget. Every preprocessing step is fitted on the rows of the partition it is given. The checkpoint and readout splits are drawn from rows the encoder has already seen.
+
+\paragraph{Models.} ArrowFlow's grid has 16 candidates. It takes every combination of the hidden-layer widths $[128]$ and $[64,128]$, the initial learning rate $\eta\in\{0.1,0.2\}$, a scale of 1 or 2 on the encoded vocabulary size $e$, and an offset of $0$ or $-1$ on the degree $p$. An adaptive rule sets the base values of $e$ and $p$ and the augmentation switch from the training partition. ArrowFlow fixes $K=7$ views, the nearest-neighbor readout, the majority vote and the validation checkpoint with $\nu=0.1$. Its readout settings are chosen by cross-validation over the training rows. The hidden rankings of these rows come from a network fitted on those same rows, so the choice carries some optimism. The prototype readout, the ablation of ArrowFlow that predicts with the nearest output filter, ran with the same grid in a separate run on the same partitions of the benchmark datasets. Each comparison model fits an imputer. The support vector classifier, the multilayer perceptron and numeric nearest neighbors also standardize the features. The majority class gives the baseline.
+
+\paragraph{Means and intervals.} Tables give the mean and standard deviation (SD) over the 15 outer folds after averaging fitting seeds within each fold. The SD describes how widely the results spread across the folds. It is not a measure of uncertainty. To compare two models on one dataset, we form a paired accuracy difference on each of the $15$ outer folds, after averaging the fitting seeds within the fold. We call such a paired comparison a contrast. When we count the datasets on which one model is ahead, we use the sign of the unrounded difference. So a difference printed as $\pm0.00$ can count either way.
+
+The 15 splits share training data, so the differences of a contrast are correlated. A standard $t$ interval, the textbook interval for a mean, would treat them as independent. The corrected resampled-$t$ interval \citep{nadeau2003inference,bouckaert2004evaluating} widens it to allow for the correlation. Like the textbook interval, it is the mean difference plus or minus a $t$ quantile times the square root of a scaled sample variance. In this interval, the sample variance of the $15$ differences is multiplied by $1/15+0.25$, where $0.25$ is the test-to-training ratio of the protocol. The $t$ quantile has $14$ degrees of freedom. A contrast over a subset of $n$ outer folds uses $1/n+0.25$ and $n-1$ degrees of freedom. The ratio is the size of a test fold divided by the size of its outer training partition. The textbook interval would multiply the variance by $1/15$ alone, so the added $0.25$ is what widens it. The corrected statistic also gives each contrast its $p$ value. It is an approximation, so its $p$ values are approximate.
+
+\paragraph{The Holm adjustment.} When many contrasts are tested, some can look significant by chance alone. The Holm adjustment \citep{holm1979simple} guards against this. The comparisons that share one Holm adjustment form a family. The adjustment sorts the $p$ values of a family from smallest to largest. The smallest must fall below $0.05$ divided by the number of contrasts in the family, the next below $0.05$ divided by one less, and so on. The check stops at the first $p$ value that misses its threshold, and only the contrasts before it are significant. Equivalently, a contrast is significant when its Holm-adjusted $p$ value is below $0.05$. The adjustment bounds the probability of any false rejection in its family, that is, of calling a contrast significant when there is no true difference. It does so only as far as the $p$ values of the corrected statistic are valid.
+
+Each family of contrasts is declared in its own protocol and adjusted only within itself. The families include the fourteen benchmark training contrasts, the fourteen contrasts of the sorting control and the two families of ten contrasts on the further datasets. The seven contrasts of ArrowFlow with the prototype readout and the fourteen contrasts fixed in the benchmark protocol form two more families. The stratum test on the further datasets compares the four marked datasets with the other six (Section~\ref{sec:training-controls}). It is an exact permutation test, and its $p$ value is the share of the 210 splits of the ten datasets into four and six whose difference of mean training effects is at least the observed one. In other words, the $p$ value is the chance that four datasets picked at random from the ten would show a difference at least as large. The matched protocol's own family of fourteen contrasts is reported for completeness with the matched study, and no claim rests on it.
+
+\paragraph{When the families were fixed.} A family is registered when a run protocol fixed it before its comparisons were scored. Analyses defined afterwards are called post hoc. Every protocol of a family that scores outer folds is a file frozen with a recorded hash (Section~\ref{supp:protocols}), and none was deposited with an external registry. The hash is a fingerprint of the file's contents, so any later change to the file would show. The family of fourteen training contrasts on the benchmark datasets was registered after the outer results of ArrowFlow and of the prototype readout on these datasets were known. The two families of ten on the further datasets and their stratum test were registered before those runs. The prototype-readout protocol fixed its family of fourteen prototype-readout contrasts before its outer folds were scored. No registered adjustment spans two families. So Holm controls errors within one family only. Across the many families of this paper a few false positives are expected, and a result with an adjusted $p$ value near $0.05$ is fragile. One Holm adjustment over all 34 training contrasts, defined after every result was known, is reported as a post hoc sensitivity analysis. It shows which training results survive this stricter correction. Every other comparison of the training controls is descriptive. The controlled experiments of Sections~\ref{sec:motion-controls} and~\ref{sec:controlled} and the two studies of the encoder network declare their own families. Table~\ref{tab:study-map} lists those of the controlled experiments, and Section~\ref{supp:learned} gives those of the encoder network.

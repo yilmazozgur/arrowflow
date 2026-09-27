@@ -1,0 +1,927 @@
+\begin{thebibliography}{118}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Achlioptas(2003)]{achlioptas2003database}
+Dimitris Achlioptas.
+\newblock Database-friendly random projections: {Johnson-Lindenstrauss} with
+  binary coins.
+\newblock \emph{Journal of Computer and System Sciences}, 66\penalty0
+  (4):\penalty0 671--687, 2003.
+\newblock \doi{10.1016/S0022-0000(03)00025-4}.
+
+\bibitem[Aeberhard and Forina(1992)]{uci_wine}
+Stefan Aeberhard and M.~Forina.
+\newblock Wine.
+\newblock UCI Machine Learning Repository, 1992.
+\newblock URL \url{https://doi.org/10.24432/C5PC7J}.
+\newblock Dataset.
+
+\bibitem[Alpaydin and Kaynak(1998)]{uci_digits}
+E.~Alpaydin and C.~Kaynak.
+\newblock Optical recognition of handwritten digits.
+\newblock UCI Machine Learning Repository, 1998.
+\newblock URL \url{https://doi.org/10.24432/C50P49}.
+\newblock Dataset; the study uses the scikit-learn subset.
+
+\bibitem[Amato and Savino(2008)]{amato2008approximate}
+Giuseppe Amato and Pasquale Savino.
+\newblock Approximate similarity search in metric spaces using inverted files.
+\newblock In \emph{Proceedings of the 3rd International ICST Conference on
+  Scalable Information Systems ({InfoScale} 2008)}. ICST, 2008.
+\newblock \doi{10.4108/ICST.INFOSCALE2008.3486}.
+
+\bibitem[Arriaga and Vempala(2006)]{arriaga2006algorithmic}
+Rosa~I. Arriaga and Santosh Vempala.
+\newblock An algorithmic theory of learning: Robust concepts and random
+  projection.
+\newblock \emph{Machine Learning}, 63\penalty0 (2):\penalty0 161--182, 2006.
+\newblock \doi{10.1007/s10994-006-6265-7}.
+
+\bibitem[Arrow(1951)]{arrow1951social}
+Kenneth~J. Arrow.
+\newblock \emph{Social Choice and Individual Values}.
+\newblock John Wiley \& Sons, 1951.
+
+\bibitem[Arrow(1963)]{arrow1963social}
+Kenneth~J. Arrow.
+\newblock \emph{Social Choice and Individual Values}.
+\newblock Number~12 in Cowles Foundation Monograph. John Wiley \& Sons, New
+  York, second edition, 1963.
+\newblock URL
+  \url{https://cowles.yale.edu/sites/default/files/2022-09/m12-2-all.pdf}.
+
+\bibitem[Barreto and Neto(2005)]{uci_vertebral}
+Guilherme Barreto and Ajalmar Neto.
+\newblock Vertebral column.
+\newblock UCI Machine Learning Repository, 2005.
+\newblock URL \url{https://doi.org/10.24432/C5K89B}.
+\newblock Dataset.
+
+\bibitem[Bengio(2014)]{bengio2014auto}
+Yoshua Bengio.
+\newblock How auto-encoders could provide credit assignment in deep networks
+  via target propagation.
+\newblock \emph{arXiv preprint arXiv:1407.7906}, 2014.
+\newblock URL \url{https://arxiv.org/abs/1407.7906}.
+
+\bibitem[Bengio et~al.(2013)Bengio, L{\'e}onard, and
+  Courville]{bengio2013estimating}
+Yoshua Bengio, Nicholas L{\'e}onard, and Aaron Courville.
+\newblock Estimating or propagating gradients through stochastic neurons for
+  conditional computation.
+\newblock \emph{arXiv preprint arXiv:1308.3432}, 2013.
+\newblock URL \url{https://arxiv.org/abs/1308.3432}.
+
+\bibitem[Bertens(2016)]{bertens2016rank}
+Paul Bertens.
+\newblock Rank ordered autoencoders.
+\newblock \emph{arXiv preprint arXiv:1605.01749}, 2016.
+
+\bibitem[Berthet et~al.(2020)Berthet, Blondel, Teboul, Cuturi, Vert, and
+  Bach]{berthet2020perturbed}
+Quentin Berthet, Mathieu Blondel, Olivier Teboul, Marco Cuturi, Jean-Philippe
+  Vert, and Francis Bach.
+\newblock Learning with differentiable perturbed optimizers.
+\newblock In H.~Larochelle, M.~Ranzato, R.~Hadsell, M.~F. Balcan, and H.~Lin,
+  editors, \emph{Advances in Neural Information Processing Systems}, volume~33,
+  pages 9508--9519. Curran Associates, Inc., 2020.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper_files/paper/2020/hash/6bb56208f672af0dd65451f869fedfd9-Abstract.html}.
+
+\bibitem[Bischl et~al.(2021)Bischl, Casalicchio, Feurer, Gijsbers, Hutter,
+  Lang, Mantovani, van Rijn, and Vanschoren]{bischl2021openml}
+Bernd Bischl, Giuseppe Casalicchio, Matthias Feurer, Pieter Gijsbers, Frank
+  Hutter, Michel Lang, Rafael~Gomes Mantovani, Jan van Rijn, and Joaquin
+  Vanschoren.
+\newblock {OpenML} benchmarking suites.
+\newblock In \emph{Proceedings of the Neural Information Processing Systems
+  Track on Datasets and Benchmarks}, volume~1, 2021.
+\newblock URL
+  \url{https://datasets-benchmarks-proceedings.neurips.cc/paper/2021/hash/c7e1249ffc03eb9ded908c236bd1996d-Abstract-round2.html}.
+
+\bibitem[Blondel et~al.(2020{\natexlab{a}})Blondel, Martins, and
+  Niculae]{blondel2020fenchel}
+Mathieu Blondel, Andr{\'e} F.~T. Martins, and Vlad Niculae.
+\newblock Learning with {Fenchel-Young} losses.
+\newblock \emph{Journal of Machine Learning Research}, 21\penalty0
+  (35):\penalty0 1--69, 2020{\natexlab{a}}.
+\newblock URL \url{https://jmlr.org/papers/v21/19-021.html}.
+
+\bibitem[Blondel et~al.(2020{\natexlab{b}})Blondel, Teboul, Berthet, and
+  Djolonga]{blondel2020fast}
+Mathieu Blondel, Olivier Teboul, Quentin Berthet, and Josip Djolonga.
+\newblock Fast differentiable sorting and ranking.
+\newblock In Hal Daum{\'e}~III and Aarti Singh, editors, \emph{Proceedings of
+  the 37th International Conference on Machine Learning}, volume 119 of
+  \emph{Proceedings of Machine Learning Research}, pages 950--959. PMLR,
+  2020{\natexlab{b}}.
+\newblock URL \url{https://proceedings.mlr.press/v119/blondel20a.html}.
+
+\bibitem[Bonilla et~al.(2022)Bonilla, Gautrais, Thorpe, and
+  Masquelier]{bonilla2022analyzing}
+Lina Bonilla, Jacques Gautrais, Simon Thorpe, and Timoth{\'e}e Masquelier.
+\newblock Analyzing time-to-first-spike coding schemes: A theoretical approach.
+\newblock \emph{Frontiers in Neuroscience}, 16:\penalty0 971937, 2022.
+\newblock \doi{10.3389/fnins.2022.971937}.
+
+\bibitem[Bouckaert and Frank(2004)]{bouckaert2004evaluating}
+Remco~R. Bouckaert and Eibe Frank.
+\newblock Evaluating the replicability of significance tests for comparing
+  learning algorithms.
+\newblock In Honghua Dai, Ramakrishnan Srikant, and Chengqi Zhang, editors,
+  \emph{Advances in Knowledge Discovery and Data Mining (PAKDD 2004)}, volume
+  3056 of \emph{Lecture Notes in Computer Science}, pages 3--12. Springer,
+  2004.
+\newblock \doi{10.1007/978-3-540-24775-3_3}.
+
+\bibitem[Breiman(1996)]{breiman1996bagging}
+Leo Breiman.
+\newblock Bagging predictors.
+\newblock \emph{Machine Learning}, 24\penalty0 (2):\penalty0 123--140, 1996.
+\newblock \doi{10.1007/BF00058655}.
+
+\bibitem[Burges(2010)]{burges2010ranknet}
+Christopher J.~C. Burges.
+\newblock From {RankNet} to {LambdaRank} to {LambdaMART}: An overview.
+\newblock Technical Report MSR-TR-2010-82, Microsoft Research, 2010.
+\newblock URL
+  \url{https://www.microsoft.com/en-us/research/publication/from-ranknet-to-lambdarank-to-lambdamart-an-overview/}.
+
+\bibitem[Burges et~al.(2005)Burges, Shaked, Renshaw, Lazier, Deeds, Hamilton,
+  and Hullender]{burges2005learning}
+Christopher J.~C. Burges, Tal Shaked, Erin Renshaw, Ari Lazier, Matt Deeds,
+  Nicole Hamilton, and Greg Hullender.
+\newblock Learning to rank using gradient descent.
+\newblock In \emph{Proceedings of the 22nd International Conference on Machine
+  Learning}, pages 89--96. ACM, 2005.
+\newblock \doi{10.1145/1102351.1102363}.
+
+\bibitem[Burges et~al.(2006)Burges, Ragno, and Le]{burges2006nonsmooth}
+Christopher J.~C. Burges, Robert Ragno, and Quoc~V. Le.
+\newblock Learning to rank with nonsmooth cost functions.
+\newblock In B.~Sch{\"o}lkopf, J.~Platt, and T.~Hoffman, editors,
+  \emph{Advances in Neural Information Processing Systems}, volume~19. MIT
+  Press, 2006.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper_files/paper/2006/hash/af44c4c56f385c43f2529f9b1b018f6a-Abstract.html}.
+
+\bibitem[Buscema et~al.(2010)Buscema, Terzi, and Tastle]{uci_steel}
+M.~Buscema, S.~Terzi, and W.~Tastle.
+\newblock Steel plates faults.
+\newblock UCI Machine Learning Repository, 2010.
+\newblock URL \url{https://doi.org/10.24432/C5J88N}.
+\newblock Dataset.
+
+\bibitem[Cannings and Samworth(2017)]{cannings2017random}
+Timothy~I. Cannings and Richard~J. Samworth.
+\newblock Random-projection ensemble classification.
+\newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, 79\penalty0 (4):\penalty0 959--1035, 2017.
+\newblock \doi{10.1111/rssb.12228}.
+
+\bibitem[Caragiannis et~al.(2013)Caragiannis, Procaccia, and
+  Shah]{caragiannis2013noisy}
+Ioannis Caragiannis, Ariel~D. Procaccia, and Nisarg Shah.
+\newblock When do noisy votes reveal the truth?
+\newblock In \emph{Proceedings of the Fourteenth ACM Conference on Electronic
+  Commerce (EC '13)}, pages 143--160. ACM, 2013.
+\newblock \doi{10.1145/2482540.2482570}.
+
+\bibitem[Cawley and Talbot(2010)]{cawley2010selection}
+Gavin~C. Cawley and Nicola L.~C. Talbot.
+\newblock On over-fitting in model selection and subsequent selection bias in
+  performance evaluation.
+\newblock \emph{Journal of Machine Learning Research}, 11:\penalty0 2079--2107,
+  2010.
+\newblock URL \url{https://www.jmlr.org/papers/v11/cawley10a.html}.
+
+\bibitem[Charikar(2002)]{charikar2002similarity}
+Moses~S. Charikar.
+\newblock Similarity estimation techniques from rounding algorithms.
+\newblock In \emph{Proceedings of the 34th Annual ACM Symposium on Theory of
+  Computing}, pages 380--388. ACM, 2002.
+\newblock \doi{10.1145/509907.509965}.
+
+\bibitem[Ch{\'a}vez et~al.(2008)Ch{\'a}vez, Figueroa, and
+  Navarro]{chavez2008proximity}
+Edgar Ch{\'a}vez, Karina Figueroa, and Gonzalo Navarro.
+\newblock Effective proximity retrieval by ordering permutations.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}, 30\penalty0 (9):\penalty0 1647--1658, 2008.
+\newblock \doi{10.1109/TPAMI.2007.70815}.
+
+\bibitem[Cho and Saul(2009)]{cho2009kernel}
+Youngmin Cho and Lawrence~K. Saul.
+\newblock Kernel methods for deep learning.
+\newblock In Y.~Bengio, D.~Schuurmans, J.~Lafferty, C.~Williams, and
+  A.~Culotta, editors, \emph{Advances in Neural Information Processing
+  Systems}, volume~22. Curran Associates, 2009.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper_files/paper/2009/hash/5751ec3e9a4feab575962e78e006250d-Abstract.html}.
+
+\bibitem[Collins(2002)]{collins2002perceptron}
+Michael Collins.
+\newblock Discriminative training methods for hidden {Markov} models: Theory
+  and experiments with perceptron algorithms.
+\newblock In \emph{Proceedings of the 2002 Conference on Empirical Methods in
+  Natural Language Processing (EMNLP 2002)}, pages 1--8. Association for
+  Computational Linguistics, 2002.
+\newblock \doi{10.3115/1118693.1118694}.
+
+\bibitem[Conitzer and Sandholm(2005)]{conitzer2005voting}
+Vincent Conitzer and Tuomas Sandholm.
+\newblock Common voting rules as maximum likelihood estimators.
+\newblock In \emph{Proceedings of the 21st Conference on Uncertainty in
+  Artificial Intelligence}, pages 145--152, 2005.
+
+\bibitem[Conover and Iman(1981)]{conover1981rank}
+W.~J. Conover and Ronald~L. Iman.
+\newblock Rank transformations as a bridge between parametric and nonparametric
+  statistics.
+\newblock \emph{The American Statistician}, 35\penalty0 (3):\penalty0 124--129,
+  1981.
+\newblock \doi{10.1080/00031305.1981.10479327}.
+
+\bibitem[Cortez et~al.(2009)Cortez, Cerdeira, Almeida, Matos, and
+  Reis]{uci_winequality}
+Paulo Cortez, A.~Cerdeira, F.~Almeida, T.~Matos, and J.~Reis.
+\newblock Wine quality.
+\newblock UCI Machine Learning Repository, 2009.
+\newblock URL \url{https://doi.org/10.24432/C56S3T}.
+\newblock Dataset; red-wine subset.
+
+\bibitem[Cover(1967)]{cover1967orderings}
+Thomas~M. Cover.
+\newblock The number of linearly inducible orderings of points in $d$-space.
+\newblock \emph{SIAM Journal on Applied Mathematics}, 15\penalty0 (2):\penalty0
+  434--439, 1967.
+\newblock \doi{10.1137/0115039}.
+
+\bibitem[Cuturi et~al.(2019)Cuturi, Teboul, and Vert]{cuturi2019ot}
+Marco Cuturi, Olivier Teboul, and Jean-Philippe Vert.
+\newblock Differentiable ranking and sorting using optimal transport.
+\newblock In H.~Wallach, H.~Larochelle, A.~Beygelzimer, F.~d'Alch{\'e} Buc,
+  E.~Fox, and R.~Garnett, editors, \emph{Advances in Neural Information
+  Processing Systems}, volume~32. Curran Associates, Inc., 2019.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper_files/paper/2019/hash/d8c24ca8f23c562a5600876ca2a550ce-Abstract.html}.
+
+\bibitem[Dem{\v{s}}ar(2006)]{demsar2006statistical}
+Janez Dem{\v{s}}ar.
+\newblock Statistical comparisons of classifiers over multiple data sets.
+\newblock \emph{Journal of Machine Learning Research}, 7\penalty0 (1):\penalty0
+  1--30, 2006.
+\newblock URL \url{https://www.jmlr.org/papers/v7/demsar06a.html}.
+
+\bibitem[Diaconis and Graham(1977)]{diaconis1977footrule}
+Persi Diaconis and R.~L. Graham.
+\newblock Spearman's footrule as a measure of disarray.
+\newblock \emph{Journal of the Royal Statistical Society: Series B
+  (Methodological)}, 39\penalty0 (2):\penalty0 262--268, 1977.
+\newblock \doi{10.1111/j.2517-6161.1977.tb01624.x}.
+
+\bibitem[Diao et~al.(2021)Diao, Kleyko, Rabaey, and Olshausen]{diao2021glvq}
+Cameron Diao, Denis Kleyko, Jan~M. Rabaey, and Bruno~A. Olshausen.
+\newblock Generalized learning vector quantization for classification in
+  randomized neural networks and hyperdimensional computing.
+\newblock In \emph{2021 International Joint Conference on Neural Networks
+  (IJCNN)}, pages 1--9. IEEE, 2021.
+\newblock \doi{10.1109/IJCNN52387.2021.9533316}.
+
+\bibitem[Dietterich(2000)]{dietterich2000ensemble}
+Thomas~G. Dietterich.
+\newblock Ensemble methods in machine learning.
+\newblock In Josef Kittler and Fabio Roli, editors, \emph{Multiple Classifier
+  Systems}, volume 1857 of \emph{Lecture Notes in Computer Science}, pages
+  1--15. Springer, 2000.
+\newblock URL \url{https://doi.org/10.1007/3-540-45014-9_1}.
+
+\bibitem[Dua and Graff(2019)]{dua2019uci}
+Dheeru Dua and Casey Graff.
+\newblock {UCI} machine learning repository.
+\newblock \url{https://archive.ics.uci.edu}, 2019.
+
+\bibitem[Duan et~al.(2022)Duan, Liu, Ren, and Xu]{duan2022lehdc}
+Shijin Duan, Yejia Liu, Shaolei Ren, and Xiaolin Xu.
+\newblock {LeHDC}: Learning-based hyperdimensional computing classifier.
+\newblock In \emph{Proceedings of the 59th ACM/IEEE Design Automation
+  Conference}, pages 1111--1116. ACM, 2022.
+\newblock \doi{10.1145/3489517.3530593}.
+
+\bibitem[Duin(1998)]{uci_mfeat}
+Robert Duin.
+\newblock Multiple features.
+\newblock UCI Machine Learning Repository, 1998.
+\newblock URL \url{https://doi.org/10.24432/C5HC70}.
+\newblock Dataset; the study uses the Zernike-moment features.
+
+\bibitem[Dwork et~al.(2001)Dwork, Kumar, Naor, and Sivakumar]{dwork2001rank}
+Cynthia Dwork, Ravi Kumar, Moni Naor, and D.~Sivakumar.
+\newblock Rank aggregation methods for the web.
+\newblock In \emph{Proceedings of the 10th International Conference on World
+  Wide Web}, pages 613--622. ACM, 2001.
+\newblock \doi{10.1145/371920.372165}.
+
+\bibitem[Eshghi and Rajaram(2008)]{eshghi2008locality}
+Kave Eshghi and Shyamsundar Rajaram.
+\newblock Locality sensitive hash functions based on concomitant rank order
+  statistics.
+\newblock In \emph{Proceedings of the 14th ACM SIGKDD International Conference
+  on Knowledge Discovery and Data Mining}, pages 221--229. ACM, 2008.
+\newblock \doi{10.1145/1401890.1401921}.
+
+\bibitem[Fagin et~al.(2003)Fagin, Kumar, and Sivakumar]{fagin2003topk}
+Ronald Fagin, Ravi Kumar, and D.~Sivakumar.
+\newblock Comparing top $k$ lists.
+\newblock \emph{SIAM Journal on Discrete Mathematics}, 17\penalty0
+  (1):\penalty0 134--160, 2003.
+\newblock \doi{10.1137/S0895480102412856}.
+
+\bibitem[Fagin et~al.(2006)Fagin, Kumar, Mahdian, Sivakumar, and
+  Vee]{fagin2006partial}
+Ronald Fagin, Ravi Kumar, Mohammad Mahdian, D.~Sivakumar, and Erik Vee.
+\newblock Comparing partial rankings.
+\newblock \emph{SIAM Journal on Discrete Mathematics}, 20\penalty0
+  (3):\penalty0 628--648, 2006.
+\newblock \doi{10.1137/05063088X}.
+
+\bibitem[Fern{\'a}ndez-Delgado et~al.(2014)Fern{\'a}ndez-Delgado, Cernadas,
+  Barro, and Amorim]{fernandezdelgado2014hundreds}
+Manuel Fern{\'a}ndez-Delgado, Eva Cernadas, Sen{\'e}n Barro, and Dinani Amorim.
+\newblock Do we need hundreds of classifiers to solve real world classification
+  problems?
+\newblock \emph{Journal of Machine Learning Research}, 15\penalty0
+  (90):\penalty0 3133--3181, 2014.
+\newblock URL \url{https://jmlr.org/papers/v15/delgado14a.html}.
+
+\bibitem[Fisher(1936)]{uci_iris}
+R.~A. Fisher.
+\newblock Iris.
+\newblock UCI Machine Learning Repository, 1936.
+\newblock URL \url{https://doi.org/10.24432/C56C76}.
+\newblock Dataset.
+
+\bibitem[Fligner and Verducci(1986)]{fligner1986distance}
+Michael~A. Fligner and Joseph~S. Verducci.
+\newblock Distance based ranking models.
+\newblock \emph{Journal of the Royal Statistical Society: Series B
+  (Methodological)}, 48\penalty0 (3):\penalty0 359--369, 1986.
+\newblock \doi{10.1111/j.2517-6161.1986.tb01420.x}.
+
+\bibitem[Friesen and Domingos(2018)]{friesen2018combinatorial}
+Abram~L. Friesen and Pedro Domingos.
+\newblock Deep learning as a mixed convex-combinatorial optimization problem.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2018.
+\newblock URL \url{https://openreview.net/forum?id=B1Lc-Gb0Z}.
+\newblock arXiv:1710.11573.
+
+\bibitem[Gautrais and Thorpe(1998)]{gautrais1998rate}
+Jacques Gautrais and Simon Thorpe.
+\newblock Rate coding versus temporal order coding: a theoretical approach.
+\newblock \emph{BioSystems}, 48\penalty0 (1--3):\penalty0 57--65, 1998.
+\newblock \doi{10.1016/S0303-2647(98)00050-1}.
+
+\bibitem[Geman et~al.(2004)Geman, d'Avignon, Naiman, and
+  Winslow]{geman2004classifying}
+Donald Geman, Christian d'Avignon, Daniel~Q. Naiman, and Raimond~L. Winslow.
+\newblock Classifying gene expression profiles from pairwise {mRNA}
+  comparisons.
+\newblock \emph{Statistical Applications in Genetics and Molecular Biology},
+  3\penalty0 (1):\penalty0 Article 19, 2004.
+\newblock \doi{10.2202/1544-6115.1071}.
+
+\bibitem[Goldberger et~al.(2004)Goldberger, Roweis, Hinton, and
+  Salakhutdinov]{goldberger2004nca}
+Jacob Goldberger, Sam Roweis, Geoffrey Hinton, and Ruslan Salakhutdinov.
+\newblock Neighbourhood components analysis.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~17, pages 513--520, 2004.
+\newblock URL
+  \url{https://papers.nips.cc/paper_files/paper/2004/hash/42fe880812925e520249e808937738d2-Abstract.html}.
+
+\bibitem[Grossberg(1987)]{grossberg1987competitive}
+Stephen Grossberg.
+\newblock Competitive learning: From interactive activation to adaptive
+  resonance.
+\newblock \emph{Cognitive Science}, 11\penalty0 (1):\penalty0 23--63, 1987.
+\newblock \doi{10.1111/j.1551-6708.1987.tb00862.x}.
+
+\bibitem[Grover et~al.(2019)Grover, Wang, Zweig, and
+  Ermon]{grover2019neuralsort}
+Aditya Grover, Eric Wang, Aaron Zweig, and Stefano Ermon.
+\newblock Stochastic optimization of sorting networks via continuous
+  relaxations.
+\newblock In \emph{International Conference on Learning Representations}, 2019.
+\newblock URL \url{https://openreview.net/forum?id=H1eSS3CcKX}.
+
+\bibitem[Hammer et~al.(2014)Hammer, Hofmann, Schleif, and
+  Zhu]{hammer2014learning}
+Barbara Hammer, Daniela Hofmann, Frank-Michael Schleif, and Xibin Zhu.
+\newblock Learning vector quantization for (dis-)similarities.
+\newblock \emph{Neurocomputing}, 131:\penalty0 43--51, 2014.
+\newblock \doi{10.1016/j.neucom.2013.05.054}.
+
+\bibitem[Hinton(2022)]{hinton2022forward}
+Geoffrey Hinton.
+\newblock The forward-forward algorithm: Some preliminary investigations.
+\newblock \emph{arXiv preprint arXiv:2212.13345}, 2022.
+
+\bibitem[Ho et~al.(1994)Ho, Hull, and Srihari]{ho1994decision}
+Tin~Kam Ho, J.~J. Hull, and S.~N. Srihari.
+\newblock Decision combination in multiple classifier systems.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}, 16\penalty0 (1):\penalty0 66--75, 1994.
+\newblock \doi{10.1109/34.273716}.
+
+\bibitem[Holm(1979)]{holm1979simple}
+Sture Holm.
+\newblock A simple sequentially rejective multiple test procedure.
+\newblock \emph{Scandinavian Journal of Statistics}, 6\penalty0 (2):\penalty0
+  65--70, 1979.
+\newblock URL \url{https://www.jstor.org/stable/4615733}.
+
+\bibitem[Huang et~al.(2006)Huang, Zhu, and Siew]{huang2006extreme}
+Guang-Bin Huang, Qin-Yu Zhu, and Chee-Kheong Siew.
+\newblock Extreme learning machine: Theory and applications.
+\newblock \emph{Neurocomputing}, 70\penalty0 (1--3):\penalty0 489--501, 2006.
+\newblock \doi{10.1016/j.neucom.2005.12.126}.
+
+\bibitem[Huang et~al.(2012)Huang, Zhou, Ding, and Zhang]{huang2012extreme}
+Guang-Bin Huang, Hongming Zhou, Xiaojian Ding, and Rui Zhang.
+\newblock Extreme learning machine for regression and multiclass
+  classification.
+\newblock \emph{IEEE Transactions on Systems, Man, and Cybernetics, Part B
+  (Cybernetics)}, 42\penalty0 (2):\penalty0 513--529, 2012.
+\newblock \doi{10.1109/TSMCB.2011.2168604}.
+
+\bibitem[{Image Segmentation}(1990)]{uci_segment}
+{Image Segmentation}.
+\newblock UCI Machine Learning Repository, 1990.
+\newblock URL \url{https://doi.org/10.24432/C5GP4N}.
+\newblock Dataset.
+
+\bibitem[Jiao and Vert(2015)]{jiao2015kernels}
+Yunlong Jiao and Jean-Philippe Vert.
+\newblock The {Kendall} and {Mallows} kernels for permutations.
+\newblock In Francis Bach and David Blei, editors, \emph{Proceedings of the
+  32nd International Conference on Machine Learning}, volume~37 of
+  \emph{Proceedings of Machine Learning Research}, pages 1935--1944. PMLR,
+  2015.
+\newblock URL \url{https://proceedings.mlr.press/v37/jiao15.html}.
+
+\bibitem[Jiao and Vert(2018)]{jiao2018kendall}
+Yunlong Jiao and Jean-Philippe Vert.
+\newblock The {Kendall} and {Mallows} kernels for permutations.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}, 40\penalty0 (7):\penalty0 1755--1769, 2018.
+\newblock \doi{10.1109/TPAMI.2017.2719680}.
+
+\bibitem[Johnson and Lindenstrauss(1984)]{johnson1984extensions}
+William~B. Johnson and Joram Lindenstrauss.
+\newblock Extensions of {Lipschitz} mappings into a {Hilbert} space.
+\newblock \emph{Contemporary Mathematics}, 26:\penalty0 189--206, 1984.
+\newblock \doi{10.1090/conm/026/737400}.
+
+\bibitem[Kamal et~al.(2017)Kamal, ElEleimy, Hegazy, and Nasr]{uci_hcv}
+Sanaa Kamal, Mohamed ElEleimy, Doaa Hegazy, and Mahmoud Nasr.
+\newblock Hepatitis {C} virus ({HCV}) for {Egyptian} patients.
+\newblock UCI Machine Learning Repository, 2017.
+\newblock URL \url{https://doi.org/10.24432/C5989V}.
+\newblock Dataset; the study uses the OpenML copy, data ID 46850.
+
+\bibitem[Kanerva(2009)]{kanerva2009hdc}
+Pentti Kanerva.
+\newblock Hyperdimensional computing: An introduction to computing in
+  distributed representation with high-dimensional random vectors.
+\newblock \emph{Cognitive Computation}, 1\penalty0 (2):\penalty0 139--159,
+  2009.
+\newblock \doi{10.1007/s12559-009-9009-8}.
+
+\bibitem[Kemeny(1959)]{kemeny1959mathematics}
+John~G. Kemeny.
+\newblock Mathematics without numbers.
+\newblock \emph{Daedalus}, 88\penalty0 (4):\penalty0 577--591, 1959.
+\newblock URL \url{https://www.jstor.org/stable/20026529}.
+
+\bibitem[Kendall(1938)]{kendall1938}
+M.~G. Kendall.
+\newblock A new measure of rank correlation.
+\newblock \emph{Biometrika}, 30\penalty0 (1--2):\penalty0 81--93, 1938.
+\newblock \doi{10.1093/biomet/30.1-2.81}.
+
+\bibitem[Kingma and Ba(2015)]{kingma2015adam}
+Diederik~P. Kingma and Jimmy Ba.
+\newblock Adam: A method for stochastic optimization.
+\newblock In \emph{3rd International Conference on Learning Representations
+  (ICLR)}, 2015.
+\newblock URL \url{https://arxiv.org/abs/1412.6980}.
+
+\bibitem[Kirby et~al.(2026)Kirby, Smets, Van~Leekwijck, and
+  Oramas]{kirby2026encoder}
+Peter Kirby, Laura Smets, Werner Van~Leekwijck, and Jos{\'e} Oramas.
+\newblock Simple encoder training for hyperdimensional computing.
+\newblock \emph{Neural Computation}, 38\penalty0 (10):\penalty0 1829--1849,
+  2026.
+\newblock \doi{10.1162/neco.a.1567}.
+\newblock URL \url{https://doi.org/10.1162/neco.a.1567}.
+
+\bibitem[Kleyko et~al.(2022)Kleyko, Rachkovskij, Osipov, and
+  Rahimi]{kleyko2022survey1}
+Denis Kleyko, Dmitri~A. Rachkovskij, Evgeny Osipov, and Abbas Rahimi.
+\newblock A survey on hyperdimensional computing aka vector symbolic
+  architectures, part {I}: Models and data transformations.
+\newblock \emph{ACM Computing Surveys}, 55\penalty0 (6):\penalty0
+  130:1--130:40, 2022.
+\newblock \doi{10.1145/3538531}.
+
+\bibitem[Kleyko et~al.(2023)Kleyko, Rachkovskij, Osipov, and
+  Rahimi]{kleyko2023survey2}
+Denis Kleyko, Dmitri~A. Rachkovskij, Evgeny Osipov, and Abbas Rahimi.
+\newblock A survey on hyperdimensional computing aka vector symbolic
+  architectures, part {II}: Applications, cognitive models, and challenges.
+\newblock \emph{ACM Computing Surveys}, 55\penalty0 (9):\penalty0
+  175:1--175:52, 2023.
+\newblock \doi{10.1145/3558000}.
+
+\bibitem[Kohonen(1990)]{kohonen1990self}
+Teuvo Kohonen.
+\newblock The self-organizing map.
+\newblock \emph{Proceedings of the IEEE}, 78\penalty0 (9):\penalty0 1464--1480,
+  1990.
+\newblock \doi{10.1109/5.58325}.
+
+\bibitem[Kuncheva and Whitaker(2003)]{kuncheva2003diversity}
+Ludmila~I. Kuncheva and Christopher~J. Whitaker.
+\newblock Measures of diversity in classifier ensembles and their relationship
+  with the ensemble accuracy.
+\newblock \emph{Machine Learning}, 51\penalty0 (2):\penalty0 181--207, 2003.
+\newblock \doi{10.1023/A:1022859003006}.
+
+\bibitem[Lee et~al.(2015)Lee, Zhang, Fischer, and Bengio]{lee2015difference}
+Dong-Hyun Lee, Saizheng Zhang, Asja Fischer, and Yoshua Bengio.
+\newblock Difference target propagation.
+\newblock In Annalisa Appice, Pedro~Pereira Rodrigues, V{\'\i}tor Santos~Costa,
+  Carlos Soares, Jo{\~a}o Gama, and Al{\'\i}pio Jorge, editors, \emph{Machine
+  Learning and Knowledge Discovery in Databases}, volume 9284 of \emph{Lecture
+  Notes in Computer Science}, pages 498--515. Springer, 2015.
+\newblock URL \url{https://doi.org/10.1007/978-3-319-23528-8_31}.
+
+\bibitem[Lillicrap et~al.(2016)Lillicrap, Cownden, Tweed, and
+  Akerman]{lillicrap2016random}
+Timothy~P. Lillicrap, Daniel Cownden, Douglas~B. Tweed, and Colin~J. Akerman.
+\newblock Random synaptic feedback weights support error backpropagation for
+  deep learning.
+\newblock \emph{Nature Communications}, 7:\penalty0 13276, 2016.
+\newblock \doi{10.1038/ncomms13276}.
+
+\bibitem[Lohweg(2012)]{uci_banknote}
+Volker Lohweg.
+\newblock Banknote authentication.
+\newblock UCI Machine Learning Repository, 2012.
+\newblock URL \url{https://doi.org/10.24432/C55P57}.
+\newblock Dataset.
+
+\bibitem[Lucas et~al.(2013)Lucas, Klein, Tannahill, Ivanova, Brandon,
+  Domyancic, and Zhang]{uci_climate}
+D.~Lucas, R.~Klein, J.~Tannahill, D.~Ivanova, S.~Brandon, D.~Domyancic, and
+  Y.~Zhang.
+\newblock Climate model simulation crashes.
+\newblock UCI Machine Learning Repository, 2013.
+\newblock URL \url{https://doi.org/10.24432/C5HG71}.
+\newblock Dataset.
+
+\bibitem[Mallows(1957)]{mallows1957nonnull}
+Colin~L. Mallows.
+\newblock Non-null ranking models. {I}.
+\newblock \emph{Biometrika}, 44\penalty0 (1--2):\penalty0 114--130, 1957.
+\newblock \doi{10.1093/biomet/44.1-2.114}.
+
+\bibitem[Mansouri et~al.(2013)Mansouri, Ringsted, Ballabio, Todeschini, and
+  Consonni]{uci_qsar}
+Kamel Mansouri, Tine Ringsted, Davide Ballabio, Roberto Todeschini, and Viviana
+  Consonni.
+\newblock {QSAR} biodegradation.
+\newblock UCI Machine Learning Repository, 2013.
+\newblock URL \url{https://doi.org/10.24432/C5H60M}.
+\newblock Dataset.
+
+\bibitem[Martinetz et~al.(1993)Martinetz, Berkovich, and
+  Schulten]{martinetz1993neural}
+Thomas~M. Martinetz, Stanislav~G. Berkovich, and Klaus~J. Schulten.
+\newblock ``{Neural-Gas}'' network for vector quantization and its application
+  to time-series prediction.
+\newblock \emph{IEEE Transactions on Neural Networks}, 4\penalty0 (4):\penalty0
+  558--569, 1993.
+\newblock \doi{10.1109/72.238311}.
+
+\bibitem[Maskin(2025)]{maskin2025borda}
+Eric Maskin.
+\newblock {Borda's} rule and {Arrow's} independence condition.
+\newblock \emph{Journal of Political Economy}, 133\penalty0 (2):\penalty0
+  385--420, 2025.
+\newblock \doi{10.1086/732892}.
+
+\bibitem[Mena et~al.(2018)Mena, Belanger, Linderman, and
+  Snoek]{mena2018gumbelsinkhorn}
+Gonzalo Mena, David Belanger, Scott Linderman, and Jasper Snoek.
+\newblock Learning latent permutations with {Gumbel--Sinkhorn} networks.
+\newblock In \emph{International Conference on Learning Representations}, 2018.
+\newblock URL \url{https://openreview.net/forum?id=Byt3oJ-0W}.
+
+\bibitem[Movshovitz-Attias et~al.(2017)Movshovitz-Attias, Toshev, Leung, Ioffe,
+  and Singh]{movshovitz2017nofuss}
+Yair Movshovitz-Attias, Alexander Toshev, Thomas~K. Leung, Sergey Ioffe, and
+  Saurabh Singh.
+\newblock No fuss distance metric learning using proxies.
+\newblock In \emph{Proceedings of the IEEE International Conference on Computer
+  Vision (ICCV)}, pages 360--368. IEEE, 2017.
+\newblock \doi{10.1109/ICCV.2017.47}.
+
+\bibitem[Mowforth and Shepherd(n.d.)]{uci_vehicle}
+Pete Mowforth and Barry Shepherd.
+\newblock Statlog (vehicle silhouettes).
+\newblock UCI Machine Learning Repository, n.d.
+\newblock URL \url{https://doi.org/10.24432/C5HG6N}.
+\newblock Dataset; accessed 11 September 2026.
+
+\bibitem[Nadeau and Bengio(2003)]{nadeau2003inference}
+Claude Nadeau and Yoshua Bengio.
+\newblock Inference for the generalization error.
+\newblock \emph{Machine Learning}, 52\penalty0 (3):\penalty0 239--281, 2003.
+\newblock \doi{10.1023/A:1024068626366}.
+
+\bibitem[Nebel et~al.(2015)Nebel, Hammer, Frohberg, and
+  Villmann]{nebel2015median}
+David Nebel, Barbara Hammer, Kathleen Frohberg, and Thomas Villmann.
+\newblock Median variants of learning vector quantization for learning of
+  dissimilarity data.
+\newblock \emph{Neurocomputing}, 169:\penalty0 295--305, 2015.
+\newblock \doi{10.1016/j.neucom.2014.12.096}.
+
+\bibitem[Niepert et~al.(2021)Niepert, Minervini, and
+  Franceschi]{niepert2021imle}
+Mathias Niepert, Pasquale Minervini, and Luca Franceschi.
+\newblock Implicit {MLE}: Backpropagating through discrete exponential family
+  distributions.
+\newblock In M.~Ranzato, A.~Beygelzimer, Y.~Dauphin, P.~S. Liang, and
+  J.~Wortman~Vaughan, editors, \emph{Advances in Neural Information Processing
+  Systems}, volume~34, pages 14567--14579. Curran Associates, Inc., 2021.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper_files/paper/2021/hash/7a430339c10c642c4b2251756fd1b484-Abstract.html}.
+
+\bibitem[Pao et~al.(1994)Pao, Park, and Sobajic]{pao1994learning}
+Yoh-Han Pao, Gwang-Hoon Park, and Dejan~J. Sobajic.
+\newblock Learning and generalization characteristics of the random vector
+  functional-link net.
+\newblock \emph{Neurocomputing}, 6\penalty0 (2):\penalty0 163--180, 1994.
+\newblock \doi{10.1016/0925-2312(94)90053-1}.
+
+\bibitem[Pedregosa et~al.(2011)Pedregosa, Varoquaux, Gramfort, Michel, Thirion,
+  Grisel, Blondel, Prettenhofer, Weiss, Dubourg, Vanderplas, Passos,
+  Cournapeau, Brucher, Perrot, and Duchesnay]{pedregosa2011sklearn}
+Fabian Pedregosa, Ga{\"e}l Varoquaux, Alexandre Gramfort, Vincent Michel,
+  Bertrand Thirion, Olivier Grisel, Mathieu Blondel, Peter Prettenhofer, Ron
+  Weiss, Vincent Dubourg, Jake Vanderplas, Alexandre Passos, David Cournapeau,
+  Matthieu Brucher, Matthieu Perrot, and {\'E}douard Duchesnay.
+\newblock Scikit-learn: Machine learning in {Python}.
+\newblock \emph{Journal of Machine Learning Research}, 12:\penalty0 2825--2830,
+  2011.
+\newblock URL \url{https://jmlr.org/papers/v12/pedregosa11a.html}.
+
+\bibitem[{\iffalse
+  Pekalska\fi}P{\fontencoding{T1}\fontfamily{lmr}\selectfont\k{e}}kalska and
+  Duin(2005)]{pekalska2005dissimilarity}
+El{\.z}bieta {\iffalse
+  Pekalska\fi}P{\fontencoding{T1}\fontfamily{lmr}\selectfont\k{e}}kalska and
+  Robert P.~W. Duin.
+\newblock \emph{The Dissimilarity Representation for Pattern Recognition:
+  Foundations and Applications}.
+\newblock Series in Machine Perception and Artificial Intelligence. World
+  Scientific, Singapore, 2005.
+\newblock \doi{10.1142/5965}.
+
+\bibitem[Plate(1995)]{plate1995hrr}
+Tony~A. Plate.
+\newblock Holographic reduced representations.
+\newblock \emph{IEEE Transactions on Neural Networks}, 6\penalty0 (3):\penalty0
+  623--641, 1995.
+\newblock \doi{10.1109/72.377968}.
+
+\bibitem[Prillo and Eisenschlos(2020)]{prillo2020softsort}
+Sebastian Prillo and Julian Eisenschlos.
+\newblock {SoftSort}: A continuous relaxation for the argsort operator.
+\newblock In Hal Daum{\'e}~III and Aarti Singh, editors, \emph{Proceedings of
+  the 37th International Conference on Machine Learning}, volume 119 of
+  \emph{Proceedings of Machine Learning Research}, pages 7793--7802. PMLR,
+  2020.
+\newblock URL \url{https://proceedings.mlr.press/v119/prillo20a.html}.
+
+\bibitem[Rahimi et~al.(2019)Rahimi, Kanerva, Benini, and
+  Rabaey]{rahimi2018biosignal}
+Abbas Rahimi, Pentti Kanerva, Luca Benini, and Jan~M. Rabaey.
+\newblock Efficient biosignal processing using hyperdimensional computing:
+  Network templates for combined learning and classification of {ExG} signals.
+\newblock \emph{Proceedings of the IEEE}, 107\penalty0 (1):\penalty0 123--143,
+  2019.
+\newblock \doi{10.1109/JPROC.2018.2871163}.
+
+\bibitem[Rahimi and Recht(2007)]{rahimi2007random}
+Ali Rahimi and Benjamin Recht.
+\newblock Random features for large-scale kernel machines.
+\newblock In J.~Platt, D.~Koller, Y.~Singer, and S.~Roweis, editors,
+  \emph{Advances in Neural Information Processing Systems}, volume~20, pages
+  1177--1184. Curran Associates, Inc., 2007.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper_files/paper/2007/hash/013a006f03dbc5392effeb8f18fda755-Abstract.html}.
+
+\bibitem[Rol{\'\i}nek et~al.(2020)Rol{\'\i}nek, Musil, Paulus, Vlastelica,
+  Michaelis, and Martius]{rolinek2020optimizing}
+Michal Rol{\'\i}nek, V{\'\i}t Musil, Anselm Paulus, Marin Vlastelica, Claudio
+  Michaelis, and Georg Martius.
+\newblock Optimizing rank-based metrics with blackbox differentiation.
+\newblock In \emph{Proceedings of the {IEEE/CVF} Conference on Computer Vision
+  and Pattern Recognition (CVPR)}, pages 7617--7627, 2020.
+\newblock \doi{10.1109/CVPR42600.2020.00764}.
+
+\bibitem[Saari(1998)]{saari1998connecting}
+Donald~G. Saari.
+\newblock Connecting and resolving {Sen's} and {Arrow's} theorems.
+\newblock \emph{Social Choice and Welfare}, 15\penalty0 (2):\penalty0 239--261,
+  1998.
+\newblock \doi{10.1007/s003550050103}.
+
+\bibitem[Sahoo et~al.(2023)Sahoo, Paulus, Vlastelica, Musil, Kuleshov, and
+  Martius]{sahoo2023identity}
+Subham~Sekhar Sahoo, Anselm Paulus, Marin Vlastelica, V{\'\i}t Musil, Volodymyr
+  Kuleshov, and Georg Martius.
+\newblock Backpropagation through combinatorial algorithms: Identity with
+  projection works.
+\newblock In \emph{The Eleventh International Conference on Learning
+  Representations (ICLR)}, 2023.
+\newblock URL \url{https://openreview.net/forum?id=JZMR727O29}.
+\newblock arXiv:2205.15213.
+
+\bibitem[Sato and Yamada(1995)]{sato1995glvq}
+Atsushi Sato and Keiji Yamada.
+\newblock Generalized learning vector quantization.
+\newblock In D.~Touretzky, M.~C. Mozer, and M.~Hasselmo, editors,
+  \emph{Advances in Neural Information Processing Systems}, volume~8, pages
+  423--429. MIT Press, 1995.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper_files/paper/1995/hash/9c3b1830513cc3b8fc4b76635d32e692-Abstract.html}.
+
+\bibitem[Schapire(1990)]{schapire1990strength}
+Robert~E. Schapire.
+\newblock The strength of weak learnability.
+\newblock \emph{Machine Learning}, 5\penalty0 (2):\penalty0 197--227, 1990.
+\newblock \doi{10.1007/BF00116037}.
+
+\bibitem[Siegler(1976)]{uci_balance}
+R.~Siegler.
+\newblock Balance scale.
+\newblock UCI Machine Learning Repository, 1976.
+\newblock URL \url{https://doi.org/10.24432/C5488X}.
+\newblock Dataset.
+
+\bibitem[Sigillito et~al.(1989)Sigillito, Wing, Hutton, and
+  Baker]{uci_ionosphere}
+V.~Sigillito, S.~Wing, L.~Hutton, and K.~Baker.
+\newblock Ionosphere.
+\newblock UCI Machine Learning Repository, 1989.
+\newblock URL \url{https://doi.org/10.24432/C5W01B}.
+\newblock Dataset.
+
+\bibitem[Sinkhorn and Knopp(1967)]{sinkhorn1967diagonal}
+Richard Sinkhorn and Paul Knopp.
+\newblock Concerning nonnegative matrices and doubly stochastic matrices.
+\newblock \emph{Pacific Journal of Mathematics}, 21\penalty0 (2):\penalty0
+  343--348, 1967.
+\newblock \doi{10.2140/pjm.1967.21.343}.
+
+\bibitem[Smets et~al.(2025)Smets, Rachkovskij, Osipov, Van~Leekwijck, Volkov,
+  and Latr{\'e}]{smets2025margin}
+Laura Smets, Dmitri Rachkovskij, Evgeny Osipov, Werner Van~Leekwijck, Olexander
+  Volkov, and Steven Latr{\'e}.
+\newblock Margin-based training of {HDC} classifiers.
+\newblock \emph{Big Data and Cognitive Computing}, 9\penalty0 (3):\penalty0 68,
+  2025.
+\newblock \doi{10.3390/bdcc9030068}.
+
+\bibitem[Smith et~al.(1988)Smith, Everhart, Dickson, Knowler, and
+  Johannes]{smith1988diabetes}
+Jack~W. Smith, J.~E. Everhart, W.~C. Dickson, W.~C. Knowler, and R.~S.
+  Johannes.
+\newblock Using the {ADAP} learning algorithm to forecast the onset of diabetes
+  mellitus.
+\newblock In \emph{Proceedings of the Annual Symposium on Computer Application
+  in Medical Care}, pages 261--265, 1988.
+\newblock URL \url{https://pmc.ncbi.nlm.nih.gov/articles/PMC2245318/}.
+
+\bibitem[Thorpe and Gautrais(1996)]{thorpe1998rapid}
+Simon Thorpe and Jacques Gautrais.
+\newblock Rapid visual processing using spike asynchrony.
+\newblock In M.~C. Mozer, M.~Jordan, and T.~Petsche, editors, \emph{Advances in
+  Neural Information Processing Systems}, volume~9, pages 901--907. MIT Press,
+  1996.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper_files/paper/1996/hash/fd5c905bcd8c3348ad1b35d7231ee2b1-Abstract.html}.
+
+\bibitem[Thorpe et~al.(2001)Thorpe, Delorme, and Van~Rullen]{thorpe2001spike}
+Simon Thorpe, Arnaud Delorme, and Rufin Van~Rullen.
+\newblock Spike-based strategies for rapid processing.
+\newblock \emph{Neural Networks}, 14\penalty0 (6--7):\penalty0 715--725, 2001.
+\newblock \doi{10.1016/S0893-6080(01)00083-1}.
+
+\bibitem[van Erp and Schomaker(2000)]{vanerp2000variants}
+Merijn van Erp and Lambert Schomaker.
+\newblock Variants of the {Borda} count method for combining ranked classifier
+  hypotheses.
+\newblock In Lambert Schomaker and Louis Vuurpijl, editors, \emph{Proceedings
+  of the 7th International Workshop on Frontiers in Handwriting Recognition
+  (IWFHR)}, pages 443--452, Nijmegen, 2000. International Unipen Foundation.
+
+\bibitem[Vanschoren et~al.(2014)Vanschoren, van Rijn, Bischl, and
+  Torgo]{vanschoren2014openml}
+Joaquin Vanschoren, Jan~N. van Rijn, Bernd Bischl, and Luis Torgo.
+\newblock {OpenML}: Networked science in machine learning.
+\newblock \emph{ACM SIGKDD Explorations Newsletter}, 15\penalty0 (2):\penalty0
+  49--60, 2014.
+\newblock \doi{10.1145/2641190.2641198}.
+\newblock URL \url{https://doi.org/10.1145/2641190.2641198}.
+
+\bibitem[Verg{\'e}s et~al.(2025)Verg{\'e}s, Heddes, Nunes, Kleyko, Givargis,
+  and Nicolau]{verges2025hdcclassification}
+Pere Verg{\'e}s, Mike Heddes, Igor Nunes, Denis Kleyko, Tony Givargis, and
+  Alexandru Nicolau.
+\newblock Classification using hyperdimensional computing: A review with
+  comparative analysis.
+\newblock \emph{Artificial Intelligence Review}, 58\penalty0 (6):\penalty0 173,
+  2025.
+\newblock \doi{10.1007/s10462-025-11181-2}.
+
+\bibitem[Vlastelica et~al.(2020)Vlastelica, Paulus, Musil, Martius, and
+  Rol{\'\i}nek]{vlastelica2020differentiation}
+Marin Vlastelica, Anselm Paulus, V{\'\i}t Musil, Georg Martius, and Michal
+  Rol{\'\i}nek.
+\newblock Differentiation of blackbox combinatorial solvers.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2020.
+\newblock URL \url{https://arxiv.org/abs/1912.02175}.
+\newblock arXiv:1912.02175.
+
+\bibitem[Weinberger and Saul(2009)]{weinberger2009lmnn}
+Kilian~Q. Weinberger and Lawrence~K. Saul.
+\newblock Distance metric learning for large margin nearest neighbor
+  classification.
+\newblock \emph{Journal of Machine Learning Research}, 10\penalty0
+  (9):\penalty0 207--244, 2009.
+\newblock URL \url{https://www.jmlr.org/papers/v10/weinberger09a.html}.
+
+\bibitem[Wilson(1972)]{wilson1972pareto}
+Robert Wilson.
+\newblock Social choice theory without the {Pareto} principle.
+\newblock \emph{Journal of Economic Theory}, 5\penalty0 (3):\penalty0 478--486,
+  1972.
+\newblock \doi{10.1016/0022-0531(72)90051-8}.
+
+\bibitem[Wolberg et~al.(1993)Wolberg, Mangasarian, Street, and
+  Street]{uci_wdbc}
+William Wolberg, Olvi Mangasarian, Nick Street, and W.~Street.
+\newblock Breast cancer {Wisconsin} (diagnostic).
+\newblock UCI Machine Learning Repository, 1993.
+\newblock URL \url{https://doi.org/10.24432/C5DW2B}.
+\newblock Dataset.
+
+\bibitem[Xu et~al.(2013)Xu, Tao, and Xu]{xu2013survey}
+Chang Xu, Dacheng Tao, and Chao Xu.
+\newblock A survey on multi-view learning.
+\newblock \emph{arXiv preprint arXiv:1304.5634}, 2013.
+
+\bibitem[Yagnik et~al.(2011)Yagnik, Strelow, Ross, and Lin]{yagnik2011power}
+Jay Yagnik, Dennis Strelow, David~A. Ross, and Ruei-Sung Lin.
+\newblock The power of comparative reasoning.
+\newblock In \emph{Proceedings of the IEEE International Conference on Computer
+  Vision}, pages 2431--2438. IEEE, 2011.
+\newblock \doi{10.1109/ICCV.2011.6126527}.
+
+\bibitem[Young(1974)]{young1974borda}
+H.~P. Young.
+\newblock An axiomatization of {Borda's} rule.
+\newblock \emph{Journal of Economic Theory}, 9\penalty0 (1):\penalty0 43--52,
+  1974.
+\newblock \doi{10.1016/0022-0531(74)90073-8}.
+
+\bibitem[Zwicker(2008)]{zwicker2008average}
+William~S. Zwicker.
+\newblock Consistency without neutrality in voting rules: When is a vote an
+  average?
+\newblock \emph{Mathematical and Computer Modelling}, 48\penalty0
+  (9--10):\penalty0 1357--1373, 2008.
+\newblock \doi{10.1016/j.mcm.2008.05.031}.
+
+\end{thebibliography}

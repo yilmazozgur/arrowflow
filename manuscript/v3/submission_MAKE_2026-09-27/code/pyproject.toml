@@ -25,7 +25,3 @@ legacy = ["torchvision", "seaborn"]
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.pytest.ini_options]
-# Keep the archived submission code out of repository test discovery.
-testpaths = ["tests"]

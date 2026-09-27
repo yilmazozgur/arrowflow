@@ -1,0 +1,153 @@
+{
+  "aggregation_integrity": "explicit_expected_folds_and_model_seeds; reconcile_every_planned_job_result_and_fit_log",
+  "augmentation": {
+    "max_swaps": 2,
+    "n_augmentations": 1,
+    "rule": "adaptive_from_training_partition: n_features<=30 and n_train>=150"
+  },
+  "candidate_budget": 24,
+  "candidate_seed": 41071,
+  "candidate_tie_rule": "lowest_canonical_config_id",
+  "confidence": 0.95,
+  "datasets": [
+    "iris",
+    "wine",
+    "breast_cancer",
+    "wine_quality",
+    "vehicle",
+    "segment",
+    "digits"
+  ],
+  "device": "cpu",
+  "failure_policy": "log_all_failures; incomplete_candidates_ineligible; failed_outer_fits_and_terminal_selection_failures_retained; no_adaptive_stopping",
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "freeze_requirement": "complete_model_registry_and_candidates_reviewed; attainable_training_only_pilot; leakage_checks_pass; freeze_before_outer_scores",
+  "frozen": true,
+  "frozen_at_utc": "2026-09-12T23:23:12.624886+00:00",
+  "full_method": {
+    "adaptive_encoding_defaults": {
+      "n_features<=10": {
+        "augment": true,
+        "degree": 3,
+        "embed_dim": 16
+      },
+      "n_features<=30": {
+        "augment": true,
+        "degree": 2,
+        "embed_dim": 32
+      },
+      "n_features>30": {
+        "augment": false,
+        "degree": 1,
+        "embed_dim": 64
+      }
+    },
+    "aggregation": "majority",
+    "candidate_grid": {
+      "degree_offset": [
+        0,
+        -1
+      ],
+      "embed_scale": [
+        1,
+        2
+      ],
+      "learning_rate": [
+        0.1,
+        0.2
+      ],
+      "widths": [
+        [
+          128
+        ],
+        [
+          64,
+          128
+        ]
+      ]
+    },
+    "checkpoint": "validation_ratio_0.1_inside_every_fit",
+    "fixed": {
+      "batch_size": 32,
+      "iterations": 200,
+      "validation_ratio": 0.1
+    },
+    "model_id": "arrowflow_full",
+    "n_views": 7,
+    "resolution": "embed_dim=clip(round(base*embed_scale),8,128); degree=max(1,base+degree_offset) lowered while comb(n_features+degree,degree)>10000; augment=base_augment and n_train>=150; resolved at fit time from the training partition only",
+    "view_strategy_cycle": [
+      "target_aware",
+      "random",
+      "calibrated"
+    ]
+  },
+  "historical_results": "exploratory_only",
+  "inner_folds": 3,
+  "internal_validation_ratio": 0.1,
+  "knn_readout": {
+    "aggregation": "majority",
+    "candidates": "the 16 bridge candidates of full_method.candidate_grid; the readout grid is selected one level deeper and does not count against candidate_budget",
+    "estimator": "experiments.make_revision.multiview:MultiViewArrowFlowKNN via bridge.AdaptiveMultiViewKNN",
+    "grid": {
+      "n_neighbors": [
+        1,
+        3,
+        5,
+        11,
+        21
+      ],
+      "weights": [
+        "uniform",
+        "distance"
+      ]
+    },
+    "model_id": "arrowflow_full_knn",
+    "networks": "identical to arrowflow_full for the same candidate, fitting seed and training rows (each view reseeds from its view seed), including the reference run's networks",
+    "readout": "StableFootruleKNN(input_kind=positions) per view, fitted on that view's training representation",
+    "reference": {
+      "code_revision": "67073eb47dd61cc412600b5efb36304be0a6e3e7",
+      "contrast": "per dataset, arrowflow_full_knn minus arrowflow_full accuracy: fitting seeds averaged within each outer fold, corrected resampled t over the 15 outer folds (evaluation.paired_corrected_interval, q = test_train_ratio), Holm across the 7 datasets",
+      "model_id": "arrowflow_full",
+      "pairing": "not refitted in this family; same datasets, dataset_hash and splits_hash (checked at the bridge_knn prepare), outer folds, fit_seeds and the 16 candidates; network-training behaviour unchanged since that run (arrowflow/arrowflow.py, benchmark.py, config.py, ranking.py, models.py, evaluation.py, datasets.py, secondary_studies.py and reporting.py byte-identical; multiview.py changed by MultiViewFootruleKNN sample_ids, the kNN readout subclass and a no-op readout hook in MultiViewArrowFlow.fit; bridge.py by the ablation helpers and the kNN wrapper and registry; comparisons.py by the native family; run_revision.py by the gene dataset and pilot hooks)",
+      "protocol_id": "arrowflow-v3-bridge-1",
+      "protocol_sha256": "dfc5a0c284d61ca9278e2463f38c19af64bee5d7249c5e25610908994aad7ec0",
+      "run": ".superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/runs/2026-09-12-bridge (735 jobs; summary.json model_rows hold the per-fold, per-seed outer metrics)",
+      "summary_sha256": "8eb5ae904d8a02d152d7e6417795b82259f0a5c0d5232a0c125ba89eec7635fe"
+    },
+    "representation": "inverse positions of the final hidden ranking of each view (ArrowFlowEstimator.transform_orders)",
+    "selection": "mean accuracy over StratifiedKFold(3, shuffle=True, random_state=derive_seed(view_seed, \"readout_selection\")) splits of the training partition inside every fit; fewer splits only if the smallest class has fewer rows; one neighbour cache per split at the largest k; ties lowest_canonical_config_id; refit on the full training representation",
+    "source": "protocols/2026-09-12/devlab.json readouts family, knn_hidden"
+  },
+  "multiplicity": "Holm_across_7_prespecified_dataset_contrasts_if_significance_claimed",
+  "numeric_threads_per_worker": 1,
+  "outer_folds": 5,
+  "outer_repeats": 3,
+  "paired_interval": "seed_average_within_fold_then_corrected_resampled_t",
+  "parallelism": "spawned_processes_by_outer_fold_and_model",
+  "primary_contrasts": [
+    "arrowflow_full_knn_vs_arrowflow_full"
+  ],
+  "primary_family_size": 7,
+  "production_family": "bridge_knn",
+  "protocol_id": "arrowflow-v3-bridge-knn-1",
+  "registry": "experiments.make_revision.bridge:bridge_knn_registry",
+  "report_metrics": [
+    "accuracy",
+    "error",
+    "balanced_accuracy",
+    "macro_f1"
+  ],
+  "resource_decision": "knn_hidden adopted in the inner-fold laboratory, 7/7 datasets improved, mean +4.3 pp; outer confirmation of the adopted readout as arrowflow_full_knn under the identical nested protocol (bridge grid, folds, seeds); training-only pilot 2026-09-12T23:02Z (iris, digits, segment; arrowflow_full, arrowflow_full_knn and the comparators; every fit ok) projected the two ArrowFlow families at 18.95 h at 16 workers (harness max-based) and 15.8-15.9 h calibrated on the realized bridge run (7.93 h wall, 118.5 serial h; arrowflow_full_knn/arrowflow_full fit-time ratio 1.005-1.061), beyond the 10 h cap -> arrowflow_full dropped from the registry: its outer-fold results exist in the frozen bridge run with the same datasets, folds, fit seeds and candidates (knn_readout.reference); at_most_16_single_thread_workers; cap 10 h; re-pilot 2026-09-12T23:16Z (iris, digits, segment; arrowflow_full_knn, dummy and the five comparators; every fit ok) projected 9.99 h at 16 workers (harness max-based) and 8.22-8.35 h calibrated on the realized bridge run (arrowflow_full_knn/arrowflow_full fit-time ratio 1.005-1.066), within the 10 h cap; frozen after the re-pilot",
+  "secondary_studies": "separately_frozen_matched_and_secondary_protocols",
+  "selection_metric": "accuracy",
+  "source_template_sha256": "dfc5a0c284d61ca9278e2463f38c19af64bee5d7249c5e25610908994aad7ec0",
+  "split_seed": 27183,
+  "status": "reviewed_and_piloted_before_confirmatory_scoring",
+  "stochastic_finalists": 3,
+  "test_train_ratio": 0.25,
+  "wallclock_cap_hours": 10
+}

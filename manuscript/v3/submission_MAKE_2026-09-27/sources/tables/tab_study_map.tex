@@ -1,0 +1,42 @@
+% Study map of Section 7, printed at the start of Section S3. Hand-written: it names comparisons, not numbers.
+\begin{table}[!htbp]
+\caption{\textbf{Study map.} What each comparison of Section~\ref{sec:experiments} asks, what ArrowFlow is set against, which settings the two sides share, and which analysis family carries it. A registered family is fixed in a frozen run protocol; every other comparison is descriptive. Contrasts from different rows are not comparable effect sizes.}
+\label{tab:study-map}
+\centering
+\scriptsize
+\begin{tabular}{@{}p{0.155\textwidth} p{0.185\textwidth} p{0.235\textwidth} p{0.285\textwidth}@{}}
+\toprule
+Question & Reference & Shared settings & Analysis \\
+\midrule
+Does ArrowFlow reach tuned classical accuracy? (Section~\ref{sec:main-benchmark}) &
+five tuned classical models and the majority class &
+folds only; every model chooses its own configuration on the inner folds &
+descriptive, with a post hoc Friedman and Nemenyi comparison \\
+\addlinespace
+What does the learning rule add? (Section~\ref{sec:training-controls}) &
+the untrained ArrowFlow; tuned input footrule kNN &
+folds, fitting seeds and readout selection; each control chooses its own configuration &
+three registered families, Holm within each; one post hoc Holm over all of them and post hoc signed-rank tests across the datasets \\
+\addlinespace
+Does sorting the projected scores help? (Section~\ref{supp:sorting}) &
+numeric kNN on the projected scores &
+folds and encoder candidates; each side chooses its own encoder settings &
+one registered family, Holm within it \\
+\addlinespace
+What does each component contribute? (Section~\ref{sec:components}) &
+variants of ArrowFlow &
+folds, fitting seeds and ArrowFlow's own selected configuration &
+descriptive \\
+\addlinespace
+Does the returned signal carry information? (Section~\ref{sec:motion-controls}) &
+frozen filters, which predict exactly as the untrained networks of the component ablation; permuted alignment; random directions &
+encoder, readout, folds, fitting seeds and configuration &
+Holm within each arm over the seventeen datasets; each scramble against frozen filters post hoc \\
+\addlinespace
+What does training do, and where does it stop? (Section~\ref{sec:controlled}) &
+mechanism and diagnostics; depth, with the earlier and the corrected relay; aggregation; neighbor baselines; the untrained and input rankings under a fixed Kendall-kernel readout &
+folds and, in the fitted studies, one configuration per fold &
+Holm within each family, or descriptive where stated \\
+\bottomrule
+\end{tabular}
+\end{table}

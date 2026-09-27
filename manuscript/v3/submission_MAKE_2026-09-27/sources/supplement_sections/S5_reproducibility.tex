@@ -1,0 +1,334 @@
+\section{Reproducibility}\label{supp:reproducibility}
+
+This section is for readers who want to check or repeat our results. Every result in the main text and in this supplement is read from a recorded run or from a proof in Section~\ref{supp:proofs}, and every setting from a protocol file. This section lists the protocols, code revisions, datasets and environment, and the commands that reproduce each evidence family. An evidence family is one study, or one separately run part of a study. For example, each of the two batches of the further datasets is a family of its own. An evidence family differs from a family of contrasts, a group of comparisons that share one Holm adjustment. The harness, our code for running the experiments, is the package \texttt{experiments/make\_revision} of the code repository.
+
+Some sentences below refer to the table renderer, the script that turns the run files into tables and checks the text against them. The subsection on commands at the end of this section says what it reads.
+
+\FloatBarrier
+\subsection{Protocols and Code Revisions}\label{supp:protocols}
+
+{\sloppy To look up a study's protocol, its freeze time and the code revision that ran it, start from Table~\ref{tab:s-protocols}. It lists the evidence families with their protocol files, freeze times and the git revision recorded in each run's \texttt{environment.json}. A git revision, or commit, names one saved version of the code. The first benchmark run, which used the prototype readout, ran at revision \texttt{67073eb47}. The matched study and the component ablation with its contrasts ran at revision \texttt{e36ca64e1}, and the laboratory at \texttt{9c3fc5214}. Three more revisions are \texttt{70fb9bf31} for the ArrowFlow run, \texttt{074278e6d} for the sorting control and \texttt{6022f9b5e} for both batches of the further datasets. The combined analysis of the seventeen datasets, the source of their comparator, rank and duplicate-row tables, ran at revision \texttt{23d9c796d} and fits no model. Its component table was written at revision \texttt{be41fa962}, after both component ablations were complete. The comparator intervals, ranks and duplicate-row analyses of the benchmark datasets (Section~\ref{supp:benchmark}) ran at revision \texttt{e0f898aa6} on the saved predictions of the ArrowFlow run and the first benchmark run. They fit no model either.\par}
+
+\paragraph{Protocol files.} Each protocol is a JavaScript Object Notation (JSON) file that fixes datasets, folds, seeds, candidate grids, budgets, metrics, contrast families and wall-clock caps. A file's hash is a short fingerprint of its contents, and any change to the contents changes it. Every protocol of a family that scores outer folds, the held-out test sets, was frozen, with its hash recorded, before that family's run started. The component ablation reproduces the benchmark's existing outer predictions of the prototype readout. The laboratory protocol scores no outer fold and was not frozen, but its hash was recorded in the run manifest before the run. The protocol directory, \texttt{experiments/make\_revision/protocols}, also holds frozen protocols of studies that this paper does not report. The protocol of the matched study lists an eighth dataset beside its seven primary ones, and this paper does not report it either.
+
+{\raggedright Each protocol file below is identified by the start of its \texttt{sha256} digest, a standard hash. The training controls ran under their own frozen protocol, \texttt{arrowflow-v3-knn-training-1} (file \texttt{2026-09-12/knn\_training.json}, whose \texttt{sha256} digest begins with \texttt{9de4bbaacf31}), at code revision \texttt{08cf39cd2}.
+The component ablation of ArrowFlow ran under its own frozen protocol, \texttt{arrowflow-v3-knn-ablation-1} (file \texttt{2026-09-12/knn\_ablation.json}, whose \texttt{sha256} digest begins with \texttt{126cf6d72a28}), at the same revision. Its exact check that the seven-view refit reproduces ArrowFlow's predictions is specific to this machine and software environment (Table~\ref{tab:s-environment}).
+The sorting control ran under \texttt{arrowflow-v3-knn-projected-1} (file \texttt{2026-09-12/knn\_projected.json}, whose digest begins with \texttt{a7e24a3b4339}) at code revision \texttt{074278e6d}. The further datasets ran under \texttt{arrowflow-v3-newdata-batch1-1} and \texttt{arrowflow-v3-newdata-batch2-1} (files \texttt{2026-09-12/newdata\_batch1.json} and \texttt{newdata\_batch2.json}, whose digests begin with \texttt{f715ec2808b4} and \texttt{188ff1e946b6}) at code revision \texttt{6022f9b5e}. The two batch protocols differ only in their identifiers and dataset lists. They pin every dataset to one exact copy by its OpenML identifier, version, file checksum and content hashes.
+The component ablation of the further datasets ran under its own frozen protocol, \texttt{arrowflow-v3-newdata-ablation-1} (file \texttt{2026-09-12/newdata\_ablation.json}, whose \texttt{sha256} digest begins with \texttt{3c4efe43eea7}), at code revision \texttt{be41fa962}. It copies the design of \texttt{arrowflow-v3-knn-ablation-1} and takes the configuration of every outer fold from the batch run holding the dataset. Its exact reproduction check is specific to the same machine and environment.\par}
+
+\paragraph{Stages and logs.} Every harness family that scores outer folds ran four stages. The \texttt{prepare} stage writes out the datasets and splits and records their hashes. The \texttt{smoke} stage is a test run of the code on synthetic data. It is never evidence. The \texttt{pilot} stage times a training-only workload and projects from it the wall-clock time of the production run. A run whose pilot projection exceeded its cap was not started. The benchmark protocol records the resource decision that set the candidate grid to 16 candidates after its pilot (Section~\ref{supp:settings}). The \texttt{run} stage executes the sealed schedule of planned jobs. It uses at most 16 single-thread workers under an execution lock, as each protocol file records. The laboratory ran three stages for each of its two families: a pilot, the readout or permutation LVQ units, and a summary.
+
+The ArrowFlow family ran its smoke stage and then two training-only pilots before that protocol was frozen. The resource decision of its protocol file (Table~\ref{tab:s-protocols}), a note of what was run and decided before the freeze, records both pilots. The family's production script then ran the \texttt{prepare}, \texttt{run} and reporting stages from a dedicated, detached git worktree checked out at commit \texttt{70fb9bf31}. A git worktree is a separate working copy of the code, and a detached one stays at a single commit. The \texttt{compare\_runs knn} command of Section~\ref{supp:commands} paired ArrowFlow's outer-fold results with the benchmark's and recorded the hashes of its analysis code.
+
+The training controls ran their smoke stage and one training-only pilot before their protocol was frozen. Their production script ran from a git worktree detached at commit \texttt{08cf39cd2} on 2026-09-13, and its log records the stage start times: \texttt{prepare} at 09:51:19 Coordinated Universal Time (UTC), the pairing check at 09:51:20, \texttt{run} at 09:51:22, reporting at 09:58:35 and \texttt{compare\_runs training} at 09:58:42. This pairing check runs before any job and makes sure that the new run uses the same datasets and splits as the ArrowFlow run. The component ablation of ArrowFlow also ran its smoke stage and one training-only pilot before its protocol was frozen. It followed in the same script, which logged \texttt{prepare} at 09:59:07, \texttt{ablation} at 09:59:11 and \texttt{summary} at 10:45:04 UTC. The script ended at 10:45:12 UTC with exit status 0. Exit status 0 means that a script finished without an error.
+
+The sorting control and the further datasets each ran a synthetic smoke stage and a training-only pilot before their protocols were frozen. Each production script ran from its own git worktree checked out at the frozen commit. The script of the sorting control, at commit \texttt{074278e6d} on 2026-09-13, logged \texttt{prepare} at 14:25:28 UTC, the pairing check at 14:25:29, \texttt{run} at 14:25:31, reporting at 14:28:36 and \texttt{compare\_runs projected} at 14:28:41, and it ended at 14:29:09 UTC with exit status 0. The script of the further datasets, at commit \texttt{6022f9b5e}, logged \texttt{prepare} of both batches at 16:00:13 UTC on 2026-09-13 and the pairing check at 16:00:16. Batch 1 ran from 16:00:18 to its reporting at 22:01:04, and batch 2 from 22:01:20 to its reporting at 06:07:01 UTC on 2026-09-14. Then the analysis, \texttt{compare\_newdata analyse}, started at 06:07:23, and the script ended at 06:08:01 UTC with exit status 0. That analysis refuses to run unless both batches are complete.
+
+The component ablation of the further datasets ran a synthetic smoke stage and one training-only pilot before its protocol was frozen. Its production script ran from a git worktree detached at commit \texttt{be41fa962} on 2026-09-14 and logged \texttt{prepare} at 09:55:44 UTC, \texttt{ablation} at 09:55:50, \texttt{summary} at 11:18:28 and \texttt{holistic components} at 11:18:39. It ended at 11:18:57 UTC with exit status 0. The summary refuses unless the seven-view refit reproduces ArrowFlow on every fold and seed. The script checked this for all ten datasets before it wrote the component table.
+
+Every result record of a harness family carries the dataset hash, the split, the model and fitting seeds, the configuration and the code revision. The summaries are recomputed from the per-example predictions after every planned job has been reconciled with its result.
+
+The two studies of the learned encoder (Section~\ref{supp:learned}) ran outside the harness, from their own modules under \texttt{experiments/tensor\_rank\_sandbox}. They have no protocol file. Each fixed its design in the header of its module and committed it before its run (Table~\ref{tab:s-protocols}). Each run directory records that commit in \texttt{code\_revision.txt} and the design in \texttt{design.json}, but it holds no \texttt{environment.json}. The result records carry the split, the configuration, the fitting seeds and the predictions, but no dataset hash or code revision. The two studies read the prepared data and splits of the registered runs they are paired with. They ran with single-thread workers, 14 at once in the nested study. The encoder swap added a second pool of 10 workers, 24 in all.
+
+The eight controlled experiments of Sections~\ref{supp:motion} and~\ref{supp:controlled}, and the duplicate-free rerun of Section~\ref{supp:benchmark}, followed the same procedure. Each of them that scores outer folds ran under its own frozen protocol. That protocol fixed its arms (the variants it compares), its Holm families and its analysis before any of its outer folds was scored. Each also ran a synthetic smoke stage and a training-only pilot against a wall-clock cap before its protocol was frozen.
+
+The experiments differ in what they reuse from earlier runs. The matched motion-signal controls, the two depth families and the aggregation family reuse the configuration each outer fold already selected. So they fit new arms on unchanged folds. The depth family with the corrected relay also reuses two arms of the first depth family. The neighbor baselines fit only the baselines and reuse ArrowFlow's stored predictions. The representation test refits ArrowFlow and its untrained and input controls at their stored selections and checks each against its stored predictions. It then reads their rankings with a new readout. The duplicate-free rerun repeats the registered design on the distinct feature rows of its two datasets. The training diagnostics instrument the registered ArrowFlow run without fitting anything. The mechanism analysis is post hoc and works on predictions that already existed. So neither of those two scores an outer fold of its own.
+
+\input{tables/tab_s_protocols}
+
+The laboratory protocol, \texttt{arrowflow-v3-devlab-1}, is a development protocol. It scores no outer test fold, and its adoption verdicts are read at a gate. The readout it adopted became ArrowFlow's readout. ArrowFlow ran under its own frozen protocol, \texttt{arrowflow-v3-bridge-knn-1}, with the same nested design, splits and candidates as the prototype readout. It ran on the benchmark's own outer partitions.
+
+\paragraph{Order of decisions.} The decisions of this paper are dated below in the order in which they were made. The times come from the freeze fields of the protocol files (Table~\ref{tab:s-protocols}) and the commit times of the git history. They also come from the execution record of the two earlier runs and the pilot authorizations in the laboratory's manifests. Two earlier protocols of the same harness used the same outer and inner folds, with split seed $27183$. They are \texttt{arrowflow-make-v2-nested-1}, a nested benchmark of a single-view configuration, and \texttt{arrowflow-make-matched-v1}, a matched study of single-view networks with learning rate $0.5$. Both were frozen on 2026-09-11 at 14:58 UTC. Their execution record shows that both runs completed on that day. Their results were known when the study plan was committed on 2026-09-12 at 10:29 UTC. Four choices of this paper were made with those results in hand:
+\begin{enumerate}[leftmargin=2em,topsep=2pt,itemsep=1pt]
+\item the candidate grid, built around the adaptive defaults;
+\item the matched study's configuration;
+\item the family of 14 contrasts;
+\item the laboratory's kinds of variants with its adoption rule.
+\end{enumerate}
+The accuracy results of the two earlier runs are not reported here, because their configurations differ from those of ArrowFlow and its prototype readout.
+
+The benchmark protocol was frozen on 2026-09-12 at 11:28 UTC, and the benchmark ran at code revision \texttt{67073eb47}. The matched and ablation protocols were frozen at 19:54 UTC, and those studies ran at revision \texttt{e36ca64e1}, committed at 19:56 UTC. The ablation reproduces the benchmark's existing outer predictions. The laboratory protocol was written after the benchmark's outer results were known. Its file was committed at 21:12 UTC. At 21:25 UTC the protocol gained the prior-$\eta$ median variant and the joint selection of the prototype count and the readout's neighbor count of the LVQ variants. Its kinds of variants and its adoption rule date from the study plan. The laboratory ran at code revision \texttt{9c3fc5214}, after the outer-fold results of the benchmark, the matched study and the component ablation were known. Its manifests record pilots authorized at 22:14 and 22:18 UTC. Its inner validation folds of the first repeat contain every row of every dataset.
+
+The protocol of ArrowFlow, \texttt{arrowflow-v3-bridge-knn-1}, was frozen on 2026-09-12 at 23:23 UTC (Table~\ref{tab:s-protocols}). Its resource decision records the laboratory's adoption verdict, and its run executed at code revision \texttt{70fb9bf31}. It reuses the benchmark's outer partitions and pairs ArrowFlow with the benchmark's existing outer-fold results of the prototype readout. So the partitions on which ArrowFlow's numbers are reported had informed the choice of its readout.
+
+The protocol of the training controls was frozen on 2026-09-13 at 09:44 UTC, and its run executed at code revision \texttt{08cf39cd2}. Its resource decision records that the pairing check against the ArrowFlow run passed before the freeze. All of the results above were known by the time of that freeze. The protocol of the component ablation of ArrowFlow was frozen at the same time, and its run executed at the same revision.
+
+The protocol of the sorting control was frozen on 2026-09-13 at 14:18 UTC, and its run executed at code revision \texttt{074278e6d}. The ten further datasets were selected by prespecified rules, every eligible dataset included, before any model was fitted on them. Their two batch protocols also fix the analysis. They were frozen at 15:47 UTC, after a fit check and a pilot that predicted training rows only. Their runs executed at code revision \texttt{6022f9b5e}. A search of the parent project's working tree, git history and binary documents found no earlier use of the ten datasets. The table renderer rescans \texttt{arrowflow/}, \texttt{manuscript/NeuralComputation/} and \texttt{manuscript/MAKE/} on every render.
+
+The combined analysis of the seventeen datasets, with its Friedman test and its Holm adjustment over all 34 training contrasts, was written on 2026-09-14, after every result above was known. It recomputes every value from the verified runs and fits no model. These analyses are post hoc and descriptive, and so are its degenerate flags and pooled depth split. The protocol of the component ablation of the further datasets was frozen on 2026-09-14 at 09:44 UTC, after the combined analysis was written. Its run executed at code revision \texttt{be41fa962}. The protocols of the depth study with the corrected relay and of the representation test were frozen on 2026-09-23, after every result above was known (Table~\ref{tab:s-protocols}). The vote scale of the corrected relay's fourth arm came from training-only pilot fits. The seven benchmark datasets had been screened for the representation question before the protocol of the representation test was written (Section~\ref{supp:controlled}). The designs of the two studies of the learned encoder were fixed after every result above was known. The nested study's design was committed on 2026-09-24 at 18:05 UTC and the encoder swap's on 2026-09-25 at 06:23 UTC (Table~\ref{tab:s-protocols}).
+
+\paragraph{Seeds.} The seeds are protocol constants. A seed is the starting value of a random number generator, so it fixes all of its later draws. The split seed $27183$ fixes the outer and inner folds of every family. The fitting seeds are $8129$, $19391$ and $39019$, and the candidate seed $41071$ samples grids larger than 24 candidates. The matched study uses encoder seed $51047$ and shuffle seed $109387$. It derives its network seeds from the base seed, dataset, fold and architecture. The laboratory uses selection seed $20260912$ for its inner splits.
+
+\FloatBarrier
+\subsection{Datasets}\label{supp:datasets}
+
+To get exactly the data we used, take each dataset from its source and check its content hash. Table~\ref{tab:s-datasets} lists the seventeen datasets with their sources and content hashes. A content hash is a hash of the data themselves, so two copies with the same content hash hold the same data. Iris, Wine, Breast cancer and Digits are the copies distributed with scikit-learn. The Iris copy of scikit-learn is taken from Fisher's paper, and it differs from the copy in the UCI repository in two data points. Wine quality (red), Vehicle and Segment are the OpenML copies with the stated identifiers. Wine quality uses the red wines, with quality scores grouped into three classes: 5 or less, 6, and 7 or more. The ten further datasets are OpenML copies pinned by identifier, version and content hashes (Table~\ref{tab:s-newdata-evidence}).
+
+The harness computes each content hash with the function \texttt{dataset\_fingerprint} of \texttt{experiments/make\_revision/evaluation.py}. It is the \texttt{sha256} digest of the table's shape, feature names and class names, followed by every feature value, as a double-precision number, and every label. The batch protocols pin these hashes for the further datasets, but no protocol pins them for the seven benchmark copies. So check a new copy of a benchmark dataset against Table~\ref{tab:s-datasets} by hand.
+
+\input{tables/tab_s_datasets}
+
+\FloatBarrier
+\subsection{Environment and Compute}\label{supp:environment}
+
+To run the code in the same software environment, install the versions recorded with the runs (Table~\ref{tab:s-environment}). Table~\ref{tab:s-compute} gives the summed wall-clock fit time of each nested benchmark run by model, for its outer fits and for its inner selection fits. It is a guide to the compute that a reproduction needs.
+
+\input{tables/tab_s_environment}
+\input{tables/tab_s_compute}
+
+\FloatBarrier
+\subsection{Commands}\label{supp:commands}
+
+{\raggedright To rerun one study, run its block of commands below in the order given. A comment line that starts with \texttt{\#} names each block. The commands reproduce each family from the repository root with the Python environment of Table~\ref{tab:s-environment}. The listing uses the following placeholders:
+\begin{itemize}[leftmargin=2em,topsep=2pt,itemsep=1pt]
+\item \texttt{<run>} is the output directory of a family. Pilots write to their own directory.
+\item \texttt{P} is \texttt{experiments/make\_revision/protocols}.
+\item \texttt{\char`\{a|b\char`\}} stands for one command per alternative, run in the order given.
+\item \texttt{<references>} stands for the \texttt{--reference} arguments that name the runs a family is matched to. Its production script records these arguments.
+\item \texttt{<runs directory>} holds the run directories under their names. Without \texttt{--runs}, \texttt{holistic} and \texttt{render\_tables.py} default to a path on the author's machine, so always pass \texttt{--runs}.
+\end{itemize}\par}
+
+The first benchmark run, the matched learning controls and both batches of the further datasets need only their protocols and the datasets. Every other family also reads earlier runs, and most name them in their commands. The two modules of the learned encoder take no \texttt{--runs} argument. They read the registered runs from a fixed path on the author's machine, \texttt{RUNS\_ROOT} in \texttt{nested.py}, which a reproduction has to edit.
+
+\begin{scriptsize}
+\begin{verbatim}
+# First benchmark run (prototype readout)
+python -m experiments.make_revision.run_revision {smoke|pilot|prepare|run} \
+   --dataset iris wine breast_cancer wine_quality vehicle segment digits \
+   --registry experiments.make_revision.bridge:bridge_registry \
+   --protocol P/2026-09-12/bridge.json --output <run> --workers 16
+python -m experiments.make_revision.reporting --output <run>
+
+# ArrowFlow (nearest-neighbor readout) on the benchmark's outer partitions
+python -m experiments.make_revision.run_revision prepare \
+   --dataset iris wine breast_cancer wine_quality vehicle segment digits \
+   --registry experiments.make_revision.bridge:bridge_knn_registry \
+   --protocol P/2026-09-12/bridge_knn.json --output <run>
+python -m experiments.make_revision.run_revision run \
+   --dataset iris wine breast_cancer wine_quality vehicle segment digits \
+   --registry experiments.make_revision.bridge:bridge_knn_registry \
+   --protocol P/2026-09-12/bridge_knn.json --output <run> --workers 16
+python -m experiments.make_revision.reporting --output <run>
+python -m experiments.make_revision.compare_runs knn --knn-source <run> \
+   --bridge-source <benchmark run> --output <comparison directory>
+
+# Matched learning controls
+python -m experiments.make_revision.run_studies {smoke|pilot|prepare|run} \
+   --protocol P/2026-09-12/matched_v3.json --output <run> --workers 16
+python -m experiments.make_revision.run_studies summary --output <run>
+
+# Component ablation and the 14 contrasts
+python -m experiments.make_revision.run_bridge prepare \
+   --protocol P/2026-09-12/ablation.json --bridge-source <benchmark run> \
+   --output <run>
+python -m experiments.make_revision.run_bridge {smoke|pilot|ablation} \
+   --protocol P/2026-09-12/ablation.json --output <run> --workers 16
+python -m experiments.make_revision.run_bridge summary --output <run>
+python -m experiments.make_revision.run_bridge contrasts \
+   --ablation-source <run> --matched-source <matched run> \
+   --output <contrasts directory>
+
+# Inner-fold laboratory (never scores an outer fold)
+python -m experiments.make_revision.devlab pilot --family {readouts|permlvq} \
+   --bridge-source <benchmark run> --output <run> --workers 16
+python -m experiments.make_revision.devlab {readouts|permlvq} \
+   --bridge-source <benchmark run> --output <run> --workers 16
+python -m experiments.make_revision.devlab summary --family {readouts|permlvq} \
+   --output <run>
+
+# Training controls (untrained ArrowFlow and tuned input footrule kNN)
+python -m experiments.make_revision.run_revision prepare \
+   --dataset iris wine breast_cancer wine_quality vehicle segment digits \
+   --protocol P/2026-09-12/knn_training.json \
+   --registry experiments.make_revision.knn_controls:knn_training_registry \
+   --output <run>
+python -m experiments.make_revision.compare_runs training-pairing \
+   --training-source <run> --knn-source <ArrowFlow run>
+python -m experiments.make_revision.run_revision run \
+   --dataset iris wine breast_cancer wine_quality vehicle segment digits \
+   --protocol P/2026-09-12/knn_training.json \
+   --registry experiments.make_revision.knn_controls:knn_training_registry \
+   --output <run> --workers 16
+python -m experiments.make_revision.reporting --output <run>
+python -m experiments.make_revision.compare_runs training \
+   --training-source <run> --knn-source <ArrowFlow run> \
+   --output <run>/compare_training
+
+# Component ablation of ArrowFlow at its selected configurations
+python -m experiments.make_revision.run_knn_ablation prepare \
+   --protocol P/2026-09-12/knn_ablation.json --reference-source <ArrowFlow run> \
+   --output <run>
+python -m experiments.make_revision.run_knn_ablation ablation \
+   --protocol P/2026-09-12/knn_ablation.json --reference-source <ArrowFlow run> \
+   --output <run> --workers 16
+python -m experiments.make_revision.run_knn_ablation summary --output <run>
+
+# Comparator intervals, ranks and duplicate rows (descriptive; no model is fitted)
+python -m experiments.make_revision.referee_analyses comparators \
+   --knn-source <ArrowFlow run> --output <run>/comparators
+python -m experiments.make_revision.referee_analyses duplicates \
+   --knn-source <ArrowFlow run> --bridge-source <benchmark run> --output <run>/duplicates
+python -m experiments.make_revision.referee_analyses ranks \
+   --knn-source <ArrowFlow run> --output <run>/ranks
+
+# Sorting control (numeric kNN on the projected scores)
+python -m experiments.make_revision.run_revision prepare \
+   --dataset iris wine breast_cancer wine_quality vehicle segment digits \
+   --protocol P/2026-09-12/knn_projected.json \
+   --registry experiments.make_revision.projected_knn:knn_projected_registry \
+   --output <run>
+python -m experiments.make_revision.compare_runs projected-pairing \
+   --projected-source <run> --knn-source <ArrowFlow run> \
+   --training-source <training controls run>
+python -m experiments.make_revision.run_revision run \
+   --dataset iris wine breast_cancer wine_quality vehicle segment digits \
+   --protocol P/2026-09-12/knn_projected.json \
+   --registry experiments.make_revision.projected_knn:knn_projected_registry \
+   --output <run> --workers 16
+python -m experiments.make_revision.reporting --output <run>
+python -m experiments.make_revision.compare_runs projected \
+   --projected-source <run> --knn-source <ArrowFlow run> \
+   --training-source <training controls run> --output <run>/compare_projected
+
+# Further datasets (two batches, analyzed together)
+python -m experiments.make_revision.newdata prepare \
+   --protocol P/2026-09-12/newdata_batch1.json --output <batch 1 run>
+python -m experiments.make_revision.newdata prepare \
+   --protocol P/2026-09-12/newdata_batch2.json --output <batch 2 run>
+python -m experiments.make_revision.compare_newdata pairing \
+   --batch1 <batch 1 run> --batch2 <batch 2 run>
+python -m experiments.make_revision.newdata run \
+   --protocol P/2026-09-12/newdata_batch1.json --output <batch 1 run> --workers 16
+python -m experiments.make_revision.reporting --output <batch 1 run>
+python -m experiments.make_revision.newdata run \
+   --protocol P/2026-09-12/newdata_batch2.json --output <batch 2 run> --workers 16
+python -m experiments.make_revision.reporting --output <batch 2 run>
+python -m experiments.make_revision.compare_newdata analyse \
+   --batch1 <batch 1 run> --batch2 <batch 2 run> --output <analysis directory>
+
+# Combined analysis of the seventeen datasets (no model is fitted)
+python -m experiments.make_revision.holistic benchmark --runs <runs directory> --output <run>/benchmark
+python -m experiments.make_revision.holistic training --runs <runs directory> --output <run>/training
+python -m experiments.make_revision.holistic ready --root <run>
+
+# Component ablation on the further datasets, then the component table of all seventeen
+python -m experiments.make_revision.run_newdata_ablation prepare \
+   --protocol P/2026-09-12/newdata_ablation.json --batch1 <batch 1 run> \
+   --batch2 <batch 2 run> --output <run>
+python -m experiments.make_revision.run_newdata_ablation ablation \
+   --protocol P/2026-09-12/newdata_ablation.json --batch1 <batch 1 run> \
+   --batch2 <batch 2 run> --output <run> --workers 16
+python -m experiments.make_revision.run_newdata_ablation summary --output <run>
+python -m experiments.make_revision.holistic components --runs <runs directory> \
+   --output <combined analysis run>/components
+
+# Matched motion-signal controls
+python -m experiments.make_revision.motion_controls {prepare|run} \
+   --protocol P/2026-09-14/motion_controls.json <references> \
+   --output <run>/run --workers 16
+python -m experiments.make_revision.motion_controls summary --output <run>/run
+python -m experiments.make_revision.compare_motion analyse --run <run>/run \
+   <references> --output <run>/analysis
+
+# Training diagnostics, and its tables
+python -m experiments.make_revision.training_diagnostics run \
+   --protocol P/2026-09-14/training_diagnostics.json <references> \
+   --output <run> --workers 8
+python -m experiments.make_revision.training_diagnostics summary --output <run>
+python -m experiments.make_revision.diagnostics_tables tables \
+   --diagnostics <diagnostics run> --ablation knn=<component ablation run> \
+   --ablation newdata=<further-dataset ablation run> --output <tables run>
+
+# Balance-scale and mfeat-zernike mechanism (descriptive; no model is fitted)
+python -m experiments.make_revision.mechanism_analysis analyse \
+   --runs <runs directory> --output <run>
+
+# Fixed-configuration depth, and aggregation inside the update
+python -m experiments.make_revision.interventions prepare \
+   --protocol P/2026-09-14/{depth|aggregation}.json <references> --output <run>/run
+python -m experiments.make_revision.interventions run \
+   --protocol P/2026-09-14/{depth|aggregation}.json --output <run>/run --workers 16
+python -m experiments.make_revision.interventions summary --output <run>/run
+python -m experiments.make_revision.interventions analyse --run <run>/run \
+   --output <run>/analysis
+
+# Duplicate-free rerun of Wine quality and Segment
+python -m experiments.make_revision.extra_runs {prepare|run} \
+   --protocol P/2026-09-14/dedup.json --output <run>/run --workers 16
+python -m experiments.make_revision.reporting --output <run>/run
+python -m experiments.make_revision.extra_ablation {prepare|ablation} \
+   --protocol P/2026-09-14/dedup.json --reference <run>/run \
+   --output <run>/ablation --workers 16
+python -m experiments.make_revision.extra_ablation summary --output <run>/ablation
+python -m experiments.make_revision.compare_extra analyse --family dedup \
+   --run <run>/run --ablation <run>/ablation --output <run>/analysis \
+   --runs <runs directory>
+
+# Neighbor baselines (LDA, PCA and NCA with kNN, and a Kendall-kernel SVC)
+python -m experiments.make_revision.neighbour_baselines prepare \
+   --protocol P/2026-09-14/neighbour_baselines.json --output <run>/run
+python -m experiments.make_revision.compare_baselines pairing --run <run>/run \
+   --runs <runs directory>
+python -m experiments.make_revision.neighbour_baselines run \
+   --protocol P/2026-09-14/neighbour_baselines.json --output <run>/run --workers 16
+python -m experiments.make_revision.reporting --output <run>/run
+python -m experiments.make_revision.compare_baselines analyse --run <run>/run \
+   --output <run>/analysis --runs <runs directory>
+
+# Depth with the corrected relay
+python -m experiments.make_revision.signed_relay_depth prepare \
+   --protocol P/2026-09-23/signed_relay_depth.json <references> \
+   --source-depth-run <depth run>/run --output <run>/run
+python -m experiments.make_revision.signed_relay_depth run \
+   --protocol P/2026-09-23/signed_relay_depth.json --output <run>/run --workers 16
+python -m experiments.make_revision.signed_relay_depth summary --output <run>/run
+python -m experiments.make_revision.signed_relay_depth analyse --run <run>/run \
+   --output <run>/analysis
+
+# Representation test (a Kendall-kernel SVC on the input, untrained and trained rankings)
+python -m experiments.make_revision.representation_test {prepare|run} \
+   --protocol P/2026-09-23/representation_test.json <references> \
+   --output <run>/run --workers 16
+python -m experiments.make_revision.representation_test summary --output <run>/run
+python -m experiments.make_revision.compare_representation analyse --run <run>/run \
+   <references> --output <run>/analysis
+
+# The learned encoder (Sections 5.5 and 7.7, S6). Development on single splits,
+# records under experiments/tensor_rank_sandbox/runs/:
+python -m experiments.tensor_rank_sandbox.search {0|1|2}
+python -m experiments.tensor_rank_sandbox.{confirm|core_confirm|mlp_reference}
+python -m experiments.tensor_rank_sandbox.conversion_check
+# the classifier under nested cross-validation, then the encoder swap
+python -m experiments.tensor_rank_sandbox.nested run --output <run> --workers 14
+python -m experiments.tensor_rank_sandbox.nested analyse --output <run>
+python -m experiments.tensor_rank_sandbox.encoder_swap check
+python -m experiments.tensor_rank_sandbox.encoder_swap run --output <run> --workers 14
+python -m experiments.tensor_rank_sandbox.encoder_swap analyse --output <run> \
+   --nested <nested run>
+
+# Tables, the data figures and the two documents
+python manuscript/v3/render_tables.py --runs <runs directory>
+(cd manuscript/v3 && ./build.sh)
+\end{verbatim}
+\end{scriptsize}
+
+The two relays of Section~\ref{sec:training} live in different files. The earlier relay is part of \texttt{arrowflow/arrowflow.py}. There \texttt{backward\_propagate} passes to the layer below the motion that \texttt{Vertex.accumulate\_motion} returns. Every run of this paper used it, except the two corrected arms of the depth study. The corrected relay is the class \texttt{RelayedMotion} of \texttt{experiments/make\_revision/signed\_relay.py}. It replaces that return value on the running network only, so \texttt{arrowflow.py} is unchanged.
+
+{\raggedright\setlength{\parindent}{1.5em} To check the numbers in this paper against the run files, rerun the table renderer, \texttt{render\_tables.py}, as in the last block above. It reads the verified summaries (\texttt{summary.json}, \texttt{ablation\_summary.json}, \texttt{primary\_contrasts\_v3.csv}, the laboratory's \texttt{readouts\_summary.json} and \texttt{permlvq\_summary.json}, and the readout comparison files \texttt{main\_table.json}, \texttt{knn\_vs\_full\_summary.json} and \texttt{knn\_vs\_full\_contrasts.csv}). A record seals an output file by storing its digest, which lets the renderer detect any later change. Beyond these summaries, it reads the following files for each family or analysis:
+\begin{itemize}[leftmargin=2em,topsep=2pt,itemsep=1pt]
+\item For the comparator intervals, ranks and duplicate rows it reads \texttt{comparator\_contrasts.csv}, \texttt{rank\_matrix.csv}, \texttt{friedman\_nemenyi.json}, the duplicate-row tables and their sealing records.
+\item For the training controls it reads \texttt{training\_contrasts.csv}, \texttt{training\_error\_table.json} and \texttt{training\_depth\_split.json}, the selection records in the result files of both runs, and the production log and script.
+\item For the component ablation of ArrowFlow it reads \texttt{knn\_ablation\_summary.json} and \texttt{.csv}, \texttt{newdata\_ablation\_summary.json} and \texttt{.csv}, the selection records of the batch runs, and the four outputs of \texttt{holistic components}.
+\item For the sorting control it reads the four outputs of \texttt{compare\_runs projected} and the selection records of both classifiers.
+\item For the further datasets it reads the five outputs of \texttt{compare\_newdata analyse} and the summaries, manifests, protocols and selection records of both batch runs. It also reads their production log and the prepared data of diabetes.
+\item For the seventeen datasets together it reads the sealed outputs of \texttt{holistic benchmark} and \texttt{holistic training} with their \texttt{READY} record. It checks every value against the runs above.
+\item For each of the eight controlled experiments and the duplicate-free rerun it reads that family's analysis directory, the record that seals it and its frozen protocol. These sealing records are \texttt{motion\_analysis.json}, \texttt{diagnostics\_tables.json}, \texttt{mechanism\_analysis.json}, \texttt{dedup\_analysis.json}, \texttt{baseline\_analysis.json}, \texttt{signed\_relay\_depth\_analysis.json}, \texttt{representation\_analysis.json} and the depth and aggregation analysis records. Every output it reads in these directories is checked against the digest and row count its record seals, or row for row against the records the same analysis holds.
+\item For the motion controls it also sums the vote counts of Table~\ref{tab:s-motion-statistics} from the per-fold result records. It does so after those records reproduce every count that the sealed analysis holds.
+\item For the two studies of the learned encoder it reads their result records, design files, run analyses and reproduction log. It also reads the prepared splits and result records of the registered runs they are paired with. It checks each study's module against its version at the commit that fixed the design and recomputes every contrast from the predictions. And it reads the development records under \texttt{experiments/tensor\_rank\_sandbox/runs/}.
+\end{itemize}
+
+Each table's rendering code also re-checks the family size, the arms, the Holm scope, the fold counts and the job checks before it prints a cell. The diagnostics tables are read from the output directory of the post-processing module and never from the raw run summary. The selection document and the production scripts are the tracked copies in \texttt{docs/superpowers/}. The selection document records how the ten further datasets were chosen (Section~\ref{supp:selection}). The production scripts ran the families of Section~\ref{supp:protocols} from their git worktrees.
+
+The renderer writes every table under \texttt{manuscript/v3/tables/}. It renders Figure~\ref{fig:learning-controls} through \texttt{render\_figures.figure7}, Figure~\ref{fig:motion-forest} through \texttt{render\_figures.motion\_forest}, Figure~\ref{fig:learning-curves} through \texttt{render\_figures.learning\_curves} and Figure~\ref{fig:learned} through \texttt{render\_figures.encoder\_forest}. It fails if a cell of a main-text table differs from the cell of the same row and column in the corresponding complete table of this supplement. It also fails if a guarded number or count printed in the text differs from the run files. A guarded number is one that the renderer rebuilds from the run files and then looks for in the text. On every run, a mutation test changes such numbers in in-memory copies of the text and makes sure that this check then fails. The focused test suite of the harness, \texttt{tests/make\_revision}, accompanies every commit.
+
+Outside the repository the renderer reads only the workspace directory \texttt{runs}. There it reads the run directories \texttt{2026-09-12-ablation}, \texttt{2026-09-12-bridge}, \texttt{2026-09-12-bridge-knn}, \texttt{2026-09-12-contrasts}, \texttt{2026-09-12-devlab}, \texttt{2026-09-12-knn-vs-full}, \texttt{2026-09-12-matched}, \texttt{2026-09-13-knn-ablation}, \texttt{2026-09-13-knn-projected}, \texttt{2026-09-13-knn-training}, \texttt{2026-09-13-referee-analyses}, \texttt{2026-09-14-baselines}, \texttt{2026-09-14-dedup}, \texttt{2026-09-14-depth-aggregation}, \texttt{2026-09-14-holistic}, \texttt{2026-09-14-mechanism-analysis}, \texttt{2026-09-14-motion}, \texttt{2026-09-14-newdata-ablation}, \texttt{2026-09-14-newdata-analysis}, \texttt{2026-09-14-newdata-batch1}, \texttt{2026-09-14-newdata-batch2}, \texttt{2026-09-14-training-diagnostics}, \texttt{2026-09-14-training-diagnostics-tables}, \texttt{2026-09-23-representation-test}, \texttt{2026-09-23-signed-relay-depth}, \texttt{2026-09-24-tensor-rank-nested} and \texttt{2026-09-25-encoder-swap}. In \texttt{runs} it also reads the production logs \texttt{task20-run.log}, \texttt{task23a-run.log}, \texttt{task23b-run.log} and \texttt{task24-run.log}. An audit of every file it opens checks this list on every run. The four logs belong, in this order, to the training controls with the component ablation of ArrowFlow, the sorting control, the further datasets and the component ablation of the further datasets.\par}

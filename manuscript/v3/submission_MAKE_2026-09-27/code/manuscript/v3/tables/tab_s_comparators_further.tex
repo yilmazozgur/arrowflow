@@ -1,0 +1,73 @@
+% Rendered by render_tables.py from run files; do not edit by hand.
+\begin{table}[!htbp]
+\caption{\textbf{ArrowFlow against every tuned classical model, further datasets.} Paired accuracy differences in percentage points, ArrowFlow minus the comparator, positive when ArrowFlow is more accurate, with the intervals and unadjusted $p$ values of Table~\ref{tab:s-comparators}. Against the best tuned model ArrowFlow is less accurate on all seventeen datasets of both tables, and the interval excludes zero on eight. HCV: hepatitis C virus.}
+\label{tab:s-comparators-further}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llrrr}
+\toprule
+Dataset & Comparator & ArrowFlow $-$ comparator (pp) & 95\% interval & $p$ (unadjusted) \\
+\midrule
+balance-scale & SVC (RBF)$^\ast$ & $-$3.95 & [$-$5.92, $-$1.98] & $<$0.001 \\
+ & Random forest & +7.73 & [+5.12, +10.34] & $<$0.001 \\
+ & MLP & $-$3.88 & [$-$5.18, $-$2.57] & $<$0.001 \\
+ & Numeric kNN & +4.21 & [+2.27, +6.16] & $<$0.001 \\
+ & Gradient boosting & +2.40 & [+0.64, +4.16] & 0.011 \\
+\midrule
+mfeat-zernike & SVC (RBF)$^\ast$ & $-$2.18 & [$-$4.06, $-$0.29] & 0.027 \\
+ & Random forest & +3.00 & [+0.80, +5.20] & 0.011 \\
+ & MLP & $-$0.41 & [$-$2.09, +1.27] & 0.608 \\
+ & Numeric kNN & +0.36 & [$-$1.34, +2.05] & 0.660 \\
+ & Gradient boosting & +3.07 & [+0.83, +5.31] & 0.011 \\
+\midrule
+ionosphere & SVC (RBF)$^\ast$ & $-$5.32 & [$-$9.05, $-$1.59] & 0.008 \\
+ & Random forest & $-$4.18 & [$-$6.84, $-$1.52] & 0.005 \\
+ & MLP & $-$3.20 & [$-$7.01, +0.61] & 0.093 \\
+ & Numeric kNN & $-$1.04 & [$-$4.90, +2.81] & 0.570 \\
+ & Gradient boosting & $-$4.56 & [$-$7.87, $-$1.25] & 0.010 \\
+\midrule
+vertebra-column & SVC (RBF)$^\ast$ & $-$2.90 & [$-$6.30, +0.49] & 0.088 \\
+ & Random forest & $-$1.08 & [$-$4.17, +2.02] & 0.468 \\
+ & MLP & $-$1.43 & [$-$4.53, +1.67] & 0.338 \\
+ & Numeric kNN & +2.90 & [$-$1.49, +7.30] & 0.178 \\
+ & Gradient boosting & +0.97 & [$-$3.54, +5.48] & 0.652 \\
+\midrule
+diabetes & SVC (RBF)$^\ast$ & $-$1.34 & [$-$4.49, +1.80] & 0.375 \\
+ & Random forest & $-$0.17 & [$-$3.57, +3.23] & 0.916 \\
+ & MLP & $-$0.52 & [$-$3.07, +2.03] & 0.668 \\
+ & Numeric kNN & +0.43 & [$-$2.77, +3.63] & 0.776 \\
+ & Gradient boosting & $-$0.08 & [$-$3.82, +3.65] & 0.962 \\
+\midrule
+banknote-authentication & SVC (RBF) & $-$0.14 & [$-$0.71, +0.44] & 0.617 \\
+ & Random forest & +0.69 & [+0.11, +1.27] & 0.023 \\
+ & MLP$^\ast$ & $-$0.19 & [$-$0.74, +0.37] & 0.484 \\
+ & Numeric kNN & +0.13 & [$-$0.14, +0.40] & 0.328 \\
+ & Gradient boosting & +0.15 & [$-$0.57, +0.88] & 0.656 \\
+\midrule
+qsar-biodeg & SVC (RBF) & $-$0.40 & [$-$3.00, +2.20] & 0.746 \\
+ & Random forest & +0.40 & [$-$1.17, +1.97] & 0.592 \\
+ & MLP$^\ast$ & $-$0.52 & [$-$2.53, +1.50] & 0.591 \\
+ & Numeric kNN & +1.15 & [$-$1.24, +3.53] & 0.319 \\
+ & Gradient boosting & +0.62 & [$-$1.52, +2.76] & 0.543 \\
+\midrule
+steel-plates-fault & SVC (RBF) & $-$0.99 & [$-$2.96, +0.98] & 0.299 \\
+ & Random forest & $-$3.66 & [$-$5.53, $-$1.78] & $<$0.001 \\
+ & MLP & $-$0.65 & [$-$2.36, +1.06] & 0.426 \\
+ & Numeric kNN & +0.69 & [$-$1.46, +2.85] & 0.502 \\
+ & Gradient boosting$^\ast$ & $-$3.82 & [$-$5.88, $-$1.77] & 0.001 \\
+\midrule
+climate-model-simulation-crashes & SVC (RBF)$^\ast$ & $-$2.96 & [$-$5.72, $-$0.20] & 0.037 \\
+ & Random forest & $-$1.89 & [$-$3.18, $-$0.60] & 0.007 \\
+ & MLP & $-$2.72 & [$-$4.76, $-$0.67] & 0.013 \\
+ & Numeric kNN & $-$1.54 & [$-$3.05, $-$0.03] & 0.046 \\
+ & Gradient boosting & $-$2.47 & [$-$4.12, $-$0.82] & 0.006 \\
+\midrule
+HCV & SVC (RBF) & $-$0.13 & [$-$2.14, +1.88] & 0.893 \\
+ & Random forest & +0.33 & [$-$2.31, +2.97] & 0.793 \\
+ & MLP & $-$0.63 & [$-$3.10, +1.84] & 0.591 \\
+ & Numeric kNN$^\ast$ & $-$1.50 & [$-$4.13, +1.13] & 0.241 \\
+ & Gradient boosting & +1.33 & [$-$1.99, +4.66] & 0.405 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,238 @@
+{
+  "aggregation_integrity": "explicit_expected_folds_and_model_seeds; reconcile_every_planned_job_result_and_fit_log",
+  "candidate_budget": 24,
+  "candidate_seed": 41071,
+  "candidate_tie_rule": "lowest_canonical_config_id",
+  "confidence": 0.95,
+  "datasets": [
+    "iris",
+    "wine",
+    "breast_cancer",
+    "wine_quality",
+    "vehicle",
+    "segment",
+    "digits"
+  ],
+  "design_source": {
+    "identical_to_template": "datasets, split_seed, outer_folds, outer_repeats, inner_folds, fit_seeds, candidate_budget, candidate_seed, candidate_tie_rule, stochastic_finalists, selection_metric, failure_policy, aggregation_integrity, freeze_requirement, paired_interval, parallelism, confidence, test_train_ratio, numeric_threads_per_worker, report_metrics, device, historical_results, full_method, primary_family_size, multiplicity",
+    "removed_from_template": {
+      "training_controls": "the training controls block and its reference to the knn run; this family declares projected_control, whose references pin both the knn run and the knn_training run"
+    },
+    "template": "protocols/2026-09-12/knn_training.json (sha256 in source_template_sha256)"
+  },
+  "device": "cpu",
+  "failure_policy": "log_all_failures; incomplete_candidates_ineligible; failed_outer_fits_and_terminal_selection_failures_retained; no_adaptive_stopping",
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "freeze_requirement": "complete_model_registry_and_candidates_reviewed; attainable_training_only_pilot; leakage_checks_pass; freeze_before_outer_scores",
+  "frozen": true,
+  "frozen_at_utc": "2026-09-13T14:18:49.592358+00:00",
+  "full_method": {
+    "adaptive_encoding_defaults": {
+      "n_features<=10": {
+        "augment": true,
+        "degree": 3,
+        "embed_dim": 16
+      },
+      "n_features<=30": {
+        "augment": true,
+        "degree": 2,
+        "embed_dim": 32
+      },
+      "n_features>30": {
+        "augment": false,
+        "degree": 1,
+        "embed_dim": 64
+      }
+    },
+    "aggregation": "majority",
+    "candidate_grid": {
+      "degree_offset": [
+        0,
+        -1
+      ],
+      "embed_scale": [
+        1,
+        2
+      ],
+      "learning_rate": [
+        0.1,
+        0.2
+      ],
+      "widths": [
+        [
+          128
+        ],
+        [
+          64,
+          128
+        ]
+      ]
+    },
+    "checkpoint": "validation_ratio_0.1_inside_every_fit",
+    "fixed": {
+      "batch_size": 32,
+      "iterations": 200,
+      "validation_ratio": 0.1
+    },
+    "model_id": "arrowflow_full",
+    "n_views": 7,
+    "resolution": "embed_dim=clip(round(base*embed_scale),8,128); degree=max(1,base+degree_offset) lowered while comb(n_features+degree,degree)>10000; augment=base_augment and n_train>=150; resolved at fit time from the training partition only",
+    "view_strategy_cycle": [
+      "target_aware",
+      "random",
+      "calibrated"
+    ]
+  },
+  "historical_results": "exploratory_only",
+  "inner_folds": 3,
+  "multiplicity": "Holm_across_the_14_prespecified_contrasts",
+  "numeric_threads_per_worker": 1,
+  "outer_folds": 5,
+  "outer_repeats": 3,
+  "paired_interval": "seed_average_within_fold_then_corrected_resampled_t",
+  "parallelism": "spawned_processes_by_outer_fold_and_model",
+  "primary_contrasts": [
+    "input_footrule_knn_vs_projected_numeric_knn",
+    "arrowflow_full_knn_vs_projected_numeric_knn"
+  ],
+  "primary_family_size": 14,
+  "production_family": "knn_projected",
+  "projected_control": {
+    "candidate_source": "full_method.candidate_grid (the 16 candidates of arrowflow_full_knn) projected onto model.candidate_keys, duplicates removed, canonical config_id order: the four candidates of input_footrule_knn (projected_knn.projected_candidates, which is knn_controls.control_candidates('input_footrule_knn'))",
+    "comparison": "python -m experiments.make_revision.compare_runs projected --projected-source <this run> --knn-source <knn run> --training-source <knn_training run> --output <directory>; compare_runs projected-pairing checks the prepared directory against both reference runs before the run",
+    "contrasts": {
+      "interval": "fitting seeds averaged within each outer fold; corrected resampled t over the 15 outer folds (evaluation.paired_corrected_interval, q = test_train_ratio, 14 df)",
+      "members": "per dataset in panel order: input_footrule_knn minus projected_numeric_knn (the effect of sorting), then arrowflow_full_knn minus projected_numeric_knn",
+      "metric": "accuracy",
+      "multiplicity": "one Holm adjustment across all 14 members (evaluation.holm_adjust)",
+      "pairing": "identical datasets, dataset_hash, splits_hash, outer schedule, fit_seeds and nested design keys across the three runs, and the knn_training design keys copied (compare_projected.DESIGN_COPY_KEYS); all three runs re-verified with the harness validators before any contrast; every source sealed by two or more environment records byte-identical (compare_runs.SHARED_SOURCES sealed by all three, knn_controls.py by the training and projected runs); projected_numeric_knn candidates equal to input_footrule_knn candidates of the knn_training run and to the projection of the knn run arrowflow_full_knn candidates",
+      "sources": "input_footrule_knn outer model rows of the knn_training run and arrowflow_full_knn outer model rows of the knn run (summary.json model_rows, re-verified); neither is refitted"
+    },
+    "descriptive": {
+      "contrast": "numeric_knn_vs_projected_numeric_knn",
+      "definition": "per dataset, numeric_knn (knn run: tuned numeric kNN on imputed, standardized raw features; deterministic, one fitting seed) minus projected_numeric_knn accuracy, fitting seeds averaged within fold; corrected resampled t interval over the outer folds (q = test_train_ratio, 14 df) without a p value: the effect of expansion, projection and the seven-view vote without sorting",
+      "status": "descriptive; outside the Holm family; no p values"
+    },
+    "ladder": [
+      {
+        "model_id": "numeric_knn",
+        "run": "knn",
+        "rung": "raw_numeric_knn"
+      },
+      {
+        "model_id": "projected_numeric_knn",
+        "run": "projected",
+        "rung": "projected_numeric_knn"
+      },
+      {
+        "model_id": "input_footrule_knn",
+        "run": "training",
+        "rung": "encoded_ranking_knn"
+      },
+      {
+        "model_id": "arrowflow_knn_untrained",
+        "run": "training",
+        "rung": "untrained_arrowflow_knn"
+      },
+      {
+        "model_id": "arrowflow_full_knn",
+        "run": "knn",
+        "rung": "arrowflow_knn"
+      }
+    ],
+    "ladder_table": "per dataset, mean outer error, outer-fold SD and within-fold seed SD of each rung from its own verified summary.json (compare_projected.ladder_error_table)",
+    "model": {
+      "candidate_keys": [
+        "n_views",
+        "strategy",
+        "aggregation",
+        "embed_scale",
+        "degree_offset"
+      ],
+      "candidates": 4,
+      "dropped": {
+        "augment": "the resolved augmentation acts only on training samples",
+        "batch_size": "acts only during training",
+        "iterations": "acts only during training",
+        "learning_rate": "acts only during training",
+        "validation_ratio": "the validation checkpoint acts only during training",
+        "widths": "no network"
+      },
+      "encoders": "the seven encoders of input_footrule_knn: view v is OrdinalEncoder(full_method.view_strategy_cycle[v mod 3], embed_dim, degree, lda_ratio 0.3, seed derive_seed(fit seed, \"view\", v)) fitted on the training rows of the fit (imputation, polynomial expansion when degree > 1, standardization, projection, and for calibrated views the calibration scaler)",
+      "estimator": "experiments.make_revision.projected_knn:MultiViewProjectedKNN via AdaptiveProjectedKNN",
+      "model_id": "projected_numeric_knn",
+      "presort_check": "score_order of the scores equals OrdinalEncoder.transform of the same rows exactly, on the training rows of every fit and on every query; otherwise the fit or prediction fails (PresortMismatch)",
+      "representation": "per view, the real-valued score matrix the view's OrdinalEncoder passes to arrowflow.ranking.score_order in transform: _scores_from_scaled(scaler_.transform(poly_.transform(imputer_.transform(X)))), poly_ only when degree > 1; _scores_from_scaled is the encoder's projection (for target_aware views the LDA block over lda_scale_ beside the random block over random_scale_) followed, for calibrated views, by the encoder's own calibration StandardScaler fitted on the training rows; no further standardization",
+      "resolution": "embed_dim and degree as full_method.resolution, from the training partition's shape at fit time (bridge.resolve); the resolved augment is dropped",
+      "stochastic": true
+    },
+    "readout": {
+      "aggregation": "majority",
+      "classifier": "StableNumericKNN: scipy cdist cityblock (p = 1) or euclidean (p = 2) to the training scores; a stable sort of each distance row, so a cutoff tie goes to the earlier training row in source order; the votes of StableFootruleKNN.predict_neighbors (uniform, or inverse distance with exact zero distances taking all the weight; a vote tie goes to the lowest class)",
+      "grid": {
+        "n_neighbors": [
+          1,
+          3,
+          5,
+          11,
+          21
+        ],
+        "p": [
+          1,
+          2
+        ],
+        "weights": [
+          "uniform",
+          "distance"
+        ]
+      },
+      "selection": "mean accuracy over StratifiedKFold(3, shuffle=True, random_state=derive_seed(view_seed, \"readout_selection\")) splits of the training partition inside every fit, the splits input_footrule_knn's readout selection uses for the same view seed and rows; fewer splits only if the smallest class has fewer rows; one neighbour cache per split and p at the largest k; ties lowest_canonical_config_id; refit on the full training scores",
+      "selection_folds": 3,
+      "source": "projected_knn.select_numeric_readout inside every fit, outside the candidate budget: multiview.select_knn_readout with the Minkowski order p added; the grid is the numeric_knn comparator grid (comparisons.CONVENTIONAL_GRIDS[\"numeric_knn\"])"
+    },
+    "references": {
+      "knn": {
+        "code_revision": "70fb9bf31092cb64e2bd349403ad090699a3494d",
+        "model_ids": [
+          "arrowflow_full_knn",
+          "numeric_knn"
+        ],
+        "protocol_id": "arrowflow-v3-bridge-knn-1",
+        "protocol_sha256": "6335d8c4a1b16fb4044c3badb1fff1448f4083d4cc89611cd54b276d60057ff1",
+        "run": ".superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/runs/2026-09-12-bridge-knn (735 jobs; summary.json model_rows hold the per-fold, per-seed outer metrics of arrowflow_full_knn and numeric_knn)",
+        "summary_sha256": "f5f0c7016864ce354c70f148bfecc31f8dbdbff5bc4f41d74e63e22a6ff36fda"
+      },
+      "training": {
+        "code_revision": "08cf39cd23fe0745a0de3c7a982b0c1d297500c5",
+        "model_ids": [
+          "input_footrule_knn",
+          "arrowflow_knn_untrained"
+        ],
+        "protocol_id": "arrowflow-v3-knn-training-1",
+        "protocol_sha256": "9de4bbaacf3197b8e050a37970f6fdd035b34ec804459ca2c0f98956af503803",
+        "run": ".superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/runs/2026-09-13-knn-training (210 jobs; summary.json model_rows hold the per-fold, per-seed outer metrics of input_footrule_knn and arrowflow_knn_untrained)",
+        "summary_sha256": "77563fa5f31986e66e8b106f03bedb06b89e2f6bfe92fafdca6c542d2a60720a"
+      }
+    }
+  },
+  "protocol_id": "arrowflow-v3-knn-projected-1",
+  "registry": "experiments.make_revision.projected_knn:knn_projected_registry",
+  "report_metrics": [
+    "accuracy",
+    "error",
+    "balanced_accuracy",
+    "macro_f1"
+  ],
+  "resource_decision": "Task 23A (ruling 2026-09-13, projected-score kNN): drafted from knn_training.json with the identical nested design; prepare 2026-09-13T14:15:34Z at 508df89cd (7 datasets); compare_runs projected-pairing against arrowflow-v3-bridge-knn-1 and arrowflow-v3-knn-training-1 passed (7 datasets, fitting seeds [8129, 19391, 39019], 14 shared sealed sources identical); synthetic smoke 2026-09-13T14:15:37Z ok (knn run with numeric_knn, knn_training run, knn_projected run, reporting, compare_runs projected); training-only pilot 2026-09-13T14:16:17Z (iris, digits, segment; projected_numeric_knn at 3 of its 4 candidates on the first outer training partition; every fit ok; slowest fit 3.17 s segment) projected 3.05 serial h, 0.19 h at 16 workers (harness max-based) and 0.76 serial h, 0.05 h at 16 workers calibrated on the realized fit and predict seconds of every input_footrule_knn fit of the knn_training run under 16 workers (0.505 h) times the per-dataset ratio of projected_numeric_knn to input_footrule_knn seconds in a same-session pilot of the same candidates and rows (digits 1.34, segment 1.34, iris 1.78; unpiloted datasets 1.78); 33 fits per outer fold, 3,465 panel fits, longest single job about 1.3 min; cap 1 h at 16 single-thread workers; frozen after the pilot",
+  "selection_metric": "accuracy",
+  "source_template_sha256": "9de4bbaacf3197b8e050a37970f6fdd035b34ec804459ca2c0f98956af503803",
+  "split_seed": 27183,
+  "status": "reviewed_and_piloted_before_confirmatory_scoring",
+  "stochastic_finalists": 3,
+  "test_train_ratio": 0.25,
+  "wallclock_cap_hours": 1
+}

@@ -1,0 +1,22 @@
+% Method overview. Hand-written: it names parts and roles, not numbers.
+\begin{table}[!htbp]
+\caption{\textbf{What a view stores, and what each part is for.} A view is one encoder with the network trained on its rankings, and ArrowFlow trains $K$ of them (Section~\ref{sec:encoding}). A target-aware view puts coordinates fitted on the class labels before random ones, and a calibrated view standardizes its projected coordinates (Section~\ref{sec:encoder}). The output layer serves training and makes none of ArrowFlow's predictions.}
+\label{tab:overview}
+\centering
+\footnotesize
+\begin{tabular}{@{}p{0.19\textwidth} p{0.37\textwidth} p{0.34\textwidth}@{}}
+\toprule
+Part & What is fitted or stored & Role \\
+\midrule
+Encoder & imputation and standardization statistics and the projection matrix; a target-aware view also fits linear discriminant coordinates on the training labels, and a calibrated view stores the means and scales of its projected coordinates & turns a real-valued example into a ranking \\
+\addlinespace
+Hidden ranking layers & one permutation per ranking filter, reordered by position votes & produce the ranking that prediction reads \\
+\addlinespace
+Output layer & one permutation per class & gates the update, returns the signal from which every hidden layer learns, and scores the checkpoint \\
+\addlinespace
+Nearest-neighbor readout & the last hidden ranking of every training row with its label, and the chosen neighbor count and weighting & predicts the class of one view \\
+\addlinespace
+Vote across views & the predicted class of each view & gives the prediction of the ensemble \\
+\bottomrule
+\end{tabular}
+\end{table}

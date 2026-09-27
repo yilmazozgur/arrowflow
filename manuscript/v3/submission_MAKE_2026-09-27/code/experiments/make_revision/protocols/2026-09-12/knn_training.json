@@ -1,0 +1,220 @@
+{
+  "aggregation_integrity": "explicit_expected_folds_and_model_seeds; reconcile_every_planned_job_result_and_fit_log",
+  "candidate_budget": 24,
+  "candidate_seed": 41071,
+  "candidate_tie_rule": "lowest_canonical_config_id",
+  "confidence": 0.95,
+  "datasets": [
+    "iris",
+    "wine",
+    "breast_cancer",
+    "wine_quality",
+    "vehicle",
+    "segment",
+    "digits"
+  ],
+  "design_source": {
+    "identical_to_template": "datasets, split_seed, outer_folds, outer_repeats, inner_folds, fit_seeds, candidate_budget, candidate_seed, candidate_tie_rule, stochastic_finalists, selection_metric, failure_policy, aggregation_integrity, freeze_requirement, paired_interval, parallelism, confidence, test_train_ratio, numeric_threads_per_worker, report_metrics, device, historical_results, full_method",
+    "removed_from_template": {
+      "augmentation": "the trained model's augmentation rule; nothing is trained here",
+      "internal_validation_ratio": "the trained model's checkpoint; nothing is trained here",
+      "knn_readout": "the trained model's readout block and its reference to the bridge run; the controls' readout is training_controls.readout and their reference is training_controls.reference",
+      "secondary_studies": "not applicable to this family"
+    },
+    "template": "protocols/2026-09-12/bridge_knn.json (sha256 in source_template_sha256)"
+  },
+  "device": "cpu",
+  "failure_policy": "log_all_failures; incomplete_candidates_ineligible; failed_outer_fits_and_terminal_selection_failures_retained; no_adaptive_stopping",
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "freeze_requirement": "complete_model_registry_and_candidates_reviewed; attainable_training_only_pilot; leakage_checks_pass; freeze_before_outer_scores",
+  "frozen": true,
+  "frozen_at_utc": "2026-09-13T09:44:49.008991+00:00",
+  "full_method": {
+    "adaptive_encoding_defaults": {
+      "n_features<=10": {
+        "augment": true,
+        "degree": 3,
+        "embed_dim": 16
+      },
+      "n_features<=30": {
+        "augment": true,
+        "degree": 2,
+        "embed_dim": 32
+      },
+      "n_features>30": {
+        "augment": false,
+        "degree": 1,
+        "embed_dim": 64
+      }
+    },
+    "aggregation": "majority",
+    "candidate_grid": {
+      "degree_offset": [
+        0,
+        -1
+      ],
+      "embed_scale": [
+        1,
+        2
+      ],
+      "learning_rate": [
+        0.1,
+        0.2
+      ],
+      "widths": [
+        [
+          128
+        ],
+        [
+          64,
+          128
+        ]
+      ]
+    },
+    "checkpoint": "validation_ratio_0.1_inside_every_fit",
+    "fixed": {
+      "batch_size": 32,
+      "iterations": 200,
+      "validation_ratio": 0.1
+    },
+    "model_id": "arrowflow_full",
+    "n_views": 7,
+    "resolution": "embed_dim=clip(round(base*embed_scale),8,128); degree=max(1,base+degree_offset) lowered while comb(n_features+degree,degree)>10000; augment=base_augment and n_train>=150; resolved at fit time from the training partition only",
+    "view_strategy_cycle": [
+      "target_aware",
+      "random",
+      "calibrated"
+    ]
+  },
+  "historical_results": "exploratory_only",
+  "inner_folds": 3,
+  "multiplicity": "Holm_across_the_14_prespecified_contrasts",
+  "numeric_threads_per_worker": 1,
+  "outer_folds": 5,
+  "outer_repeats": 3,
+  "paired_interval": "seed_average_within_fold_then_corrected_resampled_t",
+  "parallelism": "spawned_processes_by_outer_fold_and_model",
+  "primary_contrasts": [
+    "arrowflow_full_knn_vs_arrowflow_knn_untrained",
+    "arrowflow_full_knn_vs_input_footrule_knn"
+  ],
+  "primary_family_size": 14,
+  "production_family": "knn_training",
+  "protocol_id": "arrowflow-v3-knn-training-1",
+  "registry": "experiments.make_revision.knn_controls:knn_training_registry",
+  "report_metrics": [
+    "accuracy",
+    "error",
+    "balanced_accuracy",
+    "macro_f1"
+  ],
+  "resource_decision": "Task 20A (ruling 2026-09-13, training controls design): drafted from bridge_knn.json with the identical nested design; prepare 2026-09-13T09:37:49Z at c10966bf9 (7 datasets); compare_runs training-pairing against arrowflow-v3-bridge-knn-1 passed (7 datasets, fitting seeds [8129, 19391, 39019], 13 shared sealed sources identical); synthetic smoke 2026-09-13T09:37:52Z ok (reference, both controls, reporting, compare_runs training); training-only pilot 2026-09-13T09:38:28Z (iris, digits, segment; both controls at 3 candidates each on the first outer training partition; every fit ok; slowest fit 3.23 s arrowflow_knn_untrained, 2.24 s input_footrule_knn) projected 6.40 serial h, 0.40 h at 16 workers (harness max-based) and 2.35 serial h, 0.15 h at 16 workers calibrated on the realized non-training seconds (fit minus network training plus predict) of every arrowflow_full_knn fit of the reference run under 16 workers (45 fits per outer fold for the untrained control, 33 for the input control); cap 3 h at 16 single-thread workers; frozen after the pilot",
+  "selection_metric": "accuracy",
+  "source_template_sha256": "6335d8c4a1b16fb4044c3badb1fff1448f4083d4cc89611cd54b276d60057ff1",
+  "split_seed": 27183,
+  "status": "reviewed_and_piloted_before_confirmatory_scoring",
+  "stochastic_finalists": 3,
+  "test_train_ratio": 0.25,
+  "training_controls": {
+    "candidate_source": "full_method.candidate_grid (the 16 candidates of arrowflow_full_knn) projected onto each model's candidate_keys; duplicates removed; canonical config_id order (knn_controls.control_candidates)",
+    "comparison": "python -m experiments.make_revision.compare_runs training --training-source <this run> --knn-source <reference run> --output <directory>; compare_runs training-pairing checks the prepared directory against the reference before the run",
+    "contrasts": {
+      "interval": "fitting seeds averaged within each outer fold; corrected resampled t over the 15 outer folds (evaluation.paired_corrected_interval, q = test_train_ratio, 14 df)",
+      "members": "per dataset in panel order: arrowflow_full_knn minus arrowflow_knn_untrained, then arrowflow_full_knn minus input_footrule_knn",
+      "metric": "accuracy",
+      "multiplicity": "one Holm adjustment across all 14 members (evaluation.holm_adjust)",
+      "pairing": "identical datasets, dataset_hash, splits_hash, outer schedule, fit_seeds and nested design keys; both runs re-verified with the harness validators before any contrast; every source both environment records seal byte-identical (compare_runs.SHARED_SOURCES among them); each control's candidates are the projection of the reference arrowflow_full_knn candidates",
+      "trained_source": "arrowflow_full_knn outer model rows of the reference run (summary.json model_rows, re-verified); not refitted"
+    },
+    "depth_split": {
+      "definition": "per dataset, arrowflow_full_knn minus arrowflow_knn_untrained accuracy (fitting seeds averaged within fold), grouped by the hidden widths arrowflow_full_knn selected in that outer fold; per group the folds, n, mean, SD, min, max and the corrected resampled t interval over the group's folds when n >= 2; pooled across datasets per group: n, mean and SD",
+      "depths": [
+        [
+          128
+        ],
+        [
+          64,
+          128
+        ]
+      ],
+      "status": "descriptive; outside the Holm family; no p values"
+    },
+    "models": {
+      "arrowflow_knn_untrained": {
+        "candidate_keys": [
+          "n_views",
+          "strategy",
+          "aggregation",
+          "widths",
+          "embed_scale",
+          "degree_offset"
+        ],
+        "candidates": 8,
+        "dropped": {
+          "augment": "the resolved augmentation acts only on training samples",
+          "batch_size": "acts only during training",
+          "iterations": "acts only during training",
+          "learning_rate": "acts only during training",
+          "validation_ratio": "the validation checkpoint acts only during training"
+        },
+        "estimator": "experiments.make_revision.knn_controls:UntrainedMultiViewArrowFlowKNN via AdaptiveUntrainedKNN",
+        "network": "view v's network is ArrowFlowEstimator.initialize_orders with seed derive_seed(fit seed, \"view\", v): the seeded initial filters arrowflow_full_knn starts training from; no training update of any layer (update_iter 0 checked after every fit)",
+        "stochastic": true
+      },
+      "input_footrule_knn": {
+        "candidate_keys": [
+          "n_views",
+          "strategy",
+          "aggregation",
+          "embed_scale",
+          "degree_offset"
+        ],
+        "candidates": 4,
+        "dropped": {
+          "augment": "the resolved augmentation acts only on training samples",
+          "batch_size": "acts only during training",
+          "iterations": "acts only during training",
+          "learning_rate": "acts only during training",
+          "validation_ratio": "the validation checkpoint acts only during training",
+          "widths": "no network"
+        },
+        "estimator": "experiments.make_revision.knn_controls:MultiViewInputKNN via AdaptiveInputKNN",
+        "representation": "inverse positions of each view's encoded input ranking; the encoders of MultiViewFootruleKNN and arrowflow_full_knn (same derived view seeds and strategy cycle)",
+        "stochastic": true
+      }
+    },
+    "readout": {
+      "aggregation": "majority",
+      "grid": {
+        "n_neighbors": [
+          1,
+          3,
+          5,
+          11,
+          21
+        ],
+        "weights": [
+          "uniform",
+          "distance"
+        ]
+      },
+      "selection": "mean accuracy over StratifiedKFold(3, shuffle=True, random_state=derive_seed(view_seed, \"readout_selection\")) splits of the training partition inside every fit; fewer splits only if the smallest class has fewer rows; one neighbour cache per split at the largest k; ties lowest_canonical_config_id; refit on the full training representation",
+      "selection_folds": 3,
+      "source": "identical to arrowflow_full_knn (bridge_knn.json knn_readout): multiview.select_knn_readout inside every fit, outside the candidate budget; the untrained control reuses MultiViewArrowFlowKNN._fit_view_readout"
+    },
+    "reference": {
+      "code_revision": "70fb9bf31092cb64e2bd349403ad090699a3494d",
+      "model_id": "arrowflow_full_knn",
+      "protocol_id": "arrowflow-v3-bridge-knn-1",
+      "protocol_sha256": "6335d8c4a1b16fb4044c3badb1fff1448f4083d4cc89611cd54b276d60057ff1",
+      "run": ".superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/runs/2026-09-12-bridge-knn (735 jobs, 105 of them arrowflow_full_knn; summary.json model_rows hold the per-fold, per-seed outer metrics)",
+      "summary_sha256": "f5f0c7016864ce354c70f148bfecc31f8dbdbff5bc4f41d74e63e22a6ff36fda"
+    },
+    "resolution": "embed_dim and degree as full_method.resolution, from the training partition's shape at fit time (bridge.resolve); the resolved augment is dropped"
+  },
+  "wallclock_cap_hours": 3
+}

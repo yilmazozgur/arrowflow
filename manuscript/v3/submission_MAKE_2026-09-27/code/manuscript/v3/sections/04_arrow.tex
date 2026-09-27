@@ -1,0 +1,47 @@
+% Supplement subsections typed below as "Section~S<n>.<m>"; build.sh checks each number against the built supplement.
+% supplement-ref supp:iia=S1.1
+\section{Arrow's Impossibility Theorem as a Design Lens}\label{sec:arrow}
+
+Every update of a ranking filter is an election. The vote targets of a batch are the voters, the items of the layer are the alternatives on the ballot, and the reordered filter is the collective ranking. This section shows what Arrow's theorem says about ArrowFlow's update and what it leaves open.
+
+\paragraph{The three axioms.}
+Arrow's impossibility theorem \citep{arrow1951social,arrow1963social} concerns rules that merge the rankings of a fixed finite set of voters into one collective ranking. With three or more alternatives, no rule that is defined on every profile of rankings satisfies all three of the following conditions.
+\begin{itemize}[leftmargin=2em,topsep=2pt,itemsep=1pt]
+  \item \emph{Pareto}: if every voter ranks $a$ before $b$, so does the collective ranking.
+  \item \emph{Independence of irrelevant alternatives} (IIA): the collective order of $a$ and $b$ depends only on how each voter orders $a$ and $b$. Moving a third alternative around on the ballots cannot change it.
+  \item \emph{Non-dictatorship}: no single voter's ranking is the collective ranking on every profile.
+\end{itemize}
+Each condition sounds harmless on its own. The theorem says that a rule can keep at most two of them.
+
+\paragraph{The update as an election.}
+In one batch update of filter $r_j$, the voters are the targets $\tilde\tau_1,\dots,\tilde\tau_n$ of the votes~\eqref{eq:vote} that reach the filter with nonzero weight. Voter $t$ has weight $|a_t|$. The identity prior of $A_j$ adds one more voter, the current order $r_j$, with weight one. The row-mean reorder~\eqref{eq:rowmean} therefore ranks the items by the weighted Borda score
+\begin{equation}\label{eq:borda-update}
+P_j(v)=\operatorname{pos}_{r_j}(v)+\sum_{t=1}^{n} |a_t|\,\operatorname{pos}_{\tilde\tau_t}(v),
+\end{equation}
+which Proposition~\ref{prop:batch-borda} derives. An item's score is its weighted sum of positions, so the item with the smallest score goes first.
+
+\begin{proposition}[The update rule and Arrow's axioms]\label{prop:borda-iia}
+Let $V\ge3$ and fix the voters and their weights so that no voter, the prior included, weighs more than $V-1$ times the others combined. The weighted Borda count~\eqref{eq:borda-update} is defined on every profile, satisfies Pareto and is non-dictatorial. By Arrow's theorem it therefore violates IIA. Section~S1 gives the proof and witnesses with and without the prior.
+\end{proposition}
+
+Each vote in ArrowFlow weighs less than $0.4$, so only the prior can break the weight condition. For the prior, the condition says that the votes of the batch weigh at least $1/(V-1)$ in total. That is exactly the weight at which a batch can first move the filter (Section~S1.1).
+
+\paragraph{What follows.}
+The Borda count also shows which context can matter. For two items $a$ and $b$, \eqref{eq:borda-update} gives
+\[
+P_j(b)-P_j(a)=\bigl(\operatorname{pos}_{r_j}(b)-\operatorname{pos}_{r_j}(a)\bigr)+\sum_{t=1}^{n}|a_t|\,\bigl(\operatorname{pos}_{\tilde\tau_t}(b)-\operatorname{pos}_{\tilde\tau_t}(a)\bigr).
+\]
+Each voter adds its weight times the number of positions that separate $a$ and $b$ on its ballot, with a minus sign if it puts $b$ first. So the new order of $a$ and $b$ depends only on each voter's order of the two and on how many items it places between them. Moving a third item into or out of the stretch between them can reverse the pair, and moving it anywhere else cannot. This is the intensity form of independence studied by \citet{saari1998connecting}. It implies the modified independence that \citet{maskin2025borda} uses to characterize the Borda count. Figure~\ref{fig:iia} shows a small case, in which moving item C between B and A reverses their order.
+
+\input{figures/fig_iia_example}
+
+The proposition fixes the voters and their weights, which in training depend on the predictions. It also treats the prior as a ballot that can change. It concerns every possible profile, and it does not say which profiles arise in training. An actual update holds the current order fixed and maps the votes of a batch to a new filter. In ArrowFlow's layers the votes of one batch weigh less than $V-1$ in total, so this map is not Pareto efficient. Arrow's theorem therefore says nothing about it. The map still violates independence whenever its votes can move the filter. A direct construction shows this (Section~S1.1). So this context dependence lives in the learning rule. The forward pass has none within one layer. Each filter's distance depends only on the input and that filter, so no third filter can reverse the order of two others. A filter's position in the output still depends on all the filters of its layer. And Arrow's theorem predicts nothing about accuracy. The update rule is context dependent whether or not that helps classification.
+
+\paragraph{Three exchangeable stages.}
+The voting reading shows three stages where another aggregation rule could be used. They are the filter update, the readout and the vote across views. Arrow's theorem concerns only the first, since the other two output a class.
+\begin{enumerate}[leftmargin=2em,topsep=2pt,itemsep=1pt]
+  \item The filter update uses the Borda count. One alternative is the footrule median, the permutation with the smallest summed footrule distance to the voters \citep{dwork2001rank}.
+  \item The readout takes a plurality vote among the nearest stored training rankings. Its alternatives are the prototype readout and a readout with several prototypes per class, each built by a Borda count.
+  \item The $K$ views (Section~\ref{sec:encoding}) are combined by majority vote. With the prototype readout, a Borda count over their class rankings can replace it (Section~\ref{sec:ensemble}).
+\end{enumerate}
+Sections~\ref{sec:components} and~\ref{sec:controlled} and Section~S4 report these comparisons. The readout with several prototypes per class was compared on inner folds only.

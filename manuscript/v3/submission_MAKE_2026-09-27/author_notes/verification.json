@@ -1,0 +1,80 @@
+{
+  "prepared": "2026-09-27",
+  "clean_source_archive_rebuild": true,
+  "original_sources_preserved": true,
+  "table_rows_preserved": true,
+  "numbered_labels_preserved": true,
+  "pdfs": {
+    "manuscript_ArrowFlow_MAKE.pdf": {
+      "pages": 49,
+      "text_matches_clean_rebuild": true,
+      "undefined_references_or_citations": 0,
+      "duplicate_labels": 0,
+      "rerun_overfull_or_oversized_float_warnings": 0,
+      "text_outside_page": 0,
+      "all_fonts_embedded": true,
+      "external_main_pdf_links": 0,
+      "table_alphabetic_text_below_8_TeX_pt": 0,
+      "sha256": "0ca539befb165ffe903552443a468fdd8f5edd6e597885552a9b61fb5938e395"
+    },
+    "supplementary_ArrowFlow_MAKE.pdf": {
+      "pages": 136,
+      "text_matches_clean_rebuild": true,
+      "undefined_references_or_citations": 0,
+      "duplicate_labels": 0,
+      "rerun_overfull_or_oversized_float_warnings": 0,
+      "text_outside_page": 0,
+      "all_fonts_embedded": true,
+      "external_main_pdf_links": 112,
+      "table_alphabetic_text_below_8_TeX_pt": 0,
+      "sha256": "149a20b88b4a01ddf5444a74f7cc7e04a0c84a15196bafbfc4dd4988b2540745"
+    },
+    "cover_letter_MAKE.pdf": {
+      "pages": 1,
+      "all_fonts_embedded": true,
+      "sha256": "b618211fe27dc5d35aa8870407ae6e34e7843066af26d3f627ca75d1b46df5ae"
+    }
+  },
+  "archives": {
+    "ArrowFlow_code_MAKE.zip": {
+      "members": 276,
+      "integrity": "passed",
+      "bytes": 1753136,
+      "sha256": "e385225fa2f986011aaf7b1c348f085a5a017123a28649446d7e5aea31ccc68e"
+    },
+    "ArrowFlow_figures_MAKE.zip": {
+      "members": 28,
+      "integrity": "passed",
+      "bytes": 3779248,
+      "sha256": "82b7e324d6b95d068606c34b900cc271229e5bfdbe719cbbaacb8de4c18ff106"
+    },
+    "ArrowFlow_sources_MAKE.zip": {
+      "members": 115,
+      "integrity": "passed",
+      "bytes": 365694,
+      "sha256": "c179c2a327044349661d851327dd9d927a818f63d732789c9b8df0a8737c3629"
+    }
+  },
+  "abstract_words": 240,
+  "keywords": 8,
+  "abstract_matches_original": true,
+  "abstract_length_author_override": "Original 240-word abstract retained at the author's explicit request.",
+  "supplement_only_references": [],
+  "main_citation_keys": 118,
+  "supplement_citation_keys": 25,
+  "figures": {
+    "main": 8,
+    "supplement": 5,
+    "dpi": 600,
+    "color": "RGB, 8 bits/channel",
+    "combined_panels": true
+  },
+  "code": {
+    "original_source_files": 274,
+    "python_files_syntax_checked": 127,
+    "experimental_runs_repeated": false,
+    "historical_frozen_commit_identity_verified": false
+  },
+  "total_upload_bytes": 7395603,
+  "visual_review": "Main title page, cover letter, supplementary inventory, selected wide tables, and all 13 figures in a contact sheet inspected."
+}

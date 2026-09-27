@@ -1,0 +1,1136 @@
+{
+  "ablation": {
+    "aggregation": "fitting seeds averaged within outer fold, then outer-fold mean and SD; within-fold seed SD reported separately",
+    "commands": "python -m experiments.make_revision.extra_ablation prepare|ablation --protocol <frozen protocol> --reference <run> --output <ablation>; python -m experiments.make_revision.extra_ablation summary --output <ablation>",
+    "dataset_loading": "the prepared data are copied from the run; in production every dataset is reloaded through its pinned extra_data loader and must equal the run's prepared features (NaN equal to NaN) and labels, with the pinned dataset and splits hashes",
+    "depth_split": {
+      "definition": "per dataset, untrained minus views7 accuracy (fitting seeds averaged within fold), grouped by the hidden widths of the reconstructed selection; per group the folds, n, mean, SD, min, max and the corrected resampled t interval over the group's folds when n >= 2; pooled across datasets per group: n, mean and SD",
+      "depths": [
+        [
+          128
+        ],
+        [
+          64,
+          128
+        ]
+      ],
+      "status": "descriptive; no p values"
+    },
+    "dropped_variants": {
+      "borda_views7": "Borda view aggregation is not defined for the kNN readout",
+      "multiview_footrule_knn": "replaced by input_knn, whose readout is tuned inside every fit exactly as ArrowFlow-kNN tunes its own",
+      "single_view_no_checkpoint_no_augment": "not among the variants of the Task 20B ruling"
+    },
+    "failure_policy": "log_all_failures; a failed variant fit leaves an explicit failed row; failed jobs are never omitted from the summary; no adaptive stopping on any score; a views7 reproduction failure is an integrity failure: its job fails, the pending jobs are cancelled and the summary refuses",
+    "fit_reuse": "views7 is fitted once per seed and fold; views1 and views3 are majorities over its first one and three per-view kNN votes (view v depends only on derive_seed(seed, \"view\", v)); prototype_readout is the majority of the output rule of the same seven trained networks; no_checkpoint and no_augment are fitted separately unless their parameters coincide with views7 (no_augment where the resolved augment is already false), in which case the record says identical_to_views7; untrained and input_knn are fitted separately and train nothing; reused fits carry zero timings and name their source fit",
+    "knn_readout": {
+      "aggregation": "majority",
+      "applies_to": [
+        "views7",
+        "views1",
+        "views3",
+        "no_checkpoint",
+        "no_augment",
+        "untrained",
+        "input_knn"
+      ],
+      "grid": {
+        "n_neighbors": [
+          1,
+          3,
+          5,
+          11,
+          21
+        ],
+        "weights": [
+          "uniform",
+          "distance"
+        ]
+      },
+      "selection": "mean accuracy over StratifiedKFold(3, shuffle=True, random_state=derive_seed(view_seed, \"readout_selection\")) splits of the training partition inside every fit; fewer splits only if the smallest class has fewer rows; one neighbour cache per split at the largest k; ties lowest_canonical_config_id; refit on the full training representation",
+      "selection_folds": 3,
+      "source": "identical to arrowflow_full_knn (artificial.json models.arrowflow_full_knn.readout)"
+    },
+    "max_workers": 16,
+    "parallelism": "spawned single-thread process per dataset and outer fold under the shared execution lock",
+    "reference": "the artificial run of this protocol (arrowflow_full_knn): its protocol.json must be byte-identical to the committed frozen protocol and its summary.json complete; the run's protocol sha256, summary sha256 and code revision are sealed in the ablation manifest at prepare and re-checked at summary",
+    "reporting": {
+      "change_from_views7": "per dataset and variant, variant minus views7 in accuracy and error: fitting seeds averaged within outer fold, corrected resampled t interval over the 15 outer folds (q = test_train_ratio, 14 df); descriptive; no p values; no Holm adjustment",
+      "outputs": "artificial_ablation_summary.json (metrics, intervals, depth split, reproduction counts, model rows) and artificial_ablation_summary.csv (metrics per dataset, variant and metric)"
+    },
+    "reproduction": "views7 must reproduce the outer predictions of the run exactly for every dataset, outer fold and fitting seed (the same labels in the sealed test-sample order); checked inside every job, again for every record by the summary, and every sealed selection is re-derived from the run at summary time",
+    "selected_configuration": "results/<dataset>__arrowflow_full_knn__r<repeat>f<fold>.json selection block of the run, reconstructed from the complete inner fit history at prepare time (reporting.validate_result_records) and resolved to embed_dim, degree and augment from the outer training partition shape (bridge.resolve_selected); sealed in reference_selected_configurations.csv and reference_selections.json with the reference per-example predictions",
+    "shared_design": "confidence, fit_seeds, historical_results, inner_folds, numeric_threads_per_worker, outer_folds, outer_repeats, report_metrics, selection_metric, split_seed and test_train_ratio are the protocol's top-level values (equal in both templates)",
+    "variant_definitions": {
+      "input_knn": "the same seven encoders with the kNN readout tuned on the encoded input positions (knn_controls.MultiViewInputKNN)",
+      "no_augment": "augment false; kNN readout; identical_to_views7 where the resolved augment is already false",
+      "no_checkpoint": "validation_ratio 0: networks trained on all training rows without the validation checkpoint; kNN readout",
+      "prototype_readout": "the output rule of the same seven trained networks (ArrowFlowEstimator.predict_orders per view), majority vote; derived from the views7 fit without retraining",
+      "untrained": "the selected widths, embed_dim, degree and seeds with every network at its seeded initial filters and the same kNN readout selection (knn_controls.UntrainedMultiViewArrowFlowKNN)",
+      "views1": "n_views 1: the first per-view kNN vote of views7 (what MultiViewArrowFlowKNN with n_views 1 predicts)",
+      "views3": "n_views 3: the majority of the first three per-view kNN votes of views7",
+      "views7": "ArrowFlow-kNN (MultiViewArrowFlowKNN, seven views) at the reconstructed selection; must reproduce the reference outer predictions exactly"
+    },
+    "variants": [
+      "views7",
+      "views1",
+      "views3",
+      "no_checkpoint",
+      "no_augment",
+      "prototype_readout",
+      "untrained",
+      "input_knn"
+    ]
+  },
+  "ablation_template_sha256": "3c4efe43eea7151c568a64a883f834e6d2f8d849aef34d0e45f24bb42e962c8c",
+  "aggregation_integrity": "explicit_expected_folds_and_model_seeds; reconcile_every_planned_job_result_and_fit_log",
+  "analysis": {
+    "command": "python -m experiments.make_revision.compare_extra analyse --family artificial --run <run> --ablation <ablation> --output <directory>",
+    "comparator_intervals": {
+      "definition": "per dataset and comparator, arrowflow_full_knn minus the comparator accuracy: fitting seeds averaged within each outer fold; corrected resampled t over the outer folds (evaluation.paired_corrected_interval, q = test_train_ratio = 0.25, 95%, df = outer folds - 1 = 14); two-sided p, unadjusted (compare_newdata.comparator_rows); the comparator with the lowest mean outer error is flagged",
+      "models": [
+        "numeric_knn",
+        "svc_rbf",
+        "random_forest",
+        "mlp",
+        "gradient_boosting",
+        "dummy"
+      ],
+      "status": "descriptive; no multiplicity adjustment"
+    },
+    "competitiveness": {
+      "definition": "holistic.competitiveness on the mean outer errors of ArrowFlow-kNN, the five tuned classical models and the majority class: the best tuned model, the gap, within three points, best-on, ceiling, near-majority and no-learning",
+      "rules": {
+        "best_classical": "the tuned classical model (svc_rbf, random_forest, mlp, numeric_knn, gradient_boosting; the majority class excluded) with the lowest mean outer error; every model tied at that minimum is listed",
+        "best_on": "ArrowFlow mean error strictly below the mean error of every tuned classical model (gap_points < 0)",
+        "ceiling": "the best tuned classical mean error is below 1.0 point",
+        "degenerate": "ceiling or near_majority or no_learning",
+        "gap_points": "ArrowFlow mean error minus the best tuned classical mean error; positive when ArrowFlow trails",
+        "near_majority": "ArrowFlow mean error within 0.5 points (absolute difference, inclusive) of the majority-class mean error, while the best tuned classical model is at least 2.0 points better than ArrowFlow (gap_points >= 2.0)",
+        "no_learning": "the majority class has the lowest mean error of all models: no model among ArrowFlow and the five tuned classical models has a strictly lower mean error than the majority class",
+        "thresholds": {
+          "ceiling_points": 1.0,
+          "near_majority_advantage_points": 2.0,
+          "near_majority_points": 0.5,
+          "within_points": 3.0
+        },
+        "unit": "percentage points of mean outer error (the summary.json mean times 100), rounded to 9 decimals before any comparison so that binary floating-point noise cannot move a flag",
+        "within_three_points": "gap_points <= 3.0",
+        "within_three_points_as_printed": "the same rule on the gap printed with two decimals (gap_points_2dp) and on the gap of the two errors printed with one decimal (gap_points_from_1dp_errors); true only if both agree with within_three_points, so a count never contradicts a printed value"
+      },
+      "status": "descriptive; fixed rules"
+    },
+    "complete_metrics": {
+      "definition": "per dataset and model, each metric's mean, outer-fold SD and within-fold seed SD (holistic.complete_metric_rows)",
+      "metrics": [
+        "error",
+        "balanced_accuracy",
+        "macro_f1",
+        "accuracy"
+      ],
+      "models": [
+        "arrowflow_full_knn",
+        "arrowflow_knn_untrained",
+        "input_footrule_knn",
+        "projected_numeric_knn",
+        "dummy",
+        "svc_rbf",
+        "random_forest",
+        "mlp",
+        "numeric_knn",
+        "gradient_boosting"
+      ]
+    },
+    "components": {
+      "definition": "per dataset and variant, ArrowFlow (views7, which reproduces the run's outer predictions exactly) minus the variant, accuracy, in points beside the fraction: the ablation summary's change_from_views7 accuracy interval negated with its bounds swapped (holistic.component_rows), with the outer folds in which the variant is identical to views7 by construction",
+      "status": "descriptive; no p values; no multiplicity adjustment",
+      "variants": [
+        "views1",
+        "views3",
+        "no_checkpoint",
+        "no_augment",
+        "prototype_readout",
+        "untrained",
+        "input_knn"
+      ]
+    },
+    "datasets": [
+      "ranks8",
+      "ranks16",
+      "ranks8_original"
+    ],
+    "descriptive_only_datasets": [
+      "ranks8_original"
+    ],
+    "duplicate_audit": {
+      "definition": "exact duplicate feature rows of the prepared data (extra_data.duplicate_groups: float64 equality of every feature, NaN equal to NaN; equal to referee_analyses.duplicate_groups on data without NaN): rows, distinct rows, duplicate rows, duplicate groups, label-conflicting groups and the largest group; per outer fold the test rows with an exact duplicate in the training partition",
+      "expected": {
+        "ranks16": {
+          "duplicate_groups": 7,
+          "duplicate_rows": 23,
+          "label_conflicting_groups": 0
+        },
+        "ranks8": {
+          "duplicate_groups": 23,
+          "duplicate_rows": 38,
+          "label_conflicting_groups": 1
+        },
+        "ranks8_original": {
+          "duplicate_groups": 3,
+          "duplicate_rows": 3,
+          "label_conflicting_groups": 0
+        }
+      },
+      "status": "descriptive"
+    },
+    "family_datasets": [
+      "ranks8",
+      "ranks16"
+    ],
+    "ladder": [
+      {
+        "model_id": "numeric_knn",
+        "rung": "raw_numeric_knn"
+      },
+      {
+        "model_id": "projected_numeric_knn",
+        "rung": "unsorted_projected_knn"
+      },
+      {
+        "model_id": "input_footrule_knn",
+        "rung": "encoded_ranking_knn"
+      },
+      {
+        "model_id": "arrowflow_knn_untrained",
+        "rung": "untrained_arrowflow_knn"
+      },
+      {
+        "model_id": "arrowflow_full_knn",
+        "rung": "arrowflow_knn"
+      }
+    ],
+    "ladder_table": "per dataset, mean outer error, outer-fold SD (ddof 1) and mean within-fold seed SD of every rung (compare_newdata.ladder_rows)",
+    "main_table": {
+      "definition": "per dataset, mean outer error (the mean over outer folds of the fitting-seed-averaged error), outer-fold SD (ddof 1) and mean within-fold seed SD of ArrowFlow-kNN, the five tuned classical models and the majority class, from the verified summary.json",
+      "models": [
+        "arrowflow_full_knn",
+        "svc_rbf",
+        "random_forest",
+        "mlp",
+        "numeric_knn",
+        "gradient_boosting",
+        "dummy"
+      ],
+      "status": "descriptive"
+    },
+    "metric": "accuracy",
+    "notes": {
+      "descriptive_only": "ranks8_original (77 rows) is reported descriptively and belongs to no family",
+      "features": "each item's relative position, NaN for a deleted item; every model imputes missing cells fold-locally",
+      "low_power": "each family holds two datasets, so Holm adjusts over two",
+      "not_pooled": "the artificial datasets are not pooled into the seventeen-dataset Friedman analysis"
+    },
+    "primary_family": {
+      "alpha": 0.05,
+      "contrast": "arrowflow_full_knn_vs_arrowflow_knn_untrained",
+      "datasets": [
+        "ranks8",
+        "ranks16"
+      ],
+      "definition": "per family dataset, arrowflow_full_knn minus arrowflow_knn_untrained accuracy (the training effect)",
+      "interval": "fitting seeds averaged within each outer fold; corrected resampled t over the outer folds (evaluation.paired_corrected_interval, q = test_train_ratio = 0.25, 95%, df = outer folds - 1 = 14); two-sided p",
+      "model_a": "arrowflow_full_knn",
+      "model_b": "arrowflow_knn_untrained",
+      "multiplicity": "Holm across the 2 family datasets (evaluation.holm_adjust)",
+      "size": 2
+    },
+    "requires_run_and_ablation_complete": true,
+    "secondary_family": {
+      "alpha": 0.05,
+      "contrast": "arrowflow_full_knn_vs_input_footrule_knn",
+      "datasets": [
+        "ranks8",
+        "ranks16"
+      ],
+      "definition": "per family dataset, arrowflow_full_knn minus input_footrule_knn accuracy",
+      "interval": "fitting seeds averaged within each outer fold; corrected resampled t over the outer folds (evaluation.paired_corrected_interval, q = test_train_ratio = 0.25, 95%, df = outer folds - 1 = 14); two-sided p",
+      "model_a": "arrowflow_full_knn",
+      "model_b": "input_footrule_knn",
+      "multiplicity": "Holm across the 2 family datasets (evaluation.holm_adjust), adjusted separately from the primary family",
+      "size": 2
+    },
+    "selected_widths": {
+      "definition": "the hidden widths of the configuration arrowflow_full_knn selected on the inner folds of each outer fold (knn_controls.selected_widths on the verified outer model rows)",
+      "status": "descriptive"
+    },
+    "status": "prespecified before any outer score on these datasets exists; computed only by compare_extra analyse, which refuses (exit 2, nothing written) until the run and its component ablation are complete, then re-verifies both before any score is read"
+  },
+  "augmentation": {
+    "max_swaps": 2,
+    "n_augmentations": 1,
+    "rule": "adaptive_from_training_partition: n_features<=30 and n_train>=150"
+  },
+  "candidate_budget": 24,
+  "candidate_seed": 41071,
+  "candidate_tie_rule": "lowest_canonical_config_id",
+  "confidence": 0.95,
+  "datasets": [
+    "ranks8",
+    "ranks16",
+    "ranks8_original"
+  ],
+  "design_source": {
+    "ablation_changed": "knn_readout.source, reporting.outputs",
+    "ablation_identical_to_template": "aggregation, depth_split, dropped_variants, failure_policy, fit_reuse, max_workers, parallelism, variant_definitions, variants",
+    "ablation_shared_with_the_run_design": "confidence, fit_seeds, historical_results, inner_folds, numeric_threads_per_worker, outer_folds, outer_repeats, report_metrics, selection_metric, split_seed, test_train_ratio",
+    "ablation_template": "protocols/2026-09-12/newdata_ablation.json (sha256 in ablation_template_sha256)",
+    "added": "ablation, workers, projection, ablation_template_sha256",
+    "changed": "protocol_id, production_family, registry, datasets, panel, primary_family_size, secondary_family_size, multiplicity, analysis, selection_ruling, wallclock_cap_hours, frozen, status, resource_decision",
+    "family": "artificial",
+    "identical_to_template": "aggregation_integrity, augmentation, candidate_budget, candidate_seed, candidate_tie_rule, confidence, device, failure_policy, fit_seeds, freeze_requirement, full_method, historical_results, inner_folds, internal_validation_ratio, numeric_threads_per_worker, outer_folds, outer_repeats, paired_interval, parallelism, report_metrics, selection_metric, split_seed, stochastic_finalists, test_train_ratio, model_order, models, primary_contrasts, secondary_contrasts",
+    "removed_from_template": {
+      "batch, batches, batch_projection": "one run per family",
+      "frozen_at_utc": "set at the freeze",
+      "model_template_sha256": "the model declarations are copied from the template itself"
+    },
+    "template": "protocols/2026-09-12/newdata_batch1.json (sha256 in source_template_sha256)"
+  },
+  "device": "cpu",
+  "failure_policy": "log_all_failures; incomplete_candidates_ineligible; failed_outer_fits_and_terminal_selection_failures_retained; no_adaptive_stopping",
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "freeze_requirement": "complete_model_registry_and_candidates_reviewed; attainable_training_only_pilot; leakage_checks_pass; freeze_before_outer_scores",
+  "frozen": true,
+  "frozen_at_utc": "2026-09-14T17:11:15.166009+00:00",
+  "full_method": {
+    "adaptive_encoding_defaults": {
+      "n_features<=10": {
+        "augment": true,
+        "degree": 3,
+        "embed_dim": 16
+      },
+      "n_features<=30": {
+        "augment": true,
+        "degree": 2,
+        "embed_dim": 32
+      },
+      "n_features>30": {
+        "augment": false,
+        "degree": 1,
+        "embed_dim": 64
+      }
+    },
+    "aggregation": "majority",
+    "candidate_grid": {
+      "degree_offset": [
+        0,
+        -1
+      ],
+      "embed_scale": [
+        1,
+        2
+      ],
+      "learning_rate": [
+        0.1,
+        0.2
+      ],
+      "widths": [
+        [
+          128
+        ],
+        [
+          64,
+          128
+        ]
+      ]
+    },
+    "checkpoint": "validation_ratio_0.1_inside_every_fit",
+    "fixed": {
+      "batch_size": 32,
+      "iterations": 200,
+      "validation_ratio": 0.1
+    },
+    "model_id": "arrowflow_full",
+    "n_views": 7,
+    "resolution": "embed_dim=clip(round(base*embed_scale),8,128); degree=max(1,base+degree_offset) lowered while comb(n_features+degree,degree)>10000; augment=base_augment and n_train>=150; resolved at fit time from the training partition only",
+    "view_strategy_cycle": [
+      "target_aware",
+      "random",
+      "calibrated"
+    ]
+  },
+  "historical_results": "exploratory_only",
+  "inner_folds": 3,
+  "internal_validation_ratio": 0.1,
+  "model_order": [
+    "arrowflow_full_knn",
+    "arrowflow_knn_untrained",
+    "input_footrule_knn",
+    "projected_numeric_knn",
+    "dummy",
+    "svc_rbf",
+    "random_forest",
+    "mlp",
+    "numeric_knn",
+    "gradient_boosting"
+  ],
+  "models": {
+    "arrowflow_full_knn": {
+      "candidate_source": "bridge.bridge_candidates (full_method.candidate_grid)",
+      "candidates": 16,
+      "estimator": "experiments.make_revision.multiview:MultiViewArrowFlowKNN via bridge.AdaptiveMultiViewKNN",
+      "network": "seven views trained with full_method.fixed (checkpoint validation_ratio 0.1) and the augmentation rule; each view reseeds from derive_seed(fit seed, \"view\", v)",
+      "readout": {
+        "aggregation": "majority",
+        "grid": {
+          "n_neighbors": [
+            1,
+            3,
+            5,
+            11,
+            21
+          ],
+          "weights": [
+            "uniform",
+            "distance"
+          ]
+        },
+        "representation": "inverse positions of the final hidden ranking of each view",
+        "selection": "mean accuracy over StratifiedKFold(3, shuffle=True, random_state=derive_seed(view_seed, \"readout_selection\")) splits of the training partition inside every fit; ties lowest_canonical_config_id; refit on the full training representation",
+        "selection_folds": 3
+      },
+      "registry": "bridge.bridge_knn_registry",
+      "stochastic": true,
+      "template": "bridge_knn.json knn_readout without its reference block"
+    },
+    "arrowflow_knn_untrained": {
+      "candidate_keys": [
+        "n_views",
+        "strategy",
+        "aggregation",
+        "widths",
+        "embed_scale",
+        "degree_offset"
+      ],
+      "candidates": 8,
+      "estimator": "experiments.make_revision.knn_controls:UntrainedMultiViewArrowFlowKNN via AdaptiveUntrainedKNN",
+      "stochastic": true,
+      "template": "knn_training.json training_controls.models.arrowflow_knn_untrained"
+    },
+    "dummy": {
+      "candidates": 1,
+      "estimator": "sklearn DummyClassifier(strategy=\"most_frequent\") (run_revision.dummy_factory)",
+      "stochastic": false,
+      "template": "bridge_knn.json registry"
+    },
+    "gradient_boosting": {
+      "candidates": 24,
+      "estimator": "comparisons.conventional_factory (NumericImputer, StandardScaler for svc_rbf, mlp and numeric_knn, classifier)",
+      "grid": {
+        "learning_rate": [
+          0.03,
+          0.1
+        ],
+        "max_depth": [
+          1,
+          2,
+          3
+        ],
+        "min_samples_leaf": [
+          1,
+          5
+        ],
+        "n_estimators": [
+          100,
+          200
+        ]
+      },
+      "stochastic": true,
+      "template": "bridge_knn.json registry (comparisons.conventional_registry)"
+    },
+    "input_footrule_knn": {
+      "candidate_keys": [
+        "n_views",
+        "strategy",
+        "aggregation",
+        "embed_scale",
+        "degree_offset"
+      ],
+      "candidates": 4,
+      "estimator": "experiments.make_revision.knn_controls:MultiViewInputKNN via AdaptiveInputKNN",
+      "stochastic": true,
+      "template": "knn_training.json training_controls.models.input_footrule_knn"
+    },
+    "mlp": {
+      "candidates": 24,
+      "estimator": "comparisons.conventional_factory (NumericImputer, StandardScaler for svc_rbf, mlp and numeric_knn, classifier)",
+      "grid": {
+        "alpha": [
+          0.0001,
+          0.01
+        ],
+        "hidden_layer_sizes": [
+          [
+            64
+          ],
+          [
+            128
+          ],
+          [
+            64,
+            32
+          ]
+        ],
+        "learning_rate_init": [
+          0.001,
+          0.01
+        ],
+        "max_iter": [
+          200,
+          400
+        ]
+      },
+      "stochastic": true,
+      "template": "bridge_knn.json registry (comparisons.conventional_registry)"
+    },
+    "numeric_knn": {
+      "candidates": 20,
+      "estimator": "comparisons.conventional_factory (NumericImputer, StandardScaler for svc_rbf, mlp and numeric_knn, classifier)",
+      "grid": {
+        "n_neighbors": [
+          1,
+          3,
+          5,
+          11,
+          21
+        ],
+        "p": [
+          1,
+          2
+        ],
+        "weights": [
+          "uniform",
+          "distance"
+        ]
+      },
+      "stochastic": false,
+      "template": "bridge_knn.json registry (comparisons.conventional_registry)"
+    },
+    "projected_numeric_knn": {
+      "candidate_keys": [
+        "n_views",
+        "strategy",
+        "aggregation",
+        "embed_scale",
+        "degree_offset"
+      ],
+      "candidates": 4,
+      "estimator": "experiments.make_revision.projected_knn:MultiViewProjectedKNN via AdaptiveProjectedKNN",
+      "readout_grid": {
+        "n_neighbors": [
+          1,
+          3,
+          5,
+          11,
+          21
+        ],
+        "p": [
+          1,
+          2
+        ],
+        "weights": [
+          "uniform",
+          "distance"
+        ]
+      },
+      "stochastic": true,
+      "template": "knn_projected.json projected_control.model"
+    },
+    "random_forest": {
+      "candidates": 24,
+      "estimator": "comparisons.conventional_factory (NumericImputer, StandardScaler for svc_rbf, mlp and numeric_knn, classifier)",
+      "grid": {
+        "max_depth": [
+          null,
+          10
+        ],
+        "max_features": [
+          "sqrt",
+          0.5,
+          1.0
+        ],
+        "min_samples_leaf": [
+          1,
+          2,
+          5
+        ],
+        "n_estimators": [
+          100,
+          300
+        ]
+      },
+      "stochastic": true,
+      "template": "bridge_knn.json registry (comparisons.conventional_registry)"
+    },
+    "svc_rbf": {
+      "candidates": 16,
+      "estimator": "comparisons.conventional_factory (NumericImputer, StandardScaler for svc_rbf, mlp and numeric_knn, classifier)",
+      "grid": {
+        "C": [
+          0.1,
+          1,
+          10,
+          100
+        ],
+        "gamma": [
+          "scale",
+          0.01,
+          0.1,
+          1
+        ]
+      },
+      "stochastic": false,
+      "template": "bridge_knn.json registry (comparisons.conventional_registry)"
+    }
+  },
+  "multiplicity": "Holm_across_the_2_family_datasets_within_each_family; the primary and secondary families are adjusted separately",
+  "numeric_threads_per_worker": 1,
+  "outer_folds": 5,
+  "outer_repeats": 3,
+  "paired_interval": "seed_average_within_fold_then_corrected_resampled_t",
+  "panel": [
+    {
+      "class_counts": [
+        45,
+        45,
+        45,
+        45,
+        45,
+        45,
+        45
+      ],
+      "dataset_hash": "4570b16626b7a14297f396d84f58fd6da2973068a74eabecf409d1c7615a2750",
+      "duplicates": {
+        "duplicate_groups": 23,
+        "duplicate_rows": 38,
+        "label_conflicting_groups": 1
+      },
+      "expected_classes": 7,
+      "expected_rows": 315,
+      "feature_names": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4",
+        "item_5",
+        "item_6",
+        "item_7",
+        "item_8"
+      ],
+      "feature_names_sha256": "a45470c94f9737f610f56e7e9060c1e1f1b26bfee28a0626db0dcc87f8c1c3e3",
+      "generator_sha256": "1a426c61a9ee13bb45be92f835e6f478faca91361c43c4561e3a876ba5dd0e2a",
+      "label_map": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "loader": "experiments.make_revision.artificial_ranks:load_artificial",
+      "n_missing": 259,
+      "name": "ranks8",
+      "pinned": true,
+      "role": "family",
+      "sha256_X": "92e2b67eb070062defa7a3402edb9f8fc781ef1c837f44d08974036a56fb23ce",
+      "sha256_y": "8f775caddfedb37afb6a722a0b4acb90a19290f07ac7783470034c281907c901",
+      "shape": [
+        315,
+        8
+      ],
+      "splits_hash": "1a9d02126d9db5db"
+    },
+    {
+      "class_counts": [
+        45,
+        45,
+        45,
+        45,
+        45,
+        45,
+        45
+      ],
+      "dataset_hash": "67b43496def4b8f32238bf4b3b00176e92b4539ed76162418d8d159acbfea70c",
+      "duplicates": {
+        "duplicate_groups": 7,
+        "duplicate_rows": 23,
+        "label_conflicting_groups": 0
+      },
+      "expected_classes": 7,
+      "expected_rows": 315,
+      "feature_names": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4",
+        "item_5",
+        "item_6",
+        "item_7",
+        "item_8",
+        "item_9",
+        "item_10",
+        "item_11",
+        "item_12",
+        "item_13",
+        "item_14",
+        "item_15",
+        "item_16"
+      ],
+      "feature_names_sha256": "d58cfaa9931e1a06a2bc24c1b78d8fa6fdf026f9b13a09e17c7a3c392a92907a",
+      "generator_sha256": "1a426c61a9ee13bb45be92f835e6f478faca91361c43c4561e3a876ba5dd0e2a",
+      "label_map": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "loader": "experiments.make_revision.artificial_ranks:load_artificial",
+      "n_missing": 534,
+      "name": "ranks16",
+      "pinned": true,
+      "role": "family",
+      "sha256_X": "c358842d80d48693d2a59328ab681a3d104bc2ea6406d32cdb996dcca192cba4",
+      "sha256_y": "8f775caddfedb37afb6a722a0b4acb90a19290f07ac7783470034c281907c901",
+      "shape": [
+        315,
+        16
+      ],
+      "splits_hash": "1a9d02126d9db5db"
+    },
+    {
+      "class_counts": [
+        11,
+        11,
+        11,
+        11,
+        11,
+        11,
+        11
+      ],
+      "dataset_hash": "9545c8d56cceeebe455b44f11471b3db9c57552dcf74b11ccc186cd0f694dfaf",
+      "duplicates": {
+        "duplicate_groups": 3,
+        "duplicate_rows": 3,
+        "label_conflicting_groups": 0
+      },
+      "expected_classes": 7,
+      "expected_rows": 77,
+      "feature_names": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4",
+        "item_5",
+        "item_6",
+        "item_7",
+        "item_8"
+      ],
+      "feature_names_sha256": "a45470c94f9737f610f56e7e9060c1e1f1b26bfee28a0626db0dcc87f8c1c3e3",
+      "generator_sha256": "1a426c61a9ee13bb45be92f835e6f478faca91361c43c4561e3a876ba5dd0e2a",
+      "label_map": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "loader": "experiments.make_revision.artificial_ranks:load_artificial",
+      "n_missing": 59,
+      "name": "ranks8_original",
+      "pinned": true,
+      "role": "descriptive",
+      "sha256_X": "3e63448c1daf480ee3d685cf2c52f4a112c460374e4fb5a0cbe139cb9a23c032",
+      "sha256_y": "69c894479916fffa1d4cd7a5a4befa8eb1bfc1727a51f6c0b175915492d02a64",
+      "shape": [
+        77,
+        8
+      ],
+      "splits_hash": "996b378b652b9504"
+    }
+  ],
+  "parallelism": "spawned_processes_by_outer_fold_and_model",
+  "primary_contrasts": [
+    "arrowflow_full_knn_vs_arrowflow_knn_untrained"
+  ],
+  "primary_family_size": 2,
+  "production_family": "artificial",
+  "projection": {
+    "ablation": {
+      "central": {
+        "serial_hours": 9.42512777892041,
+        "serial_over_workers_hours": 0.5890704861825257,
+        "simulated_makespan_hours": 0.6283418519280273
+      },
+      "upper": {
+        "serial_hours": 10.679660652806898,
+        "serial_over_workers_hours": 0.6674787908004312,
+        "simulated_makespan_hours": 0.7119773768537933
+      }
+    },
+    "ablation_pilot": {
+      "ranks16": {
+        "all_variants_to_views7_ratio": 2.7905505680087757,
+        "config_id": "f6af1ed0c6b83aa2",
+        "fit_sources": {
+          "input_knn": "separate_input",
+          "no_augment": "separate",
+          "no_checkpoint": "separate",
+          "prototype_readout": "output_rule_of_views7",
+          "untrained": "separate_untrained",
+          "views1": "prefix_of_views7",
+          "views3": "prefix_of_views7",
+          "views7": "fitted"
+        },
+        "seconds_per_job_estimate": 675.0163549409481,
+        "seconds_per_seed": 225.0054516469827
+      },
+      "ranks8": {
+        "all_variants_to_views7_ratio": 3.5696951975857187,
+        "config_id": "f6af1ed0c6b83aa2",
+        "fit_sources": {
+          "input_knn": "separate_input",
+          "no_augment": "separate",
+          "no_checkpoint": "separate",
+          "prototype_readout": "output_rule_of_views7",
+          "untrained": "separate_untrained",
+          "views1": "prefix_of_views7",
+          "views3": "prefix_of_views7",
+          "views7": "fitted"
+        },
+        "seconds_per_job_estimate": 460.9187610959052,
+        "seconds_per_seed": 153.6395870319684
+      },
+      "ranks8_original": {
+        "all_variants_to_views7_ratio": 1.9821477872226332,
+        "config_id": "f6af1ed0c6b83aa2",
+        "fit_sources": {
+          "input_knn": "separate_input",
+          "no_augment": "identical_to_views7",
+          "no_checkpoint": "separate",
+          "prototype_readout": "output_rule_of_views7",
+          "untrained": "separate_untrained",
+          "views1": "prefix_of_views7",
+          "views3": "prefix_of_views7",
+          "views7": "fitted"
+        },
+        "seconds_per_job_estimate": 467.1111631500826,
+        "seconds_per_seed": 155.70372105002753
+      }
+    },
+    "assumptions": "the calibration factors were measured under 16 single-thread workers of the bridge_knn and knn_training production runs and are applied at this family's workers; other families running at the same time add contention the factors do not hold; the ablation jobs take their fold's three seeds in sequence",
+    "calibration_factors": {
+      "arrowflow_full_knn": {
+        "max": 1.5970334667893344,
+        "pooled": 1.409211135243505
+      },
+      "arrowflow_knn_untrained": {
+        "max": 1.311992244882457,
+        "pooled": 0.7126080008098654
+      },
+      "dummy": {
+        "max": 0.17098602376732105,
+        "pooled": 0.14843753252336903
+      },
+      "gradient_boosting": {
+        "max": 1.7674768449818572,
+        "pooled": 1.3853768079997215
+      },
+      "input_footrule_knn": {
+        "max": 1.6166438508663716,
+        "pooled": 0.61432546173492
+      },
+      "mlp": {
+        "max": 2.170359002383683,
+        "pooled": 2.0502793274621864
+      },
+      "numeric_knn": {
+        "max": 0.8714577086482292,
+        "pooled": 0.49706085412182144
+      },
+      "random_forest": {
+        "max": 1.6204396046527907,
+        "pooled": 1.2976839910265852
+      },
+      "svc_rbf": {
+        "max": 0.6853567355615126,
+        "pooled": 0.6698471993948194
+      }
+    },
+    "cap_hours": 6,
+    "decision": "calibrated central simulated makespan at 16 workers of the run jobs plus the ablation jobs plus 0.25 h of stage overhead (prepare, reporting, ablation prepare and summary, analysis)",
+    "decision_hours": 5.2721207057400425,
+    "harness_max_based_run_hours": 6.767585108641514,
+    "per_dataset": {
+      "ranks16": {
+        "ablation_job_minutes": {
+          "central": 15.870676064237768,
+          "upper": 17.983728491180706
+        },
+        "arrowflow_job_minutes": {
+          "central": 122.73051829397079,
+          "upper": 139.0860530674216
+        },
+        "central_serial_hours": 31.424731256917337,
+        "upper_serial_hours": 35.840473936138316
+      },
+      "ranks8": {
+        "ablation_job_minutes": {
+          "central": 10.842197509649841,
+          "upper": 12.285044782353975
+        },
+        "arrowflow_job_minutes": {
+          "central": 64.31727576241782,
+          "upper": 72.88738283731976
+        },
+        "central_serial_hours": 16.435578587194158,
+        "upper_serial_hours": 18.71240746122291
+      },
+      "ranks8_original": {
+        "ablation_job_minutes": {
+          "central": 10.987637541794033,
+          "upper": 12.449869337692913
+        },
+        "arrowflow_job_minutes": {
+          "central": 68.71507851766721,
+          "upper": 77.87133308070042
+        },
+        "central_serial_hours": 17.600136164668506,
+        "upper_serial_hours": 20.038840595104954
+      }
+    },
+    "projection_sha256": "46733f63fdd1d225c9b10e94bedda06c41ac9042612038cb50649a54be07dffa",
+    "realized_full_data_serial_hours": null,
+    "run": {
+      "central": {
+        "serial_hours": 65.46044600878001,
+        "serial_over_workers_hours": 4.091277875548751,
+        "simulated_makespan_hours": 4.393778853812015
+      },
+      "upper": {
+        "serial_hours": 74.59172199246618,
+        "serial_over_workers_hours": 4.661982624529136,
+        "simulated_makespan_hours": 5.015215651338976
+      }
+    },
+    "stage_overhead_hours": 0.25,
+    "stages": {
+      "code_revision": "65d5c09c7ba4ebbd604d98e216eb8fbe51fecd48",
+      "ended_utc": "2026-09-14T17:10:22Z",
+      "family": "artificial",
+      "machine_load_at_start_pilot_and_projection": [
+        "load average: 16.48, 16.55, 15.33; production processes by worktree:  19 arrowflow-v3-dedup-run;",
+        "load average: 18.68, 17.18, 15.64; production processes by worktree:  19 arrowflow-v3-dedup-run;",
+        "load average: 17.20, 17.17, 16.70; production processes by worktree:  19 arrowflow-v3-dedup-run;"
+      ],
+      "note": "controller decision 2026-09-14: 16 workers and a 6 h cap after the 8-worker projection (5.40 h) exceeded the earlier 4 h cap, both applied by artificial_runs.py because extra_runs.py is sealed by the dedup production run and stays byte-identical; the training-only pilot ran beside the dedup production run's 16 single-thread workers (the training diagnostics run had been stopped at 16:27:29Z, before the pilot started at 16:53:11Z), so its timings, and the projection calibrated from them, are conservative",
+      "pilot": {
+        "ablation": {
+          "ranks16": {
+            "all_variants_to_views7_ratio": 2.7905505680087757,
+            "config_id": "f6af1ed0c6b83aa2",
+            "fit_sources": {
+              "input_knn": "separate_input",
+              "no_augment": "separate",
+              "no_checkpoint": "separate",
+              "prototype_readout": "output_rule_of_views7",
+              "untrained": "separate_untrained",
+              "views1": "prefix_of_views7",
+              "views3": "prefix_of_views7",
+              "views7": "fitted"
+            },
+            "seconds_per_seed": 225.0054516469827,
+            "status": "ok"
+          },
+          "ranks8": {
+            "all_variants_to_views7_ratio": 3.5696951975857187,
+            "config_id": "f6af1ed0c6b83aa2",
+            "fit_sources": {
+              "input_knn": "separate_input",
+              "no_augment": "separate",
+              "no_checkpoint": "separate",
+              "prototype_readout": "output_rule_of_views7",
+              "untrained": "separate_untrained",
+              "views1": "prefix_of_views7",
+              "views3": "prefix_of_views7",
+              "views7": "fitted"
+            },
+            "seconds_per_seed": 153.6395870319684,
+            "status": "ok"
+          },
+          "ranks8_original": {
+            "all_variants_to_views7_ratio": 1.9821477872226332,
+            "config_id": "f6af1ed0c6b83aa2",
+            "fit_sources": {
+              "input_knn": "separate_input",
+              "no_augment": "identical_to_views7",
+              "no_checkpoint": "separate",
+              "prototype_readout": "output_rule_of_views7",
+              "untrained": "separate_untrained",
+              "views1": "prefix_of_views7",
+              "views3": "prefix_of_views7",
+              "views7": "fitted"
+            },
+            "seconds_per_seed": 155.70372105002753,
+            "status": "ok"
+          }
+        },
+        "datasets": [
+          "ranks8",
+          "ranks16",
+          "ranks8_original"
+        ],
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/extra-runs-stages/artificial/pilot",
+        "failed": [],
+        "fits": 84,
+        "peak_process_rss_kib": 858236,
+        "slowest_fit_seconds_by_model": {
+          "arrowflow_full_knn": 122.87517138398835,
+          "arrowflow_knn_untrained": 0.8727969879982993,
+          "dummy": 0.002059144986560568,
+          "gradient_boosting": 0.7205543679883704,
+          "input_footrule_knn": 0.3454873799928464,
+          "mlp": 0.14836713901604526,
+          "numeric_knn": 0.0073093309765681624,
+          "projected_numeric_knn": 0.7978940469911322,
+          "random_forest": 0.2725906679988839,
+          "svc_rbf": 0.01020253001479432
+        }
+      },
+      "prepare": {
+        "datasets": {
+          "ranks16": {
+            "class_counts": [
+              45,
+              45,
+              45,
+              45,
+              45,
+              45,
+              45
+            ],
+            "dataset_hash": "67b43496def4b8f32238bf4b3b00176e92b4539ed76162418d8d159acbfea70c",
+            "shape": [
+              315,
+              16
+            ],
+            "splits_hash": "1a9d02126d9db5db"
+          },
+          "ranks8": {
+            "class_counts": [
+              45,
+              45,
+              45,
+              45,
+              45,
+              45,
+              45
+            ],
+            "dataset_hash": "4570b16626b7a14297f396d84f58fd6da2973068a74eabecf409d1c7615a2750",
+            "shape": [
+              315,
+              8
+            ],
+            "splits_hash": "1a9d02126d9db5db"
+          },
+          "ranks8_original": {
+            "class_counts": [
+              11,
+              11,
+              11,
+              11,
+              11,
+              11,
+              11
+            ],
+            "dataset_hash": "9545c8d56cceeebe455b44f11471b3db9c57552dcf74b11ccc186cd0f694dfaf",
+            "shape": [
+              77,
+              8
+            ],
+            "splits_hash": "996b378b652b9504"
+          }
+        },
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/extra-runs-stages/artificial/prepare"
+      },
+      "projection": {
+        "cap_hours": 6,
+        "decision_hours": 5.2721207057400425,
+        "upper_hours": 5.97719302819277,
+        "within_cap": true,
+        "workers": 16
+      },
+      "smoke": {
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/extra-runs-stages/artificial/smoke",
+        "outputs": [
+          "artificial_comparators.csv",
+          "artificial_competitiveness.csv",
+          "artificial_complete_metrics.csv",
+          "artificial_components.csv",
+          "artificial_duplicates.csv",
+          "artificial_families.csv",
+          "artificial_ladder.csv",
+          "artificial_main_table.csv",
+          "artificial_selected_widths.csv"
+        ],
+        "purpose": "synthetic_smoke_only_not_paper_evidence",
+        "views7_reproduced_fold_seeds": [
+          27,
+          27
+        ]
+      },
+      "stage_times_utc": {
+        "draft": "16:52:00Z",
+        "pilot": "16:53:11Z",
+        "prepare": "16:52:02Z",
+        "project": "17:10:16Z",
+        "smoke": "16:52:05Z"
+      },
+      "started_utc": "2026-09-14T16:52:00Z",
+      "summary": "stage draft, prepare, smoke and pilot at 65d5c09c7 (2026-09-14T16:52:00Z to 2026-09-14T17:10:22Z): prepare 16:52:02Z of ranks8, ranks16, ranks8_original with every pin held (shape, missing cells, class counts, feature names, label map, sha256 of the NaN-normalized features and of the labels, harness fingerprint, splits hash, duplicate counts, generator sha256); synthetic smoke 16:52:05Z ok (run_revision worker and reporting, extra_ablation prepare, run and summary with views7 reproducing the run on 27/27 fold-seeds, compare_extra analyse); training-only pilot 16:53:11Z of every dataset (the ten models at up to three evenly spaced candidates, 84 fits; every ablation variant at the middle ArrowFlow-kNN candidate, all-variants/views7 time ratios ranks8 3.57, ranks16 2.79, ranks8_original 1.98; 0 failed; slowest fit 122.9 s, arrowflow_full_knn on ranks16); controller decision 2026-09-14: 16 workers and a 6 h cap after the 8-worker projection (5.40 h) exceeded the earlier 4 h cap, both applied by artificial_runs.py because extra_runs.py is sealed by the dedup production run and stays byte-identical; the training-only pilot ran beside the dedup production run's 16 single-thread workers (the training diagnostics run had been stopped at 16:27:29Z, before the pilot started at 16:53:11Z), so its timings, and the projection calibrated from them, are conservative",
+      "uncommitted_sources_at_the_stages": {}
+    },
+    "upper_hours": 5.97719302819277,
+    "workers": 16
+  },
+  "protocol_id": "arrowflow-v3-artificial-1",
+  "registry": "experiments.make_revision.extra_runs:extra_registry",
+  "report_metrics": [
+    "accuracy",
+    "error",
+    "balanced_accuracy",
+    "macro_f1"
+  ],
+  "resource_decision": "G4 follow-up experiment (c) (ruling 2026-09-14): drafted from newdata_batch1.json with the identical nested design and ten models and from newdata_ablation.json's component ablation; stage draft, prepare, smoke and pilot at 65d5c09c7 (2026-09-14T16:52:00Z to 2026-09-14T17:10:22Z): prepare 16:52:02Z of ranks8, ranks16, ranks8_original with every pin held (shape, missing cells, class counts, feature names, label map, sha256 of the NaN-normalized features and of the labels, harness fingerprint, splits hash, duplicate counts, generator sha256); synthetic smoke 16:52:05Z ok (run_revision worker and reporting, extra_ablation prepare, run and summary with views7 reproducing the run on 27/27 fold-seeds, compare_extra analyse); training-only pilot 16:53:11Z of every dataset (the ten models at up to three evenly spaced candidates, 84 fits; every ablation variant at the middle ArrowFlow-kNN candidate, all-variants/views7 time ratios ranks8 3.57, ranks16 2.79, ranks8_original 1.98; 0 failed; slowest fit 122.9 s, arrowflow_full_knn on ranks16); controller decision 2026-09-14: 16 workers and a 6 h cap after the 8-worker projection (5.40 h) exceeded the earlier 4 h cap, both applied by artificial_runs.py because extra_runs.py is sealed by the dedup production run and stays byte-identical; the training-only pilot ran beside the dedup production run's 16 single-thread workers (the training diagnostics run had been stopped at 16:27:29Z, before the pilot started at 16:53:11Z), so its timings, and the projection calibrated from them, are conservative; projected at 16 single-thread workers as the calibrated central simulated makespan of the run (4.39 h) plus the ablation (0.63 h) plus 0.25 h of stage overhead: 5.27 h (upper 5.98 h; harness max-based run 6.77 h); cap 6 h; frozen after the pilot",
+  "secondary_contrasts": [
+    "arrowflow_full_knn_vs_input_footrule_knn"
+  ],
+  "secondary_family_size": 2,
+  "selection_metric": "accuracy",
+  "selection_ruling": "progress.md \"RULING (G4 follow-up, 2026-09-14)\" item (5): ranks8 and ranks16 (45 rows per class) and ranks8_original (the 77 original rows, descriptive only) from artificial_ranks.py; the design and models of experiment (a) plus the component ablation; families over ranks8 and ranks16; not pooled into the seventeen-dataset Friedman analysis; pinned and frozen only after the data module is committed and the controller has approved the data (artificial-data-approved.md)",
+  "source_template_sha256": "f715ec2808b4b08c10e49ae23696070a471d7ea88eb351d63b059eecccc0d011",
+  "split_seed": 27183,
+  "status": "reviewed_and_piloted_before_confirmatory_scoring",
+  "stochastic_finalists": 3,
+  "test_train_ratio": 0.25,
+  "wallclock_cap_hours": 6,
+  "workers": 16
+}

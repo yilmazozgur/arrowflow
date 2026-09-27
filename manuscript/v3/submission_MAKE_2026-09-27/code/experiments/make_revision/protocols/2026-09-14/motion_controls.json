@@ -1,0 +1,690 @@
+{
+  "analysis": {
+    "declared": "frozen with this protocol, before any outer score exists",
+    "descriptive": {
+      "displacement": "per dataset, arm and layer, outer-fold mean of the normalized footrule displacement and of the share of unchanged filters",
+      "neighborhood_purity": "per dataset and arm, outer-fold mean and SD of the test and training purity",
+      "per_class_recall": "per dataset, arm and class, outer-fold mean and SD",
+      "single_layer": "views7 minus single_layer_first and views7 minus single_layer_last, accuracy, restricted to the outer folds whose selection has two hidden layers; the fold count is reported with every row. No dataset has fifteen such folds, so these contrasts are descriptive: the interval is a corrected resampled t over the qualifying folds at df = n_folds - 1 when n_folds >= 3, they are not part of the primary family and they are not Holm-adjusted."
+    },
+    "interpretation": "Fixed in advance. If the real signal does not beat comparable random movement, the paper says so and narrows its contribution to a construction plus an adaptation scheme. The claim is not rescued after the fact, and no arm, dataset or subset is added, dropped or reweighted after an outer score is seen.",
+    "named_subset": {
+      "datasets": [
+        "balance_scale",
+        "mfeat_zernike"
+      ],
+      "definition": "the same primary-family contrasts restricted to the two datasets whose training gains survive the paper's Holm-34 correction (balance-scale and mfeat-zernike)",
+      "status": "a named subset of the primary family, not a new family: the rows carry the primary family's own Holm adjustment over the seventeen datasets and are not adjusted again"
+    },
+    "primary_family": {
+      "adjustment": "Holm across the seventeen datasets within each arm (evaluation.holm_adjust); the three arms are adjusted separately",
+      "aggregation": "fitting seeds averaged within each outer fold",
+      "arms": [
+        "frozen",
+        "permuted_alignment",
+        "random_direction"
+      ],
+      "contrast": "views7 minus the control arm",
+      "datasets": "the seventeen protocol datasets",
+      "direction": "positive favours ArrowFlow (views7)",
+      "interval": "corrected resampled t (evaluation.paired_corrected_interval): standard error sqrt((1/15 + q) * variance (ddof 1) of the fold differences), q = 0.25, t quantile with 14 df, 95%",
+      "metric": "accuracy"
+    },
+    "verification": "the analysis refuses (exit 2, nothing written) until the run is complete, and then re-verifies every reference run with compare_runs.load_run and compare_runs.verify_run and this run with motion_controls.summary before any score is read"
+  },
+  "arm_definitions": {
+    "frozen": "the hidden ranking filters never move: no hidden layer applies its accumulated motion, so every hidden filter keeps its seeded initial order for the whole fit. Everything else is unchanged, including the forward pass, the eligibility gate, the auxiliary class-prototype (output) layer's own accumulation and update, the learning-rate schedule, the validation checkpoint, augmentation and the kNN readout, which is still selected and refitted on the (now untrained) hidden rankings.",
+    "permuted_alignment": "the motion records reaching each hidden layer are re-keyed by a uniformly random permutation of that layer's filter identities, drawn once per layer and batch from the recorded arm seed. The motion vector itself is untouched, so the set of motions, their magnitudes and signs, the accepted slots (ratio_data_backprop), the number of votes and the eligibility gate are all preserved; only which filter receives which motion changes.",
+    "random_direction": "within each motion record, the signs of the accepted nonzero votes are permuted among the accepted nonzero slots, drawn per record, layer and batch from the recorded arm seed. |motion| is untouched element for element, so the accepted slots, the accepted vote mass per batch and per layer, the magnitude multiset, the number of effective votes and the counts of attraction and repulsion are preserved exactly; only which filter is pulled towards the batch input and which away from it is randomized. Zero votes stay zero, so no vote is created or destroyed. Because the sign counts are held fixed, the share of accepted slots whose direction actually changes is bounded by 2p(1-p) with p the realized share of attractions among the accepted votes; p, the realized change share and the per-batch mass deviation are recorded per dataset, arm and hidden layer, so how much was randomized is reported, not assumed. Randomizing the signs independently instead would raise the change share to about a half but would also move the attraction/repulsion mix away from the real run's, which would confound a difference in direction pairing with a difference in that mix; the mass-matched permutation is chosen for that reason.",
+    "single_layer_first": "only hidden layer 0 applies its accumulated motion; the deeper hidden layer, where there is one, resets its accumulator instead. At a one-hidden-layer selection this is views7 by construction: it is then recorded as identical_to_views7 and not fitted again.",
+    "single_layer_last": "only the last hidden layer (the one the kNN readout reads) applies its accumulated motion. At a one-hidden-layer selection this is views7 by construction: it is then recorded as identical_to_views7 and not fitted again.",
+    "views7": "the unmodified method (MultiViewArrowFlowKNN at the reconstructed selection), fitted through the same instance-level wrapper with an identity transform and every hidden layer updating; it must reproduce the reference run's outer predictions exactly for every dataset, outer fold and fitting seed"
+  },
+  "arms": [
+    "views7",
+    "frozen",
+    "permuted_alignment",
+    "random_direction",
+    "single_layer_first",
+    "single_layer_last"
+  ],
+  "checks": {
+    "core_sources": "every job: the pinned sha256 of every core function the transcription depends on is unchanged",
+    "first_batch_signal": "every job: at the first batch, before any filter has moved, every arm's pre-transform motion records equal views7's per view and hidden layer, so the arms start from the identical signal and differ only by the transform. The one exception is permuted_alignment below the last hidden layer: a deeper layer reads the mean, over the accepted filters above it, of each accepted filter's own motion against the batch input, so re-keying, which changes which filters are accepted, changes it, while permuting signs does not (that mean depends on the signs only through how many are attractions and how many repulsions, which the permutation preserves; the changed signs reach the filters through the accumulators instead). Only the last hidden layer is therefore compared for permuted_alignment.",
+    "frozen_unmoved": "every job: the frozen arm's hidden-layer displacement is exactly zero and its share of unchanged filters exactly one, for every view and hidden layer",
+    "initial_state": "every job: every arm's captured initial filters and initial state hash equal views7's, per view",
+    "mass_matched": "every job and randomizing arm: per hidden layer the transform preserved the accepted vote count, the accepted |motion| multiset, the accepted mass and the counts of attraction and repulsion",
+    "reference_predictions": "every job and fitting seed: views7's 7-view kNN outer predictions equal the reference run's recorded predictions exactly, in the sealed test order",
+    "rng_untouched": "every job: every wrapper call and every guarded read left the global numpy and Python RNG states unchanged",
+    "single_layer_identity": "every job at a one-hidden-layer selection: both single_layer arms are recorded identical_to_views7 and their predictions equal views7's",
+    "uninstrumented_fit": "first outer fold of every dataset, first fitting seed: views7's seven view state_hash() and its kNN predictions equal those of MultiViewArrowFlowKNN(**selected, seed).fit on the same rows, fitted without any wrapper",
+    "wrapper_removed": "every job: no view network keeps an instance-level backward_propagate after its fit"
+  },
+  "confidence": 0.95,
+  "dataset_loading": "the reference run prepared data (hash-checked) must equal the ablation copy, its splits the declared nested splits, and in production a fresh load by the reference loader (run_revision.load_dataset or newdata.load_newdata with every pin) must return the same arrays and dataset hash",
+  "datasets": [
+    "iris",
+    "wine",
+    "breast_cancer",
+    "wine_quality",
+    "vehicle",
+    "segment",
+    "digits",
+    "balance_scale",
+    "ionosphere",
+    "diabetes",
+    "banknote_authentication",
+    "qsar_biodeg",
+    "mfeat_zernike",
+    "vertebra_column",
+    "steel_plates_fault",
+    "climate_model_simulation_crashes",
+    "hcv_egyptian_patients"
+  ],
+  "decision_rule": "freeze only if the calibrated projection at 16 single-thread workers is at most 5 h: the simulated first-free-worker makespan of the planned jobs in planned order, each job priced at the reference run's realized outer fit and predict seconds of its fold and its three fitting seeds times the piloted all-arms/views7 time ratio of the pilot dataset with the same hidden depth (the largest piloted ratio when no pilot dataset shares it), plus the views7 seconds once more for a first fold's uninstrumented fit",
+  "differs_from_untrained": "The existing untrained control (knn_controls.UntrainedMultiViewArrowFlowKNN, the ablations' \"untrained\" variant and the runs' arrowflow_knn_untrained family) never trains at all: no layer is ever updated, the auxiliary output layer included, no batch is drawn, no validation checkpoint and no augmentation act, and its training-only settings (learning rate, iterations, batch size, validation_ratio, augment) are not even parameters, so a network that is never trained carries ArrowFlowEstimator defaults for them; as a model family in the production runs it is also tuned on its own inner folds over its own projected candidate grid (knn_controls.control_candidates). The frozen arm here does train: the same batches, the same forward pass, the same label-driven eligibility gate, the same auxiliary class-prototype layer accumulation and update, the same learning-rate schedule, checkpoint and augmentation, and the same readout, at views7's own selection. Only the hidden ranking filters are held still. frozen therefore isolates the hidden-layer update alone, while untrained removes training altogether.",
+  "failure_policy": "log_all_failures; a failed check or fit fails its job, cancels the pending jobs and blocks the summary; failures are never omitted; no adaptive stopping on any score",
+  "fit_reuse": "views7, frozen, permuted_alignment and random_direction are fitted once per outer fold and fitting seed. At a two-hidden-layer selection single_layer_first and single_layer_last are fitted too; at a one-hidden-layer selection both are views7 by construction and are recorded as identical_to_views7 with zero timings, naming their source fit, rather than fitted twice.",
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "frozen": true,
+  "frozen_at_utc": "2026-09-14T20:14:08.203227+00:00",
+  "inner_folds": 3,
+  "instrumentation": "an instance-level backward_propagate on each view network, installed after initialize_orders and removed after train_initialized; it is a transcription of SortFlowHybridNetwork.backward_propagate restricted to the sort-only path (every layer \"sort\", average_method_motion \"mean\", backprop_signal_replication 1) with exactly one injected step, the arm's transform of the motion records entering each hidden layer, and one changed step, which hidden layers apply their accumulated motion; every draw comes from a private RandomState seeded by derive_seed(20260914, arm, dataset, outer_repeat, outer_fold, model_seed, view); every call saves and restores the global numpy and Python RNG states and records whether they changed; the pinned sha256 of every core function this transcription depends on is re-checked in every job",
+  "matched": "Every arm is fitted at ArrowFlow-kNN's reconstructed per-fold selection, resolved from the outer training partition's shape (bridge.resolve_selected), on the same folds, the same three fitting seeds, the same encoders and seeded initial filters, the same training rows, the same view identities, the same training budget (iterations, batch size, learning-rate schedule, validation checkpoint and augmentation) and the same kNN readout rule. Only the hidden-layer update changes.",
+  "max_workers": 16,
+  "measures": {
+    "accuracy": "outer-test accuracy, error, balanced accuracy and macro-F1 of the 7-view kNN majority (the paper's metric) per arm, dataset, outer fold and fitting seed",
+    "displacement": "per layer (each hidden layer, then the output layer) the mean over filters of footrule(final filter, initial filter) / floor(n^2 / 2) and the share of filters that differ, averaged over the seven views; the final filters are the network's, i.e. the checkpoint the core restores",
+    "motion_statistics": "per hidden layer, the batches and motion records seen, the accepted slots, the share of accepted slots the transform changed, and the accepted vote count, effective votes, mass, sign counts and magnitude-multiset digest before and after the transform",
+    "neighborhood_purity": "same-class neighbourhood purity of the last hidden ranking: for each outer test row the share of its k nearest stored training rankings that carry its class, at the view's selected n_neighbors, averaged over rows and then over the seven views; and the same on the training rows with each row's own stored ranking dropped, over a deterministic every-m-th subsample when the training partition exceeds 512 rows",
+    "per_class_recall": "sklearn recall_score(labels=the dataset classes, average=None, zero_division=0) of the same predictions, per class"
+  },
+  "motion_seed": 20260914,
+  "numeric_threads_per_worker": 1,
+  "outer_folds": 5,
+  "outer_repeats": 3,
+  "parallelism": "one spawned single-thread process per dataset and outer fold under the shared execution lock",
+  "pilot": "training-only: every arm on the first outer training partition of each pilot dataset at the first fitting seed, predicting on every fourth training row (the outer test fold is never touched), plus one uninstrumented fit and one reproduction probe (run_knn_ablation.reproduction_probe) per reference",
+  "pilot_datasets": [
+    "wine",
+    "balance_scale"
+  ],
+  "pilot_projection": {
+    "calibrated": {
+      "longest_job_hours": 0.852099025554315,
+      "serial_hours": 40.03363586364183,
+      "serial_hours_over_workers": 2.502102241477614,
+      "simulated_makespan_hours": 2.9189450923035922
+    },
+    "calibrated_per_dataset_hours": {
+      "balance_scale": 0.9343961847894995,
+      "banknote_authentication": 2.6565457644845694,
+      "breast_cancer": 1.675258408424912,
+      "climate_model_simulation_crashes": 3.0545603628316877,
+      "diabetes": 2.7141245367966045,
+      "digits": 1.8385895988526573,
+      "hcv_egyptian_patients": 4.652006900975712,
+      "ionosphere": 2.795021931447587,
+      "iris": 2.0082513797568775,
+      "mfeat_zernike": 2.6730250110941056,
+      "qsar_biodeg": 1.8677501580313338,
+      "segment": 1.5835864662928634,
+      "steel_plates_fault": 1.9796620756128473,
+      "vehicle": 2.307469583964833,
+      "vertebra_column": 2.936132159024862,
+      "wine": 2.3615021954580433,
+      "wine_quality": 1.9957531458028321
+    },
+    "cap_hours": 5,
+    "decision_hours": 2.9189450923035922,
+    "decision_rule": "freeze only if the calibrated projection at 16 single-thread workers is at most 5 h: the simulated first-free-worker makespan of the planned jobs in planned order, each job priced at the reference run's realized outer fit and predict seconds of its fold and its three fitting seeds times the piloted all-arms/views7 time ratio of the pilot dataset with the same hidden depth (the largest piloted ratio when no pilot dataset shares it), plus the views7 seconds once more for a first fold's uninstrumented fit",
+    "pilot_ratios": {
+      "balance_scale": 2.4206962697851164,
+      "wine": 4.86877612503483
+    },
+    "pilot_seconds_by_arm": {
+      "balance_scale": {
+        "frozen": 8.601281375013059,
+        "permuted_alignment": 37.40109589500935,
+        "random_direction": 26.24340386298718,
+        "single_layer_first": 0.0,
+        "single_layer_last": 0.0,
+        "views7": 50.85237616900122
+      },
+      "wine": {
+        "frozen": 6.3171691710012965,
+        "permuted_alignment": 50.68770774701261,
+        "random_direction": 87.65340438802377,
+        "single_layer_first": 61.62583901701146,
+        "single_layer_last": 69.27910470298957,
+        "views7": 71.22749317099806
+      }
+    },
+    "pilot_sha256": "b400c1021827aca21dae3c635130d788d3dbf51d464af1d5c7435d137a306fb1",
+    "reproduction_probes": {
+      "bridge_knn": {
+        "config_id": "b5b2cf609efe12eb",
+        "dataset_id": "iris",
+        "inner_fold": 0,
+        "model_seed": 8129,
+        "readout_selections_identical": true,
+        "reference_score": 1.0,
+        "refit_score": 1.0,
+        "reproduced": true,
+        "result_file": "results/iris__arrowflow_full_knn__r0f0.json"
+      },
+      "newdata_batch1": {
+        "config_id": "b5b2cf609efe12eb",
+        "dataset_id": "ionosphere",
+        "inner_fold": 0,
+        "model_seed": 8129,
+        "readout_selections_identical": true,
+        "reference_score": 0.925531914893617,
+        "refit_score": 0.925531914893617,
+        "reproduced": true,
+        "result_file": "results/ionosphere__arrowflow_full_knn__r0f0.json"
+      },
+      "newdata_batch2": {
+        "config_id": "b5b2cf609efe12eb",
+        "dataset_id": "vertebra_column",
+        "inner_fold": 0,
+        "model_seed": 8129,
+        "readout_selections_identical": true,
+        "reference_score": 0.7951807228915663,
+        "refit_score": 0.7951807228915663,
+        "reproduced": true,
+        "result_file": "results/vertebra_column__arrowflow_full_knn__r0f0.json"
+      }
+    },
+    "stages": {
+      "code_revision": "d036d11aa4af8a51420f82fee62d625b0ce37987",
+      "ended_utc": "2026-09-14T20:13:22Z",
+      "pilot": {
+        "all_arms_to_views7_ratio": {
+          "balance_scale": 2.4206962697851164,
+          "wine": 4.86877612503483
+        },
+        "checks": {
+          "balance_scale": {
+            "core_sources": true,
+            "first_batch_signal": true,
+            "frozen_unmoved": true,
+            "initial_state": true,
+            "mass_matched": true,
+            "reference_predictions": null,
+            "rng_untouched": true,
+            "single_layer_identity": true,
+            "uninstrumented_fit": true,
+            "wrapper_removed": true
+          },
+          "wine": {
+            "core_sources": true,
+            "first_batch_signal": true,
+            "frozen_unmoved": true,
+            "initial_state": true,
+            "mass_matched": true,
+            "reference_predictions": null,
+            "rng_untouched": true,
+            "single_layer_identity": true,
+            "uninstrumented_fit": true,
+            "wrapper_removed": true
+          }
+        },
+        "contention": "the pilot ran while other production runs held the machine, so its absolute seconds are inflated; only the all-arms/views7 ratio is carried into the projection",
+        "datasets": [
+          "wine",
+          "balance_scale"
+        ],
+        "decision": {
+          "cap_hours": 5,
+          "checks_passed": true,
+          "hours": 2.9189450923035922,
+          "probes_reproduced": true,
+          "rule": "freeze only if the calibrated projection at 16 single-thread workers is at most 5 h: the simulated first-free-worker makespan of the planned jobs in planned order, each job priced at the reference run's realized outer fit and predict seconds of its fold and its three fitting seeds times the piloted all-arms/views7 time ratio of the pilot dataset with the same hidden depth (the largest piloted ratio when no pilot dataset shares it), plus the views7 seconds once more for a first fold's uninstrumented fit",
+          "within_cap": true,
+          "workers": 16
+        },
+        "hidden_layers": {
+          "balance_scale": 1,
+          "wine": 2
+        },
+        "reproduction_probes": {
+          "bridge_knn": {
+            "dataset_id": "iris",
+            "readout_selections_identical": true,
+            "reference_score": 1.0,
+            "refit_score": 1.0,
+            "reproduced": true
+          },
+          "newdata_batch1": {
+            "dataset_id": "ionosphere",
+            "readout_selections_identical": true,
+            "reference_score": 0.925531914893617,
+            "refit_score": 0.925531914893617,
+            "reproduced": true
+          },
+          "newdata_batch2": {
+            "dataset_id": "vertebra_column",
+            "readout_selections_identical": true,
+            "reference_score": 0.7951807228915663,
+            "refit_score": 0.7951807228915663,
+            "reproduced": true
+          }
+        },
+        "seconds_by_arm": {
+          "balance_scale": {
+            "frozen": 8.601281375013059,
+            "permuted_alignment": 37.40109589500935,
+            "random_direction": 26.24340386298718,
+            "single_layer_first": 0.0,
+            "single_layer_last": 0.0,
+            "views7": 50.85237616900122
+          },
+          "wine": {
+            "frozen": 6.3171691710012965,
+            "permuted_alignment": 50.68770774701261,
+            "random_direction": 87.65340438802377,
+            "single_layer_first": 61.62583901701146,
+            "single_layer_last": 69.27910470298957,
+            "views7": 71.22749317099806
+          }
+        },
+        "uninstrumented_fit_seconds": {
+          "balance_scale": 30.653414017986506,
+          "wine": 61.530683349003084
+        }
+      },
+      "prepare": {
+        "datasets": [
+          "iris",
+          "wine",
+          "breast_cancer",
+          "wine_quality",
+          "vehicle",
+          "segment",
+          "digits",
+          "balance_scale",
+          "ionosphere",
+          "diabetes",
+          "banknote_authentication",
+          "qsar_biodeg",
+          "mfeat_zernike",
+          "vertebra_column",
+          "steel_plates_fault",
+          "climate_model_simulation_crashes",
+          "hcv_egyptian_patients"
+        ],
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/runs/2026-09-14-motion-pilot",
+        "fresh_loads": [
+          "balance_scale",
+          "banknote_authentication",
+          "breast_cancer",
+          "climate_model_simulation_crashes",
+          "diabetes",
+          "digits",
+          "hcv_egyptian_patients",
+          "ionosphere",
+          "iris",
+          "mfeat_zernike",
+          "qsar_biodeg",
+          "segment",
+          "steel_plates_fault",
+          "vehicle",
+          "vertebra_column",
+          "wine",
+          "wine_quality"
+        ],
+        "planned_jobs": 255,
+        "references": {
+          "bridge_knn": {
+            "ablation": "arrowflow-v3-knn-ablation-1",
+            "datasets": [
+              "iris",
+              "wine",
+              "breast_cancer",
+              "wine_quality",
+              "vehicle",
+              "segment",
+              "digits"
+            ],
+            "run": "arrowflow-v3-bridge-knn-1"
+          },
+          "newdata_batch1": {
+            "ablation": "arrowflow-v3-newdata-ablation-1",
+            "datasets": [
+              "balance_scale",
+              "ionosphere",
+              "diabetes",
+              "banknote_authentication",
+              "qsar_biodeg"
+            ],
+            "run": "arrowflow-v3-newdata-batch1-1"
+          },
+          "newdata_batch2": {
+            "ablation": "arrowflow-v3-newdata-ablation-1",
+            "datasets": [
+              "mfeat_zernike",
+              "vertebra_column",
+              "steel_plates_fault",
+              "climate_model_simulation_crashes",
+              "hcv_egyptian_patients"
+            ],
+            "run": "arrowflow-v3-newdata-batch2-1"
+          }
+        },
+        "selected_widths": {
+          "[128]": 185,
+          "[64, 128]": 70
+        }
+      },
+      "smoke": {
+        "arms": [
+          "views7",
+          "frozen",
+          "permuted_alignment",
+          "random_direction",
+          "single_layer_first",
+          "single_layer_last"
+        ],
+        "check_totals": {
+          "core_sources": {
+            "True": 9
+          },
+          "first_batch_signal": {
+            "True": 9
+          },
+          "frozen_unmoved": {
+            "True": 9
+          },
+          "initial_state": {
+            "True": 9
+          },
+          "mass_matched": {
+            "True": 9
+          },
+          "reference_predictions": {
+            "True": 9
+          },
+          "rng_untouched": {
+            "True": 9
+          },
+          "single_layer_identity": {
+            "True": 9
+          },
+          "uninstrumented_fit": {
+            "None": 6,
+            "True": 3
+          },
+          "wrapper_removed": {
+            "True": 9
+          }
+        },
+        "datasets": [
+          "synthetic",
+          "synthetic_b1",
+          "synthetic_b2"
+        ],
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/runs/2026-09-14-motion-smoke/run",
+        "motion_statistics": {
+          "permuted_alignment": {
+            "0": {
+              "accepted_slots": 131712,
+              "changed_share": 0.8059250485908649,
+              "changed_slots": 106150,
+              "mass_after": 53508.302482460815,
+              "mass_before": 53508.302482460815,
+              "mass_deviation": 0.0,
+              "positive_after": 40985,
+              "positive_before": 40985,
+              "positive_share": 0.311171343537415
+            },
+            "1": {
+              "accepted_slots": 170016,
+              "changed_share": 0.8702651515151515,
+              "changed_slots": 147959,
+              "mass_after": 400429.0,
+              "mass_before": 400429.0,
+              "mass_deviation": 0.0,
+              "positive_after": 53121,
+              "positive_before": 53121,
+              "positive_share": 0.3124470638057595
+            }
+          },
+          "random_direction": {
+            "0": {
+              "accepted_slots": 131712,
+              "changed_share": 0.2696793002915452,
+              "changed_slots": 35520,
+              "mass_after": 50690.885246630016,
+              "mass_before": 50690.885246630016,
+              "mass_deviation": 0.0,
+              "positive_after": 38776,
+              "positive_before": 38776,
+              "positive_share": 0.29439990281827016
+            },
+            "1": {
+              "accepted_slots": 170016,
+              "changed_share": 0.27242141916054957,
+              "changed_slots": 46316,
+              "mass_after": 369739.0,
+              "mass_before": 369739.0,
+              "mass_deviation": 0.0,
+              "positive_after": 49786,
+              "positive_before": 49786,
+              "positive_share": 0.2928312629399586
+            }
+          },
+          "single_layer_first": {
+            "0": {
+              "accepted_slots": 131712,
+              "changed_share": 0.0,
+              "changed_slots": 0,
+              "mass_after": 48730.471664485645,
+              "mass_before": 48730.471664485645,
+              "mass_deviation": 0.0,
+              "positive_after": 36503,
+              "positive_before": 36503,
+              "positive_share": 0.2771425534499514
+            },
+            "1": {
+              "accepted_slots": 170016,
+              "changed_share": 0.0,
+              "changed_slots": 0,
+              "mass_after": 341594.0,
+              "mass_before": 341594.0,
+              "mass_deviation": 0.0,
+              "positive_after": 47309,
+              "positive_before": 47309,
+              "positive_share": 0.2782620459250894
+            }
+          },
+          "single_layer_last": {
+            "0": {
+              "accepted_slots": 8064,
+              "changed_share": 0.0,
+              "changed_slots": 0,
+              "mass_after": 11528.0,
+              "mass_before": 11528.0,
+              "mass_deviation": 0.0,
+              "positive_after": 2709,
+              "positive_before": 2709,
+              "positive_share": 0.3359375
+            },
+            "1": {
+              "accepted_slots": 170016,
+              "changed_share": 0.0,
+              "changed_slots": 0,
+              "mass_after": 354900.0,
+              "mass_before": 354900.0,
+              "mass_deviation": 0.0,
+              "positive_after": 50018,
+              "positive_before": 50018,
+              "positive_share": 0.29419584039149255
+            }
+          },
+          "views7": {
+            "0": {
+              "accepted_slots": 131712,
+              "changed_share": 0.0,
+              "changed_slots": 0,
+              "mass_after": 51585.099936862614,
+              "mass_before": 51585.099936862614,
+              "mass_deviation": 0.0,
+              "positive_after": 39281,
+              "positive_before": 39281,
+              "positive_share": 0.2982340257531584
+            },
+            "1": {
+              "accepted_slots": 170016,
+              "changed_share": 0.0,
+              "changed_slots": 0,
+              "mass_after": 358374.0,
+              "mass_before": 358374.0,
+              "mass_deviation": 0.0,
+              "positive_after": 50822,
+              "positive_before": 50822,
+              "positive_share": 0.298924807076981
+            }
+          }
+        },
+        "planned_jobs": 9,
+        "status": "ok",
+        "two_hidden_layer_folds": {
+          "synthetic": 3,
+          "synthetic_b1": 0,
+          "synthetic_b2": 0
+        }
+      },
+      "stage_times_utc": {
+        "pilot": "20:02:28Z",
+        "smoke": "20:00:48Z"
+      },
+      "started_utc": "2026-09-14T20:00:44Z",
+      "summary": "smoke and pilot at d036d11aa (2026-09-14T20:00:44Z to 2026-09-14T20:13:22Z): synthetic smoke 20:00:48Z ok (9 jobs over three synthetic references, 3 of them at two-hidden-layer selections and 6 at one-hidden-layer ones; every check passed in every job, the uninstrumented-fit check on 3 first folds, and views7 reproduced every fold and seed); training-only pilot 20:02:28Z: prepare of all 17 datasets (255 per-fold selections reconstructed from the three reference runs, each equal to its sealed record and ablation plan; selected widths [128] in 185 folds and [64, 128] in 70; a fresh load with every pin for all 17 datasets), then wine and balance_scale first outer fold with training query rows (every check passed; all-arms/views7 time ratios wine 4.87 at 2 hidden layer(s), balance_scale 2.42 at 1 hidden layer(s)), measured under machine contention; reproduction probes: iris reproduced, ionosphere reproduced, vertebra_column reproduced"
+    },
+    "workers": 16
+  },
+  "production_family": "motion_controls",
+  "protocol_id": "arrowflow-v3-motion-controls-1",
+  "purity_query_cap": 512,
+  "purpose": "matched motion-signal controls: does ArrowFlow's learning signal carry information, or would comparable random movement of the same filters do as well?",
+  "reference_argument": "--reference NAME=RUN_DIR,ABLATION_DIR, one per protocol reference",
+  "references": {
+    "bridge_knn": {
+      "ablation": {
+        "code_revision": "08cf39cd23fe0745a0de3c7a982b0c1d297500c5",
+        "family": "knn_ablation",
+        "manifest_sha256": "615868f286be02f8d32068bb2e27ee016f530c08aa6b22ce49bbd21365a8bf9e",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/knn_ablation.json",
+        "protocol_id": "arrowflow-v3-knn-ablation-1",
+        "protocol_sha256": "126cf6d72a2842751a04b5994f7f4b3e9b3b3f5261407d1f1345295b043a1ba5",
+        "reference_selections_sha256": "809d725c60dd1548d120c7b8534b6446c948ead0ec3563baf7b98c6f5ca029e2",
+        "summary_file": "knn_ablation_summary.json",
+        "summary_sha256": "53cebfacb52ab2de6d33ef869344f9753dee7d12a8176fdb48df0fe75dc8cde7"
+      },
+      "datasets": [
+        "iris",
+        "wine",
+        "breast_cancer",
+        "wine_quality",
+        "vehicle",
+        "segment",
+        "digits"
+      ],
+      "loader": "experiments.make_revision.run_revision:load_dataset",
+      "run": {
+        "code_revision": "70fb9bf31092cb64e2bd349403ad090699a3494d",
+        "family": "bridge_knn",
+        "model_id": "arrowflow_full_knn",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/bridge_knn.json",
+        "protocol_id": "arrowflow-v3-bridge-knn-1",
+        "protocol_sha256": "6335d8c4a1b16fb4044c3badb1fff1448f4083d4cc89611cd54b276d60057ff1",
+        "summary_sha256": "f5f0c7016864ce354c70f148bfecc31f8dbdbff5bc4f41d74e63e22a6ff36fda"
+      }
+    },
+    "newdata_batch1": {
+      "ablation": {
+        "code_revision": "be41fa9626e634bb0adb6c9caada5fe4aa5d0424",
+        "family": "newdata_ablation",
+        "manifest_sha256": "14d6c377f5afc78f9b7407ab4dc3940cfc4e77fccb497f556ad013b42d70fdbb",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_ablation.json",
+        "protocol_id": "arrowflow-v3-newdata-ablation-1",
+        "protocol_sha256": "3c4efe43eea7151c568a64a883f834e6d2f8d849aef34d0e45f24bb42e962c8c",
+        "reference_selections_sha256": "fa6933cd9dc0be3c786849d816922422ed3d9fe8dccf3ec83faeebfba02722d8",
+        "summary_file": "newdata_ablation_summary.json",
+        "summary_sha256": "2775b79d3a524e526ee1bdf937bdea783ebf0e22d14e9f4531ecd1c013c91246"
+      },
+      "datasets": [
+        "balance_scale",
+        "ionosphere",
+        "diabetes",
+        "banknote_authentication",
+        "qsar_biodeg"
+      ],
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "run": {
+        "code_revision": "6022f9b5e2312f80a96e96b2d0607c72b7d52138",
+        "family": "newdata",
+        "model_id": "arrowflow_full_knn",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_batch1.json",
+        "protocol_id": "arrowflow-v3-newdata-batch1-1",
+        "protocol_sha256": "f715ec2808b4b08c10e49ae23696070a471d7ea88eb351d63b059eecccc0d011",
+        "summary_sha256": "f3ab23c5eeccbe36f036325fe94c4c28ce69bc9d35fa16e62cea813e977ec843"
+      }
+    },
+    "newdata_batch2": {
+      "ablation": {
+        "code_revision": "be41fa9626e634bb0adb6c9caada5fe4aa5d0424",
+        "family": "newdata_ablation",
+        "manifest_sha256": "14d6c377f5afc78f9b7407ab4dc3940cfc4e77fccb497f556ad013b42d70fdbb",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_ablation.json",
+        "protocol_id": "arrowflow-v3-newdata-ablation-1",
+        "protocol_sha256": "3c4efe43eea7151c568a64a883f834e6d2f8d849aef34d0e45f24bb42e962c8c",
+        "reference_selections_sha256": "fa6933cd9dc0be3c786849d816922422ed3d9fe8dccf3ec83faeebfba02722d8",
+        "summary_file": "newdata_ablation_summary.json",
+        "summary_sha256": "2775b79d3a524e526ee1bdf937bdea783ebf0e22d14e9f4531ecd1c013c91246"
+      },
+      "datasets": [
+        "mfeat_zernike",
+        "vertebra_column",
+        "steel_plates_fault",
+        "climate_model_simulation_crashes",
+        "hcv_egyptian_patients"
+      ],
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "run": {
+        "code_revision": "6022f9b5e2312f80a96e96b2d0607c72b7d52138",
+        "family": "newdata",
+        "model_id": "arrowflow_full_knn",
+        "protocol_file": "experiments/make_revision/protocols/2026-09-12/newdata_batch2.json",
+        "protocol_id": "arrowflow-v3-newdata-batch2-1",
+        "protocol_sha256": "188ff1e946b6dc8df712c5a5cfb01e9cf2f9e7022a7776d98ec95ae1f66fca49",
+        "summary_sha256": "50ebfbef88616f8ecd20737f45b3ef840ed19f75a5e5a3f8ceeb120e386d49db"
+      }
+    }
+  },
+  "report_metrics": [
+    "accuracy",
+    "error",
+    "balanced_accuracy",
+    "macro_f1"
+  ],
+  "reporting": {
+    "change_from_views7": "per dataset and arm, arm minus views7 in accuracy and error: fitting seeds averaged within outer fold, corrected resampled t interval over the 15 outer folds (q = test_train_ratio, 14 df); descriptive in the summary, without p values or multiplicity adjustment; the tested family is compare_motion.analyse",
+    "outputs": "motion_controls_summary.json (metrics, descriptive intervals against views7, purity, recall, displacement, motion statistics, reproduction counts and model rows) and motion_controls_summary.csv (metrics per dataset, arm and metric); the prespecified analysis is compare_motion.analyse"
+  },
+  "resource_decision": "E1 matched motion-signal controls (author decision 2026-09-14 and the binding E1 design ruling): drafted from training_diagnostics' references over all seventeen datasets; smoke and pilot at d036d11aa (2026-09-14T20:00:44Z to 2026-09-14T20:13:22Z): synthetic smoke 20:00:48Z ok (9 jobs over three synthetic references, 3 of them at two-hidden-layer selections and 6 at one-hidden-layer ones; every check passed in every job, the uninstrumented-fit check on 3 first folds, and views7 reproduced every fold and seed); training-only pilot 20:02:28Z: prepare of all 17 datasets (255 per-fold selections reconstructed from the three reference runs, each equal to its sealed record and ablation plan; selected widths [128] in 185 folds and [64, 128] in 70; a fresh load with every pin for all 17 datasets), then wine and balance_scale first outer fold with training query rows (every check passed; all-arms/views7 time ratios wine 4.87 at 2 hidden layer(s), balance_scale 2.42 at 1 hidden layer(s)), measured under machine contention; reproduction probes: iris reproduced, ionosphere reproduced, vertebra_column reproduced; projected at 16 single-thread workers: calibrated simulated makespan 2.92 h (serial 40.03 h, serial over workers 2.50 h); cap 5 h; the pilot ran while two production runs held the machine, so its absolute seconds are inflated by contention and only the all-arms/views7 ratio is carried forward; reproduction probes held on iris, ionosphere, vertebra_column; frozen after the pilot",
+  "selection_metric": "accuracy",
+  "selection_statement": "Nothing is selected. Every arm is fitted at the per-fold selection sealed by the reference ablation run; every kNN readout setting is the one the fit chose on training rows only; no outer-fold score chooses anything; the analysis is frozen with this protocol, before any outer score exists.",
+  "split_seed": 27183,
+  "status": "reviewed_and_piloted_before_any_outer_score",
+  "supervision_disclosure": "The eligibility gate that decides which examples produce votes reads the labels: an example votes when its predicted class is wrong, and, when it is right, only with probability p_correct; the vote is then accumulated on the ground-truth class's output filter. That gate, and the auxiliary output layer's own label-driven update, are PRESERVED in every arm. What is randomized is only which hidden filter receives which motion (permuted_alignment) and in which direction a hidden filter is moved (random_direction), or whether hidden filters move at all (frozen, single_layer). A full label-permutation control, in which the labels themselves are permuted, is a different experiment and is not claimed here.",
+  "test_train_ratio": 0.25,
+  "unit_of_work": "every protocol dataset x every outer fold (5 folds x 3 repeats) x every fitting seed x all six arms",
+  "wallclock_cap_hours": 5,
+  "workers": 16
+}

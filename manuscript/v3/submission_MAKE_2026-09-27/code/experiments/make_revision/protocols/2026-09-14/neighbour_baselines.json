@@ -1,0 +1,1276 @@
+{
+  "aggregation_integrity": "explicit_expected_folds_and_model_seeds; reconcile_every_planned_job_result_and_fit_log",
+  "analysis": {
+    "command": "python -m experiments.make_revision.compare_baselines analyse --run <run> --output <directory> [--runs <directory holding the registered runs>]",
+    "datasets": [
+      "iris",
+      "wine",
+      "breast_cancer",
+      "wine_quality",
+      "vehicle",
+      "segment",
+      "digits",
+      "balance_scale",
+      "mfeat_zernike",
+      "ionosphere",
+      "vertebra_column",
+      "diabetes",
+      "banknote_authentication",
+      "qsar_biodeg",
+      "steel_plates_fault",
+      "climate_model_simulation_crashes",
+      "hcv_egyptian_patients"
+    ],
+    "descriptive": {
+      "convergence_warnings": "per dataset and baseline, the number of fits raising a warning and the count of each warning category, over the outer fits and over every fit of the complete fit logs (inner and outer); nca_knn additionally reports the fits that reached max_iter",
+      "metrics_table": "per dataset and baseline, the mean outer error (the mean over outer folds of the fitting-seed-averaged error), the outer-fold SD (ddof 1) and the mean within-fold seed SD, with balanced accuracy and macro-F1 in the same form, from the verified summary.json; a non-stochastic baseline is fitted at one seed, so its seed SD is undefined by construction",
+      "rank_panel": "the rank of each baseline by mean outer error among the eleven models every dataset holds: the four baselines and the seven models of the bridge_knn registry (ArrowFlow-kNN, the five tuned classical comparators and the majority class); ties take the average rank. The three ArrowFlow controls exist only on the ten further datasets and are therefore outside the rank panel; their errors are listed beside it where they exist",
+      "status": "descriptive; no multiplicity adjustment"
+    },
+    "families": {
+      "kendall_svc": {
+        "alpha": 0.05,
+        "contrast": "arrowflow_full_knn_vs_kendall_svc",
+        "datasets": [
+          "iris",
+          "wine",
+          "breast_cancer",
+          "wine_quality",
+          "vehicle",
+          "segment",
+          "digits",
+          "balance_scale",
+          "mfeat_zernike",
+          "ionosphere",
+          "vertebra_column",
+          "diabetes",
+          "banknote_authentication",
+          "qsar_biodeg",
+          "steel_plates_fault",
+          "climate_model_simulation_crashes",
+          "hcv_egyptian_patients"
+        ],
+        "definition": "per dataset, arrowflow_full_knn minus kendall_svc accuracy",
+        "interval": "fitting seeds averaged within each outer fold; corrected resampled t over the outer folds (evaluation.paired_corrected_interval, q = test_train_ratio = 0.25, 95%, df = outer folds - 1 = 14); two-sided p",
+        "model_a": "arrowflow_full_knn",
+        "model_b": "kendall_svc",
+        "multiplicity": "Holm across the 17 datasets of this baseline (evaluation.holm_adjust), adjusted separately from the other three baselines",
+        "size": 17
+      },
+      "lda_knn": {
+        "alpha": 0.05,
+        "contrast": "arrowflow_full_knn_vs_lda_knn",
+        "datasets": [
+          "iris",
+          "wine",
+          "breast_cancer",
+          "wine_quality",
+          "vehicle",
+          "segment",
+          "digits",
+          "balance_scale",
+          "mfeat_zernike",
+          "ionosphere",
+          "vertebra_column",
+          "diabetes",
+          "banknote_authentication",
+          "qsar_biodeg",
+          "steel_plates_fault",
+          "climate_model_simulation_crashes",
+          "hcv_egyptian_patients"
+        ],
+        "definition": "per dataset, arrowflow_full_knn minus lda_knn accuracy",
+        "interval": "fitting seeds averaged within each outer fold; corrected resampled t over the outer folds (evaluation.paired_corrected_interval, q = test_train_ratio = 0.25, 95%, df = outer folds - 1 = 14); two-sided p",
+        "model_a": "arrowflow_full_knn",
+        "model_b": "lda_knn",
+        "multiplicity": "Holm across the 17 datasets of this baseline (evaluation.holm_adjust), adjusted separately from the other three baselines",
+        "size": 17
+      },
+      "nca_knn": {
+        "alpha": 0.05,
+        "contrast": "arrowflow_full_knn_vs_nca_knn",
+        "datasets": [
+          "iris",
+          "wine",
+          "breast_cancer",
+          "wine_quality",
+          "vehicle",
+          "segment",
+          "digits",
+          "balance_scale",
+          "mfeat_zernike",
+          "ionosphere",
+          "vertebra_column",
+          "diabetes",
+          "banknote_authentication",
+          "qsar_biodeg",
+          "steel_plates_fault",
+          "climate_model_simulation_crashes",
+          "hcv_egyptian_patients"
+        ],
+        "definition": "per dataset, arrowflow_full_knn minus nca_knn accuracy",
+        "interval": "fitting seeds averaged within each outer fold; corrected resampled t over the outer folds (evaluation.paired_corrected_interval, q = test_train_ratio = 0.25, 95%, df = outer folds - 1 = 14); two-sided p",
+        "model_a": "arrowflow_full_knn",
+        "model_b": "nca_knn",
+        "multiplicity": "Holm across the 17 datasets of this baseline (evaluation.holm_adjust), adjusted separately from the other three baselines",
+        "size": 17
+      },
+      "pca_knn": {
+        "alpha": 0.05,
+        "contrast": "arrowflow_full_knn_vs_pca_knn",
+        "datasets": [
+          "iris",
+          "wine",
+          "breast_cancer",
+          "wine_quality",
+          "vehicle",
+          "segment",
+          "digits",
+          "balance_scale",
+          "mfeat_zernike",
+          "ionosphere",
+          "vertebra_column",
+          "diabetes",
+          "banknote_authentication",
+          "qsar_biodeg",
+          "steel_plates_fault",
+          "climate_model_simulation_crashes",
+          "hcv_egyptian_patients"
+        ],
+        "definition": "per dataset, arrowflow_full_knn minus pca_knn accuracy",
+        "interval": "fitting seeds averaged within each outer fold; corrected resampled t over the outer folds (evaluation.paired_corrected_interval, q = test_train_ratio = 0.25, 95%, df = outer folds - 1 = 14); two-sided p",
+        "model_a": "arrowflow_full_knn",
+        "model_b": "pca_knn",
+        "multiplicity": "Holm across the 17 datasets of this baseline (evaluation.holm_adjust), adjusted separately from the other three baselines",
+        "size": 17
+      }
+    },
+    "interpretation": {
+      "if_matched": "if a supervised neighbourhood baseline (lda_knn, nca_knn or kendall_svc) matches or beats ArrowFlow on most datasets, the paper says so plainly in the results and in the discussion, and the contribution is stated as a construction within permutation space rather than an accuracy argument",
+      "if_not_matched": "if no supervised neighbourhood baseline matches or beats ArrowFlow on most datasets, the paper reports the per-dataset comparison and the Holm-adjusted family in full, and still states the contribution as a construction within permutation space; the baselines bound the alternative explanation, they do not establish an accuracy claim",
+      "rule": "a baseline matches or beats ArrowFlow-kNN on a dataset when its mean outer error is at most arrowflow_full_knn's mean outer error there; it does so on most datasets when that holds on at least 9 of the 17",
+      "status": "fixed in advance and recorded before any outer score exists",
+      "supervised_baselines": [
+        "lda_knn",
+        "nca_knn",
+        "kendall_svc"
+      ]
+    },
+    "metric": "accuracy",
+    "models": [
+      "lda_knn",
+      "pca_knn",
+      "nca_knn",
+      "kendall_svc"
+    ],
+    "notes": {
+      "lmnn": "LMNN is out of scope: metric_learn is not installed in this environment and no package may be added for this family, so the supervised metric learner is NCA alone",
+      "polynomial": "the three sklearn pipelines read the imputed and scaled features, with no polynomial expansion; only kendall_svc reads ArrowFlow's own encoder, which expands and projects",
+      "unpaired_nothing": "every contrast is paired: the same rows, the same outer folds and the same fitting seeds as the registered ArrowFlow-kNN runs",
+      "what_is_not_tested": "nothing here isolates the ranking-filter update from the encoder: the alternative explanation is bounded by comparison, not by decomposition, and the component ablation and the untrained and input controls of the registered runs remain the decomposition",
+      "what_is_tested": "whether established supervised neighbourhood learning on the same rows (lda_knn, nca_knn) and a permutation kernel on the same encoded rankings (kendall_svc) reach the accuracy of the deployed ArrowFlow-kNN readout"
+    },
+    "primary_contrasts": [
+      "arrowflow_full_knn_vs_lda_knn",
+      "arrowflow_full_knn_vs_pca_knn",
+      "arrowflow_full_knn_vs_nca_knn",
+      "arrowflow_full_knn_vs_kendall_svc"
+    ],
+    "primary_family_size": 17,
+    "reference_model": "arrowflow_full_knn",
+    "reference_not_refitted": "arrowflow_full_knn is not refitted for this family: its outer predictions are the registered runs' (bridge_knn for the seven benchmark datasets, the two newdata batches for the ten further datasets), paired fold by fold. The pairing is verified the way compare_runs.check_training_pairing verifies a control run against the knn run (identical panel, dataset and splits hashes, nested design and fitting seeds, and byte-identical sealed sources) and the analysis refuses on any mismatch.",
+    "requires_run_complete": true,
+    "status": "prespecified before any outer score of these baselines exists; computed only by compare_baselines analyse, which refuses (exit 2, nothing written) until the run is complete, then re-verifies the run and every referenced ArrowFlow run with compare_runs.load_run and compare_runs.verify_run before any score is read"
+  },
+  "augmentation": {
+    "max_swaps": 2,
+    "n_augmentations": 1,
+    "rule": "adaptive_from_training_partition: n_features<=30 and n_train>=150"
+  },
+  "candidate_budget": 24,
+  "candidate_seed": 41071,
+  "candidate_tie_rule": "lowest_canonical_config_id",
+  "confidence": 0.95,
+  "datasets": [
+    "iris",
+    "wine",
+    "breast_cancer",
+    "wine_quality",
+    "vehicle",
+    "segment",
+    "digits",
+    "balance_scale",
+    "mfeat_zernike",
+    "ionosphere",
+    "vertebra_column",
+    "diabetes",
+    "banknote_authentication",
+    "qsar_biodeg",
+    "steel_plates_fault",
+    "climate_model_simulation_crashes",
+    "hcv_egyptian_patients"
+  ],
+  "design_source": {
+    "added": "reference, kendall_kernel, workers, projection",
+    "changed": "protocol_id, production_family, registry, datasets, panel, models, model_order, primary_contrasts, primary_family_size, multiplicity, analysis, reference, kendall_kernel, selection_ruling, wallclock_cap_hours, frozen, status, resource_decision",
+    "family": "neighbour_baselines",
+    "identical_to_template": "aggregation_integrity, augmentation, candidate_budget, candidate_seed, candidate_tie_rule, confidence, device, failure_policy, fit_seeds, freeze_requirement, full_method, historical_results, inner_folds, internal_validation_ratio, numeric_threads_per_worker, outer_folds, outer_repeats, paired_interval, parallelism, report_metrics, selection_metric, split_seed, stochastic_finalists, test_train_ratio",
+    "removed_from_template": {
+      "batch, batches, batch_projection": "one run over all seventeen datasets",
+      "frozen_at_utc": "set at the freeze",
+      "model_template_sha256, secondary_contrasts, secondary_family_size, production panel fields": "this family declares its own models, panel and one family per baseline"
+    },
+    "template": "protocols/2026-09-12/newdata_batch1.json (sha256 in source_template_sha256)"
+  },
+  "device": "cpu",
+  "failure_policy": "log_all_failures; incomplete_candidates_ineligible; failed_outer_fits_and_terminal_selection_failures_retained; no_adaptive_stopping",
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "freeze_requirement": "complete_model_registry_and_candidates_reviewed; attainable_training_only_pilot; leakage_checks_pass; freeze_before_outer_scores",
+  "frozen": true,
+  "frozen_at_utc": "2026-09-14T20:08:03.677002+00:00",
+  "full_method": {
+    "adaptive_encoding_defaults": {
+      "n_features<=10": {
+        "augment": true,
+        "degree": 3,
+        "embed_dim": 16
+      },
+      "n_features<=30": {
+        "augment": true,
+        "degree": 2,
+        "embed_dim": 32
+      },
+      "n_features>30": {
+        "augment": false,
+        "degree": 1,
+        "embed_dim": 64
+      }
+    },
+    "aggregation": "majority",
+    "candidate_grid": {
+      "degree_offset": [
+        0,
+        -1
+      ],
+      "embed_scale": [
+        1,
+        2
+      ],
+      "learning_rate": [
+        0.1,
+        0.2
+      ],
+      "widths": [
+        [
+          128
+        ],
+        [
+          64,
+          128
+        ]
+      ]
+    },
+    "checkpoint": "validation_ratio_0.1_inside_every_fit",
+    "fixed": {
+      "batch_size": 32,
+      "iterations": 200,
+      "validation_ratio": 0.1
+    },
+    "model_id": "arrowflow_full",
+    "n_views": 7,
+    "resolution": "embed_dim=clip(round(base*embed_scale),8,128); degree=max(1,base+degree_offset) lowered while comb(n_features+degree,degree)>10000; augment=base_augment and n_train>=150; resolved at fit time from the training partition only",
+    "view_strategy_cycle": [
+      "target_aware",
+      "random",
+      "calibrated"
+    ]
+  },
+  "historical_results": "exploratory_only",
+  "inner_folds": 3,
+  "internal_validation_ratio": 0.1,
+  "kendall_kernel": {
+    "cap": {
+      "max_feature_entries": 50000000,
+      "max_training_rows": 3000,
+      "rule": "kendall_svc refuses a training partition with more than max_training_rows rows, or whose per-view concordance feature matrix (training rows x V(V-1)/2 for the resolved vocabulary V) holds more than max_feature_entries entries; the refusal is recorded in this protocol and in the fit log, and the kernel is never computed on a subsample of the training partition"
+    },
+    "capacity": {
+      "balance_scale": {
+        "feature_bytes": 992000,
+        "feature_entries": 248000,
+        "kernel_bytes": 2000000,
+        "kernel_entries": 250000,
+        "pairs": 496,
+        "training_rows": 500,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 32,
+        "within_cap": true
+      },
+      "banknote_authentication": {
+        "feature_bytes": 2178432,
+        "feature_entries": 544608,
+        "kernel_bytes": 9644832,
+        "kernel_entries": 1205604,
+        "pairs": 496,
+        "training_rows": 1098,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 32,
+        "within_cap": true
+      },
+      "breast_cancer": {
+        "feature_bytes": 3677184,
+        "feature_entries": 919296,
+        "kernel_bytes": 1663488,
+        "kernel_entries": 207936,
+        "pairs": 2016,
+        "training_rows": 456,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 64,
+        "within_cap": true
+      },
+      "climate_model_simulation_crashes": {
+        "feature_bytes": 3483648,
+        "feature_entries": 870912,
+        "kernel_bytes": 1492992,
+        "kernel_entries": 186624,
+        "pairs": 2016,
+        "training_rows": 432,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 64,
+        "within_cap": true
+      },
+      "diabetes": {
+        "feature_bytes": 1220160,
+        "feature_entries": 305040,
+        "kernel_bytes": 3025800,
+        "kernel_entries": 378225,
+        "pairs": 496,
+        "training_rows": 615,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 32,
+        "within_cap": true
+      },
+      "digits": {
+        "feature_bytes": 46752256,
+        "feature_entries": 11688064,
+        "kernel_bytes": 16542752,
+        "kernel_entries": 2067844,
+        "pairs": 8128,
+        "training_rows": 1438,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 128,
+        "within_cap": true
+      },
+      "hcv_egyptian_patients": {
+        "feature_bytes": 8934912,
+        "feature_entries": 2233728,
+        "kernel_bytes": 9821312,
+        "kernel_entries": 1227664,
+        "pairs": 2016,
+        "training_rows": 1108,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 64,
+        "within_cap": true
+      },
+      "ionosphere": {
+        "feature_bytes": 9135872,
+        "feature_entries": 2283968,
+        "kernel_bytes": 631688,
+        "kernel_entries": 78961,
+        "pairs": 8128,
+        "training_rows": 281,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 128,
+        "within_cap": true
+      },
+      "iris": {
+        "feature_bytes": 238080,
+        "feature_entries": 59520,
+        "kernel_bytes": 115200,
+        "kernel_entries": 14400,
+        "pairs": 496,
+        "training_rows": 120,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 32,
+        "within_cap": true
+      },
+      "mfeat_zernike": {
+        "feature_bytes": 52019200,
+        "feature_entries": 13004800,
+        "kernel_bytes": 20480000,
+        "kernel_entries": 2560000,
+        "pairs": 8128,
+        "training_rows": 1600,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 128,
+        "within_cap": true
+      },
+      "qsar_biodeg": {
+        "feature_bytes": 27440128,
+        "feature_entries": 6860032,
+        "kernel_bytes": 5698688,
+        "kernel_entries": 712336,
+        "pairs": 8128,
+        "training_rows": 844,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 128,
+        "within_cap": true
+      },
+      "segment": {
+        "feature_bytes": 14902272,
+        "feature_entries": 3725568,
+        "kernel_bytes": 27320832,
+        "kernel_entries": 3415104,
+        "pairs": 2016,
+        "training_rows": 1848,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 64,
+        "within_cap": true
+      },
+      "steel_plates_fault": {
+        "feature_bytes": 12523392,
+        "feature_entries": 3130848,
+        "kernel_bytes": 19294472,
+        "kernel_entries": 2411809,
+        "pairs": 2016,
+        "training_rows": 1553,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 64,
+        "within_cap": true
+      },
+      "vehicle": {
+        "feature_bytes": 5459328,
+        "feature_entries": 1364832,
+        "kernel_bytes": 3666632,
+        "kernel_entries": 458329,
+        "pairs": 2016,
+        "training_rows": 677,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 64,
+        "within_cap": true
+      },
+      "vertebra_column": {
+        "feature_bytes": 492032,
+        "feature_entries": 123008,
+        "kernel_bytes": 492032,
+        "kernel_entries": 61504,
+        "pairs": 496,
+        "training_rows": 248,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 32,
+        "within_cap": true
+      },
+      "wine": {
+        "feature_bytes": 1153152,
+        "feature_entries": 288288,
+        "kernel_bytes": 163592,
+        "kernel_entries": 20449,
+        "pairs": 2016,
+        "training_rows": 143,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 64,
+        "within_cap": true
+      },
+      "wine_quality": {
+        "feature_bytes": 10321920,
+        "feature_entries": 2580480,
+        "kernel_bytes": 13107200,
+        "kernel_entries": 1638400,
+        "pairs": 2016,
+        "training_rows": 1280,
+        "training_rows_basis": "n - n // outer_folds (an upper bound on any outer training partition of the declared stratified design)",
+        "vocabulary": 64,
+        "within_cap": true
+      }
+    },
+    "definition": "K(s, s\u2032) = (concordant - discordant) / (V choose 2) over the (V choose 2) unordered item pairs of two encoded rankings of the same V-item vocabulary: a pair {i, j} is concordant when both rankings place the same item first and discordant otherwise. The encoded rankings are total orders, so concordant + discordant = (V choose 2) and K = 1 - 2 * Kendall-tau-distance / (V choose 2), K(s, s) = 1 and K takes values in [-1, 1]; K is exactly Kendall\u2019s tau between the two rankings. This is the Kendall kernel of Jiao and Vert (2015); it is positive semi-definite because K(s, s\u2032) = <phi(s), phi(s\u2032)> for the explicit feature map phi(s)_{i<j} = sign(position_j - position_i) / sqrt(V choose 2). neighbour_baselines.kendall_features builds that +-1 feature matrix from arrowflow.ranking.inverse_positions and kendall_kernel is the inner product: the partial sums are integers of modulus at most (V choose 2) < 2**24, so the float32 matrix product is exact, and the division by (V choose 2) is float64.",
+    "implementation": "experiments.make_revision.neighbour_baselines:kendall_features and kendall_kernel; no dependency beyond numpy, and the implementation is tested against a brute-force pairwise concordance count over every permutation of small vocabularies",
+    "reference": "Jiao and Vert (2015), the Kendall kernel",
+    "refusal_effect": "a panel holding a refused dataset is not run: build_registry raises, so the run cannot start and the kernel is never computed on a subsample",
+    "refused": []
+  },
+  "model_order": [
+    "lda_knn",
+    "pca_knn",
+    "nca_knn",
+    "kendall_svc"
+  ],
+  "models": {
+    "kendall_svc": {
+      "candidate_budget": 24,
+      "candidate_source": "input_footrule_knn's four candidates (knn_controls.control_candidates) crossed with the C grid of the svc_rbf comparator",
+      "candidates": 16,
+      "estimator": "experiments.make_revision.neighbour_baselines:MultiViewKendallSVC via AdaptiveKendallSVC: the seven encoders of input_footrule_knn with sklearn SVC(kernel=\"precomputed\") on the Kendall kernel of each view's encoded ranking; majority vote",
+      "grid": {
+        "C": [
+          0.1,
+          1,
+          10,
+          100
+        ],
+        "degree_offset": [
+          0,
+          -1
+        ],
+        "embed_scale": [
+          1,
+          2
+        ]
+      },
+      "kernel": "K(s, s\u2032) = (concordant - discordant) / (V choose 2) over the (V choose 2) unordered item pairs of two encoded rankings of the same V-item vocabulary: a pair {i, j} is concordant when both rankings place the same item first and discordant otherwise. The encoded rankings are total orders, so concordant + discordant = (V choose 2) and K = 1 - 2 * Kendall-tau-distance / (V choose 2), K(s, s) = 1 and K takes values in [-1, 1]; K is exactly Kendall\u2019s tau between the two rankings. This is the Kendall kernel of Jiao and Vert (2015); it is positive semi-definite because K(s, s\u2032) = <phi(s), phi(s\u2032)> for the explicit feature map phi(s)_{i<j} = sign(position_j - position_i) / sqrt(V choose 2). neighbour_baselines.kendall_features builds that +-1 feature matrix from arrowflow.ranking.inverse_positions and kendall_kernel is the inner product: the partial sums are integers of modulus at most (V choose 2) < 2**24, so the float32 matrix product is exact, and the division by (V choose 2) is float64.",
+      "preprocessing": "each view's OrdinalEncoder fits its own imputation, polynomial expansion, scaling and projection on the training rows of the fit only",
+      "question": "whether a permutation kernel over the same encoded rankings, with no ranking-filter update at all, reaches the accuracy of the trained readout",
+      "reference": "Jiao and Vert (2015), the Kendall kernel",
+      "representation": "ArrowFlow's own encoder at the encoder settings of the input-kNN control, so the baseline reads exactly the representation ArrowFlow's ranking layers receive; embed_dim and degree are resolved from the training partition by bridge.resolve and the resolved augmentation is dropped, as in knn_controls.AdaptiveKNNControl",
+      "selection": "the harness inner folds of the outer training partition (evaluation.select_model), mean accuracy, ties to the lowest canonical config_id",
+      "stochastic": true,
+      "svc_max_iter": 1000000,
+      "timing": "fit and prediction seconds of every fit, as the registered comparators record them (evaluation._fit_predict)",
+      "tuned": "the encoder setting (embed_scale and degree_offset) and C"
+    },
+    "lda_knn": {
+      "candidate_budget": 24,
+      "candidates": 24,
+      "component_bound": "min(classes - 1, features) of the training partition",
+      "component_rule": "component_scale is resolved inside every fit as int(clip(round(component_scale * max_components), 1, max_components)), exactly as bridge.resolve derives an embedding width; on a dataset whose max_components is 1 (a two-class LDA) both scales resolve to the same single component",
+      "estimator": "sklearn LinearDiscriminantAnalysis(solver=\"svd\") as a supervised dimensionality reduction, then sklearn KNeighborsClassifier",
+      "grid": {
+        "component_scale": [
+          0.5,
+          1.0
+        ],
+        "n_neighbors": [
+          1,
+          3,
+          5,
+          11,
+          21
+        ],
+        "p": [
+          1,
+          2
+        ],
+        "weights": [
+          "uniform",
+          "distance"
+        ]
+      },
+      "pipeline": "experiments.make_revision.neighbour_baselines:BaselinePipeline (comparisons.TimedPipeline, which records encoding, classifier fit and prediction seconds and every warning raised in the fit)",
+      "preprocessing": "NumericImputer (training column means) then StandardScaler, both fitted on the training rows of the fit only, as the conventional comparators are",
+      "question": "whether the label-aware projection alone, with a neighbour rule on top, explains the accuracy of the deployed readout",
+      "selection": "the harness inner folds of the outer training partition (evaluation.select_model), mean accuracy, ties to the lowest canonical config_id",
+      "stochastic": false,
+      "timing": "fit and prediction seconds of every fit, as the registered comparators record them (evaluation._fit_predict)",
+      "tuned": "the component count and the neighbour count, the weighting and the Minkowski exponent of the numeric_knn comparator (comparisons.CONVENTIONAL_GRIDS)"
+    },
+    "nca_knn": {
+      "candidate_budget": 24,
+      "candidates": 20,
+      "component_bound": "the features",
+      "component_rule": "component_scale is resolved inside every fit as int(clip(round(component_scale * max_components), 1, max_components)), exactly as bridge.resolve derives an embedding width; on a dataset whose max_components is 1 (a two-class LDA) both scales resolve to the same single component",
+      "convergence": "every warning raised inside a fit is recorded in that fit's record (fit_warnings) and the resolved projection records n_iter and reached_max_iter; sklearn raises its own ConvergenceWarning for a truncated NCA only under verbose, which a spawned worker must not set, so ScaledNCA raises it from n_iter_ instead; the analysis reports both counts, which the review asked for and the registered MLP comparator does not carry",
+      "estimator": "sklearn NeighborhoodComponentsAnalysis(init=\"auto\", max_iter=50, random_state=the fitting seed), then sklearn KNeighborsClassifier (Minkowski exponent 2, the distance NCA optimizes)",
+      "grid": {
+        "component_scale": [
+          0.5,
+          1.0
+        ],
+        "n_neighbors": [
+          1,
+          3,
+          5,
+          11,
+          21
+        ],
+        "weights": [
+          "uniform",
+          "distance"
+        ]
+      },
+      "max_iter": 50,
+      "pipeline": "experiments.make_revision.neighbour_baselines:BaselinePipeline (comparisons.TimedPipeline, which records encoding, classifier fit and prediction seconds and every warning raised in the fit)",
+      "preprocessing": "NumericImputer (training column means) then StandardScaler, both fitted on the training rows of the fit only, as the conventional comparators are",
+      "question": "whether established supervised neighbourhood learning, the method ArrowFlow's deployed readout is closest to, does as well or better",
+      "selection": "the harness inner folds of the outer training partition (evaluation.select_model), mean accuracy, ties to the lowest canonical config_id",
+      "stochastic": true,
+      "timing": "fit and prediction seconds of every fit, as the registered comparators record them (evaluation._fit_predict)",
+      "tuned": "the component count, the neighbour count and the weighting"
+    },
+    "pca_knn": {
+      "candidate_budget": 24,
+      "candidates": 24,
+      "component_bound": "min(training rows, features)",
+      "component_rule": "component_scale is resolved inside every fit as int(clip(round(component_scale * max_components), 1, max_components)), exactly as bridge.resolve derives an embedding width; on a dataset whose max_components is 1 (a two-class LDA) both scales resolve to the same single component",
+      "determinism": "svd_solver=\"full\" is exact, so no random state enters the fit",
+      "estimator": "sklearn PCA(svd_solver=\"full\", whiten=False) as a label-free dimensionality reduction, then sklearn KNeighborsClassifier",
+      "grid": {
+        "component_scale": [
+          0.5,
+          1.0
+        ],
+        "n_neighbors": [
+          1,
+          3,
+          5,
+          11,
+          21
+        ],
+        "p": [
+          1,
+          2
+        ],
+        "weights": [
+          "uniform",
+          "distance"
+        ]
+      },
+      "pipeline": "experiments.make_revision.neighbour_baselines:BaselinePipeline (comparisons.TimedPipeline, which records encoding, classifier fit and prediction seconds and every warning raised in the fit)",
+      "preprocessing": "NumericImputer (training column means) then StandardScaler, both fitted on the training rows of the fit only, as the conventional comparators are",
+      "question": "the label-free counterpart of lda_knn, so the supervised part of the encoder is separated from the projection itself; at component_scale 1 the projection is an orthogonal rotation, which leaves the Euclidean neighbour order unchanged",
+      "selection": "the harness inner folds of the outer training partition (evaluation.select_model), mean accuracy, ties to the lowest canonical config_id",
+      "stochastic": false,
+      "timing": "fit and prediction seconds of every fit, as the registered comparators record them (evaluation._fit_predict)",
+      "tuned": "the component count and the neighbour count, the weighting and the Minkowski exponent of the numeric_knn comparator (comparisons.CONVENTIONAL_GRIDS)"
+    }
+  },
+  "multiplicity": "Holm_across_the_17_datasets_within_each_baseline; the four baseline families are adjusted separately",
+  "numeric_threads_per_worker": 1,
+  "outer_folds": 5,
+  "outer_repeats": 3,
+  "paired_interval": "seed_average_within_fold_then_corrected_resampled_t",
+  "panel": [
+    {
+      "dataset_hash": "33e362815d948773b41930da32bab6bc926bc3e27695071215897ada704a1d71",
+      "loader": "experiments.make_revision.run_revision:load_dataset",
+      "n_classes": 3,
+      "name": "iris",
+      "panel": "benchmark",
+      "reference": "knn",
+      "shape": [
+        150,
+        4
+      ],
+      "splits_hash": "be679133de1d7551"
+    },
+    {
+      "dataset_hash": "25af908ff72aab7f44f1b69f12d1ae4231a1be2be49aaf38f1fca7736dd83adb",
+      "loader": "experiments.make_revision.run_revision:load_dataset",
+      "n_classes": 3,
+      "name": "wine",
+      "panel": "benchmark",
+      "reference": "knn",
+      "shape": [
+        178,
+        13
+      ],
+      "splits_hash": "8b6b40df532ebf02"
+    },
+    {
+      "dataset_hash": "cc52cc8a9e05f5e3aceb9a5149af91a01ec49f05a392e9ac68da8d87d494c1fa",
+      "loader": "experiments.make_revision.run_revision:load_dataset",
+      "n_classes": 2,
+      "name": "breast_cancer",
+      "panel": "benchmark",
+      "reference": "knn",
+      "shape": [
+        569,
+        30
+      ],
+      "splits_hash": "93d4c06be906e07b"
+    },
+    {
+      "dataset_hash": "ce355ca6e4b5ba0392eba133945437af61776a27eea18ff0e0c3055f7b1c0f66",
+      "loader": "experiments.make_revision.run_revision:load_dataset",
+      "n_classes": 3,
+      "name": "wine_quality",
+      "panel": "benchmark",
+      "reference": "knn",
+      "shape": [
+        1599,
+        11
+      ],
+      "splits_hash": "ce17432feae50e58"
+    },
+    {
+      "dataset_hash": "ba259412e447e5b657edf1313b1b8b6eebf214a72e24c6619aaf21371dd93886",
+      "loader": "experiments.make_revision.run_revision:load_dataset",
+      "n_classes": 4,
+      "name": "vehicle",
+      "panel": "benchmark",
+      "reference": "knn",
+      "shape": [
+        846,
+        18
+      ],
+      "splits_hash": "9f0639a14f5ee800"
+    },
+    {
+      "dataset_hash": "a2a1dbbbaf3c2983c8fd53be626118de95e52a8a0fb2dcd992f2a0de1544ed24",
+      "loader": "experiments.make_revision.run_revision:load_dataset",
+      "n_classes": 7,
+      "name": "segment",
+      "panel": "benchmark",
+      "reference": "knn",
+      "shape": [
+        2310,
+        19
+      ],
+      "splits_hash": "48209cb10a3f57f2"
+    },
+    {
+      "dataset_hash": "40521dcb7380cd2e327e0ed9e208fc5a08c78aa74eaf35d2570838c24d2c419b",
+      "loader": "experiments.make_revision.run_revision:load_dataset",
+      "n_classes": 10,
+      "name": "digits",
+      "panel": "benchmark",
+      "reference": "knn",
+      "shape": [
+        1797,
+        64
+      ],
+      "splits_hash": "04a91fdff1945f71"
+    },
+    {
+      "dataset_hash": "498096feb1f6776ec20ae7b0a57cce39f12ad06c0afb1f62243c825423417e5f",
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "n_classes": 3,
+      "name": "balance_scale",
+      "panel": "further",
+      "reference": "batch1",
+      "shape": [
+        625,
+        4
+      ],
+      "splits_hash": "989fbe54fa5292b3"
+    },
+    {
+      "dataset_hash": "5160d61c6e084dec230157fd910afb97e8d1fd0c7f4611f025040e2f0cd472d1",
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "n_classes": 10,
+      "name": "mfeat_zernike",
+      "panel": "further",
+      "reference": "batch2",
+      "shape": [
+        2000,
+        47
+      ],
+      "splits_hash": "3d403360286afa26"
+    },
+    {
+      "dataset_hash": "dda052743b36e2698a87124a36c26b9c2c9ea58bcce6fa9fda1d3e5def492be5",
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "n_classes": 2,
+      "name": "ionosphere",
+      "panel": "further",
+      "reference": "batch1",
+      "shape": [
+        351,
+        34
+      ],
+      "splits_hash": "231ab272ec6a79b5"
+    },
+    {
+      "dataset_hash": "3770457475ec7d53e2368490358f146fdea80804b34305b33cd0a795e153bb4a",
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "n_classes": 3,
+      "name": "vertebra_column",
+      "panel": "further",
+      "reference": "batch2",
+      "shape": [
+        310,
+        6
+      ],
+      "splits_hash": "d1c530e96235c8c2"
+    },
+    {
+      "dataset_hash": "26f50df6731663a5ad1f8c2a7181668f7e727637323927012c079a3f7b289a96",
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "n_classes": 2,
+      "name": "diabetes",
+      "panel": "further",
+      "reference": "batch1",
+      "shape": [
+        768,
+        8
+      ],
+      "splits_hash": "c791ebf248362e45"
+    },
+    {
+      "dataset_hash": "50f2701a1e1215b7ba70de3b0bb2adaaf03ac37aaec76a8f76252622ee389f7b",
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "n_classes": 2,
+      "name": "banknote_authentication",
+      "panel": "further",
+      "reference": "batch1",
+      "shape": [
+        1372,
+        4
+      ],
+      "splits_hash": "7a0628abd290e42c"
+    },
+    {
+      "dataset_hash": "d98d99ce1cb59785a3376398c16d9db78635f77cb6f707856d24dcc07db06c9f",
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "n_classes": 2,
+      "name": "qsar_biodeg",
+      "panel": "further",
+      "reference": "batch1",
+      "shape": [
+        1055,
+        41
+      ],
+      "splits_hash": "9c9cd4a11834c63b"
+    },
+    {
+      "dataset_hash": "f4408a76aa4aef6665368c99de713b9f7ba84bfbc0af24d2a458acd0e09ea924",
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "n_classes": 7,
+      "name": "steel_plates_fault",
+      "panel": "further",
+      "reference": "batch2",
+      "shape": [
+        1941,
+        27
+      ],
+      "splits_hash": "56e1c8a731816b1e"
+    },
+    {
+      "dataset_hash": "6c76b66184fc0e45b09e2b3a27fa5d94a94b77a934811eaa805ac295b56509bd",
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "n_classes": 2,
+      "name": "climate_model_simulation_crashes",
+      "panel": "further",
+      "reference": "batch2",
+      "shape": [
+        540,
+        18
+      ],
+      "splits_hash": "9c9deb85963bf183"
+    },
+    {
+      "dataset_hash": "284048565b76499ea5a35ce555bc937b165e1be197d9f520bfe64ddc9d4ebfd5",
+      "loader": "experiments.make_revision.newdata:load_newdata",
+      "n_classes": 4,
+      "name": "hcv_egyptian_patients",
+      "panel": "further",
+      "reference": "batch2",
+      "shape": [
+        1385,
+        28
+      ],
+      "splits_hash": "c6d05b187035a507"
+    }
+  ],
+  "parallelism": "spawned_processes_by_outer_fold_and_model",
+  "primary_contrasts": [
+    "arrowflow_full_knn_vs_lda_knn",
+    "arrowflow_full_knn_vs_pca_knn",
+    "arrowflow_full_knn_vs_nca_knn",
+    "arrowflow_full_knn_vs_kendall_svc"
+  ],
+  "primary_family_size": 17,
+  "production_family": "neighbour_baselines",
+  "projection": {
+    "assumptions": "the calibration factors were measured under the 16 single-thread workers of the bridge_knn and knn_training production runs and are applied here at the same worker count; these four models have no completed production run, so the factor comes from the closest models that do; the pilot itself ran while other production runs held the machine, so its seconds are already inflated by contention and the projection is conservative in that direction",
+    "calibration_factors": {
+      "classical": {
+        "max": 2.170359002383683,
+        "pooled": 1.1800496360010269
+      },
+      "gradient_boosting": {
+        "max": 1.7674768449818572,
+        "pooled": 1.3853768079997215
+      },
+      "input_footrule_knn": {
+        "max": 1.6166438508663716,
+        "pooled": 0.61432546173492
+      },
+      "mlp": {
+        "max": 2.170359002383683,
+        "pooled": 2.0502793274621864
+      },
+      "numeric_knn": {
+        "max": 0.8714577086482292,
+        "pooled": 0.49706085412182144
+      },
+      "random_forest": {
+        "max": 1.6204396046527907,
+        "pooled": 1.2976839910265852
+      },
+      "svc_rbf": {
+        "max": 0.6853567355615126,
+        "pooled": 0.6698471993948194
+      }
+    },
+    "calibration_source": {
+      "kendall_svc": "input_footrule_knn",
+      "lda_knn": "classical",
+      "nca_knn": "classical",
+      "pca_knn": "classical"
+    },
+    "cap_hours": 6,
+    "decision": "calibrated central simulated makespan at 16 workers of the run jobs plus 0.25 h of stage overhead (prepare, reporting and the analysis)",
+    "decision_hours": 2.8928992571307854,
+    "fits_per_outer": {
+      "kendall_svc": 69,
+      "lda_knn": 73,
+      "nca_knn": 81,
+      "pca_knn": 73
+    },
+    "harness_max_based_run_hours": 20.581763735884884,
+    "per_dataset": {
+      "balance_scale": {
+        "central_serial_hours": 0.12395129404406557,
+        "upper_serial_hours": 0.2306835381321165
+      },
+      "banknote_authentication": {
+        "central_serial_hours": 0.31046058682763883,
+        "upper_serial_hours": 0.6543511325678361
+      },
+      "breast_cancer": {
+        "central_serial_hours": 0.20283905607830155,
+        "upper_serial_hours": 0.45195500712684167
+      },
+      "climate_model_simulation_crashes": {
+        "central_serial_hours": 0.19352799559040926,
+        "upper_serial_hours": 0.44280969393092817
+      },
+      "diabetes": {
+        "central_serial_hours": 0.30773855485169044,
+        "upper_serial_hours": 0.5890969651197995
+      },
+      "digits": {
+        "central_serial_hours": 2.273011040112927,
+        "upper_serial_hours": 5.5829213026277325
+      },
+      "hcv_egyptian_patients": {
+        "central_serial_hours": 2.581386777272719,
+        "upper_serial_hours": 5.1579322459029475
+      },
+      "ionosphere": {
+        "central_serial_hours": 0.16788562418533517,
+        "upper_serial_hours": 0.4038344502285349
+      },
+      "iris": {
+        "central_serial_hours": 0.036063755353910695,
+        "upper_serial_hours": 0.057245667315608935
+      },
+      "mfeat_zernike": {
+        "central_serial_hours": 5.100029980880075,
+        "upper_serial_hours": 11.648264616650989
+      },
+      "qsar_biodeg": {
+        "central_serial_hours": 2.3847870705729752,
+        "upper_serial_hours": 5.211491818355357
+      },
+      "segment": {
+        "central_serial_hours": 10.705443074468313,
+        "upper_serial_hours": 20.43434933906989
+      },
+      "steel_plates_fault": {
+        "central_serial_hours": 10.119048735701274,
+        "upper_serial_hours": 19.35530797584228
+      },
+      "vehicle": {
+        "central_serial_hours": 1.1793649244681481,
+        "upper_serial_hours": 2.316305450959497
+      },
+      "vertebra_column": {
+        "central_serial_hours": 0.07621501134567428,
+        "upper_serial_hours": 0.13854385141444098
+      },
+      "wine": {
+        "central_serial_hours": 0.04992081286507019,
+        "upper_serial_hours": 0.09564236208721572
+      },
+      "wine_quality": {
+        "central_serial_hours": 5.208243173260966,
+        "upper_serial_hours": 10.095393592469007
+      }
+    },
+    "projection_sha256": "5ee6c6eef33a80fb1c52d40f13becac10681faed2e1e09544e358e30cc9c8638",
+    "run": {
+      "central": {
+        "serial_hours": 41.019917467879495,
+        "serial_over_workers_hours": 2.5637448417424684,
+        "simulated_makespan_hours": 2.6428992571307854
+      },
+      "upper": {
+        "serial_hours": 82.86612900980101,
+        "serial_over_workers_hours": 5.179133063112563,
+        "simulated_makespan_hours": 5.31566426333143
+      }
+    },
+    "stage_overhead_hours": 0.25,
+    "stages": {
+      "code_revision": "ba16863c859195ebf6c1783374c70b94abfa057f",
+      "draft": {
+        "datasets": 17,
+        "frozen": false,
+        "models": [
+          "lda_knn",
+          "pca_knn",
+          "nca_knn",
+          "kendall_svc"
+        ],
+        "path": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/baselines-stages/draft.json",
+        "sha256": "0e68b2123d6ff6d42851c87133ecb6225bdd4c2329fa73860a65914d8a30e688"
+      },
+      "ended_utc": "2026-09-14T20:07:15Z",
+      "family": "neighbour_baselines",
+      "neighbour_baselines_sha256": "370aaeff7b675c84490cb44f17d5d5827b8f3ebbc0424d7479dd81cf2daabfd2",
+      "pairing_check_before_any_fit": {
+        "datasets": 17,
+        "fit_seeds": [
+          8129,
+          19391,
+          39019
+        ],
+        "outer_folds": 15,
+        "references": {
+          "batch1": "arrowflow-v3-newdata-batch1-1",
+          "batch2": "arrowflow-v3-newdata-batch2-1",
+          "knn": "arrowflow-v3-bridge-knn-1"
+        },
+        "shared_sources_identical": {
+          "batch1": 16,
+          "batch2": 16,
+          "knn": 13
+        }
+      },
+      "pilot": {
+        "contention": "the pilot ran as a single process while two other production runs held 32 workers (load average about 31 on 32 cores), so its seconds are inflated by contention and the calibrated projection is conservative in that direction",
+        "datasets": [
+          "iris",
+          "wine",
+          "breast_cancer",
+          "wine_quality",
+          "vehicle",
+          "segment",
+          "digits",
+          "balance_scale",
+          "mfeat_zernike",
+          "ionosphere",
+          "vertebra_column",
+          "diabetes",
+          "banknote_authentication",
+          "qsar_biodeg",
+          "steel_plates_fault",
+          "climate_model_simulation_crashes",
+          "hcv_egyptian_patients"
+        ],
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/baselines-stages/pilot",
+        "failed": 0,
+        "fit_warnings": {
+          "nca_knn:ConvergenceWarning": 6
+        },
+        "fits": 204,
+        "fits_reaching_nca_max_iter": 6,
+        "mean_fit_seconds_by_model": {
+          "kendall_svc": 3.219577790704195,
+          "lda_knn": 0.01480082313669389,
+          "nca_knn": 4.563207750940267,
+          "pca_knn": 0.013779813744465583
+        },
+        "slowest_fit_seconds_by_model": {
+          "kendall_svc": 16.92345803999342,
+          "lda_knn": 0.0690779639990069,
+          "nca_knn": 42.88426791099482,
+          "pca_knn": 0.03657840300002135
+        }
+      },
+      "prepare": {
+        "datasets": [
+          "iris",
+          "wine",
+          "breast_cancer",
+          "wine_quality",
+          "vehicle",
+          "segment",
+          "digits",
+          "balance_scale",
+          "mfeat_zernike",
+          "ionosphere",
+          "vertebra_column",
+          "diabetes",
+          "banknote_authentication",
+          "qsar_biodeg",
+          "steel_plates_fault",
+          "climate_model_simulation_crashes",
+          "hcv_egyptian_patients"
+        ],
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/baselines-stages/prepare",
+        "identical_to_registered_runs": {
+          "definition": "manifest.json and splits.json of each dataset compared byte for byte with the run holding its ArrowFlow-kNN predictions (2026-09-12-bridge-knn, 2026-09-14-newdata-batch1, -batch2)",
+          "differing": 0,
+          "files_compared": 34,
+          "identical": 34
+        },
+        "pins_held": "every OpenML identity pin of the ten newdata datasets and the dataset and splits hash of all seventeen"
+      },
+      "projection": {
+        "calibration_factors": {
+          "classical": {
+            "max": 2.170359002383683,
+            "pooled": 1.1800496360010269
+          },
+          "gradient_boosting": {
+            "max": 1.7674768449818572,
+            "pooled": 1.3853768079997215
+          },
+          "input_footrule_knn": {
+            "max": 1.6166438508663716,
+            "pooled": 0.61432546173492
+          },
+          "mlp": {
+            "max": 2.170359002383683,
+            "pooled": 2.0502793274621864
+          },
+          "numeric_knn": {
+            "max": 0.8714577086482292,
+            "pooled": 0.49706085412182144
+          },
+          "random_forest": {
+            "max": 1.6204396046527907,
+            "pooled": 1.2976839910265852
+          },
+          "svc_rbf": {
+            "max": 0.6853567355615126,
+            "pooled": 0.6698471993948194
+          }
+        },
+        "calibration_source": {
+          "kendall_svc": "input_footrule_knn",
+          "lda_knn": "classical",
+          "nca_knn": "classical",
+          "pca_knn": "classical"
+        },
+        "cap_hours": 6,
+        "decision_hours": 2.8928992571307854,
+        "harness_max_based_run_hours": 20.581763735884884,
+        "path": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/baselines-stages/projection.json",
+        "upper_hours": 5.56566426333143,
+        "within_cap": true,
+        "workers": 16
+      },
+      "protocol_id": "arrowflow-v3-neighbour-baselines-1",
+      "smoke": {
+        "analysis": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/baselines-stages/smoke/analysis",
+        "directory": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/baselines-stages/smoke",
+        "families": {
+          "kendall_svc": 2,
+          "lda_knn": 2,
+          "nca_knn": 2,
+          "pca_knn": 2
+        },
+        "interpretation_statement_selected": true,
+        "outputs": [
+          "baseline_families.csv",
+          "baseline_metrics.csv",
+          "baseline_ranks.csv",
+          "baseline_warnings.csv"
+        ],
+        "purpose": "synthetic_smoke_only_not_paper_evidence",
+        "reference_run": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/baselines-stages/smoke/reference",
+        "run": "/home/ozgur/Desktop/Lechler/Code/Playground/sortflow/.worktrees/arrowflow-make/.superpowers/sdd/2026-09-12-arrowflow-story-restoration-plan/baselines-stages/smoke/run",
+        "status": "ok"
+      },
+      "stage_revisions": {
+        "draft": "357cc306e",
+        "note": "neighbour_baselines.py, which every stage exercises, is byte-identical at 357cc306e and at this revision; the only change between them is compare_baselines.print_record, so the smoke (the one stage that runs compare_baselines) was rerun at this revision",
+        "pilot": "357cc306e",
+        "prepare": "357cc306e",
+        "project": "357cc306e",
+        "smoke": "ba16863c8"
+      },
+      "stage_times_utc": {
+        "draft": "19:55:19Z",
+        "pilot": "19:57:34Z",
+        "prepare": "19:55:33Z",
+        "project": "20:04:47Z",
+        "smoke": "20:06:13Z"
+      },
+      "started_utc": "2026-09-14T19:55:19Z",
+      "summary": "stage draft, prepare, pilot, project and smoke (2026-09-14T19:55:19Z to 2026-09-14T20:07:15Z): prepare 19:55:33Z of all 17 datasets with every pin held, the prepared manifest and splits of every dataset byte-identical to the registered run holding its ArrowFlow-kNN predictions (34 of 34 files); the reference pins and the pairing checked against the three registered runs before any baseline was fitted (17 datasets, 15 outer folds, fitting seeds 8129/19391/39019, every source sealed by both runs identical); training-only pilot 19:57:34Z of all 17 datasets at three candidates of every model (204 fits, 0 failed; slowest fit 42.9 s, nca_knn on segment; 6 fits reached the NCA max_iter and recorded their ConvergenceWarning), under contention from two other production runs; synthetic smoke 20:06:13Z ok (a synthetic ArrowFlow-kNN reference run and a synthetic baselines run through run_revision's worker and reporting, then compare_baselines analyse); 41 tests passed",
+      "tests": {
+        "command": "pytest tests/make_revision/test_neighbour_baselines.py tests/make_revision/test_compare_baselines.py",
+        "failed": 0,
+        "passed": 41,
+        "seconds": 39
+      }
+    },
+    "upper_hours": 5.56566426333143,
+    "workers": 16
+  },
+  "protocol_id": "arrowflow-v3-neighbour-baselines-1",
+  "reference": {
+    "batch1": {
+      "code_revision": "6022f9b5e2312f80a96e96b2d0607c72b7d52138",
+      "datasets": [
+        "balance_scale",
+        "ionosphere",
+        "diabetes",
+        "banknote_authentication",
+        "qsar_biodeg"
+      ],
+      "directory": "2026-09-14-newdata-batch1",
+      "model_id": "arrowflow_full_knn",
+      "protocol_id": "arrowflow-v3-newdata-batch1-1",
+      "protocol_sha256": "f715ec2808b4b08c10e49ae23696070a471d7ea88eb351d63b059eecccc0d011",
+      "summary_sha256": "f3ab23c5eeccbe36f036325fe94c4c28ce69bc9d35fa16e62cea813e977ec843"
+    },
+    "batch2": {
+      "code_revision": "6022f9b5e2312f80a96e96b2d0607c72b7d52138",
+      "datasets": [
+        "mfeat_zernike",
+        "vertebra_column",
+        "steel_plates_fault",
+        "climate_model_simulation_crashes",
+        "hcv_egyptian_patients"
+      ],
+      "directory": "2026-09-14-newdata-batch2",
+      "model_id": "arrowflow_full_knn",
+      "protocol_id": "arrowflow-v3-newdata-batch2-1",
+      "protocol_sha256": "188ff1e946b6dc8df712c5a5cfb01e9cf2f9e7022a7776d98ec95ae1f66fca49",
+      "summary_sha256": "50ebfbef88616f8ecd20737f45b3ef840ed19f75a5e5a3f8ceeb120e386d49db"
+    },
+    "knn": {
+      "code_revision": "70fb9bf31092cb64e2bd349403ad090699a3494d",
+      "datasets": [
+        "iris",
+        "wine",
+        "breast_cancer",
+        "wine_quality",
+        "vehicle",
+        "segment",
+        "digits"
+      ],
+      "directory": "2026-09-12-bridge-knn",
+      "model_id": "arrowflow_full_knn",
+      "protocol_id": "arrowflow-v3-bridge-knn-1",
+      "protocol_sha256": "6335d8c4a1b16fb4044c3badb1fff1448f4083d4cc89611cd54b276d60057ff1",
+      "summary_sha256": "f5f0c7016864ce354c70f148bfecc31f8dbdbff5bc4f41d74e63e22a6ff36fda"
+    }
+  },
+  "registry": "experiments.make_revision.neighbour_baselines:baselines_registry",
+  "report_metrics": [
+    "accuracy",
+    "error",
+    "balanced_accuracy",
+    "macro_f1"
+  ],
+  "resource_decision": "Neighbour baselines (external review 2026-09-14): drafted from newdata_batch1.json with the identical nested design over all seventeen registered datasets and the four nearest baselines; stage draft, prepare, pilot, project and smoke (2026-09-14T19:55:19Z to 2026-09-14T20:07:15Z): prepare 19:55:33Z of all 17 datasets with every pin held, the prepared manifest and splits of every dataset byte-identical to the registered run holding its ArrowFlow-kNN predictions (34 of 34 files); the reference pins and the pairing checked against the three registered runs before any baseline was fitted (17 datasets, 15 outer folds, fitting seeds 8129/19391/39019, every source sealed by both runs identical); training-only pilot 19:57:34Z of all 17 datasets at three candidates of every model (204 fits, 0 failed; slowest fit 42.9 s, nca_knn on segment; 6 fits reached the NCA max_iter and recorded their ConvergenceWarning), under contention from two other production runs; synthetic smoke 20:06:13Z ok (a synthetic ArrowFlow-kNN reference run and a synthetic baselines run through run_revision's worker and reporting, then compare_baselines analyse); 41 tests passed; projected at 16 single-thread workers as the calibrated central simulated makespan of the run (2.64 h) plus 0.25 h of stage overhead: 2.89 h (upper 5.57 h; harness max-based run 20.58 h); cap 6 h; every dataset within the Kendall kernel cap, so no dataset is refused; frozen after the pilot",
+  "selection_metric": "accuracy",
+  "selection_ruling": "External review of 2026-09-14 (REPORT.md R3 and R8, novelty-literature-audit items 3 and 4, and the referee request \"Run the nearest conceptual comparators\"): all seventeen registered datasets, every baseline reported whatever the result, with the interpretation fixed in this protocol before any outer score exists. The panel, the folds, the fitting seeds and the candidate budget are the registered design, so every contrast is paired with the registered ArrowFlow-kNN outer predictions and nothing is refitted.",
+  "source_template_sha256": "f715ec2808b4b08c10e49ae23696070a471d7ea88eb351d63b059eecccc0d011",
+  "split_seed": 27183,
+  "status": "reviewed_and_piloted_before_confirmatory_scoring",
+  "stochastic_finalists": 3,
+  "test_train_ratio": 0.25,
+  "wallclock_cap_hours": 6,
+  "workers": 16
+}

@@ -1,0 +1,33 @@
+% Rendered by render_tables.py from run files; do not edit by hand.
+\begin{sidewaystable}[p]
+\caption{\textbf{Depth at a matched configuration.} One hidden layer minus each two-layer arm, accuracy, in percentage points with the 95\% corrected resampled-$t$ interval (test-to-training ratio 0.25, 14 degrees of freedom); positive favors one layer. Every arm reads the same per-fold selection, the same splits and one fitting seed, and neither the learning rate nor the update count is retuned. The untrained-second arm never moves its second hidden layer; the first-only arm never moves the layer the readout reads. Every two-layer arm used the earlier relay of Section~\ref{sec:training}; Table~\ref{tab:s-relay-contrasts} repeats the primary contrast with the corrected relay. Holm adjusts across the seventeen datasets within each arm. One hidden layer is more accurate than two on 15 of the 17 datasets at a matched configuration, none of the seventeen contrasts survives Holm adjustment, and the largest difference is mfeat-zernike +2.98 points (Holm 0.056). HCV: hepatitis C virus.}
+\label{tab:s-depth-contrasts}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lrrrrrr}
+\toprule
+Dataset & \begin{tabular}[b]{@{}r@{}}Two\\Diff. (pp) [interval]\end{tabular} & \begin{tabular}[b]{@{}r@{}}Two\\Holm $p$\end{tabular} & \begin{tabular}[b]{@{}r@{}}Untrained\\Diff. (pp) [interval]\end{tabular} & \begin{tabular}[b]{@{}r@{}}Untrained\\Holm $p$\end{tabular} & \begin{tabular}[b]{@{}r@{}}First\\Diff. (pp) [interval]\end{tabular} & \begin{tabular}[b]{@{}r@{}}First\\Holm $p$\end{tabular} \\
+\midrule
+Iris & +0.44 [$-$1.63, +2.52] & 1.000 & +1.33 [$-$2.00, +4.66] & 1.000 & +0.22 [$-$1.62, +2.06] & 1.000 \\
+Wine & +0.37 [$-$1.80, +2.54] & 1.000 & +1.49 [$-$2.13, +5.12] & 1.000 & +0.17 [$-$3.58, +3.93] & 1.000 \\
+Breast cancer & $-$0.29 [$-$1.78, +1.19] & 1.000 & +0.47 [$-$1.53, +2.46] & 1.000 & +0.70 [$-$1.27, +2.67] & 1.000 \\
+Wine quality & +0.77 [$-$1.27, +2.81] & 1.000 & +0.54 [$-$1.46, +2.55] & 1.000 & +0.25 [$-$1.02, +1.52] & 1.000 \\
+Vehicle & +2.96 [$-$0.51, +6.42] & 1.000 & +4.02 [$-$0.07, +8.10] & 0.697 & +4.89 [+1.97, +7.81] & 0.044 \\
+Segment & +1.15 [+0.01, +2.30] & 0.717 & +1.18 [+0.06, +2.31] & 0.569 & +0.92 [$-$0.02, +1.87] & 0.764 \\
+Digits & +0.63 [$-$0.60, +1.86] & 1.000 & +1.22 [+0.18, +2.27] & 0.373 & +1.21 [$-$0.07, +2.48] & 0.818 \\
+balance-scale & +1.65 [+0.17, +3.13] & 0.499 & +7.04 [+4.40, +9.68] & $<$0.001 & +6.03 [+2.57, +9.49] & 0.035 \\
+mfeat-zernike & +2.98 [+1.17, +4.79] & 0.056 & +6.33 [+4.59, +8.08] & $<$0.001 & +4.28 [+2.73, +5.84] & $<$0.001 \\
+ionosphere & +1.05 [$-$2.24, +4.33] & 1.000 & +0.76 [$-$2.73, +4.24] & 1.000 & +1.42 [$-$1.69, +4.54] & 1.000 \\
+vertebra-column & +0.22 [$-$3.60, +4.03] & 1.000 & +1.51 [$-$3.67, +6.68] & 1.000 & +0.11 [$-$3.05, +3.27] & 1.000 \\
+diabetes & +1.87 [$-$0.39, +4.12] & 1.000 & +1.09 [$-$1.92, +4.09] & 1.000 & +1.22 [$-$1.55, +3.98] & 1.000 \\
+banknote-authentication & +0.00 [$-$0.23, +0.24] & 1.000 & $-$0.10 [$-$0.71, +0.51] & 1.000 & $-$0.12 [$-$0.71, +0.47] & 1.000 \\
+qsar-biodeg & +1.01 [$-$1.26, +3.28] & 1.000 & +1.42 [$-$1.36, +4.20] & 1.000 & +1.33 [$-$1.16, +3.81] & 1.000 \\
+steel-plates-fault & +1.53 [$-$0.13, +3.19] & 0.957 & +1.39 [$-$0.17, +2.95] & 0.922 & +1.12 [$-$0.82, +3.06] & 1.000 \\
+climate-model-simulation-crashes & +0.12 [$-$0.45, +0.70] & 1.000 & +0.19 [$-$0.28, +0.65] & 1.000 & +0.19 [$-$0.28, +0.65] & 1.000 \\
+HCV & $-$1.44 [$-$5.18, +2.30] & 1.000 & $-$0.26 [$-$3.36, +2.83] & 1.000 & $-$0.94 [$-$4.53, +2.65] & 1.000 \\
+\bottomrule
+\end{tabular}
+}
+\end{sidewaystable}

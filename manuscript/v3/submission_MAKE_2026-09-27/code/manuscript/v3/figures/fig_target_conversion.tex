@@ -1,0 +1,57 @@
+% Figure: how the ranking signal trains the encoder network (Section 5.5). Drawn by hand; the scores in panel (b) are an
+% illustration of Equation eq:target, not run data: e = 6, the coordinate at p = 5, its position 2 in the true filter
+% (m_y = -3) and 6 in the nearest wrong filter (m_w = +1), so q_p = 5 - 3 - 1/2 = 1.5 and the target is (2.1 + 1.4)/2.
+\begin{figure}[!htbp]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+    >=Stealth,
+    box/.style={draw, rounded corners=2pt, minimum height=0.85cm, minimum width=1.7cm,
+                font=\small, align=center, thick},
+    databox/.style={box, fill=blue!8, minimum width=0.8cm},
+    procbox/.style={box, fill=orange!12},
+    sortbox/.style={box, fill=green!12},
+    arr/.style={->, thick},
+    lbl/.style={font=\footnotesize, text=black!70},
+    slot/.style={draw, minimum width=1.05cm, minimum height=0.5cm, font=\small, inner sep=0pt},
+    note/.style={font=\footnotesize, anchor=west, align=left},
+]
+% ------------------------------------------------ (a) the training loop
+\node[font=\small\bfseries, anchor=west] at (-0.45,1.45) {(a) Training the encoder network};
+\node[databox] (x) at (0,0) {$x$};
+\node[procbox] (enc) at (2.4,0) {Encoder\\[-1pt]network};
+\node[sortbox] (sort) at (6.0,0) {Sort,\\[-1pt]decreasing};
+\node[sortbox] (filt) at (10.2,0) {Class filters\\[-1pt]$r_1,\dots,r_C$};
+\draw[arr] (x) -- (enc);
+\draw[arr] (enc) -- node[lbl, above=1pt] {scores $h$} (sort);
+\draw[arr] (sort) -- node[lbl, above=1pt] {ranking $\pi_x$} (filt);
+\node[lbl, font=\scriptsize\itshape] at (6.0,0.78) {never differentiated};
+\node[procbox] (conv) at (8.6,-2.5) {Target conversion~\eqref{eq:target}};
+\node[procbox] (step) at (2.4,-2.5) {Adam step on\\[-1pt]$\tfrac12\lVert h-\tilde h\rVert^2$};
+\draw[arr] (filt.south) -- node[lbl, right] {motions $m_y$, $m_w$} ++(0,-1.0) -| ([xshift=7mm]conv.north);
+\draw[arr, black!55] (sort.south) -- node[lbl, left] {current scores} ++(0,-1.0) -| ([xshift=-7mm]conv.north);
+\draw[arr] (conv) -- node[lbl, above=1pt] {target scores $\tilde h$} node[lbl, below=1pt] {held fixed} (step);
+\draw[arr, dashed] (step) -- node[lbl, left] {update} (enc);
+% ------------------------------------------------ (b) one coordinate
+\begin{scope}[xshift=13.9cm]
+\node[font=\small\bfseries, anchor=west] at (-0.75,1.45) {(b) One coordinate, $e=6$};
+\node[lbl] at (-0.35,0.62) {position};
+\node[lbl] at (0.9,0.62) {score};
+\foreach \p/\s in {1/2.1, 2/1.4, 3/0.9, 4/0.3, 5/{-0.4}, 6/{-1.2}} {
+  \node[font=\small] at (-0.35,0.75-0.75*\p) {\p};
+  \node[slot] (s\p) at (0.9,0.75-0.75*\p) {$\s$};
+}
+\node[slot, fill=red!15] at (s5) {$-0.4$};
+% to the position in the true filter, then half a step away from the wrong filter
+\draw[arr, blue!70!black] (s5.east) to[out=0, in=0, looseness=1.4] (s2.east);
+\draw[red!75!black, line width=1.6pt] (0.2,-0.375) -- (1.6,-0.375);
+\node[note, text=red!75!black] at (2.75,-0.375) {target position $q_p=2-\tfrac12=1.5$\\target score $\tilde h=1.75$};
+\node[note, text=blue!70!black] at (2.75,-1.9) {true filter: position 2,\\so $m_y[p]=-3$};
+\node[note] at (2.75,-3.0) {the coordinate, now at $p=5$};
+\node[note, text=orange!60!black] at (2.75,-3.95) {wrong filter: position 6,\\so $m_w[p]=+1$};
+\end{scope}
+\end{tikzpicture}%
+}
+\caption{\textbf{How the ranking signal trains the encoder network.} (a)~The encoder network turns an example $x$ into scores $h$, and a sort in decreasing order gives the input ranking $\pi_x$. A ranking layer with one filter per class reads $\pi_x$ and keeps learning by its own vote. For an accepted example, the filter of the true class and the filter of the wrong class nearest to $\pi_x$ give the motions $m_y$ and $m_w$. The target conversion~\eqref{eq:target} turns them into target scores $\tilde h$. With $\tilde h$ held fixed, an Adam step on $\tfrac12\lVert h-\tilde h\rVert^2$ updates the network (dashed arrow). No gradient passes through the sort. After training, each view's encoder network is fixed and replaces that view's fixed encoder. (b)~The conversion for one coordinate, with $e=6$ scores listed from the largest down. The coordinate sits at position $p=5$ with score $-0.4$. The true filter puts it at position 2, so $m_y[p]=-3$ (blue arrow), and the nearest wrong filter puts it at position 6, so $m_w[p]=+1$. Its target position is $q_p=5-3-\tfrac12=1.5$ (red line). Its target score, $1.75$, lies halfway between the scores at positions 1 and 2, and the loss pulls its score toward that value. The scores are made up for the example.}
+\label{fig:target}
+\end{figure}

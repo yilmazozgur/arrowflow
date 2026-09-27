@@ -1,0 +1,30 @@
+% Rendered by render_tables.py from run files; do not edit by hand.
+\begin{table}[!htbp]
+\caption{\textbf{Candidate grids.} For every model of the benchmark, the hyperparameters and values of its grid (scikit-learn names for the classical models), the grid size and the number of distinct candidates that its inner folds choose among. The lower block gives the same for every control and baseline of Section~\ref{supp:results}, and every model chooses on the same inner folds under the same budget. In the lower block, nearest-neighbor classifiers follow a linear discriminant analysis (LDA), a principal component analysis (PCA) or a neighborhood components analysis (NCA) and keep a share of the largest number of its components. The Kendall support vector classifier (SVC) combines seven views by majority vote. A grid larger than the budget of 24 candidates is sampled once with the candidate seed 41071: random forest uses 24 of its 36 combinations, LDA kNN uses 24 of its 40 combinations and PCA kNN uses 24 of its 40 combinations. Smaller grids are used whole, and both benchmark runs used the same candidates. ArrowFlow's readout settings, 5 neighbor counts with two weightings, are chosen inside every fit and do not count against the budget, so ArrowFlow tunes more settings than its candidate count shows. The untrained ArrowFlow, tuned input footrule kNN and numeric kNN on the projected scores choose among ArrowFlow's encoder settings and tune their readout inside every fit in the same way. RBF: radial basis function; MLP: multilayer perceptron; kNN: nearest-neighbor classifier.}
+\label{tab:s-grids}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lp{0.6\textwidth}rr}
+\toprule
+Model & Hyperparameters and values & Grid & Candidates \\
+\midrule
+ArrowFlow & widths: $[128]$, $[64,128]$; $\eta$: $0.1$, $0.2$; $s_e$: $1$, $2$; $\delta_p$: $0$, $-1$; readout, inside every fit: 1, 3, 5, 11, 21 neighbors with uniform or distance weights & 16 & 16 \\
+SVC (RBF) & \texttt{C}: 0.1, 1, 10, 100; \texttt{gamma}: scale, 0.01, 0.1, 1 & 16 & 16 \\
+Random forest & \texttt{n\_\allowbreak estimators}: 100, 300; \texttt{max\_\allowbreak features}: sqrt, 0.5, 1.0 (all features); \texttt{min\_\allowbreak samples\_\allowbreak leaf}: 1, 2, 5; \texttt{max\_\allowbreak depth}: None, 10 & 36 & 24 \\
+MLP & \texttt{hidden\_\allowbreak layer\_\allowbreak sizes}: $[64]$, $[128]$, $[64,32]$; \texttt{alpha}: 0.0001, 0.01; \texttt{learning\_\allowbreak rate\_\allowbreak init}: 0.001, 0.01; \texttt{max\_\allowbreak iter}: 200, 400 & 24 & 24 \\
+Numeric kNN & \texttt{n\_\allowbreak neighbors}: 1, 3, 5, 11, 21; \texttt{weights}: uniform, distance; \texttt{p}: 1, 2 & 20 & 20 \\
+Gradient boosting & \texttt{n\_\allowbreak estimators}: 100, 200; \texttt{learning\_\allowbreak rate}: 0.03, 0.1; \texttt{max\_\allowbreak depth}: 1, 2, 3; \texttt{min\_\allowbreak samples\_\allowbreak leaf}: 1, 5 & 24 & 24 \\
+Majority class & -- & 1 & 1 \\
+\midrule
+\multicolumn{4}{l}{\emph{Controls and baselines}} \\
+Untrained ArrowFlow & widths: $[128]$, $[64,128]$; $s_e$: $1$, $2$; $\delta_p$: $0$, $-1$; readout, inside every fit: 1, 3, 5, 11, 21 neighbors with uniform or distance weights & 8 & 8 \\
+Tuned input footrule kNN & $s_e$: $1$, $2$; $\delta_p$: $0$, $-1$; readout, inside every fit: 1, 3, 5, 11, 21 neighbors with uniform or distance weights & 4 & 4 \\
+Numeric kNN, projected scores & $s_e$: $1$, $2$; $\delta_p$: $0$, $-1$; readout, inside every fit: \texttt{n\_neighbors}: 1, 3, 5, 11, 21; \texttt{weights}: uniform, distance; \texttt{p}: 1, 2 & 4 & 4 \\
+LDA kNN & component share: 0.5, 1; \texttt{n\_\allowbreak neighbors}: 1, 3, 5, 11, 21; \texttt{p}: 1, 2; \texttt{weights}: uniform, distance & 40 & 24 \\
+PCA kNN & component share: 0.5, 1; \texttt{n\_\allowbreak neighbors}: 1, 3, 5, 11, 21; \texttt{p}: 1, 2; \texttt{weights}: uniform, distance & 40 & 24 \\
+NCA kNN & component share: 0.5, 1; \texttt{n\_\allowbreak neighbors}: 1, 3, 5, 11, 21; \texttt{weights}: uniform, distance & 20 & 20 \\
+Kendall SVC & \texttt{C}: 0.1, 1, 10, 100; $\delta_p$: $0$, $-1$; $s_e$: $1$, $2$ & 16 & 16 \\
+\bottomrule
+\end{tabular}
+\end{table}

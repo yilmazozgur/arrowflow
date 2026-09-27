@@ -1,0 +1,36 @@
+% Rendered by render_tables.py from run files; do not edit by hand.
+\begin{sidewaystable}[p]
+\caption{\textbf{The encoder swap: controls.} Accuracy differences between the arms of Table~\ref{tab:s-learned-swap}, in percentage points, with the 95\% corrected resampled-$t$ interval (test-to-training ratio 0.25, 14 degrees of freedom); positive favors the first-named arm. The design declared these contrasts secondary and descriptive, and only the contrast of Table~\ref{tab:s-learned-swap} primary. Each has its own Holm adjustment across the seventeen datasets, and a Holm $p$ below 0.05 counts as significant within it. The trained encoder beats the untrained one on 15 of the 17 datasets, significantly on four. The untrained encoder is behind the fixed one on 16, significantly on three. HCV: hepatitis C virus.}
+\label{tab:s-learned-swap-controls}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lrrrrrr}
+\toprule
+Dataset & \begin{tabular}[b]{@{}r@{}}Trained $-$ untrained\\(pp) [interval]\end{tabular} & Holm $p$ & \begin{tabular}[b]{@{}r@{}}Untrained $-$ fixed\\(pp) [interval]\end{tabular} & Holm $p$ & \begin{tabular}[b]{@{}r@{}}Trained $-$ MLP\\(pp) [interval]\end{tabular} & Holm $p$ \\
+\midrule
+\multicolumn{7}{l}{\emph{The seven benchmark datasets}} \\
+Iris & +2.37 [$-$1.55, +6.29] & 1.000 & $-$1.48 [$-$4.63, +1.67] & 1.000 & +0.00 [$-$1.60, +1.60] & 1.000 \\
+Wine & +2.11 [$-$1.01, +5.24] & 1.000 & $-$0.81 [$-$3.70, +2.09] & 1.000 & $-$0.00 [$-$1.54, +1.53] & 1.000 \\
+Breast cancer & +1.66 [+0.12, +3.20] & 0.368 & $-$1.72 [$-$3.07, $-$0.37] & 0.198 & +0.12 [$-$0.48, +0.71] & 1.000 \\
+Wine quality & +0.24 [$-$1.42, +1.90] & 1.000 & $-$0.26 [$-$2.25, +1.73] & 1.000 & +4.64 [+2.56, +6.72] & 0.005 \\
+Vehicle & +6.41 [+3.37, +9.45] & 0.007 & $-$10.13 [$-$13.75, $-$6.50] & $<$0.001 & $-$6.42 [$-$9.62, $-$3.22] & 0.012 \\
+Segment & +0.24 [$-$0.51, +0.99] & 1.000 & $-$0.82 [$-$1.35, $-$0.28] & 0.075 & $-$0.39 [$-$1.25, +0.47] & 1.000 \\
+Digits & +2.20 [+0.71, +3.69] & 0.083 & $-$1.73 [$-$3.04, $-$0.43] & 0.169 & $-$0.04 [$-$0.79, +0.70] & 1.000 \\
+\midrule
+\multicolumn{7}{l}{\emph{The ten further datasets}} \\
+balance-scale & +9.03 [+7.34, +10.72] & $<$0.001 & $-$4.57 [$-$6.14, $-$3.00] & $<$0.001 & +0.59 [$-$0.80, +1.97] & 1.000 \\
+mfeat-zernike & +4.15 [+3.06, +5.24] & $<$0.001 & $-$2.40 [$-$3.66, $-$1.14] & 0.017 & +1.34 [$-$0.47, +3.15] & 1.000 \\
+ionosphere & +6.24 [+3.61, +8.86] & 0.002 & $-$2.25 [$-$4.92, +0.42] & 0.927 & +0.79 [$-$1.08, +2.67] & 1.000 \\
+vertebra-column & +5.63 [+1.37, +9.88] & 0.145 & $-$4.91 [$-$9.14, $-$0.68] & 0.287 & $-$0.72 [$-$3.99, +2.55] & 1.000 \\
+diabetes & +0.97 [$-$0.82, +2.76] & 1.000 & $-$2.66 [$-$6.22, +0.89] & 1.000 & $-$2.21 [$-$4.19, $-$0.24] & 0.430 \\
+banknote-authentication & +0.22 [$-$0.17, +0.60] & 1.000 & $-$0.03 [$-$0.31, +0.25] & 1.000 & +0.00 [+0.00, +0.00] & 1.000 \\
+qsar-biodeg & +0.76 [$-$1.34, +2.86] & 1.000 & $-$0.43 [$-$1.69, +0.82] & 1.000 & $-$0.19 [$-$2.10, +1.72] & 1.000 \\
+steel-plates-fault & $-$1.27 [$-$2.87, +0.34] & 1.000 & $-$0.38 [$-$2.19, +1.42] & 1.000 & $-$2.30 [$-$3.64, $-$0.97] & 0.036 \\
+climate-model-simulation-crashes & +3.05 [+1.01, +5.08] & 0.083 & $-$0.19 [$-$0.60, +0.23] & 1.000 & +0.14 [$-$0.93, +1.22] & 1.000 \\
+HCV & $-$0.66 [$-$3.48, +2.16] & 1.000 & +0.86 [$-$1.27, +2.99] & 1.000 & $-$0.43 [$-$3.44, +2.57] & 1.000 \\
+\bottomrule
+\end{tabular}
+}
+\end{sidewaystable}

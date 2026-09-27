@@ -1,0 +1,33 @@
+% Rendered by render_tables.py from run files; do not edit by hand.
+\begin{table}[!htbp]
+\caption{\textbf{Mechanism: where the error goes, and which architecture was selected.} The first block gives mean outer-fold error in percent and the differences between neighboring rungs in points; a positive difference is a cost paid, and the training line is what training gives back. The last three lines of the block are the paired ArrowFlow minus projected kNN difference with its 95\% corrected resampled-$t$ interval (test-to-training ratio 0.25, 14 degrees of freedom), post hoc and unadjusted. The second block counts outer folds. On mfeat-zernike sorting costs 2.5056 points and random layers 0.1556, and training returns 2.3389 of the 2.6611 points. The untrained control chose two hidden layers on 2 of the 15 balance-scale and 1 of the 15 mfeat-zernike outer folds.}
+\label{tab:s-mech-reading}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrr}
+\toprule
+Quantity & balance-scale & mfeat-zernike \\
+\midrule
+\multicolumn{3}{l}{\emph{Error and its differences (percent, points)}} \\
+Numeric kNN on the raw features & 10.2400 & 19.6500 \\
+Numeric kNN on the projected scores & 10.2578 & 18.9722 \\
+Tuned input footrule kNN & 10.9333 & 21.4778 \\
+Untrained ArrowFlow & 11.0044 & 21.6333 \\
+ArrowFlow & 6.0267 & 19.2944 \\
+Sorting cost: input $-$ projected & 0.6756 & 2.5056 \\
+Random layers: untrained $-$ input & 0.0711 & 0.1556 \\
+Representation cost: untrained $-$ projected & 0.7467 & 2.6611 \\
+Training returns: untrained $-$ ArrowFlow & 4.9778 & 2.3389 \\
+ArrowFlow $-$ projected, accuracy (pp) & +4.2311 & $-$0.3222 \\
+95\% interval of that difference & [+2.92, +5.54] & [$-$1.39, +0.75] \\
+$p$ of that difference, unadjusted & $<$0.001 & 0.529 \\
+\midrule
+\multicolumn{3}{l}{\emph{Selected architecture (outer folds)}} \\
+Outer folds & 15 & 15 \\
+ArrowFlow chose two hidden layers on & 0 & 0 \\
+The untrained control chose two hidden layers on & 2 & 1 \\
+Both chose the same widths on & 13 & 14 \\
+\bottomrule
+\end{tabular}
+\end{table}

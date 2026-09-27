@@ -1,0 +1,31 @@
+% Rendered by render_tables.py from run files; do not edit by hand.
+\begin{table}[!htbp]
+\caption{\textbf{Inner-fold laboratory, readout stage.} First block: mean inner-validation accuracy in percent over 45 units per dataset (five outer folds of the first repeat $\times$ three inner folds $\times$ three fitting seeds). The readouts act on the trained hidden ranking of the fitted first view (target-aware encoding). They are the network's own prototype readout (reference), footrule kNN with 1, 3, 5, 11 or 21 neighbors and uniform or distance weights, and the prototype readouts. The prototype readouts use 2, 4 or 8 Borda prototypes per class, found by clustering each class's hidden rankings and read out by the nearest prototype, or one Borda prototype per class. Every unit fits the configuration the prototype readout chose on that outer fold on the inner training partition; each variant's own settings are chosen one level deeper, on splits of the inner training partition. Second block: mean paired change from the reference in percentage points per dataset, its mean over datasets, the number of datasets improved, and the verdict of the adoption rule. The rule adopts a variant when at least 5 of 7 datasets improve and none worsens by more than 1 point. Third block: the SD of the paired change over the 45 units of each dataset, in percentage points; it describes dispersion across units and is not a confidence interval. Two of the three variants meet the rule. No outer test fold is scored; the laboratory is exploratory. Protocol \texttt{arrowflow-v3-devlab-1}, code \texttt{9c3fc5214546}.}
+\label{tab:s-lab-readouts}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lrrrrrrrrrr}
+\toprule
+Variant & Iris & Wine & Breast cancer & Wine quality & Vehicle & Segment & Digits & Mean & Improved & Verdict \\
+\midrule
+\multicolumn{11}{l}{\emph{Mean inner-validation accuracy, \%}} \\
+Prototype readout (reference) & 88.6 & 90.1 & 94.1 & 51.6 & 80.0 & 93.0 & 90.6 & -- & -- & -- \\
+Footrule kNN on the hidden ranking & 93.4 & 91.7 & 95.2 & 65.9 & 80.8 & 95.9 & 95.1 & -- & -- & -- \\
+Several Borda prototypes per class, nearest by footrule & 92.6 & 91.9 & 95.3 & 54.4 & 80.4 & 94.1 & 94.0 & -- & -- & -- \\
+One Borda prototype per class & 88.4 & 87.6 & 94.0 & 50.6 & 80.3 & 93.1 & 92.1 & -- & -- & -- \\
+\midrule
+\multicolumn{11}{l}{\emph{Mean paired change from the reference, pp}} \\
+Footrule kNN on the hidden ranking & +4.8 & +1.5 & +1.2 & +14.4 & +0.8 & +3.0 & +4.5 & +4.3 & 7 / 7 & adopt \\
+Several Borda prototypes per class, nearest by footrule & +3.9 & +1.8 & +1.2 & +2.8 & +0.4 & +1.1 & +3.4 & +2.1 & 7 / 7 & adopt \\
+One Borda prototype per class & $-$0.2 & $-$2.5 & $-$0.1 & $-$1.0 & +0.3 & +0.1 & +1.5 & $-$0.3 & 3 / 7 & reject \\
+\midrule
+\multicolumn{11}{l}{\emph{SD of the paired change over the 45 units of a dataset, pp}} \\
+Footrule kNN on the hidden ranking & 8.4 & 3.5 & 1.6 & 3.8 & 2.2 & 1.4 & 2.4 & -- & -- & -- \\
+Several Borda prototypes per class, nearest by footrule & 7.9 & 3.4 & 1.9 & 4.7 & 2.2 & 1.2 & 2.2 & -- & -- & -- \\
+One Borda prototype per class & 6.3 & 5.1 & 1.8 & 5.5 & 1.5 & 1.0 & 1.3 & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

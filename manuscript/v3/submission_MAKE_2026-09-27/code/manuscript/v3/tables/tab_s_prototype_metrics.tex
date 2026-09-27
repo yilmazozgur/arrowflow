@@ -1,0 +1,21 @@
+% Rendered by render_tables.py from run files; do not edit by hand.
+\begin{table}[!htbp]
+\caption{\textbf{Complete metrics of the prototype readout.} Mean outer-fold error, balanced accuracy and macro-F1 in percent, with the outer-fold SD in parentheses, of the prototype readout in the first benchmark run on the seven benchmark datasets. Macro-F1 is the unweighted mean of the per-class F1 scores, a class never predicted scoring 0. The seed SD is the mean over folds of the SD of the error across the three fitting seeds, and the last column gives outer folds $\times$ fitting seeds. Protocol \texttt{arrowflow-v3-bridge-1}.}
+\label{tab:s-prototype-metrics}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Dataset & Error & Bal. acc. & Macro-F1 & Seed SD & Folds $\times$ seeds \\
+\midrule
+Iris & 5.0 (4.0) & 95.0 (4.0) & 94.9 (4.0) & 1.9 & 15 $\times$ 3 \\
+Wine & 4.2 (3.7) & 96.4 (3.2) & 95.9 (3.7) & 2.0 & 15 $\times$ 3 \\
+Breast cancer & 3.0 (1.1) & 96.7 (1.4) & 96.8 (1.2) & 0.9 & 15 $\times$ 3 \\
+Wine quality & 41.4 (2.1) & 56.4 (3.3) & 53.9 (2.6) & 1.4 & 15 $\times$ 3 \\
+Vehicle & 20.0 (2.1) & 80.3 (2.1) & 79.7 (2.1) & 1.6 & 15 $\times$ 3 \\
+Segment & 4.7 (0.9) & 95.3 (0.9) & 95.3 (0.9) & 0.6 & 15 $\times$ 3 \\
+Digits & 4.3 (1.0) & 95.7 (1.0) & 95.7 (1.0) & 0.5 & 15 $\times$ 3 \\
+\bottomrule
+\end{tabular}
+\end{table}

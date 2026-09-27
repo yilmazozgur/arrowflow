@@ -1,0 +1,39 @@
+% Rendered by render_tables.py from run files; do not edit by hand.
+\begin{sidewaystable}[p]
+\caption{\textbf{The learned encoder under nested cross-validation: error.} Mean error (\%) over the 15 test sets of the main benchmark. The first four columns are the classifier of Section~\ref{supp:learned-method}, an encoder network followed by one ranking layer of class filters. It is read by the class filters or by a nearest-neighbor vote on the encoder's own ranking, and its encoder is the trained network, the same network never trained, or a trained single linear layer. Each is tuned on the inner folds at the first fitting seed and refitted with the three fitting seeds. Unlike the stochastic models of the main benchmark, it does not rescore its three best candidates with all three seeds. The untrained encoder keeps its initial weights, uniform on $[0,1)$ in its first two layers. ArrowFlow and the MLP are the registered results on the same test sets. HCV: hepatitis C virus.}
+\label{tab:s-learned-nested}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
+\begin{tabular}{lrrrrrr}
+\toprule
+Dataset & \begin{tabular}[b]{@{}r@{}}Trained encoder,\\class filters\end{tabular} & \begin{tabular}[b]{@{}r@{}}Untrained encoder,\\class filters\end{tabular} & \begin{tabular}[b]{@{}r@{}}Trained linear enc.,\\class filters\end{tabular} & \begin{tabular}[b]{@{}r@{}}Trained encoder,\\kNN readout\end{tabular} & ArrowFlow & MLP \\
+\midrule
+\multicolumn{7}{l}{\emph{The seven benchmark datasets}} \\
+Iris & 5.0 & 7.0 & 11.1 & 4.6 & 5.0 & 4.1 \\
+Wine & 1.9 & 5.2 & 3.3 & 1.9 & 3.2 & 1.9 \\
+Breast cancer & 2.8 & 5.3 & 3.2 & 2.8 & 2.7 & 2.9 \\
+Wine quality & 43.4 & 45.8 & 43.6 & 30.1 & 27.7 & 32.3 \\
+Vehicle & 25.0 & 48.7 & 24.0 & 24.4 & 19.9 & 17.2 \\
+Segment & 6.3 & 17.9 & 9.6 & 3.4 & 2.6 & 2.8 \\
+Digits & 3.0 & 20.9 & 6.5 & 2.4 & 2.8 & 2.3 \\
+\midrule
+\multicolumn{7}{l}{\emph{The ten further datasets}} \\
+balance-scale & 3.7 & 16.3 & 10.3 & 2.5 & 6.0 & 2.2 \\
+mfeat-zernike & 17.0 & 34.3 & 20.4 & 17.2 & 19.3 & 18.9 \\
+ionosphere & 8.0 & 18.0 & 13.2 & 7.9 & 11.2 & 8.0 \\
+vertebra-column & 18.6 & 21.8 & 17.0 & 17.8 & 16.9 & 15.4 \\
+diabetes & 29.3 & 30.5 & 26.4 & 26.3 & 24.0 & 23.5 \\
+banknote-authentication & 0.0 & 4.0 & 3.0 & 0.0 & 0.2 & 0.0 \\
+qsar-biodeg & 13.7 & 21.9 & 16.4 & 13.4 & 12.6 & 12.0 \\
+steel-plates-fault & 34.7 & 44.1 & 38.2 & 29.4 & 24.8 & 24.2 \\
+climate-model-simulation-crashes & 5.9 & 17.7 & 6.7 & 5.8 & 8.3 & 5.6 \\
+HCV & 74.4 & 74.9 & 75.3 & 74.9 & 75.6 & 75.0 \\
+\midrule
+\multicolumn{7}{l}{\emph{All datasets}} \\
+Mean over the seventeen & 17.2 & 25.5 & 19.3 & 15.6 & 15.5 & 14.6 \\
+\bottomrule
+\end{tabular}
+}
+\end{sidewaystable}

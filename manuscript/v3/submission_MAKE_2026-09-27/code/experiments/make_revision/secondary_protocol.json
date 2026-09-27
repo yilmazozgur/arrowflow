@@ -1,0 +1,172 @@
+{
+  "protocol_id": "arrowflow-make-secondary-v1",
+  "frozen": false,
+  "status": "awaiting_secondary_review_and_joint_freeze",
+  "datasets": [
+    "iris",
+    "wine",
+    "breast_cancer",
+    "wine_quality",
+    "vehicle",
+    "segment",
+    "digits",
+    "sushi_childhood_east_west_v2"
+  ],
+  "outer_folds": 5,
+  "outer_repeats": 3,
+  "inner_folds": 3,
+  "split_seed": 27183,
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "encoder_seed": 51047,
+  "degree": 2,
+  "embed_dim": 32,
+  "strategy": "random",
+  "view_id": 0,
+  "architectures": [
+    [
+      64
+    ],
+    [
+      64,
+      32
+    ],
+    [
+      128
+    ]
+  ],
+  "native_architectures": [
+    [
+      64
+    ],
+    [
+      64,
+      32
+    ],
+    [
+      230
+    ]
+  ],
+  "iterations": 200,
+  "learning_rate": 0.5,
+  "batch_size": 32,
+  "ratio_data_backprop": 0.5,
+  "motion_normalization_mult": 0.125,
+  "p_correct": 0.01,
+  "last_layer_update": true,
+  "multistep_lr": true,
+  "augmentation": false,
+  "probe_neighbors": [
+    1,
+    3,
+    5,
+    11,
+    21
+  ],
+  "probe_weights": [
+    "uniform",
+    "distance"
+  ],
+  "hdc_dimensions": [
+    1024,
+    10000
+  ],
+  "probe_selection": "symmetric_mean_over_trained_untrained_inner_folds_and_three_seeds",
+  "hdc_selection": "mean_over_inner_folds_and_three_seeds",
+  "selection_metric": "accuracy",
+  "shuffle_seed": 109387,
+  "max_workers": 16,
+  "failure_policy": "persist_terminal_failed_model_matrix; no_missing_fold_or_seed_inference",
+  "primary_architecture_index": 1,
+  "primary_tabular_comparisons": 14,
+  "families": [
+    "e05",
+    "e06",
+    "e07"
+  ],
+  "panels": {
+    "e05": [
+      "iris",
+      "wine",
+      "digits"
+    ],
+    "e06": [
+      "wine",
+      "digits"
+    ],
+    "e07": [
+      "iris",
+      "wine",
+      "digits"
+    ]
+  },
+  "candidate_budget": 24,
+  "candidate_seed": 41071,
+  "e05_schemes": [
+    "same_projection",
+    "different_random",
+    "mixed"
+  ],
+  "e05_views": 7,
+  "e05_prefixes": [
+    1,
+    3,
+    7
+  ],
+  "head_conditions": [
+    true,
+    false
+  ],
+  "corruption_seeds": [
+    104729,
+    130363,
+    155921
+  ],
+  "gaussian_levels": [
+    0,
+    0.1,
+    0.25,
+    0.5,
+    1
+  ],
+  "quantization_steps": [
+    0,
+    0.1,
+    0.25,
+    0.5,
+    1
+  ],
+  "masking_probabilities": [
+    0,
+    0.05,
+    0.1,
+    0.2,
+    0.4
+  ],
+  "crossed_levels": [
+    0.1,
+    0.5
+  ],
+  "crossed_families": [
+    "gaussian_isotropic",
+    "gaussian_correlated"
+  ],
+  "degrees": [
+    1,
+    2,
+    3
+  ],
+  "degree_column_cap": 10000,
+  "cost_warmups": 1,
+  "cost_repetitions": 5,
+  "cost_seed": 8129,
+  "cost_datasets": [
+    "iris",
+    "digits",
+    "sushi_childhood_east_west_v2"
+  ],
+  "test_train_ratio": 0.25
+}

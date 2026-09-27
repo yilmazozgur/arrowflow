@@ -1,0 +1,42 @@
+% Figure: nested cross-validation (supplement, Section S2.5). Drawn by hand; it restates the protocol of Section 7.1 and
+% Section S2.5 (5 stratified parts, 3 repeats, 15 outer folds, 3 inner folds, at most 24 candidates, 3 fitting seeds).
+\begin{figure}[!htbp]
+\centering
+\begin{tikzpicture}[
+    >=Stealth,
+    part/.style={draw, minimum width=1.25cm, minimum height=0.6cm, font=\footnotesize, inner sep=0pt},
+    trainpart/.style={part, fill=blue!12},
+    testpart/.style={part, fill=orange!30},
+    inner/.style={draw, minimum width=0.95cm, minimum height=0.42cm, font=\scriptsize, inner sep=0pt},
+    fitpart/.style={inner, fill=blue!12},
+    valpart/.style={inner, fill=green!25},
+    box/.style={draw, rounded corners=2pt, font=\footnotesize, align=center, thick, minimum height=0.7cm, inner sep=4pt},
+    arr/.style={->, thick},
+    lbl/.style={font=\footnotesize, text=black!70},
+]
+% ----- the outer split: five stratified parts, one of them the test set
+\node[font=\small\bfseries, anchor=west] at (-0.2,1.15) {Outer split: 5 parts $\times$ 3 repeats $=$ 15 outer folds};
+\foreach \i in {1,...,4} { \node[trainpart] (o\i) at (1.25*\i-0.6,0.35) {part \i}; }
+\node[testpart] (o5) at (1.25*5-0.6,0.35) {test};
+\draw[decorate, decoration={brace, mirror, amplitude=4pt}, thick] ([yshift=-2pt]o1.south west) -- ([yshift=-2pt]o4.south east)
+      node[midway, below=5pt, lbl] {training partition};
+% ----- the inner split of the training partition
+\node[font=\small\bfseries, anchor=west] at (-0.2,-1.3) {Inside the training partition: 3 inner folds};
+\foreach \r in {1,2,3} {
+  \foreach \c in {1,2,3} {
+    \ifnum\c=\r \node[valpart] at (0.95*\c+0.1,-1.55-0.52*\r) {score}; \else \node[fitpart] at (0.95*\c+0.1,-1.55-0.52*\r) {fit}; \fi
+  }
+  \node[lbl, anchor=east] at (0.5,-1.55-0.52*\r) {inner \r};
+}
+% ----- the choice, the refit and the one test score, stacked on the right
+\node[box, fill=orange!30, text width=6.0cm] (score) at (11.3,0.35) {the refitted model is scored once on the test set};
+\node[box, fill=orange!10, text width=6.0cm] (refit) at (11.3,-1.25) {the choice is refitted on the whole training partition, with 3 fitting seeds or once for a deterministic model};
+\node[box, fill=orange!10, text width=6.0cm] (choose) at (11.3,-3.05) {at most 24 candidates are fitted with one seed and scored on the 3 inner folds, and the best mean accuracy wins};
+\draw[arr] (3.55,-3.05) -- (choose.west);
+\draw[arr] (choose) -- (refit);
+\draw[arr] (refit) -- (score);
+\draw[arr, dashed, black!55] (o5.east) -- (score.west) node[midway, above, lbl] {held out};
+\end{tikzpicture}
+\caption{\textbf{Nested cross-validation.} Each dataset is split into five parts that keep its class proportions, and the split is repeated three times with new shuffles. So every model is tested on the same 15 outer folds. In each outer fold, one part is the test set and the other four form the training partition. Every choice is made inside the training partition. It is split again into three inner folds, and each model fits at most 24 candidate configurations with one fitting seed and scores them on those folds. For a stochastic model, one whose fit depends on a random seed, the three best candidates are then rescored with all three fitting seeds. The chosen configuration is refitted on the whole training partition, with the three fitting seeds or once for a deterministic model. It is then scored once on the test set, which no choice ever sees.}
+\label{fig:s-nested-cv}
+\end{figure}

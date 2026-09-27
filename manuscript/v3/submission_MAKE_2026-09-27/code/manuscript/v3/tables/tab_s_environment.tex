@@ -1,0 +1,21 @@
+% Rendered by render_tables.py from run files; do not edit by hand.
+\begin{table}[!htbp]
+\caption{\textbf{Software environment.} Versions recorded in \texttt{environment.json} of the nested benchmark. Every other harness family records the same versions, and the two studies of the learned encoder write no \texttt{environment.json} (Section~\ref{supp:protocols}). Every worker runs single-threaded, and no run used a graphics processor, although this PyTorch build supports one. At most 16 workers run at once under the harness execution lock. The two studies of the learned encoder ran outside it, with 14 workers, 24 in the encoder swap.}
+\label{tab:s-environment}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{ll}
+\toprule
+Component & Value \\
+\midrule
+Python & 3.12.7 \\
+NumPy & 1.26.4 \\
+SciPy & 1.14.1 \\
+scikit-learn & 1.5.2 \\
+PyTorch & 2.6.0+cu124 \\
+Platform & Linux-6.8.0-138-generic-x86\_64-with-glibc2.35 \\
+Numerical threads per worker & 1 \\
+\bottomrule
+\end{tabular}
+\end{table}

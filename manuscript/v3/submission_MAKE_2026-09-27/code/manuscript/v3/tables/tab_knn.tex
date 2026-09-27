@@ -1,0 +1,21 @@
+% Rendered by render_tables.py from run files; do not edit by hand.
+\begin{table}[!htbp]
+\caption{\textbf{ArrowFlow against the prototype readout on the benchmark's outer partitions.} Paired accuracy differences in percentage points, ArrowFlow minus the prototype readout$^\dagger$ (positive favors ArrowFlow), on the seven benchmark datasets. ArrowFlow ran in its own run and is paired fold by fold with the prototype readout's run. Each method chose its configuration by the inner-fold accuracy of its own readout, and ArrowFlow chose the prototype readout's configuration in 17 of the 105 outer folds (51 of 315 outer fits). Each difference carries the 95\% corrected resampled-$t$ interval (test-to-training ratio 0.25, 14 degrees of freedom); $p$ values are approximate, and the Holm column adjusts them over these seven contrasts, a family separate from the 14 prototype-readout contrasts of Table~\ref{tab:s-contrasts}. ArrowFlow has equal or higher mean accuracy on all seven datasets, and three of the seven differences remain significant after Holm adjustment. None of the 1,260 comparator cells differ between the two runs. A cell is one outer fit of one of the five classical models or the majority class, compared by its chosen configuration and every test prediction. $^\dagger$: from the prototype readout's own run on the same partitions.}
+\label{tab:knn}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrr}
+\toprule
+Dataset & Difference (pp) & 95\% interval & $p$ & Holm $p$ \\
+\midrule
+Iris & +0.0 & [$-$2.1, +2.1] & 1.000 & 1.000 \\
+Wine & +1.0 & [$-$0.5, +2.5] & 0.179 & 0.717 \\
+Breast cancer & +0.3 & [$-$0.9, +1.6] & 0.572 & 1.000 \\
+Wine quality & +13.7 & [+10.7, +16.7] & $<$0.001 & $<$0.001 \\
+Vehicle & +0.1 & [$-$2.6, +2.8] & 0.942 & 1.000 \\
+Segment & +2.1 & [+1.3, +2.9] & $<$0.001 & $<$0.001 \\
+Digits & +1.5 & [+0.7, +2.3] & 0.001 & 0.006 \\
+\bottomrule
+\end{tabular}
+\end{table}

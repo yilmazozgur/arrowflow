@@ -1,0 +1,11 @@
+# Observed development/test versions on Python 3.12.7.
+# Each prepared run records actual versions and checks environment identity.
+numpy==1.26.4
+scipy==1.14.1
+scikit-learn==1.5.2
+pandas==2.2.3
+torch==2.6.0
+joblib==1.4.2
+threadpoolctl==3.5.0
+matplotlib==3.9.2
+pytest==9.1.1
