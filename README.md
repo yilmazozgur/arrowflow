@@ -9,6 +9,7 @@ This repository holds the code, the frozen evaluation protocols and the tests be
 - `arrowflow/`: the core package. `arrowflow.py` holds the ranking layers and the training rule, and `ranking.py` the ranking conventions. `readouts.py` and `permlvq.py` hold the readouts compared in the paper's inner-fold laboratory. `arrowflow.py` is the version the paper's runs used: when a hidden layer passes displacements to the hidden layer below, it drops the sign of repelling votes. This matters only in networks with two or more hidden layers. `experiments/make_revision/signed_relay.py` holds the corrected relay, which the paper's depth rerun used (Section 3.5 of the paper).
 - `experiments/make_revision/`: the evaluation harness. It holds the nested cross-validation, one module per study and, under `protocols/`, the protocol of every study. The model the paper evaluates is `bridge.AdaptiveMultiViewKNN` (registry `bridge_knn_registry`, model `arrowflow_full_knn`). It is built from `multiview.MultiViewArrowFlowKNN` and the single-view network `models.ArrowFlowEstimator`.
 - `tests/make_revision/`: the tests of the harness and the core.
+- `experiments/tensor_rank_sandbox/`: the trained encoder, an extension of ArrowFlow. An encoder network is trained by motions turned into target scores, without differentiating the sort. `core_hybrid.py` holds the target conversion, `nested.py` the nested evaluation of the encoder as a classifier, `encoder_swap.py` the study that swaps it into ArrowFlow for the fixed encoder, and `conversion_check.py` the numerical check of the conversion. The other modules are the development searches. They need the same environment as the harness.
 - `manuscript/MAKE/review/secondary_experiment_spec.md`: the written specification of the matched learning controls. Their runner, `run_studies`, reads it and records its hash in every run, so it must stay at this path.
 - `experiments/exp_*.py`, `experiments/plot_results.py`, `experiments/results/` and the preprint files in `manuscript/`: the earlier version. The paper does not use them.
 
@@ -96,17 +97,16 @@ The run outputs of the paper's studies are not included. This covers predictions
 
 ## Citation
 
-If you use this code, please cite the paper:
+If you use this code, please cite the preprint until the paper is published:
 
 ```bibtex
-@article{yilmaz_arrowflow_make,
-  title   = {ArrowFlow: Training Ranking Filters with Position Votes},
-  author  = {Yilmaz, Ozgur},
-  journal = {Machine Learning and Knowledge Extraction},
-  year    = {TODO},
-  volume  = {TODO},
-  pages   = {TODO},
-  doi     = {TODO}
+@misc{yilmaz_arrowflow,
+  title         = {ArrowFlow: Hierarchical Machine Learning in the Space of Permutations},
+  author        = {Yilmaz, Ozgur},
+  year          = {2026},
+  eprint        = {2604.04087},
+  archivePrefix = {arXiv},
+  url           = {https://arxiv.org/abs/2604.04087}
 }
 ```
 
