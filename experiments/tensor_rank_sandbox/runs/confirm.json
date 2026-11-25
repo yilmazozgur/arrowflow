@@ -1,0 +1,1356 @@
+{
+ "final": {
+  "V": 64,
+  "convert": "target",
+  "eta": 0.01,
+  "contrast": 0.5,
+  "eta_decay": true,
+  "epochs": 150
+ },
+ "results": [
+  {
+   "dataset": "iris",
+   "arm": "trained",
+   "seed": 0,
+   "rank_acc": 0.8666666666666667,
+   "knn_acc": 0.9111111111111111
+  },
+  {
+   "dataset": "iris",
+   "arm": "trained",
+   "seed": 1,
+   "rank_acc": 0.8444444444444444,
+   "knn_acc": 0.8888888888888888
+  },
+  {
+   "dataset": "iris",
+   "arm": "trained",
+   "seed": 2,
+   "rank_acc": 0.9111111111111111,
+   "knn_acc": 0.8666666666666667
+  },
+  {
+   "dataset": "iris",
+   "arm": "trained",
+   "seed": 3,
+   "rank_acc": 0.8666666666666667,
+   "knn_acc": 0.8888888888888888
+  },
+  {
+   "dataset": "iris",
+   "arm": "trained",
+   "seed": 4,
+   "rank_acc": 0.8888888888888888,
+   "knn_acc": 0.9333333333333333
+  },
+  {
+   "dataset": "iris",
+   "arm": "frozen",
+   "seed": 0,
+   "rank_acc": 0.8444444444444444,
+   "knn_acc": 0.8888888888888888
+  },
+  {
+   "dataset": "iris",
+   "arm": "frozen",
+   "seed": 1,
+   "rank_acc": 0.8444444444444444,
+   "knn_acc": 0.9111111111111111
+  },
+  {
+   "dataset": "iris",
+   "arm": "frozen",
+   "seed": 2,
+   "rank_acc": 0.8666666666666667,
+   "knn_acc": 0.8444444444444444
+  },
+  {
+   "dataset": "iris",
+   "arm": "frozen",
+   "seed": 3,
+   "rank_acc": 0.8,
+   "knn_acc": 0.8444444444444444
+  },
+  {
+   "dataset": "iris",
+   "arm": "frozen",
+   "seed": 4,
+   "rank_acc": 0.7777777777777778,
+   "knn_acc": 0.8444444444444444
+  },
+  {
+   "dataset": "iris",
+   "arm": "scrambled",
+   "seed": 0,
+   "rank_acc": 0.8,
+   "knn_acc": 0.8666666666666667
+  },
+  {
+   "dataset": "iris",
+   "arm": "scrambled",
+   "seed": 1,
+   "rank_acc": 0.9111111111111111,
+   "knn_acc": 0.9111111111111111
+  },
+  {
+   "dataset": "iris",
+   "arm": "scrambled",
+   "seed": 2,
+   "rank_acc": 0.8222222222222222,
+   "knn_acc": 0.8444444444444444
+  },
+  {
+   "dataset": "iris",
+   "arm": "scrambled",
+   "seed": 3,
+   "rank_acc": 0.8222222222222222,
+   "knn_acc": 0.8222222222222222
+  },
+  {
+   "dataset": "iris",
+   "arm": "scrambled",
+   "seed": 4,
+   "rank_acc": 0.7555555555555555,
+   "knn_acc": 0.8444444444444444
+  },
+  {
+   "dataset": "iris",
+   "arm": "logistic",
+   "seed": 0,
+   "rank_acc": 0.9777777777777777,
+   "knn_acc": null
+  },
+  {
+   "dataset": "wine",
+   "arm": "trained",
+   "seed": 0,
+   "rank_acc": 1.0,
+   "knn_acc": 1.0
+  },
+  {
+   "dataset": "wine",
+   "arm": "trained",
+   "seed": 1,
+   "rank_acc": 1.0,
+   "knn_acc": 1.0
+  },
+  {
+   "dataset": "wine",
+   "arm": "trained",
+   "seed": 2,
+   "rank_acc": 1.0,
+   "knn_acc": 1.0
+  },
+  {
+   "dataset": "wine",
+   "arm": "trained",
+   "seed": 3,
+   "rank_acc": 1.0,
+   "knn_acc": 1.0
+  },
+  {
+   "dataset": "wine",
+   "arm": "trained",
+   "seed": 4,
+   "rank_acc": 1.0,
+   "knn_acc": 1.0
+  },
+  {
+   "dataset": "wine",
+   "arm": "frozen",
+   "seed": 0,
+   "rank_acc": 0.9259259259259259,
+   "knn_acc": 0.9444444444444444
+  },
+  {
+   "dataset": "wine",
+   "arm": "frozen",
+   "seed": 1,
+   "rank_acc": 0.9444444444444444,
+   "knn_acc": 0.9629629629629629
+  },
+  {
+   "dataset": "wine",
+   "arm": "frozen",
+   "seed": 2,
+   "rank_acc": 0.9814814814814815,
+   "knn_acc": 0.9444444444444444
+  },
+  {
+   "dataset": "wine",
+   "arm": "frozen",
+   "seed": 3,
+   "rank_acc": 0.8888888888888888,
+   "knn_acc": 0.9629629629629629
+  },
+  {
+   "dataset": "wine",
+   "arm": "frozen",
+   "seed": 4,
+   "rank_acc": 0.9444444444444444,
+   "knn_acc": 0.9629629629629629
+  },
+  {
+   "dataset": "wine",
+   "arm": "scrambled",
+   "seed": 0,
+   "rank_acc": 0.9074074074074074,
+   "knn_acc": 0.9444444444444444
+  },
+  {
+   "dataset": "wine",
+   "arm": "scrambled",
+   "seed": 1,
+   "rank_acc": 0.9259259259259259,
+   "knn_acc": 0.9629629629629629
+  },
+  {
+   "dataset": "wine",
+   "arm": "scrambled",
+   "seed": 2,
+   "rank_acc": 0.9814814814814815,
+   "knn_acc": 0.9259259259259259
+  },
+  {
+   "dataset": "wine",
+   "arm": "scrambled",
+   "seed": 3,
+   "rank_acc": 0.9074074074074074,
+   "knn_acc": 0.9629629629629629
+  },
+  {
+   "dataset": "wine",
+   "arm": "scrambled",
+   "seed": 4,
+   "rank_acc": 0.9259259259259259,
+   "knn_acc": 0.9444444444444444
+  },
+  {
+   "dataset": "wine",
+   "arm": "logistic",
+   "seed": 0,
+   "rank_acc": 1.0,
+   "knn_acc": null
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "trained",
+   "seed": 0,
+   "rank_acc": 0.935672514619883,
+   "knn_acc": 0.9532163742690059
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "trained",
+   "seed": 1,
+   "rank_acc": 0.9415204678362573,
+   "knn_acc": 0.9649122807017544
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "trained",
+   "seed": 2,
+   "rank_acc": 0.9298245614035088,
+   "knn_acc": 0.9473684210526315
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "trained",
+   "seed": 3,
+   "rank_acc": 0.935672514619883,
+   "knn_acc": 0.9590643274853801
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "trained",
+   "seed": 4,
+   "rank_acc": 0.935672514619883,
+   "knn_acc": 0.9473684210526315
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "frozen",
+   "seed": 0,
+   "rank_acc": 0.9181286549707602,
+   "knn_acc": 0.9181286549707602
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "frozen",
+   "seed": 1,
+   "rank_acc": 0.9590643274853801,
+   "knn_acc": 0.935672514619883
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "frozen",
+   "seed": 2,
+   "rank_acc": 0.9122807017543859,
+   "knn_acc": 0.9181286549707602
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "frozen",
+   "seed": 3,
+   "rank_acc": 0.8947368421052632,
+   "knn_acc": 0.9181286549707602
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "frozen",
+   "seed": 4,
+   "rank_acc": 0.9239766081871345,
+   "knn_acc": 0.9181286549707602
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "scrambled",
+   "seed": 0,
+   "rank_acc": 0.9122807017543859,
+   "knn_acc": 0.9239766081871345
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "scrambled",
+   "seed": 1,
+   "rank_acc": 0.9005847953216374,
+   "knn_acc": 0.9298245614035088
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "scrambled",
+   "seed": 2,
+   "rank_acc": 0.9005847953216374,
+   "knn_acc": 0.935672514619883
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "scrambled",
+   "seed": 3,
+   "rank_acc": 0.9122807017543859,
+   "knn_acc": 0.9415204678362573
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "scrambled",
+   "seed": 4,
+   "rank_acc": 0.9473684210526315,
+   "knn_acc": 0.935672514619883
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "logistic",
+   "seed": 0,
+   "rank_acc": 0.9590643274853801,
+   "knn_acc": null
+  },
+  {
+   "dataset": "digits",
+   "arm": "trained",
+   "seed": 0,
+   "rank_acc": 0.9407407407407408,
+   "knn_acc": 0.9592592592592593
+  },
+  {
+   "dataset": "digits",
+   "arm": "trained",
+   "seed": 1,
+   "rank_acc": 0.924074074074074,
+   "knn_acc": 0.95
+  },
+  {
+   "dataset": "digits",
+   "arm": "trained",
+   "seed": 2,
+   "rank_acc": 0.937037037037037,
+   "knn_acc": 0.9537037037037037
+  },
+  {
+   "dataset": "digits",
+   "arm": "trained",
+   "seed": 3,
+   "rank_acc": 0.9296296296296296,
+   "knn_acc": 0.9555555555555556
+  },
+  {
+   "dataset": "digits",
+   "arm": "trained",
+   "seed": 4,
+   "rank_acc": 0.937037037037037,
+   "knn_acc": 0.9537037037037037
+  },
+  {
+   "dataset": "digits",
+   "arm": "frozen",
+   "seed": 0,
+   "rank_acc": 0.8777777777777778,
+   "knn_acc": 0.9444444444444444
+  },
+  {
+   "dataset": "digits",
+   "arm": "frozen",
+   "seed": 1,
+   "rank_acc": 0.8629629629629629,
+   "knn_acc": 0.9425925925925925
+  },
+  {
+   "dataset": "digits",
+   "arm": "frozen",
+   "seed": 2,
+   "rank_acc": 0.8481481481481481,
+   "knn_acc": 0.9333333333333333
+  },
+  {
+   "dataset": "digits",
+   "arm": "frozen",
+   "seed": 3,
+   "rank_acc": 0.8574074074074074,
+   "knn_acc": 0.95
+  },
+  {
+   "dataset": "digits",
+   "arm": "frozen",
+   "seed": 4,
+   "rank_acc": 0.8518518518518519,
+   "knn_acc": 0.9481481481481482
+  },
+  {
+   "dataset": "digits",
+   "arm": "scrambled",
+   "seed": 0,
+   "rank_acc": 0.5370370370370371,
+   "knn_acc": 0.7962962962962963
+  },
+  {
+   "dataset": "digits",
+   "arm": "scrambled",
+   "seed": 1,
+   "rank_acc": 0.5111111111111111,
+   "knn_acc": 0.7870370370370371
+  },
+  {
+   "dataset": "digits",
+   "arm": "scrambled",
+   "seed": 2,
+   "rank_acc": 0.5018518518518519,
+   "knn_acc": 0.7888888888888889
+  },
+  {
+   "dataset": "digits",
+   "arm": "scrambled",
+   "seed": 3,
+   "rank_acc": 0.5259259259259259,
+   "knn_acc": 0.7722222222222223
+  },
+  {
+   "dataset": "digits",
+   "arm": "scrambled",
+   "seed": 4,
+   "rank_acc": 0.5648148148148148,
+   "knn_acc": 0.7796296296296297
+  },
+  {
+   "dataset": "digits",
+   "arm": "logistic",
+   "seed": 0,
+   "rank_acc": 0.9722222222222222,
+   "knn_acc": null
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "trained",
+   "seed": 0,
+   "rank_acc": 0.7165354330708661,
+   "knn_acc": 0.7480314960629921
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "trained",
+   "seed": 1,
+   "rank_acc": 0.7086614173228346,
+   "knn_acc": 0.7440944881889764
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "trained",
+   "seed": 2,
+   "rank_acc": 0.7834645669291339,
+   "knn_acc": 0.7401574803149606
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "trained",
+   "seed": 3,
+   "rank_acc": 0.7559055118110236,
+   "knn_acc": 0.7559055118110236
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "trained",
+   "seed": 4,
+   "rank_acc": 0.7677165354330708,
+   "knn_acc": 0.7677165354330708
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "frozen",
+   "seed": 0,
+   "rank_acc": 0.5039370078740157,
+   "knn_acc": 0.6535433070866141
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "frozen",
+   "seed": 1,
+   "rank_acc": 0.5669291338582677,
+   "knn_acc": 0.6535433070866141
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "frozen",
+   "seed": 2,
+   "rank_acc": 0.43700787401574803,
+   "knn_acc": 0.6259842519685039
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "frozen",
+   "seed": 3,
+   "rank_acc": 0.5118110236220472,
+   "knn_acc": 0.6535433070866141
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "frozen",
+   "seed": 4,
+   "rank_acc": 0.5118110236220472,
+   "knn_acc": 0.6417322834645669
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "scrambled",
+   "seed": 0,
+   "rank_acc": 0.4448818897637795,
+   "knn_acc": 0.6062992125984252
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "scrambled",
+   "seed": 1,
+   "rank_acc": 0.421259842519685,
+   "knn_acc": 0.6614173228346457
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "scrambled",
+   "seed": 2,
+   "rank_acc": 0.47244094488188976,
+   "knn_acc": 0.6456692913385826
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "scrambled",
+   "seed": 3,
+   "rank_acc": 0.47244094488188976,
+   "knn_acc": 0.6023622047244095
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "scrambled",
+   "seed": 4,
+   "rank_acc": 0.5,
+   "knn_acc": 0.6259842519685039
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "logistic",
+   "seed": 0,
+   "rank_acc": 0.8149606299212598,
+   "knn_acc": null
+  },
+  {
+   "dataset": "segment",
+   "arm": "trained",
+   "seed": 0,
+   "rank_acc": 0.9076479076479076,
+   "knn_acc": 0.9523809523809523
+  },
+  {
+   "dataset": "segment",
+   "arm": "trained",
+   "seed": 1,
+   "rank_acc": 0.9047619047619048,
+   "knn_acc": 0.950937950937951
+  },
+  {
+   "dataset": "segment",
+   "arm": "trained",
+   "seed": 2,
+   "rank_acc": 0.9018759018759018,
+   "knn_acc": 0.9408369408369408
+  },
+  {
+   "dataset": "segment",
+   "arm": "trained",
+   "seed": 3,
+   "rank_acc": 0.886002886002886,
+   "knn_acc": 0.9393939393939394
+  },
+  {
+   "dataset": "segment",
+   "arm": "trained",
+   "seed": 4,
+   "rank_acc": 0.9191919191919192,
+   "knn_acc": 0.9422799422799423
+  },
+  {
+   "dataset": "segment",
+   "arm": "frozen",
+   "seed": 0,
+   "rank_acc": 0.84992784992785,
+   "knn_acc": 0.937950937950938
+  },
+  {
+   "dataset": "segment",
+   "arm": "frozen",
+   "seed": 1,
+   "rank_acc": 0.823953823953824,
+   "knn_acc": 0.9422799422799423
+  },
+  {
+   "dataset": "segment",
+   "arm": "frozen",
+   "seed": 2,
+   "rank_acc": 0.8124098124098124,
+   "knn_acc": 0.9321789321789322
+  },
+  {
+   "dataset": "segment",
+   "arm": "frozen",
+   "seed": 3,
+   "rank_acc": 0.8138528138528138,
+   "knn_acc": 0.9307359307359307
+  },
+  {
+   "dataset": "segment",
+   "arm": "frozen",
+   "seed": 4,
+   "rank_acc": 0.8181818181818182,
+   "knn_acc": 0.9206349206349206
+  },
+  {
+   "dataset": "segment",
+   "arm": "scrambled",
+   "seed": 0,
+   "rank_acc": 0.5367965367965368,
+   "knn_acc": 0.8051948051948052
+  },
+  {
+   "dataset": "segment",
+   "arm": "scrambled",
+   "seed": 1,
+   "rank_acc": 0.49927849927849927,
+   "knn_acc": 0.8152958152958153
+  },
+  {
+   "dataset": "segment",
+   "arm": "scrambled",
+   "seed": 2,
+   "rank_acc": 0.5526695526695526,
+   "knn_acc": 0.8152958152958153
+  },
+  {
+   "dataset": "segment",
+   "arm": "scrambled",
+   "seed": 3,
+   "rank_acc": 0.5064935064935064,
+   "knn_acc": 0.8181818181818182
+  },
+  {
+   "dataset": "segment",
+   "arm": "scrambled",
+   "seed": 4,
+   "rank_acc": 0.47474747474747475,
+   "knn_acc": 0.8008658008658008
+  },
+  {
+   "dataset": "segment",
+   "arm": "logistic",
+   "seed": 0,
+   "rank_acc": 0.9393939393939394,
+   "knn_acc": null
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "trained",
+   "seed": 0,
+   "rank_acc": 0.9202127659574468,
+   "knn_acc": 0.925531914893617
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "trained",
+   "seed": 1,
+   "rank_acc": 0.9202127659574468,
+   "knn_acc": 0.9202127659574468
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "trained",
+   "seed": 2,
+   "rank_acc": 0.9308510638297872,
+   "knn_acc": 0.9148936170212766
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "trained",
+   "seed": 3,
+   "rank_acc": 0.925531914893617,
+   "knn_acc": 0.9308510638297872
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "trained",
+   "seed": 4,
+   "rank_acc": 0.9308510638297872,
+   "knn_acc": 0.9202127659574468
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "frozen",
+   "seed": 0,
+   "rank_acc": 0.8404255319148937,
+   "knn_acc": 0.8351063829787234
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "frozen",
+   "seed": 1,
+   "rank_acc": 0.8670212765957447,
+   "knn_acc": 0.824468085106383
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "frozen",
+   "seed": 2,
+   "rank_acc": 0.8936170212765957,
+   "knn_acc": 0.851063829787234
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "frozen",
+   "seed": 3,
+   "rank_acc": 0.8670212765957447,
+   "knn_acc": 0.851063829787234
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "frozen",
+   "seed": 4,
+   "rank_acc": 0.898936170212766,
+   "knn_acc": 0.8617021276595744
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "scrambled",
+   "seed": 0,
+   "rank_acc": 0.8297872340425532,
+   "knn_acc": 0.8191489361702128
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "scrambled",
+   "seed": 1,
+   "rank_acc": 0.898936170212766,
+   "knn_acc": 0.8563829787234043
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "scrambled",
+   "seed": 2,
+   "rank_acc": 0.9042553191489362,
+   "knn_acc": 0.8404255319148937
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "scrambled",
+   "seed": 3,
+   "rank_acc": 0.9148936170212766,
+   "knn_acc": 0.8670212765957447
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "scrambled",
+   "seed": 4,
+   "rank_acc": 0.851063829787234,
+   "knn_acc": 0.8723404255319149
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "logistic",
+   "seed": 0,
+   "rank_acc": 0.8829787234042553,
+   "knn_acc": null
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "trained",
+   "seed": 0,
+   "rank_acc": 0.8083333333333333,
+   "knn_acc": 0.8266666666666667
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "trained",
+   "seed": 1,
+   "rank_acc": 0.8066666666666666,
+   "knn_acc": 0.8233333333333334
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "trained",
+   "seed": 2,
+   "rank_acc": 0.8066666666666666,
+   "knn_acc": 0.815
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "trained",
+   "seed": 3,
+   "rank_acc": 0.8083333333333333,
+   "knn_acc": 0.825
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "trained",
+   "seed": 4,
+   "rank_acc": 0.795,
+   "knn_acc": 0.8116666666666666
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "frozen",
+   "seed": 0,
+   "rank_acc": 0.7066666666666667,
+   "knn_acc": 0.7733333333333333
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "frozen",
+   "seed": 1,
+   "rank_acc": 0.705,
+   "knn_acc": 0.7966666666666666
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "frozen",
+   "seed": 2,
+   "rank_acc": 0.6916666666666667,
+   "knn_acc": 0.8083333333333333
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "frozen",
+   "seed": 3,
+   "rank_acc": 0.7033333333333334,
+   "knn_acc": 0.8066666666666666
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "frozen",
+   "seed": 4,
+   "rank_acc": 0.72,
+   "knn_acc": 0.7866666666666666
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "scrambled",
+   "seed": 0,
+   "rank_acc": 0.5066666666666667,
+   "knn_acc": 0.685
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "scrambled",
+   "seed": 1,
+   "rank_acc": 0.4866666666666667,
+   "knn_acc": 0.7116666666666667
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "scrambled",
+   "seed": 2,
+   "rank_acc": 0.4766666666666667,
+   "knn_acc": 0.6916666666666667
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "scrambled",
+   "seed": 3,
+   "rank_acc": 0.46,
+   "knn_acc": 0.6633333333333333
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "scrambled",
+   "seed": 4,
+   "rank_acc": 0.4716666666666667,
+   "knn_acc": 0.675
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "logistic",
+   "seed": 0,
+   "rank_acc": 0.825,
+   "knn_acc": null
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "trained",
+   "seed": 0,
+   "rank_acc": 0.8584905660377359,
+   "knn_acc": 0.8301886792452831
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "trained",
+   "seed": 1,
+   "rank_acc": 0.8962264150943396,
+   "knn_acc": 0.8679245283018868
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "trained",
+   "seed": 2,
+   "rank_acc": 0.8679245283018868,
+   "knn_acc": 0.8962264150943396
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "trained",
+   "seed": 3,
+   "rank_acc": 0.8962264150943396,
+   "knn_acc": 0.8867924528301887
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "trained",
+   "seed": 4,
+   "rank_acc": 0.8962264150943396,
+   "knn_acc": 0.8773584905660378
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "frozen",
+   "seed": 0,
+   "rank_acc": 0.7264150943396226,
+   "knn_acc": 0.839622641509434
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "frozen",
+   "seed": 1,
+   "rank_acc": 0.7452830188679245,
+   "knn_acc": 0.8584905660377359
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "frozen",
+   "seed": 2,
+   "rank_acc": 0.8207547169811321,
+   "knn_acc": 0.8301886792452831
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "frozen",
+   "seed": 3,
+   "rank_acc": 0.8018867924528302,
+   "knn_acc": 0.8113207547169812
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "frozen",
+   "seed": 4,
+   "rank_acc": 0.8773584905660378,
+   "knn_acc": 0.8584905660377359
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "scrambled",
+   "seed": 0,
+   "rank_acc": 0.8113207547169812,
+   "knn_acc": 0.8301886792452831
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "scrambled",
+   "seed": 1,
+   "rank_acc": 0.7641509433962265,
+   "knn_acc": 0.839622641509434
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "scrambled",
+   "seed": 2,
+   "rank_acc": 0.8018867924528302,
+   "knn_acc": 0.8018867924528302
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "scrambled",
+   "seed": 3,
+   "rank_acc": 0.6415094339622641,
+   "knn_acc": 0.8113207547169812
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "scrambled",
+   "seed": 4,
+   "rank_acc": 0.8301886792452831,
+   "knn_acc": 0.8113207547169812
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "logistic",
+   "seed": 0,
+   "rank_acc": 0.8773584905660378,
+   "knn_acc": null
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "trained",
+   "seed": 0,
+   "rank_acc": 0.7835497835497836,
+   "knn_acc": 0.7489177489177489
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "trained",
+   "seed": 1,
+   "rank_acc": 0.7445887445887446,
+   "knn_acc": 0.7359307359307359
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "trained",
+   "seed": 2,
+   "rank_acc": 0.7878787878787878,
+   "knn_acc": 0.7272727272727273
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "trained",
+   "seed": 3,
+   "rank_acc": 0.696969696969697,
+   "knn_acc": 0.7186147186147186
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "trained",
+   "seed": 4,
+   "rank_acc": 0.7359307359307359,
+   "knn_acc": 0.7662337662337663
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "frozen",
+   "seed": 0,
+   "rank_acc": 0.7402597402597403,
+   "knn_acc": 0.7359307359307359
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "frozen",
+   "seed": 1,
+   "rank_acc": 0.7056277056277056,
+   "knn_acc": 0.7272727272727273
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "frozen",
+   "seed": 2,
+   "rank_acc": 0.7445887445887446,
+   "knn_acc": 0.7489177489177489
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "frozen",
+   "seed": 3,
+   "rank_acc": 0.7229437229437229,
+   "knn_acc": 0.7575757575757576
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "frozen",
+   "seed": 4,
+   "rank_acc": 0.7272727272727273,
+   "knn_acc": 0.7835497835497836
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "scrambled",
+   "seed": 0,
+   "rank_acc": 0.7186147186147186,
+   "knn_acc": 0.7445887445887446
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "scrambled",
+   "seed": 1,
+   "rank_acc": 0.6623376623376623,
+   "knn_acc": 0.7142857142857143
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "scrambled",
+   "seed": 2,
+   "rank_acc": 0.6666666666666666,
+   "knn_acc": 0.7619047619047619
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "scrambled",
+   "seed": 3,
+   "rank_acc": 0.6926406926406926,
+   "knn_acc": 0.7705627705627706
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "scrambled",
+   "seed": 4,
+   "rank_acc": 0.670995670995671,
+   "knn_acc": 0.7965367965367965
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "logistic",
+   "seed": 0,
+   "rank_acc": 0.7748917748917749,
+   "knn_acc": null
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "trained",
+   "seed": 0,
+   "rank_acc": 0.8602150537634409,
+   "knn_acc": 0.8387096774193549
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "trained",
+   "seed": 1,
+   "rank_acc": 0.8709677419354839,
+   "knn_acc": 0.8817204301075269
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "trained",
+   "seed": 2,
+   "rank_acc": 0.8387096774193549,
+   "knn_acc": 0.8602150537634409
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "trained",
+   "seed": 3,
+   "rank_acc": 0.8817204301075269,
+   "knn_acc": 0.8709677419354839
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "trained",
+   "seed": 4,
+   "rank_acc": 0.7956989247311828,
+   "knn_acc": 0.8387096774193549
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "frozen",
+   "seed": 0,
+   "rank_acc": 0.8172043010752689,
+   "knn_acc": 0.8279569892473119
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "frozen",
+   "seed": 1,
+   "rank_acc": 0.8064516129032258,
+   "knn_acc": 0.8172043010752689
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "frozen",
+   "seed": 2,
+   "rank_acc": 0.8064516129032258,
+   "knn_acc": 0.7849462365591398
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "frozen",
+   "seed": 3,
+   "rank_acc": 0.8387096774193549,
+   "knn_acc": 0.7526881720430108
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "frozen",
+   "seed": 4,
+   "rank_acc": 0.8279569892473119,
+   "knn_acc": 0.7849462365591398
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "scrambled",
+   "seed": 0,
+   "rank_acc": 0.8279569892473119,
+   "knn_acc": 0.8172043010752689
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "scrambled",
+   "seed": 1,
+   "rank_acc": 0.8172043010752689,
+   "knn_acc": 0.8279569892473119
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "scrambled",
+   "seed": 2,
+   "rank_acc": 0.8064516129032258,
+   "knn_acc": 0.7956989247311828
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "scrambled",
+   "seed": 3,
+   "rank_acc": 0.7849462365591398,
+   "knn_acc": 0.7741935483870968
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "scrambled",
+   "seed": 4,
+   "rank_acc": 0.8172043010752689,
+   "knn_acc": 0.8387096774193549
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "logistic",
+   "seed": 0,
+   "rank_acc": 0.8709677419354839,
+   "knn_acc": null
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "trained",
+   "seed": 0,
+   "rank_acc": 0.5523156089193825,
+   "knn_acc": 0.6500857632933105
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "trained",
+   "seed": 1,
+   "rank_acc": 0.6037735849056604,
+   "knn_acc": 0.6500857632933105
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "trained",
+   "seed": 2,
+   "rank_acc": 0.5780445969125214,
+   "knn_acc": 0.6432246998284734
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "trained",
+   "seed": 3,
+   "rank_acc": 0.5917667238421955,
+   "knn_acc": 0.6689536878216124
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "trained",
+   "seed": 4,
+   "rank_acc": 0.5248713550600344,
+   "knn_acc": 0.6586620926243568
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "frozen",
+   "seed": 0,
+   "rank_acc": 0.5060034305317325,
+   "knn_acc": 0.7272727272727273
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "frozen",
+   "seed": 1,
+   "rank_acc": 0.49056603773584906,
+   "knn_acc": 0.7375643224699828
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "frozen",
+   "seed": 2,
+   "rank_acc": 0.5077186963979416,
+   "knn_acc": 0.7169811320754716
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "frozen",
+   "seed": 3,
+   "rank_acc": 0.5111492281303602,
+   "knn_acc": 0.7409948542024014
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "frozen",
+   "seed": 4,
+   "rank_acc": 0.5145797598627787,
+   "knn_acc": 0.7204116638078902
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "scrambled",
+   "seed": 0,
+   "rank_acc": 0.44939965694682676,
+   "knn_acc": 0.6500857632933105
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "scrambled",
+   "seed": 1,
+   "rank_acc": 0.444253859348199,
+   "knn_acc": 0.6535162950257289
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "scrambled",
+   "seed": 2,
+   "rank_acc": 0.45969125214408235,
+   "knn_acc": 0.6363636363636364
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "scrambled",
+   "seed": 3,
+   "rank_acc": 0.43739279588336194,
+   "knn_acc": 0.6586620926243568
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "scrambled",
+   "seed": 4,
+   "rank_acc": 0.4888507718696398,
+   "knn_acc": 0.6706689536878216
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "logistic",
+   "seed": 0,
+   "rank_acc": 0.7152658662092625,
+   "knn_acc": null
+  }
+ ]
+}

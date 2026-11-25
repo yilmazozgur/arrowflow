@@ -35,7 +35,7 @@ def study_environment():
     env=environment_record(__package__+'.run_studies:study_environment')
     root=Path(__file__).resolve().parents[2]
     for relative in ['experiments/make_revision/study_protocol.json','experiments/make_revision/protocol.json',
-                     'manuscript/MAKE/review/secondary_experiment_spec.md']:
+                     'docs/secondary_experiment_spec.md']:
         env['source_hashes'][relative]=hashlib.sha256((root/relative).read_bytes()).hexdigest()
     return env
 

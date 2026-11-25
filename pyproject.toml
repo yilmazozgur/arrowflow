@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "arrowflow"
 version = "0.1.0"
-description = "ArrowFlow: Training Ranking Filters with Position Votes"
+description = "ArrowFlow: networks of ranking layers trained with position votes"
 authors = ["Ozgur Yilmaz <ozguryilmaz@atu.edu.tr>"]
 readme = "README.md"
 license = "MIT"
@@ -17,15 +17,13 @@ threadpoolctl = "^3.5"
 torch = "^2.2"
 torchvision = {version = "^0.17", optional = true}
 matplotlib = "^3.8"
-seaborn = {version = "^0.13", optional = true}
 
 [tool.poetry.extras]
-legacy = ["torchvision", "seaborn"]
+mnist = ["torchvision"]
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
-# Keep the archived submission code out of repository test discovery.
 testpaths = ["tests"]

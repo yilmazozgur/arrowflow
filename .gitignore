@@ -12,9 +12,7 @@ venv/
 .mypy_cache/
 .pytest_cache/
 *.log
-*.aux
-*.bbl
-*.blg
 *.out
 *.DS_Store
 data/
+runs/

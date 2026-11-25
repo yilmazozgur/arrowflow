@@ -1,6 +1,7 @@
 """G4 follow-up: extra_data (the dedup pins and refusals, the NaN-aware duplicate audit, and the artificial pin gate with a
 stand-in loader; the real artificial module is never fitted or pinned here)."""
 import json
+import subprocess
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -224,6 +225,10 @@ def test_the_committed_artificial_pins_hold_for_the_committed_module_and_equal_a
     import hashlib
     status = ed.module_committed()
     record = json.loads(ed.ARTIFICIAL_PINS_FILE.read_text())
+    try:
+        subprocess.run(['git', 'cat-file', '-e', record['generator']['commit']], cwd=REPO, check=True, capture_output=True)
+    except (OSError, subprocess.CalledProcessError):
+        pytest.skip('the commit of the artificial pins is not in this repository')
     assert status['committed'] and record['generator']['sha256'] == hashlib.sha256(ed.ARTIFICIAL_MODULE.read_bytes()).hexdigest()
     approval = tmp_path/'approved.md'
     approval.write_text('fresh pin for the test\n')

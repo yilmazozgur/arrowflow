@@ -1,0 +1,794 @@
+[
+ {
+  "dataset": "iris",
+  "seed": 0,
+  "acc": 0.9777777777777777,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "iris",
+  "seed": 1,
+  "acc": 1.0,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "iris",
+  "seed": 2,
+  "acc": 1.0,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "iris",
+  "seed": 3,
+  "acc": 1.0,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    64,
+    32
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "iris",
+  "seed": 4,
+  "acc": 0.9777777777777777,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64,
+    32
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "wine",
+  "seed": 0,
+  "acc": 1.0,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "wine",
+  "seed": 1,
+  "acc": 1.0,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "wine",
+  "seed": 2,
+  "acc": 1.0,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64,
+    32
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "wine",
+  "seed": 3,
+  "acc": 1.0,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "wine",
+  "seed": 4,
+  "acc": 1.0,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "breast_cancer",
+  "seed": 0,
+  "acc": 0.9532163742690059,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "breast_cancer",
+  "seed": 1,
+  "acc": 0.9532163742690059,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "breast_cancer",
+  "seed": 2,
+  "acc": 0.9473684210526315,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64,
+    32
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "breast_cancer",
+  "seed": 3,
+  "acc": 0.9532163742690059,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "breast_cancer",
+  "seed": 4,
+  "acc": 0.9532163742690059,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "digits",
+  "seed": 0,
+  "acc": 0.9777777777777777,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "digits",
+  "seed": 1,
+  "acc": 0.9777777777777777,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "digits",
+  "seed": 2,
+  "acc": 0.975925925925926,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "digits",
+  "seed": 3,
+  "acc": 0.9796296296296296,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "digits",
+  "seed": 4,
+  "acc": 0.9833333333333333,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "vehicle",
+  "seed": 0,
+  "acc": 0.8031496062992126,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "vehicle",
+  "seed": 1,
+  "acc": 0.8149606299212598,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "vehicle",
+  "seed": 2,
+  "acc": 0.8307086614173228,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "vehicle",
+  "seed": 3,
+  "acc": 0.8110236220472441,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "vehicle",
+  "seed": 4,
+  "acc": 0.7952755905511811,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    64,
+    32
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "segment",
+  "seed": 0,
+  "acc": 0.9797979797979798,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "segment",
+  "seed": 1,
+  "acc": 0.963924963924964,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "segment",
+  "seed": 2,
+  "acc": 0.9725829725829725,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64,
+    32
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "segment",
+  "seed": 3,
+  "acc": 0.974025974025974,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "segment",
+  "seed": 4,
+  "acc": 0.9711399711399712,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "balance_scale",
+  "seed": 0,
+  "acc": 0.973404255319149,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "balance_scale",
+  "seed": 1,
+  "acc": 0.973404255319149,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "balance_scale",
+  "seed": 2,
+  "acc": 0.973404255319149,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "balance_scale",
+  "seed": 3,
+  "acc": 0.9680851063829787,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    64,
+    32
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "balance_scale",
+  "seed": 4,
+  "acc": 0.9680851063829787,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "mfeat_zernike",
+  "seed": 0,
+  "acc": 0.815,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "mfeat_zernike",
+  "seed": 1,
+  "acc": 0.8266666666666667,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "mfeat_zernike",
+  "seed": 2,
+  "acc": 0.8183333333333334,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "mfeat_zernike",
+  "seed": 3,
+  "acc": 0.825,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "mfeat_zernike",
+  "seed": 4,
+  "acc": 0.8333333333333334,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.01,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "ionosphere",
+  "seed": 0,
+  "acc": 0.9433962264150944,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    64,
+    32
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "ionosphere",
+  "seed": 1,
+  "acc": 0.9245283018867925,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64,
+    32
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "ionosphere",
+  "seed": 2,
+  "acc": 0.9150943396226415,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "ionosphere",
+  "seed": 3,
+  "acc": 0.9056603773584906,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64,
+    32
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "ionosphere",
+  "seed": 4,
+  "acc": 0.9056603773584906,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64,
+    32
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "diabetes",
+  "seed": 0,
+  "acc": 0.7965367965367965,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "diabetes",
+  "seed": 1,
+  "acc": 0.8008658008658008,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "diabetes",
+  "seed": 2,
+  "acc": 0.8181818181818182,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "diabetes",
+  "seed": 3,
+  "acc": 0.7965367965367965,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "diabetes",
+  "seed": 4,
+  "acc": 0.8138528138528138,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "vertebra_column",
+  "seed": 0,
+  "acc": 0.8709677419354839,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "vertebra_column",
+  "seed": 1,
+  "acc": 0.8279569892473119,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64,
+    32
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "vertebra_column",
+  "seed": 2,
+  "acc": 0.8494623655913979,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "vertebra_column",
+  "seed": 3,
+  "acc": 0.8709677419354839,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "vertebra_column",
+  "seed": 4,
+  "acc": 0.8602150537634409,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "steel_plates",
+  "seed": 0,
+  "acc": 0.7547169811320755,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "steel_plates",
+  "seed": 1,
+  "acc": 0.7632933104631218,
+  "selected": {
+   "alpha": 0.01,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "steel_plates",
+  "seed": 2,
+  "acc": 0.7564322469982847,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ },
+ {
+  "dataset": "steel_plates",
+  "seed": 3,
+  "acc": 0.7512864493996569,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    64
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 200
+  }
+ },
+ {
+  "dataset": "steel_plates",
+  "seed": 4,
+  "acc": 0.7632933104631218,
+  "selected": {
+   "alpha": 0.0001,
+   "hidden_layer_sizes": [
+    128
+   ],
+   "learning_rate_init": 0.001,
+   "max_iter": 400
+  }
+ }
+]

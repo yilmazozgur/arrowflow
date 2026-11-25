@@ -1,0 +1,41 @@
+{
+ "gradient_identity": {
+  "identical_when_every_motion_flips": true,
+  "equals_lr_abs_m_sign_h_over_numel": true
+ },
+ "sign_test": {
+  "core_mlp/core_original": {
+   "before": 1310.234375,
+   "after": 1137.1953125
+  },
+  "core_mlp/core_detached": {
+   "before": 1310.234375,
+   "after": 1594.484375
+  },
+  "core_mlp/core_detached_flipped": {
+   "before": 1310.234375,
+   "after": 895.6875
+  },
+  "core_mlp/target": {
+   "before": 1310.234375,
+   "after": 921.390625
+  },
+  "linear/core_original": {
+   "before": 1381.4375,
+   "after": 921.78125
+  },
+  "linear/core_detached": {
+   "before": 1381.4375,
+   "after": 1723.328125
+  },
+  "linear/core_detached_flipped": {
+   "before": 1381.4375,
+   "after": 759.609375
+  },
+  "linear/target": {
+   "before": 1381.4375,
+   "after": 770.984375
+  }
+ },
+ "setting": "digits rows 0-255, standardized; seed 3; lr_tensor 0.05; five updates; class filters fixed; gate all; no away term"
+}

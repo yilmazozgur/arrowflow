@@ -1,0 +1,233 @@
+{
+  "across_datasets": {
+    "counts": "positive, negative, Holm-significant positive and negative",
+    "mean": "mean of the 17 per-dataset mean differences, 95 % t interval with 16 df",
+    "signed_rank": "exact two-sided Wilcoxon over the per-dataset mean differences; zeros dropped, ties at average ranks, exact over all 2^n sign assignments",
+    "subset_status": "descriptive only, with the 17-dataset Holm p",
+    "subsets": {
+      "benchmark": [
+        "iris",
+        "wine",
+        "breast_cancer",
+        "wine_quality",
+        "vehicle",
+        "segment",
+        "digits"
+      ],
+      "further": "the ten further datasets"
+    }
+  },
+  "af_refit": "every job and seed, before PL; it must reproduce the registered views7 predictions exactly, or the job stops and the run stops",
+  "analysis_module": "experiments/make_revision/compare_labels.py",
+  "blindness": "records hold per-row predictions, never an accuracy; PL's validation errors and the readouts' inner scores are not stored; run.log holds job names and seconds; check prints counts only",
+  "checks": [
+    "inputs",
+    "core_sources",
+    "reference_predictions",
+    "registered_state",
+    "checkpoints",
+    "initial_state",
+    "update0_frozen",
+    "label_routing",
+    "snapshot_readout",
+    "frozen_permuted",
+    "uninstrumented_fit",
+    "training_record",
+    "rng_untouched",
+    "wrapper_removed"
+  ],
+  "descriptive": [
+    "vote volume per hidden layer (share of selected slots with a nonzero vote), over the run and up to the matched stop, AF and PL, and PL over AF",
+    "displacement per layer at PL[match], PL[own], PL[final]; AF at its checkpoint and update 200",
+    "checkpoint distribution: median, IQR, share at update 0, PL[own] against AF",
+    "neighbourhood purity at the three readouts beside AF's and FR's registered purity; per-class recall of every arm and readout",
+    "PL[final] accuracy, PL[final] - FR, AF - PL[final]",
+    "per permutation: share keeping the true label (expected sum of squared class shares), Cramer's V",
+    "per-view split by encoder type (LDA views 1, 4, 7 against the four others): AF, FR, PL[match], PL[own], PL[final], and D and S within each group"
+  ],
+  "diverges_by_construction": "the batch sequence after the first update (the gate draws for correct rows only); the first batch holds AF's rows",
+  "failure_policy": "a failed check or fit fails its job, which writes no record; the pending jobs are cancelled and the run stops",
+  "families": {
+    "F1": {
+      "contrast": "AF - PL[match]",
+      "role": "primary"
+    },
+    "F2": {
+      "contrast": "PL[match] - FR",
+      "role": "separate family"
+    },
+    "F3": {
+      "contrast": "AF - PL[own]",
+      "role": "secondary"
+    },
+    "F4": {
+      "contrast": "PL[own] - FR",
+      "role": "secondary"
+    },
+    "G": {
+      "contrast": "AF - FR",
+      "role": "the size of the gain; must equal the registered motion analysis"
+    }
+  },
+  "fit": "MultiViewArrowFlowKNN at the sealed selection, step for step as motion_controls.arm_fit, with an identity MotionArm (views7) and a TrainingRecorder subclass on each view network",
+  "fixed": "2026-11-25, before any score of the permuted-label arm",
+  "identical": [
+    "the registered data, splits and 15 outer folds of the 17 datasets",
+    "the sealed per-fold selection",
+    "the fitting seeds 8129, 19391 and 39019",
+    "the view seeds, encoders, seeded initial filters and validation rows",
+    "eta with its multistep schedule, T = 200, B = 32, rho = 0.5, c = 0.125, p_correct = 0.01",
+    "the Borda update and the earlier relay on the two-layer folds",
+    "the checkpoint rule and the readout rule"
+  ],
+  "inputs": {
+    "motion_files_digest": "1cb92ea5c8287505e1dd853daf9c56f35b87347e21e0cee9f62e36b4d90d05b2",
+    "pinned_sha256": {
+      "diagnostics/checkpoints.csv": "8ff8761fb9d16c3d0324a8efca45bd8d844e21a2e98527ecbbbc679978e0cfe9",
+      "diagnostics/provenance.json": "8a558a4f9ba8b69c78783ecc8a025b7234d34b117b46fba5826b3b4f1ef2e647",
+      "motion/environment.json": "6d38adc4545f623c337a21686b73342adc8f7aab044e9c4cc966c985543ed70d",
+      "motion/manifest.json": "f89bc0783d2ebc876d1fda2bc72a932ccf49bdaaa4635f447ddd25c563b9d008",
+      "motion/motion_controls_summary.json": "8f693fe35f5f0efbb5a3c5b61b64fc7c174a086d0ad8a7efff6aaba81cfd1e80",
+      "motion/planned_jobs.json": "06f4e9a2af5dc1cb4292df0d64b76a8939949b136d7cb23c51c59b69a7f79d87",
+      "motion/protocol.json": "d31d5d39a94bde79c35a9b258a0e94a725a4c1788f440085452624f97a65c454",
+      "motion/reference_selections.json": "535c203238deef743119fe8bd0068d16db5d26d5f87008fe814da0f4eb44c327",
+      "motion_analysis/motion_analysis.json": "d3f6d809751be57ebb6b9fafae76b1b7228413f24c866045f5c87e0f9b80a8b5"
+    }
+  },
+  "interpretation": "If ArrowFlow does not beat its own pipeline trained on permuted labels, the paper says so and withdraws the claim that the gain depends on the labels in the signal. No arm, dataset, readout or subset is added, dropped or reweighted after a PL score is seen.",
+  "joins": {
+    "protocol_id": "arrowflow-v3-motion-controls-1",
+    "run": "2026-09-14-motion",
+    "study": "matched motion controls (motion_controls.py)"
+  },
+  "label_share": {
+    "bootstrap": "np.random.default_rng(20261125).integers(0, 17, (10000, 17)), 95 % percentile interval, linear interpolation",
+    "complement": "X = sum(S)/sum(G)",
+    "reported": "only in pattern (b)",
+    "undefined": "sum(G) <= 0 counts as -inf (lower) and +inf (upper)",
+    "value": "sum(D)/sum(G) over the 17 datasets"
+  },
+  "labels": {
+    "permuted": [
+      "the gate",
+      "the class-filter prototype readout inside the gate",
+      "the class-layer vote",
+      "the motions to the hidden layers and the relay",
+      "the checkpoint validation error"
+    ],
+    "true": [
+      "OrdinalEncoder.fit, the three LDA views included",
+      "the kNN readout's stored labels",
+      "select_knn_readout",
+      "the test scoring, purity and per-class recall"
+    ]
+  },
+  "module": "experiments/make_revision/label_controls.py",
+  "named_subset": {
+    "adjustment": "the family's own",
+    "datasets": [
+      "balance_scale",
+      "mfeat_zernike"
+    ],
+    "families": [
+      "F1",
+      "F2"
+    ]
+  },
+  "names": {
+    "AF": "ArrowFlow, the registered arm views7",
+    "D": "AF - PL",
+    "FR": "the registered frozen-filter arm",
+    "G": "AF - FR = D + S",
+    "PL": "the permuted-label arm",
+    "S": "PL - FR"
+  },
+  "parallelism": "one spawned single-thread process per dataset and outer fold, 24 workers by default, longest jobs first",
+  "permutation": {
+    "granularity": "one per outer fold and fitting seed, shared by the seven views",
+    "kind": "uniform permutation of the rows of the outer training partition (class counts kept)",
+    "network_labels": "y_train[permutation]",
+    "rows": "the whole partition, the checkpoint validation rows included",
+    "stream": "np.random.RandomState(derive_seed(20261125, 'permuted_labels', dataset, outer_repeat, outer_fold, seed)).permutation(n_train), inside an RNG guard"
+  },
+  "protocol_id": "arrowflow-v3-permuted-labels-1",
+  "reading": {
+    "d_damage": "In this pattern D includes the damage that training on permuted labels does (D = G - S).",
+    "direction": "signed-rank p < 0.05, in the direction of the larger rank sum; else n.s.",
+    "g_sentence": "The size of the gain is G = {g} points (ArrowFlow minus frozen filters, positive on {k_g} of 17 datasets, significantly on {m_g}); D is evidence of label dependence, not a size.",
+    "order": [
+      "f",
+      "d",
+      "c",
+      "b",
+      "a",
+      "e"
+    ],
+    "patterns": {
+      "a": "D n.s., S positive",
+      "b": "D positive, S positive",
+      "c": "D positive, S n.s.",
+      "d": "D positive, S negative",
+      "e": "D n.s., S n.s.; also D n.s., S negative (not in the specification's table)",
+      "f": "D negative"
+    },
+    "placeholders": {
+      "X": "sum(S)/sum(G) with its bootstrap interval",
+      "k": "datasets with D > 0",
+      "k_s": "datasets with S > 0",
+      "m": "datasets significantly positive in D",
+      "s, l, u": "mean of S and its 95 % t interval",
+      "x, y": "mean normalized footrule displacement of the last hidden layer from its initial filters, at PL's readout and at AF's checkpoint, averaged over views, seeds, folds, then datasets"
+    },
+    "readouts": {
+      "primary": [
+        "F1",
+        "F2"
+      ],
+      "secondary": [
+        "F3",
+        "F4"
+      ]
+    },
+    "stopping": "Read at the arm's own checkpoint (F3 and F4), the pattern is ({secondary}) rather than ({primary}); both are reported, and the difference is attributed to the stopping rule.",
+    "withdraw": "ArrowFlow does not beat its own pipeline trained on permuted labels: the paper says so and withdraws the claim that the gain depends on the labels in the signal.",
+    "wordings": {
+      "a": "The labels in the signal are not what helps: trained with permuted labels, the networks are as accurate as ArrowFlow and more accurate than frozen filters on {k_s} datasets. The gain is a label-free adaptation of the hidden code.",
+      "b": "Part of the gain does not need the labels. With permuted labels the networks beat frozen filters by {s_points} points, {x_share} ({x_interval}) of ArrowFlow's gain; the labels add the other {d_points} points.",
+      "c": "Trained with permuted labels, the hidden filters move (displacement {x} against {y} for ArrowFlow), but the networks are as accurate as networks whose filters never move (S = {s}, interval {l} to {u}). The gain over frozen filters needs the labels.",
+      "d": "Trained with permuted labels, the same networks are less accurate than ArrowFlow on {k} of 17 datasets (significantly on {m}), and less accurate than networks whose hidden filters never move, by {abs_s} points on average. A consistent target without the labels' content does not help the readout; it harms it. The gain over frozen filters therefore needs the labels in the signal.",
+      "e": "The permuted-label control cannot apportion the one-point gain between the labels and the structure of a consistent target.",
+      "f": "Reported as found: trained with permuted labels, the networks are more accurate than ArrowFlow (D = {d} points on average, signed-rank p = {p_d}), and the training claim is withdrawn."
+    }
+  },
+  "readouts": {
+    "final": "the filters after update 200 (descriptive)",
+    "match": "the filters after update k*_v, AF's checkpoint update of the same fold, seed and view (primary)",
+    "own": "PL's own checkpoint, the network train() restores (secondary)",
+    "rule": "network_forward of the training and test rows under the copied filters, select_knn_readout with the true labels at derive_seed(view seed, \"readout_selection\"), StableFootruleKNN, majority of the seven views"
+  },
+  "reused": {
+    "AF": "the registered motion-run views7 predictions",
+    "FR": "the registered motion-run frozen predictions"
+  },
+  "seeds": {
+    "bootstrap": 20261125,
+    "fit": [
+      8129,
+      19391,
+      39019
+    ],
+    "label_stream": 20261125
+  },
+  "specification": "manuscript/TMLR/handoff/COST_permuted_labels.md (Sections 2, 3 and 5); option B, the fuller version",
+  "test": {
+    "adjustment": "Holm across the 17 datasets within each family",
+    "aggregation": "fitting seeds averaged within each outer fold",
+    "alpha": 0.05,
+    "confidence": 0.95,
+    "df": 14,
+    "method": "corrected resampled t",
+    "sides": 2,
+    "test_train_ratio": 0.25
+  }
+}

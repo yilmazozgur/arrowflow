@@ -1,0 +1,96 @@
+{
+  "aggregation_integrity": "explicit_expected_folds_and_model_seeds; reconcile_every_planned_job_result_and_fit_log",
+  "augmentation": false,
+  "candidate_budget": 24,
+  "candidate_seed": 41071,
+  "candidate_tie_rule": "lowest_canonical_config_id",
+  "confidence": 0.95,
+  "datasets": [
+    "sushi_childhood_east_west_v2"
+  ],
+  "device": "cpu",
+  "failure_policy": "log_all_failures; incomplete_candidates_ineligible; failed_outer_fits_and_terminal_selection_failures_retained; no_adaptive_stopping",
+  "fit_seeds": [
+    8129,
+    19391,
+    39019
+  ],
+  "freeze_requirement": "complete_model_registry_and_candidates_reviewed; attainable_training_only_pilot; leakage_checks_pass; freeze_before_outer_scores",
+  "frozen": true,
+  "frozen_at_utc": "2026-09-12T19:54:52.020064+00:00",
+  "historical_results": "exploratory_only",
+  "inner_folds": 3,
+  "internal_validation_ratio": [
+    0,
+    0.1
+  ],
+  "multiplicity": "descriptive_secondary_native_benchmark",
+  "native_arrowflow_grid": "v3",
+  "native_arrowflow_v3": {
+    "candidate_grid": {
+      "learning_rate": [
+        0.05,
+        0.1,
+        0.2
+      ],
+      "p_correct": [
+        0.01,
+        0.1
+      ],
+      "validation_ratio": [
+        0,
+        0.1
+      ],
+      "widths": [
+        [
+          64
+        ],
+        [
+          128
+        ],
+        [
+          64,
+          32
+        ]
+      ]
+    },
+    "fixed": {
+      "augment": false,
+      "batch_size": 32,
+      "embed_dim": 10,
+      "iterations": 200
+    },
+    "model_id": "native_arrowflow",
+    "replaces": [
+      "native_arrowflow_64",
+      "native_arrowflow_64_32",
+      "native_arrowflow_230"
+    ],
+    "sampling": "candidate_grid(grid, candidate_budget, candidate_seed): 24 of 36 combinations, the same budget and seed as every other tuned family",
+    "selection": "inner folds only; 3 stochastic finalists reranked over the 3 fit seeds; 93 fits per outer fold"
+  },
+  "numeric_threads_per_worker": 1,
+  "outer_folds": 5,
+  "outer_repeats": 3,
+  "paired_interval": "seed_average_within_fold_then_corrected_resampled_t",
+  "parallelism": "spawned_processes_by_outer_fold_and_model",
+  "primary_contrasts": [],
+  "primary_family_size": 0,
+  "production_family": "native",
+  "protocol_id": "arrowflow-v3-native-1",
+  "report_metrics": [
+    "accuracy",
+    "error",
+    "balanced_accuracy",
+    "macro_f1"
+  ],
+  "resource_decision": "retain_complete_prespecified_design; at_most_16_single_thread_workers",
+  "secondary_studies": "separately_frozen_matched_and_secondary_protocols",
+  "selection_metric": "accuracy",
+  "source_template_sha256": "0dc439ccecea1aa0799b4bbdb702e1db2aafae16941454d9210ac2adc7b1c47a",
+  "split_seed": 27183,
+  "status": "reviewed_and_piloted_before_confirmatory_scoring",
+  "stochastic_finalists": 3,
+  "test_train_ratio": 0.25,
+  "wallclock_cap_hours": 1
+}

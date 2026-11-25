@@ -1,0 +1,5420 @@
+{
+ "arms": {
+  "frozen": {},
+  "core_original": {},
+  "core_detached_flipped": {
+   "gate": "all"
+  },
+  "target": {
+   "gate": "accepted",
+   "contrast": 0.5
+  },
+  "target_scrambled": {
+   "gate": "accepted",
+   "contrast": 0.5
+  }
+ },
+ "epochs": 60,
+ "results": [
+  {
+   "dataset": "iris",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8666666666666667,
+   "iterations": 240,
+   "seconds": 1.2624664420000045
+  },
+  {
+   "dataset": "iris",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8666666666666667,
+   "iterations": 240,
+   "seconds": 2.544174781000038
+  },
+  {
+   "dataset": "iris",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8444444444444444,
+   "iterations": 240,
+   "seconds": 1.3243988110000373
+  },
+  {
+   "dataset": "iris",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.8666666666666667,
+   "iterations": 240,
+   "seconds": 1.203400178000038
+  },
+  {
+   "dataset": "iris",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8,
+   "iterations": 240,
+   "seconds": 1.2265670259998842
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.9555555555555556,
+   "iterations": 240,
+   "seconds": 1.4127645569999459
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.9111111111111111,
+   "iterations": 240,
+   "seconds": 1.4169190479999543
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8666666666666667,
+   "iterations": 240,
+   "seconds": 3.0817466139999397
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9555555555555556,
+   "iterations": 240,
+   "seconds": 3.0940809329999865
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.9555555555555556,
+   "iterations": 240,
+   "seconds": 3.014432412999895
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 1.6363954149999245
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.9333333333333333,
+   "iterations": 240,
+   "seconds": 1.4234558279999874
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.9555555555555556,
+   "iterations": 240,
+   "seconds": 0.8839565139999195
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9555555555555556,
+   "iterations": 240,
+   "seconds": 0.8767337489998681
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.9555555555555556,
+   "iterations": 240,
+   "seconds": 0.8731354149999788
+  },
+  {
+   "dataset": "iris",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8666666666666667,
+   "iterations": 240,
+   "seconds": 0.9110505420001118
+  },
+  {
+   "dataset": "iris",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8,
+   "iterations": 240,
+   "seconds": 0.9168950139999197
+  },
+  {
+   "dataset": "iris",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8666666666666667,
+   "iterations": 240,
+   "seconds": 0.9082673450000129
+  },
+  {
+   "dataset": "iris",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.8444444444444444,
+   "iterations": 240,
+   "seconds": 0.9238673260001633
+  },
+  {
+   "dataset": "iris",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8444444444444444,
+   "iterations": 240,
+   "seconds": 0.9032881820000966
+  },
+  {
+   "dataset": "iris",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8444444444444444,
+   "iterations": 240,
+   "seconds": 0.9329968389999976
+  },
+  {
+   "dataset": "iris",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8222222222222222,
+   "iterations": 240,
+   "seconds": 0.9246404959999381
+  },
+  {
+   "dataset": "iris",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8444444444444444,
+   "iterations": 240,
+   "seconds": 0.9318414429999393
+  },
+  {
+   "dataset": "iris",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9333333333333333,
+   "iterations": 240,
+   "seconds": 0.9174032880000595
+  },
+  {
+   "dataset": "iris",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8,
+   "iterations": 240,
+   "seconds": 0.921750363000001
+  },
+  {
+   "dataset": "iris",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9555555555555556,
+   "iterations": 240,
+   "seconds": 1.108907095000177
+  },
+  {
+   "dataset": "iris",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9777777777777777,
+   "iterations": 240,
+   "seconds": 2.8456931460000305
+  },
+  {
+   "dataset": "iris",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9777777777777777,
+   "iterations": 240,
+   "seconds": 1.1235645079998449
+  },
+  {
+   "dataset": "iris",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.9333333333333333,
+   "iterations": 240,
+   "seconds": 1.1137563730001148
+  },
+  {
+   "dataset": "iris",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.7555555555555555,
+   "iterations": 240,
+   "seconds": 2.9418343709999135
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9777777777777777,
+   "iterations": 240,
+   "seconds": 1.6854443520001041
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 1.6821540710000136
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9777777777777777,
+   "iterations": 240,
+   "seconds": 1.6762760470001012
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.9555555555555556,
+   "iterations": 240,
+   "seconds": 1.670602216000134
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9333333333333333,
+   "iterations": 240,
+   "seconds": 1.6767431630000829
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 4.719991015000005
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9777777777777777,
+   "iterations": 240,
+   "seconds": 4.628238302
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9777777777777777,
+   "iterations": 240,
+   "seconds": 1.6599109419998967
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.9777777777777777,
+   "iterations": 240,
+   "seconds": 1.6831765150000138
+  },
+  {
+   "dataset": "iris",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9777777777777777,
+   "iterations": 240,
+   "seconds": 1.6512174080000932
+  },
+  {
+   "dataset": "iris",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 1.713623353999992
+  },
+  {
+   "dataset": "iris",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9777777777777777,
+   "iterations": 240,
+   "seconds": 1.703130862999842
+  },
+  {
+   "dataset": "iris",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 1.704441450000104
+  },
+  {
+   "dataset": "iris",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 1.6809245950000786
+  },
+  {
+   "dataset": "iris",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9777777777777777,
+   "iterations": 240,
+   "seconds": 1.6829538680001406
+  },
+  {
+   "dataset": "iris",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.8888888888888888,
+   "iterations": 240,
+   "seconds": 1.7290725759999077
+  },
+  {
+   "dataset": "iris",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.7777777777777778,
+   "iterations": 240,
+   "seconds": 4.744848502999957
+  },
+  {
+   "dataset": "iris",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.8,
+   "iterations": 240,
+   "seconds": 1.7490218670000104
+  },
+  {
+   "dataset": "iris",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.7555555555555555,
+   "iterations": 240,
+   "seconds": 1.7196294120001312
+  },
+  {
+   "dataset": "iris",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.8,
+   "iterations": 240,
+   "seconds": 4.171015363000151
+  },
+  {
+   "dataset": "wine",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.9444444444444444,
+   "iterations": 240,
+   "seconds": 0.7216866240000854
+  },
+  {
+   "dataset": "wine",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.9444444444444444,
+   "iterations": 240,
+   "seconds": 0.7190953560000253
+  },
+  {
+   "dataset": "wine",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.9444444444444444,
+   "iterations": 240,
+   "seconds": 0.7188258219998716
+  },
+  {
+   "dataset": "wine",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9444444444444444,
+   "iterations": 240,
+   "seconds": 0.7145322700000634
+  },
+  {
+   "dataset": "wine",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.9629629629629629,
+   "iterations": 240,
+   "seconds": 0.709967880000022
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 0.8763547010000821
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.9814814814814815,
+   "iterations": 240,
+   "seconds": 0.8885534259998167
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.9629629629629629,
+   "iterations": 240,
+   "seconds": 0.900408754999944
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9814814814814815,
+   "iterations": 240,
+   "seconds": 0.8868002760000309
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.9444444444444444,
+   "iterations": 240,
+   "seconds": 0.8772864769998705
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 0.8899271520001548
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.9814814814814815,
+   "iterations": 240,
+   "seconds": 0.8726796720000038
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 0.883164172999841
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 0.8762375269998302
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 2.206858433999969
+  },
+  {
+   "dataset": "wine",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 0.922681066999985
+  },
+  {
+   "dataset": "wine",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.9814814814814815,
+   "iterations": 240,
+   "seconds": 2.2265628860000106
+  },
+  {
+   "dataset": "wine",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.9814814814814815,
+   "iterations": 240,
+   "seconds": 0.9217098700000861
+  },
+  {
+   "dataset": "wine",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9629629629629629,
+   "iterations": 240,
+   "seconds": 0.9026859690000038
+  },
+  {
+   "dataset": "wine",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 0.9072343450000062
+  },
+  {
+   "dataset": "wine",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.9629629629629629,
+   "iterations": 240,
+   "seconds": 0.9250963300000876
+  },
+  {
+   "dataset": "wine",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.9629629629629629,
+   "iterations": 240,
+   "seconds": 0.9432696840001427
+  },
+  {
+   "dataset": "wine",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.9444444444444444,
+   "iterations": 240,
+   "seconds": 0.9302006660000188
+  },
+  {
+   "dataset": "wine",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9444444444444444,
+   "iterations": 240,
+   "seconds": 0.9336931679999907
+  },
+  {
+   "dataset": "wine",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.9814814814814815,
+   "iterations": 240,
+   "seconds": 1.0544411800001399
+  },
+  {
+   "dataset": "wine",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9629629629629629,
+   "iterations": 240,
+   "seconds": 1.1275354240001434
+  },
+  {
+   "dataset": "wine",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9629629629629629,
+   "iterations": 240,
+   "seconds": 1.1335484579999502
+  },
+  {
+   "dataset": "wine",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9074074074074074,
+   "iterations": 240,
+   "seconds": 1.1288317839998854
+  },
+  {
+   "dataset": "wine",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.9074074074074074,
+   "iterations": 240,
+   "seconds": 1.117862070000001
+  },
+  {
+   "dataset": "wine",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9629629629629629,
+   "iterations": 240,
+   "seconds": 1.1274990069998694
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9259259259259259,
+   "iterations": 240,
+   "seconds": 1.674547622999853
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9629629629629629,
+   "iterations": 240,
+   "seconds": 1.6700825890000033
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9444444444444444,
+   "iterations": 240,
+   "seconds": 2.743552036999972
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.9629629629629629,
+   "iterations": 240,
+   "seconds": 4.663198222000119
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9814814814814815,
+   "iterations": 240,
+   "seconds": 1.686177157999964
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9814814814814815,
+   "iterations": 240,
+   "seconds": 1.6911707679998926
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9814814814814815,
+   "iterations": 240,
+   "seconds": 2.0819600780000656
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 1.660958058999995
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 4.6868720100001156
+  },
+  {
+   "dataset": "wine",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 1.6574196799999754
+  },
+  {
+   "dataset": "wine",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 1.721797959000014
+  },
+  {
+   "dataset": "wine",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9814814814814815,
+   "iterations": 240,
+   "seconds": 4.712211196999988
+  },
+  {
+   "dataset": "wine",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 1.7002625930001614
+  },
+  {
+   "dataset": "wine",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 1.6986649539999235
+  },
+  {
+   "dataset": "wine",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 1.0,
+   "iterations": 240,
+   "seconds": 1.7008006920000298
+  },
+  {
+   "dataset": "wine",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.8148148148148148,
+   "iterations": 240,
+   "seconds": 2.4004429560000062
+  },
+  {
+   "dataset": "wine",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9259259259259259,
+   "iterations": 240,
+   "seconds": 1.7294443739999679
+  },
+  {
+   "dataset": "wine",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9444444444444444,
+   "iterations": 240,
+   "seconds": 1.7181046609998702
+  },
+  {
+   "dataset": "wine",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.8333333333333334,
+   "iterations": 240,
+   "seconds": 1.72957201600002
+  },
+  {
+   "dataset": "wine",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9814814814814815,
+   "iterations": 240,
+   "seconds": 2.375287979999939
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.9239766081871345,
+   "iterations": 780,
+   "seconds": 2.2343393779999587
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.9064327485380117,
+   "iterations": 780,
+   "seconds": 2.272524186000055
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.935672514619883,
+   "iterations": 780,
+   "seconds": 2.2567856599998777
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9239766081871345,
+   "iterations": 780,
+   "seconds": 2.2668782539999484
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.9239766081871345,
+   "iterations": 780,
+   "seconds": 2.250168598999835
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.9005847953216374,
+   "iterations": 780,
+   "seconds": 2.835113002000071
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8830409356725146,
+   "iterations": 780,
+   "seconds": 2.8763510599999336
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.9005847953216374,
+   "iterations": 780,
+   "seconds": 4.058506986000111
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9005847953216374,
+   "iterations": 780,
+   "seconds": 2.9052965450000556
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8187134502923976,
+   "iterations": 780,
+   "seconds": 2.865626431999999
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.9532163742690059,
+   "iterations": 780,
+   "seconds": 7.042622619999975
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.9415204678362573,
+   "iterations": 780,
+   "seconds": 7.017148068999859
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.9415204678362573,
+   "iterations": 780,
+   "seconds": 7.060852849999947
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9649122807017544,
+   "iterations": 780,
+   "seconds": 4.89804140199999
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.9415204678362573,
+   "iterations": 780,
+   "seconds": 2.7854262749999634
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.9415204678362573,
+   "iterations": 780,
+   "seconds": 2.8687263050001093
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.9415204678362573,
+   "iterations": 780,
+   "seconds": 2.907755391999899
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.9415204678362573,
+   "iterations": 780,
+   "seconds": 2.8905989820000286
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9415204678362573,
+   "iterations": 780,
+   "seconds": 2.879947234999918
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.9415204678362573,
+   "iterations": 780,
+   "seconds": 3.422220788000004
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.9181286549707602,
+   "iterations": 780,
+   "seconds": 3.0368363000000045
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.9181286549707602,
+   "iterations": 780,
+   "seconds": 3.0166406779999306
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.9181286549707602,
+   "iterations": 780,
+   "seconds": 2.977916157999971
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9064327485380117,
+   "iterations": 780,
+   "seconds": 2.9371338079999987
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.9122807017543859,
+   "iterations": 780,
+   "seconds": 3.052370871999983
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9239766081871345,
+   "iterations": 780,
+   "seconds": 3.560911949000001
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.8654970760233918,
+   "iterations": 780,
+   "seconds": 3.607125394999912
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9005847953216374,
+   "iterations": 780,
+   "seconds": 8.552462828999978
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.9064327485380117,
+   "iterations": 780,
+   "seconds": 3.590776910999921
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9122807017543859,
+   "iterations": 780,
+   "seconds": 3.6207484389999536
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9005847953216374,
+   "iterations": 780,
+   "seconds": 5.776421583000001
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.8771929824561403,
+   "iterations": 780,
+   "seconds": 5.5054583000001
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.8771929824561403,
+   "iterations": 780,
+   "seconds": 5.476481885999874
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.935672514619883,
+   "iterations": 780,
+   "seconds": 5.495032825999942
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9473684210526315,
+   "iterations": 780,
+   "seconds": 15.412530306999997
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9532163742690059,
+   "iterations": 780,
+   "seconds": 10.807333192999977
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9473684210526315,
+   "iterations": 780,
+   "seconds": 11.967821370000138
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9590643274853801,
+   "iterations": 780,
+   "seconds": 5.36958491900009
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.9415204678362573,
+   "iterations": 780,
+   "seconds": 5.415374885999881
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9532163742690059,
+   "iterations": 780,
+   "seconds": 5.550228036000135
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9473684210526315,
+   "iterations": 780,
+   "seconds": 6.775072865999846
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9473684210526315,
+   "iterations": 780,
+   "seconds": 5.692327636000073
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9532163742690059,
+   "iterations": 780,
+   "seconds": 6.507868190999943
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.9532163742690059,
+   "iterations": 780,
+   "seconds": 5.690958787999989
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9473684210526315,
+   "iterations": 780,
+   "seconds": 5.713802156999918
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9122807017543859,
+   "iterations": 780,
+   "seconds": 5.773439393999979
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.8362573099415205,
+   "iterations": 780,
+   "seconds": 10.447245505999945
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.8596491228070176,
+   "iterations": 780,
+   "seconds": 12.137347241000043
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.8713450292397661,
+   "iterations": 780,
+   "seconds": 5.629819406000024
+  },
+  {
+   "dataset": "breast_cancer",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.8888888888888888,
+   "iterations": 780,
+   "seconds": 5.615386117000071
+  },
+  {
+   "dataset": "digits",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.6555555555555556,
+   "iterations": 2400,
+   "seconds": 9.20428971199999
+  },
+  {
+   "dataset": "digits",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.6888888888888889,
+   "iterations": 2400,
+   "seconds": 20.848867283000118
+  },
+  {
+   "dataset": "digits",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.6296296296296297,
+   "iterations": 2400,
+   "seconds": 9.17876644099988
+  },
+  {
+   "dataset": "digits",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.6611111111111111,
+   "iterations": 2400,
+   "seconds": 9.307145250000076
+  },
+  {
+   "dataset": "digits",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.6222222222222222,
+   "iterations": 2400,
+   "seconds": 9.178211792999946
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.7537037037037037,
+   "iterations": 2400,
+   "seconds": 10.743077110000058
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.7333333333333333,
+   "iterations": 2400,
+   "seconds": 10.740171607000093
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.7814814814814814,
+   "iterations": 2400,
+   "seconds": 10.935622164000051
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.7092592592592593,
+   "iterations": 2400,
+   "seconds": 25.60307568600001
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.6703703703703704,
+   "iterations": 2400,
+   "seconds": 26.210840408999957
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8444444444444444,
+   "iterations": 2400,
+   "seconds": 10.534134619000042
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8592592592592593,
+   "iterations": 2400,
+   "seconds": 25.46140484700004
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8685185185185185,
+   "iterations": 2400,
+   "seconds": 10.699090337999905
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.8666666666666667,
+   "iterations": 2400,
+   "seconds": 10.671838750000006
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8222222222222222,
+   "iterations": 2400,
+   "seconds": 10.760746806000043
+  },
+  {
+   "dataset": "digits",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.9425925925925925,
+   "iterations": 2400,
+   "seconds": 10.890506132000155
+  },
+  {
+   "dataset": "digits",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.9425925925925925,
+   "iterations": 2400,
+   "seconds": 10.885501622999982
+  },
+  {
+   "dataset": "digits",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.9296296296296296,
+   "iterations": 2400,
+   "seconds": 10.963250650000191
+  },
+  {
+   "dataset": "digits",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9296296296296296,
+   "iterations": 2400,
+   "seconds": 10.976274431999855
+  },
+  {
+   "dataset": "digits",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.9259259259259259,
+   "iterations": 2400,
+   "seconds": 11.01731780099999
+  },
+  {
+   "dataset": "digits",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.4462962962962963,
+   "iterations": 2400,
+   "seconds": 11.770364169999993
+  },
+  {
+   "dataset": "digits",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.5370370370370371,
+   "iterations": 2400,
+   "seconds": 11.63670969299983
+  },
+  {
+   "dataset": "digits",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.5092592592592593,
+   "iterations": 2400,
+   "seconds": 11.923534315000097
+  },
+  {
+   "dataset": "digits",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.5462962962962963,
+   "iterations": 2400,
+   "seconds": 11.602809542999921
+  },
+  {
+   "dataset": "digits",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.49444444444444446,
+   "iterations": 2400,
+   "seconds": 27.479009442999995
+  },
+  {
+   "dataset": "digits",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.4,
+   "iterations": 2400,
+   "seconds": 14.10754906599982
+  },
+  {
+   "dataset": "digits",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.37962962962962965,
+   "iterations": 2400,
+   "seconds": 14.114632862000008
+  },
+  {
+   "dataset": "digits",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.4111111111111111,
+   "iterations": 2400,
+   "seconds": 14.154466977000084
+  },
+  {
+   "dataset": "digits",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.4962962962962963,
+   "iterations": 2400,
+   "seconds": 19.16822579199993
+  },
+  {
+   "dataset": "digits",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.5055555555555555,
+   "iterations": 2400,
+   "seconds": 18.78386076300012
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.8574074074074074,
+   "iterations": 2400,
+   "seconds": 50.926958845999934
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.8962962962962963,
+   "iterations": 2400,
+   "seconds": 19.303960408999956
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.7407407407407407,
+   "iterations": 2400,
+   "seconds": 19.189291125999944
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.8629629629629629,
+   "iterations": 2400,
+   "seconds": 19.20274021499995
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.8666666666666667,
+   "iterations": 2400,
+   "seconds": 19.406318676999945
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9537037037037037,
+   "iterations": 2400,
+   "seconds": 38.16476386299996
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9518518518518518,
+   "iterations": 2400,
+   "seconds": 18.66884234700001
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9518518518518518,
+   "iterations": 2400,
+   "seconds": 18.72940114800008
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.9592592592592593,
+   "iterations": 2400,
+   "seconds": 18.694530485000087
+  },
+  {
+   "dataset": "digits",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9592592592592593,
+   "iterations": 2400,
+   "seconds": 50.67592530900015
+  },
+  {
+   "dataset": "digits",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9796296296296296,
+   "iterations": 2400,
+   "seconds": 51.043767355
+  },
+  {
+   "dataset": "digits",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9574074074074074,
+   "iterations": 2400,
+   "seconds": 19.238184330000195
+  },
+  {
+   "dataset": "digits",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9685185185185186,
+   "iterations": 2400,
+   "seconds": 19.53663644700009
+  },
+  {
+   "dataset": "digits",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.9648148148148148,
+   "iterations": 2400,
+   "seconds": 19.416028054000208
+  },
+  {
+   "dataset": "digits",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9685185185185186,
+   "iterations": 2400,
+   "seconds": 19.331557546999875
+  },
+  {
+   "dataset": "digits",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.14814814814814814,
+   "iterations": 2400,
+   "seconds": 29.710312768999984
+  },
+  {
+   "dataset": "digits",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.20185185185185187,
+   "iterations": 2400,
+   "seconds": 21.06440585999985
+  },
+  {
+   "dataset": "digits",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.19814814814814816,
+   "iterations": 2400,
+   "seconds": 20.772354837999956
+  },
+  {
+   "dataset": "digits",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.15,
+   "iterations": 2400,
+   "seconds": 21.080021287000136
+  },
+  {
+   "dataset": "digits",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.09444444444444444,
+   "iterations": 2400,
+   "seconds": 26.790198707999934
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.5196850393700787,
+   "iterations": 1140,
+   "seconds": 3.8677175459999944
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.5393700787401575,
+   "iterations": 1140,
+   "seconds": 4.185879994000061
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.5236220472440944,
+   "iterations": 1140,
+   "seconds": 3.9243485870001678
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.5551181102362205,
+   "iterations": 1140,
+   "seconds": 3.909539241999937
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.4763779527559055,
+   "iterations": 1140,
+   "seconds": 3.863567681999939
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.7283464566929134,
+   "iterations": 1140,
+   "seconds": 4.646131306999905
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.7716535433070866,
+   "iterations": 1140,
+   "seconds": 4.6780892349997885
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.7480314960629921,
+   "iterations": 1140,
+   "seconds": 4.677957402999937
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.7165354330708661,
+   "iterations": 1140,
+   "seconds": 4.622105784000041
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.7244094488188977,
+   "iterations": 1140,
+   "seconds": 4.628053074999798
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.7637795275590551,
+   "iterations": 1140,
+   "seconds": 4.621136258999968
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.7440944881889764,
+   "iterations": 1140,
+   "seconds": 6.190020582999978
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.7322834645669292,
+   "iterations": 1140,
+   "seconds": 4.579328627999985
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.7362204724409449,
+   "iterations": 1140,
+   "seconds": 4.613741037000182
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.7795275590551181,
+   "iterations": 1140,
+   "seconds": 4.655736058000002
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.7755905511811023,
+   "iterations": 1140,
+   "seconds": 4.739832739999883
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.7362204724409449,
+   "iterations": 1140,
+   "seconds": 5.098642741000049
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.6811023622047244,
+   "iterations": 1140,
+   "seconds": 4.7571409310000945
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.7322834645669292,
+   "iterations": 1140,
+   "seconds": 11.321192219000068
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.7559055118110236,
+   "iterations": 1140,
+   "seconds": 4.82728120999991
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.49606299212598426,
+   "iterations": 1140,
+   "seconds": 4.983554693000087
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.5039370078740157,
+   "iterations": 1140,
+   "seconds": 4.98798342200007
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.48031496062992124,
+   "iterations": 1140,
+   "seconds": 7.538033971000004
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.484251968503937,
+   "iterations": 1140,
+   "seconds": 4.971695548000071
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.47244094488188976,
+   "iterations": 1140,
+   "seconds": 4.984615918999907
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.5275590551181102,
+   "iterations": 1140,
+   "seconds": 5.990592367999852
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.5354330708661418,
+   "iterations": 1140,
+   "seconds": 5.956637215000001
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.5826771653543307,
+   "iterations": 1140,
+   "seconds": 6.057718618999843
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.5236220472440944,
+   "iterations": 1140,
+   "seconds": 6.074626939999916
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.5354330708661418,
+   "iterations": 1140,
+   "seconds": 6.04992279399994
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.6181102362204725,
+   "iterations": 1140,
+   "seconds": 8.76967184199998
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.6259842519685039,
+   "iterations": 1140,
+   "seconds": 8.748697471000014
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.42913385826771655,
+   "iterations": 1140,
+   "seconds": 8.72136787699992
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.6732283464566929,
+   "iterations": 1140,
+   "seconds": 16.075328262000085
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.6023622047244095,
+   "iterations": 1140,
+   "seconds": 8.638319103999947
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.7834645669291339,
+   "iterations": 1140,
+   "seconds": 22.941247104000013
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.7519685039370079,
+   "iterations": 1140,
+   "seconds": 8.510192442999823
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.7598425196850394,
+   "iterations": 1140,
+   "seconds": 9.970495072999938
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.7244094488188977,
+   "iterations": 1140,
+   "seconds": 8.532369195000001
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.7598425196850394,
+   "iterations": 1140,
+   "seconds": 8.508711962999996
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.7007874015748031,
+   "iterations": 1140,
+   "seconds": 23.2663658030001
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.7401574803149606,
+   "iterations": 1140,
+   "seconds": 8.758346224999968
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.7007874015748031,
+   "iterations": 1140,
+   "seconds": 23.134195120999948
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.7598425196850394,
+   "iterations": 1140,
+   "seconds": 8.723530387999972
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.6692913385826772,
+   "iterations": 1140,
+   "seconds": 8.742362473999947
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.2559055118110236,
+   "iterations": 1140,
+   "seconds": 9.200009289000036
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.3464566929133858,
+   "iterations": 1140,
+   "seconds": 9.217598728999974
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.24803149606299213,
+   "iterations": 1140,
+   "seconds": 9.118726683999967
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.24015748031496062,
+   "iterations": 1140,
+   "seconds": 9.094821115000059
+  },
+  {
+   "dataset": "vehicle",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.3228346456692913,
+   "iterations": 1140,
+   "seconds": 9.267270824999969
+  },
+  {
+   "dataset": "segment",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.847041847041847,
+   "iterations": 3060,
+   "seconds": 10.784248569000056
+  },
+  {
+   "dataset": "segment",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.86002886002886,
+   "iterations": 3060,
+   "seconds": 13.29726721499992
+  },
+  {
+   "dataset": "segment",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8225108225108225,
+   "iterations": 3060,
+   "seconds": 10.778498807000005
+  },
+  {
+   "dataset": "segment",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.8253968253968254,
+   "iterations": 3060,
+   "seconds": 10.944728978000057
+  },
+  {
+   "dataset": "segment",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8282828282828283,
+   "iterations": 3060,
+   "seconds": 10.774903989999984
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.7821067821067821,
+   "iterations": 3060,
+   "seconds": 13.274557232999996
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.6536796536796536,
+   "iterations": 3060,
+   "seconds": 13.297913803000029
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8023088023088023,
+   "iterations": 3060,
+   "seconds": 31.29983950499991
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.7950937950937951,
+   "iterations": 3060,
+   "seconds": 13.374683101000073
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8282828282828283,
+   "iterations": 3060,
+   "seconds": 31.339722493999943
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8932178932178932,
+   "iterations": 3060,
+   "seconds": 12.978050565999865
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.873015873015873,
+   "iterations": 3060,
+   "seconds": 13.007548231999863
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8643578643578643,
+   "iterations": 3060,
+   "seconds": 13.03697083399993
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.8917748917748918,
+   "iterations": 3060,
+   "seconds": 30.98605666000003
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.86002886002886,
+   "iterations": 3060,
+   "seconds": 13.000761727000054
+  },
+  {
+   "dataset": "segment",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8975468975468975,
+   "iterations": 3060,
+   "seconds": 13.494617371999993
+  },
+  {
+   "dataset": "segment",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8888888888888888,
+   "iterations": 3060,
+   "seconds": 31.443662760000052
+  },
+  {
+   "dataset": "segment",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8802308802308803,
+   "iterations": 3060,
+   "seconds": 13.444709414000044
+  },
+  {
+   "dataset": "segment",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.898989898989899,
+   "iterations": 3060,
+   "seconds": 13.492867683999975
+  },
+  {
+   "dataset": "segment",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.9004329004329005,
+   "iterations": 3060,
+   "seconds": 13.659893264000175
+  },
+  {
+   "dataset": "segment",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.7662337662337663,
+   "iterations": 3060,
+   "seconds": 14.001604448999842
+  },
+  {
+   "dataset": "segment",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.7417027417027418,
+   "iterations": 3060,
+   "seconds": 13.82976156399991
+  },
+  {
+   "dataset": "segment",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.7243867243867244,
+   "iterations": 3060,
+   "seconds": 13.908765662000178
+  },
+  {
+   "dataset": "segment",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.7676767676767676,
+   "iterations": 3060,
+   "seconds": 13.95989610200013
+  },
+  {
+   "dataset": "segment",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8008658008658008,
+   "iterations": 3060,
+   "seconds": 13.946759380999993
+  },
+  {
+   "dataset": "segment",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.7619047619047619,
+   "iterations": 3060,
+   "seconds": 16.725969937000173
+  },
+  {
+   "dataset": "segment",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.7388167388167388,
+   "iterations": 3060,
+   "seconds": 16.76587874200004
+  },
+  {
+   "dataset": "segment",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.696969696969697,
+   "iterations": 3060,
+   "seconds": 20.873946918
+  },
+  {
+   "dataset": "segment",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.7907647907647908,
+   "iterations": 3060,
+   "seconds": 24.779687532000025
+  },
+  {
+   "dataset": "segment",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.8008658008658008,
+   "iterations": 3060,
+   "seconds": 16.58296087099984
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.5670995670995671,
+   "iterations": 3060,
+   "seconds": 23.902884689999837
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.784992784992785,
+   "iterations": 3060,
+   "seconds": 63.99458245200003
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.873015873015873,
+   "iterations": 3060,
+   "seconds": 23.97650173599982
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.823953823953824,
+   "iterations": 3060,
+   "seconds": 23.91021515699981
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.5382395382395382,
+   "iterations": 3060,
+   "seconds": 23.921830756999952
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9422799422799423,
+   "iterations": 3060,
+   "seconds": 63.47869055499996
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.961038961038961,
+   "iterations": 3060,
+   "seconds": 63.20559910100019
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9437229437229437,
+   "iterations": 3060,
+   "seconds": 23.67043389399987
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.963924963924964,
+   "iterations": 3060,
+   "seconds": 23.71935606199986
+  },
+  {
+   "dataset": "segment",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9581529581529582,
+   "iterations": 3060,
+   "seconds": 24.39983883800005
+  },
+  {
+   "dataset": "segment",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9235209235209235,
+   "iterations": 3060,
+   "seconds": 60.486438987000156
+  },
+  {
+   "dataset": "segment",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9422799422799423,
+   "iterations": 3060,
+   "seconds": 25.196675412999866
+  },
+  {
+   "dataset": "segment",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9321789321789322,
+   "iterations": 3060,
+   "seconds": 24.811897487000124
+  },
+  {
+   "dataset": "segment",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.9018759018759018,
+   "iterations": 3060,
+   "seconds": 24.758864970000104
+  },
+  {
+   "dataset": "segment",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9292929292929293,
+   "iterations": 3060,
+   "seconds": 24.671741995000048
+  },
+  {
+   "dataset": "segment",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.3362193362193362,
+   "iterations": 3060,
+   "seconds": 26.65030009299994
+  },
+  {
+   "dataset": "segment",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.329004329004329,
+   "iterations": 3060,
+   "seconds": 26.20604555800014
+  },
+  {
+   "dataset": "segment",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.30735930735930733,
+   "iterations": 3060,
+   "seconds": 26.517817159999822
+  },
+  {
+   "dataset": "segment",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.3564213564213564,
+   "iterations": 3060,
+   "seconds": 26.12661747700008
+  },
+  {
+   "dataset": "segment",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.18037518037518038,
+   "iterations": 3060,
+   "seconds": 26.28455753099979
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8882978723404256,
+   "iterations": 840,
+   "seconds": 2.621156216999907
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8882978723404256,
+   "iterations": 840,
+   "seconds": 2.644508599000119
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8776595744680851,
+   "iterations": 840,
+   "seconds": 2.6639495800000077
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.8936170212765957,
+   "iterations": 840,
+   "seconds": 2.6809028089999174
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8723404255319149,
+   "iterations": 840,
+   "seconds": 2.6658600989999286
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8882978723404256,
+   "iterations": 840,
+   "seconds": 3.26991781799984
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.9308510638297872,
+   "iterations": 840,
+   "seconds": 3.3673136540000996
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.9202127659574468,
+   "iterations": 840,
+   "seconds": 3.3249504189998333
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9095744680851063,
+   "iterations": 840,
+   "seconds": 3.318413468000017
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.9042553191489362,
+   "iterations": 840,
+   "seconds": 3.287940189999972
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.9202127659574468,
+   "iterations": 840,
+   "seconds": 3.26868183900001
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.9095744680851063,
+   "iterations": 840,
+   "seconds": 3.2482457970002088
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.898936170212766,
+   "iterations": 840,
+   "seconds": 3.256621042000006
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.8882978723404256,
+   "iterations": 840,
+   "seconds": 3.2331864889999906
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.9042553191489362,
+   "iterations": 840,
+   "seconds": 3.2411231139999472
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.9042553191489362,
+   "iterations": 840,
+   "seconds": 3.3922763299999588
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8776595744680851,
+   "iterations": 840,
+   "seconds": 3.3771096309999393
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8936170212765957,
+   "iterations": 840,
+   "seconds": 3.3637094569999135
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9042553191489362,
+   "iterations": 840,
+   "seconds": 3.376440480999918
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.898936170212766,
+   "iterations": 840,
+   "seconds": 3.365400753999893
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8829787234042553,
+   "iterations": 840,
+   "seconds": 3.427335032999963
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8829787234042553,
+   "iterations": 840,
+   "seconds": 3.4087522330000866
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8829787234042553,
+   "iterations": 840,
+   "seconds": 3.39014111199981
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.9095744680851063,
+   "iterations": 840,
+   "seconds": 3.386737020000055
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8723404255319149,
+   "iterations": 840,
+   "seconds": 3.4339211460001025
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.723404255319149,
+   "iterations": 840,
+   "seconds": 10.279304747999959
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.8085106382978723,
+   "iterations": 840,
+   "seconds": 4.239488291000043
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.8457446808510638,
+   "iterations": 840,
+   "seconds": 4.2939654440001505
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.8191489361702128,
+   "iterations": 840,
+   "seconds": 4.2544541909999225
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.7074468085106383,
+   "iterations": 840,
+   "seconds": 4.366382815999941
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.8085106382978723,
+   "iterations": 840,
+   "seconds": 6.304293386999916
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.7606382978723404,
+   "iterations": 840,
+   "seconds": 6.195315935999815
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.6329787234042553,
+   "iterations": 840,
+   "seconds": 6.33528126300007
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.8031914893617021,
+   "iterations": 840,
+   "seconds": 16.89541495499998
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.776595744680851,
+   "iterations": 840,
+   "seconds": 6.271628225999848
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9414893617021277,
+   "iterations": 840,
+   "seconds": 6.239675597999849
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9680851063829787,
+   "iterations": 840,
+   "seconds": 6.112143279000065
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9468085106382979,
+   "iterations": 840,
+   "seconds": 17.236153861000048
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.9414893617021277,
+   "iterations": 840,
+   "seconds": 6.1994408060002115
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9680851063829787,
+   "iterations": 840,
+   "seconds": 6.165678628000023
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9468085106382979,
+   "iterations": 840,
+   "seconds": 6.164319363000004
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9521276595744681,
+   "iterations": 840,
+   "seconds": 6.324991927000156
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9574468085106383,
+   "iterations": 840,
+   "seconds": 6.192057868999882
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.9787234042553191,
+   "iterations": 840,
+   "seconds": 17.274606088000155
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9468085106382979,
+   "iterations": 840,
+   "seconds": 6.213072022000006
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.5904255319148937,
+   "iterations": 840,
+   "seconds": 16.427628572999993
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.8297872340425532,
+   "iterations": 840,
+   "seconds": 6.488258459999997
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.7872340425531915,
+   "iterations": 840,
+   "seconds": 6.414301045000002
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.7606382978723404,
+   "iterations": 840,
+   "seconds": 6.585492337000005
+  },
+  {
+   "dataset": "balance_scale",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.6382978723404256,
+   "iterations": 840,
+   "seconds": 6.671990317999871
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.5866666666666667,
+   "iterations": 2640,
+   "seconds": 11.223636270000043
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.5583333333333333,
+   "iterations": 2640,
+   "seconds": 15.353742104000048
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.5416666666666666,
+   "iterations": 2640,
+   "seconds": 11.265936887999942
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.5533333333333333,
+   "iterations": 2640,
+   "seconds": 11.123108722000097
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.555,
+   "iterations": 2640,
+   "seconds": 11.981473306999987
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.6583333333333333,
+   "iterations": 2640,
+   "seconds": 13.041374664999921
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.6216666666666667,
+   "iterations": 2640,
+   "seconds": 13.298937991000003
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.65,
+   "iterations": 2640,
+   "seconds": 19.668797655999924
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.6283333333333333,
+   "iterations": 2640,
+   "seconds": 13.344405040999845
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.6,
+   "iterations": 2640,
+   "seconds": 29.70750642300004
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.7583333333333333,
+   "iterations": 2640,
+   "seconds": 12.508545680999987
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.7416666666666667,
+   "iterations": 2640,
+   "seconds": 12.592253346999996
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.775,
+   "iterations": 2640,
+   "seconds": 18.518458535000036
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.7433333333333333,
+   "iterations": 2640,
+   "seconds": 29.655856574000154
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.73,
+   "iterations": 2640,
+   "seconds": 12.680288366000013
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.78,
+   "iterations": 2640,
+   "seconds": 22.22182635000013
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.7966666666666666,
+   "iterations": 2640,
+   "seconds": 13.06727188900004
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.7983333333333333,
+   "iterations": 2640,
+   "seconds": 13.09528783299993
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.795,
+   "iterations": 2640,
+   "seconds": 12.959304498999927
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.795,
+   "iterations": 2640,
+   "seconds": 13.048000277000028
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.38166666666666665,
+   "iterations": 2640,
+   "seconds": 13.99663187200008
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.3566666666666667,
+   "iterations": 2640,
+   "seconds": 14.231354294999846
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.5216666666666666,
+   "iterations": 2640,
+   "seconds": 14.40795385299998
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.395,
+   "iterations": 2640,
+   "seconds": 14.301983898000117
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.43833333333333335,
+   "iterations": 2640,
+   "seconds": 25.21638648399994
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.415,
+   "iterations": 2640,
+   "seconds": 18.32707901499998
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.43,
+   "iterations": 2640,
+   "seconds": 16.866933633999906
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.45,
+   "iterations": 2640,
+   "seconds": 38.25650779900002
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.43333333333333335,
+   "iterations": 2640,
+   "seconds": 16.96224257499989
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.32166666666666666,
+   "iterations": 2640,
+   "seconds": 16.73309234500016
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.5566666666666666,
+   "iterations": 2640,
+   "seconds": 23.536547590000055
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.5833333333333334,
+   "iterations": 2640,
+   "seconds": 60.597671397999875
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.68,
+   "iterations": 2640,
+   "seconds": 26.935818112000106
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.655,
+   "iterations": 2640,
+   "seconds": 23.586912745999825
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.625,
+   "iterations": 2640,
+   "seconds": 22.95797411300009
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.825,
+   "iterations": 2640,
+   "seconds": 55.91302398999983
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.8383333333333334,
+   "iterations": 2640,
+   "seconds": 22.567709899999954
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.8216666666666667,
+   "iterations": 2640,
+   "seconds": 22.758941568999944
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.8216666666666667,
+   "iterations": 2640,
+   "seconds": 22.78200346100016
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.81,
+   "iterations": 2640,
+   "seconds": 22.466210419999925
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.8133333333333334,
+   "iterations": 2640,
+   "seconds": 39.1308201060001
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.8333333333333334,
+   "iterations": 2640,
+   "seconds": 22.98330766900017
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.7883333333333333,
+   "iterations": 2640,
+   "seconds": 23.040676085000086
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.8133333333333334,
+   "iterations": 2640,
+   "seconds": 30.19314039300002
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.8266666666666667,
+   "iterations": 2640,
+   "seconds": 23.26883592099989
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.11666666666666667,
+   "iterations": 2640,
+   "seconds": 62.544526068000096
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.12166666666666667,
+   "iterations": 2640,
+   "seconds": 24.912756357000035
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.13166666666666665,
+   "iterations": 2640,
+   "seconds": 25.113179414000115
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.14333333333333334,
+   "iterations": 2640,
+   "seconds": 25.545536225999967
+  },
+  {
+   "dataset": "mfeat_zernike",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.37666666666666665,
+   "iterations": 2640,
+   "seconds": 24.768328646999862
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8301886792452831,
+   "iterations": 480,
+   "seconds": 1.521560301999898
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8018867924528302,
+   "iterations": 480,
+   "seconds": 1.5918337670000255
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8301886792452831,
+   "iterations": 480,
+   "seconds": 1.615625214000147
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.7924528301886793,
+   "iterations": 480,
+   "seconds": 1.530486713999835
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8490566037735849,
+   "iterations": 480,
+   "seconds": 1.5459554269998534
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8207547169811321,
+   "iterations": 480,
+   "seconds": 1.9096803200000068
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8018867924528302,
+   "iterations": 480,
+   "seconds": 1.9084412800000337
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8207547169811321,
+   "iterations": 480,
+   "seconds": 2.4800081979999504
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.8584905660377359,
+   "iterations": 480,
+   "seconds": 1.9670942729999297
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.7735849056603774,
+   "iterations": 480,
+   "seconds": 1.9635623870001382
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8679245283018868,
+   "iterations": 480,
+   "seconds": 5.181307879999849
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8584905660377359,
+   "iterations": 480,
+   "seconds": 1.9414562800000112
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8490566037735849,
+   "iterations": 480,
+   "seconds": 1.9845401989998663
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.8584905660377359,
+   "iterations": 480,
+   "seconds": 2.008971083000006
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8679245283018868,
+   "iterations": 480,
+   "seconds": 1.8559552169999733
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8773584905660378,
+   "iterations": 480,
+   "seconds": 2.2412782779999816
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8867924528301887,
+   "iterations": 480,
+   "seconds": 3.267328095000039
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.9245283018867925,
+   "iterations": 480,
+   "seconds": 2.4285755419998623
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.8867924528301887,
+   "iterations": 480,
+   "seconds": 2.4315453070000785
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8679245283018868,
+   "iterations": 480,
+   "seconds": 2.382861647000027
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8113207547169812,
+   "iterations": 480,
+   "seconds": 2.3773519419999047
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.7641509433962265,
+   "iterations": 480,
+   "seconds": 2.1708464840000943
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8490566037735849,
+   "iterations": 480,
+   "seconds": 4.669407342000113
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.8018867924528302,
+   "iterations": 480,
+   "seconds": 1.9533231629998227
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8018867924528302,
+   "iterations": 480,
+   "seconds": 1.978512421000005
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.8207547169811321,
+   "iterations": 480,
+   "seconds": 2.448991504999867
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.7924528301886793,
+   "iterations": 480,
+   "seconds": 5.864763708000055
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.5754716981132075,
+   "iterations": 480,
+   "seconds": 2.477493824000021
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.7924528301886793,
+   "iterations": 480,
+   "seconds": 2.4007859349999308
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.7924528301886793,
+   "iterations": 480,
+   "seconds": 2.384042998999803
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.8113207547169812,
+   "iterations": 480,
+   "seconds": 9.577138014999946
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.8207547169811321,
+   "iterations": 480,
+   "seconds": 3.541990210999984
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.7924528301886793,
+   "iterations": 480,
+   "seconds": 3.6234340639998663
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.839622641509434,
+   "iterations": 480,
+   "seconds": 3.647412282000005
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.8207547169811321,
+   "iterations": 480,
+   "seconds": 3.663062851999939
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.8962264150943396,
+   "iterations": 480,
+   "seconds": 3.5754924770001253
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.8867924528301887,
+   "iterations": 480,
+   "seconds": 3.569426589000159
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.8490566037735849,
+   "iterations": 480,
+   "seconds": 3.574661132000074
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.8867924528301887,
+   "iterations": 480,
+   "seconds": 3.5479352169998037
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9056603773584906,
+   "iterations": 480,
+   "seconds": 9.624416263000057
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.9245283018867925,
+   "iterations": 480,
+   "seconds": 3.619651092999902
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.9339622641509434,
+   "iterations": 480,
+   "seconds": 3.5656637100000808
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.9056603773584906,
+   "iterations": 480,
+   "seconds": 3.5548728329999904
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.9339622641509434,
+   "iterations": 480,
+   "seconds": 10.133520928000053
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.9150943396226415,
+   "iterations": 480,
+   "seconds": 3.5714134410000042
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.7075471698113207,
+   "iterations": 480,
+   "seconds": 3.705672419999928
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.7169811320754716,
+   "iterations": 480,
+   "seconds": 3.6980388590000075
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.6132075471698113,
+   "iterations": 480,
+   "seconds": 3.708229554000127
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.8207547169811321,
+   "iterations": 480,
+   "seconds": 3.6622449930000585
+  },
+  {
+   "dataset": "ionosphere",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.7358490566037735,
+   "iterations": 480,
+   "seconds": 3.723610692999955
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.683982683982684,
+   "iterations": 1020,
+   "seconds": 3.3580316850000145
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.696969696969697,
+   "iterations": 1020,
+   "seconds": 3.3910807030001706
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.7575757575757576,
+   "iterations": 1020,
+   "seconds": 3.4367896829999154
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.6190476190476191,
+   "iterations": 1020,
+   "seconds": 3.462687391999907
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.7359307359307359,
+   "iterations": 1020,
+   "seconds": 3.2991627589999553
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.7012987012987013,
+   "iterations": 1020,
+   "seconds": 4.288616036999883
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.47186147186147187,
+   "iterations": 1020,
+   "seconds": 10.515374717999975
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.6926406926406926,
+   "iterations": 1020,
+   "seconds": 4.241406731999859
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.5627705627705628,
+   "iterations": 1020,
+   "seconds": 4.658215543999859
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.6666666666666666,
+   "iterations": 1020,
+   "seconds": 4.608055728999943
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.70995670995671,
+   "iterations": 1020,
+   "seconds": 4.524946163999857
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.6363636363636364,
+   "iterations": 1020,
+   "seconds": 4.46126401499987
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.7662337662337663,
+   "iterations": 1020,
+   "seconds": 4.366150745999903
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.696969696969697,
+   "iterations": 1020,
+   "seconds": 4.4464791030000015
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.7402597402597403,
+   "iterations": 1020,
+   "seconds": 10.221620819000009
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.696969696969697,
+   "iterations": 1020,
+   "seconds": 4.483297496999967
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.7575757575757576,
+   "iterations": 1020,
+   "seconds": 4.279764513000146
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.7359307359307359,
+   "iterations": 1020,
+   "seconds": 9.768036431000155
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.7835497835497836,
+   "iterations": 1020,
+   "seconds": 4.110533674999942
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.7662337662337663,
+   "iterations": 1020,
+   "seconds": 4.110890189999964
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.7575757575757576,
+   "iterations": 1020,
+   "seconds": 4.255669401999967
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.670995670995671,
+   "iterations": 1020,
+   "seconds": 4.286587822000001
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.7316017316017316,
+   "iterations": 1020,
+   "seconds": 4.273224546999927
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.7359307359307359,
+   "iterations": 1020,
+   "seconds": 4.27217711000003
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.7532467532467533,
+   "iterations": 1020,
+   "seconds": 4.268122280999933
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.6796536796536796,
+   "iterations": 1020,
+   "seconds": 5.245991385000025
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.7142857142857143,
+   "iterations": 1020,
+   "seconds": 5.232772253999883
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.6406926406926406,
+   "iterations": 1020,
+   "seconds": 13.266698665000149
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.70995670995671,
+   "iterations": 1020,
+   "seconds": 5.210360582000021
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.683982683982684,
+   "iterations": 1020,
+   "seconds": 5.285080416000028
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.5800865800865801,
+   "iterations": 1020,
+   "seconds": 8.089773893000029
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.47186147186147187,
+   "iterations": 1020,
+   "seconds": 7.805499144999885
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.6406926406926406,
+   "iterations": 1020,
+   "seconds": 8.045808585000032
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.35064935064935066,
+   "iterations": 1020,
+   "seconds": 8.522024267000006
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.5757575757575758,
+   "iterations": 1020,
+   "seconds": 21.601773559999856
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.6363636363636364,
+   "iterations": 1020,
+   "seconds": 7.925634630000104
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.70995670995671,
+   "iterations": 1020,
+   "seconds": 21.605407385000035
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.7662337662337663,
+   "iterations": 1020,
+   "seconds": 8.07397872499996
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.7142857142857143,
+   "iterations": 1020,
+   "seconds": 8.139431610999964
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.6147186147186147,
+   "iterations": 1020,
+   "seconds": 8.143358069999977
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.6926406926406926,
+   "iterations": 1020,
+   "seconds": 8.256660711999984
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.7705627705627706,
+   "iterations": 1020,
+   "seconds": 8.31356346199982
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.658008658008658,
+   "iterations": 1020,
+   "seconds": 8.332582409999986
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.6666666666666666,
+   "iterations": 1020,
+   "seconds": 7.839529200000015
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.7229437229437229,
+   "iterations": 1020,
+   "seconds": 7.788226444999964
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.5151515151515151,
+   "iterations": 1020,
+   "seconds": 7.882494082999983
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.70995670995671,
+   "iterations": 1020,
+   "seconds": 21.27349875699997
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.6623376623376623,
+   "iterations": 1020,
+   "seconds": 21.456882921000215
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.7012987012987013,
+   "iterations": 1020,
+   "seconds": 7.933287606000022
+  },
+  {
+   "dataset": "diabetes",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.6883116883116883,
+   "iterations": 1020,
+   "seconds": 8.042910243000051
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8279569892473119,
+   "iterations": 420,
+   "seconds": 1.3446130249999442
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8172043010752689,
+   "iterations": 420,
+   "seconds": 1.356091713000069
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8387096774193549,
+   "iterations": 420,
+   "seconds": 1.357199434999984
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.8064516129032258,
+   "iterations": 420,
+   "seconds": 1.349743023999963
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8172043010752689,
+   "iterations": 420,
+   "seconds": 1.3612470069999745
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8817204301075269,
+   "iterations": 420,
+   "seconds": 1.6702818280000429
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8709677419354839,
+   "iterations": 420,
+   "seconds": 1.6840079109999806
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8602150537634409,
+   "iterations": 420,
+   "seconds": 1.66046230500001
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.8924731182795699,
+   "iterations": 420,
+   "seconds": 1.6793500239998593
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.9032258064516129,
+   "iterations": 420,
+   "seconds": 1.7087033430000247
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8387096774193549,
+   "iterations": 420,
+   "seconds": 1.6884444610000173
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8064516129032258,
+   "iterations": 420,
+   "seconds": 1.6871803619999355
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8494623655913979,
+   "iterations": 420,
+   "seconds": 1.6700023270000202
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.7741935483870968,
+   "iterations": 420,
+   "seconds": 1.6778456349998123
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8387096774193549,
+   "iterations": 420,
+   "seconds": 1.7162383099998806
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8709677419354839,
+   "iterations": 420,
+   "seconds": 1.7036332350000976
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8602150537634409,
+   "iterations": 420,
+   "seconds": 1.7749756999999136
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8494623655913979,
+   "iterations": 420,
+   "seconds": 1.8097275479999553
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.8709677419354839,
+   "iterations": 420,
+   "seconds": 1.8204697349999606
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.8494623655913979,
+   "iterations": 420,
+   "seconds": 1.829094497999904
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.8064516129032258,
+   "iterations": 420,
+   "seconds": 1.7623588540000128
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.8387096774193549,
+   "iterations": 420,
+   "seconds": 1.8711561039999651
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.8279569892473119,
+   "iterations": 420,
+   "seconds": 1.868669103000002
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.8064516129032258,
+   "iterations": 420,
+   "seconds": 1.7400340570000026
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.7956989247311828,
+   "iterations": 420,
+   "seconds": 1.8830526029998964
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.8172043010752689,
+   "iterations": 420,
+   "seconds": 2.5327516859999832
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.8172043010752689,
+   "iterations": 420,
+   "seconds": 2.699061387000029
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.7526881720430108,
+   "iterations": 420,
+   "seconds": 2.6256638760000897
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.8064516129032258,
+   "iterations": 420,
+   "seconds": 2.5433487530001457
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.8172043010752689,
+   "iterations": 420,
+   "seconds": 5.689420483000049
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.6451612903225806,
+   "iterations": 420,
+   "seconds": 3.6133086309998816
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.7634408602150538,
+   "iterations": 420,
+   "seconds": 3.631657058999963
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.7096774193548387,
+   "iterations": 420,
+   "seconds": 3.600084322999919
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.8064516129032258,
+   "iterations": 420,
+   "seconds": 3.5880602909999197
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.7311827956989247,
+   "iterations": 420,
+   "seconds": 3.3463051380001616
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.8279569892473119,
+   "iterations": 420,
+   "seconds": 6.251484677000008
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.8494623655913979,
+   "iterations": 420,
+   "seconds": 3.1436348580000413
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.8494623655913979,
+   "iterations": 420,
+   "seconds": 3.148692674000131
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.8387096774193549,
+   "iterations": 420,
+   "seconds": 3.120733260999941
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.8279569892473119,
+   "iterations": 420,
+   "seconds": 3.10988474099986
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.8602150537634409,
+   "iterations": 420,
+   "seconds": 3.2449204529998497
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.7741935483870968,
+   "iterations": 420,
+   "seconds": 3.2050296589998197
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.8064516129032258,
+   "iterations": 420,
+   "seconds": 3.2200612159999764
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.8387096774193549,
+   "iterations": 420,
+   "seconds": 5.326696886000036
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.8494623655913979,
+   "iterations": 420,
+   "seconds": 3.28276234499981
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.5806451612903226,
+   "iterations": 420,
+   "seconds": 3.3736154230000466
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.7204301075268817,
+   "iterations": 420,
+   "seconds": 3.3534984350001196
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.6881720430107527,
+   "iterations": 420,
+   "seconds": 8.538557659000162
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.8279569892473119,
+   "iterations": 420,
+   "seconds": 3.3210369739999805
+  },
+  {
+   "dataset": "vertebra_column",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.7526881720430108,
+   "iterations": 420,
+   "seconds": 3.3399916479997955
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.5437392795883362,
+   "iterations": 2580,
+   "seconds": 9.827356681999845
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.5265866209262435,
+   "iterations": 2580,
+   "seconds": 16.181245380000064
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.5283018867924528,
+   "iterations": 2580,
+   "seconds": 10.477035752999882
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.5231560891938251,
+   "iterations": 2580,
+   "seconds": 10.36714310100001
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "frozen",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.516295025728988,
+   "iterations": 2580,
+   "seconds": 10.451801845999853
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.35506003430531735,
+   "iterations": 2580,
+   "seconds": 12.23039066299998
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.411663807890223,
+   "iterations": 2580,
+   "seconds": 29.091231852999954
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.4288164665523156,
+   "iterations": 2580,
+   "seconds": 12.492816202999848
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.483704974271012,
+   "iterations": 2580,
+   "seconds": 29.029870154000037
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_original",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.4734133790737564,
+   "iterations": 2580,
+   "seconds": 13.906265461999965
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.6209262435677531,
+   "iterations": 2580,
+   "seconds": 12.23117377299991
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.5986277873070326,
+   "iterations": 2580,
+   "seconds": 28.639245099999926
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.5574614065180102,
+   "iterations": 2580,
+   "seconds": 12.061137244000065
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.6192109777015438,
+   "iterations": 2580,
+   "seconds": 11.907846912999958
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_detached_flipped",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.5574614065180102,
+   "iterations": 2580,
+   "seconds": 11.865710504000162
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.6209262435677531,
+   "iterations": 2580,
+   "seconds": 23.170731569000054
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.5643224699828473,
+   "iterations": 2580,
+   "seconds": 12.069377769000084
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.6020583190394511,
+   "iterations": 2580,
+   "seconds": 12.713005119999934
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.5351629502572899,
+   "iterations": 2580,
+   "seconds": 12.753007344000025
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.5900514579759862,
+   "iterations": 2580,
+   "seconds": 12.786057489000086
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 0,
+   "acc": 0.5265866209262435,
+   "iterations": 2580,
+   "seconds": 12.919024777999994
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 1,
+   "acc": 0.5283018867924528,
+   "iterations": 2580,
+   "seconds": 12.765217306000068
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 2,
+   "acc": 0.5094339622641509,
+   "iterations": 2580,
+   "seconds": 13.131909125999982
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 3,
+   "acc": 0.5403087478559176,
+   "iterations": 2580,
+   "seconds": 13.056439526000077
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target_scrambled",
+   "arch": "linear",
+   "seed": 4,
+   "acc": 0.49914236706689535,
+   "iterations": 2580,
+   "seconds": 12.76747105100003
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.5334476843910806,
+   "iterations": 2580,
+   "seconds": 15.409940217999974
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.5626072041166381,
+   "iterations": 2580,
+   "seconds": 15.44118211099999
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.5351629502572899,
+   "iterations": 2580,
+   "seconds": 15.671740881999995
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.5283018867924528,
+   "iterations": 2580,
+   "seconds": 15.355844182000055
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "frozen",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.5025728987993139,
+   "iterations": 2580,
+   "seconds": 32.36400469
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.27787307032590053,
+   "iterations": 2580,
+   "seconds": 54.921900455000014
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.5231560891938251,
+   "iterations": 2580,
+   "seconds": 21.99251330700008
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.4065180102915952,
+   "iterations": 2580,
+   "seconds": 51.406919060000064
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.3927958833619211,
+   "iterations": 2580,
+   "seconds": 53.55947737700012
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_original",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.2727272727272727,
+   "iterations": 2580,
+   "seconds": 23.004440385999942
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.6209262435677531,
+   "iterations": 2580,
+   "seconds": 22.099911175999978
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.6672384219554031,
+   "iterations": 2580,
+   "seconds": 21.61585193299993
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.7049742710120068,
+   "iterations": 2580,
+   "seconds": 21.34114019200001
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.6895368782161235,
+   "iterations": 2580,
+   "seconds": 21.45123485399995
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "core_detached_flipped",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.7307032590051458,
+   "iterations": 2580,
+   "seconds": 21.815783898000063
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.6638078902229846,
+   "iterations": 2580,
+   "seconds": 21.993250018999788
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.5797598627787307,
+   "iterations": 2580,
+   "seconds": 21.771989129000076
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.5934819897084048,
+   "iterations": 2580,
+   "seconds": 25.813591892999966
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.5969125214408233,
+   "iterations": 2580,
+   "seconds": 29.06119128499995
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.6226415094339622,
+   "iterations": 2580,
+   "seconds": 21.836832723000043
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 0,
+   "acc": 0.313893653516295,
+   "iterations": 2580,
+   "seconds": 23.408022231000132
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 1,
+   "acc": 0.3379073756432247,
+   "iterations": 2580,
+   "seconds": 23.097111014999882
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 2,
+   "acc": 0.4854202401372213,
+   "iterations": 2580,
+   "seconds": 23.064590027000122
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 3,
+   "acc": 0.444253859348199,
+   "iterations": 2580,
+   "seconds": 22.960065490999796
+  },
+  {
+   "dataset": "steel_plates",
+   "arm": "target_scrambled",
+   "arch": "core_mlp",
+   "seed": 4,
+   "acc": 0.28130360205831906,
+   "iterations": 2580,
+   "seconds": 22.77546259099995
+  }
+ ]
+}

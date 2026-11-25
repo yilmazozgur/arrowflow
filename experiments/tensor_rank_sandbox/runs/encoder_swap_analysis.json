@@ -1,0 +1,726 @@
+{
+ "means": {
+  "iris|fixed": 94.96296296296298,
+  "iris|learned": 95.85185185185185,
+  "iris|random": 93.48148148148148,
+  "iris|mlp": 95.85185185185185,
+  "iris|hybrid_knn": 95.4074074074074,
+  "wine|fixed": 96.82186948853617,
+  "wine|learned": 98.12874779541445,
+  "wine|random": 96.01410934744268,
+  "wine|mlp": 98.13051146384478,
+  "wine|hybrid_knn": 98.12698412698411,
+  "breast_cancer|fixed": 97.32339698804535,
+  "breast_cancer|learned": 97.26474494988702,
+  "breast_cancer|random": 95.6047197640118,
+  "breast_cancer|mlp": 97.1477858855595,
+  "breast_cancer|hybrid_knn": 97.206782935707,
+  "wine_quality|fixed": 72.33646812957156,
+  "wine_quality|learned": 72.3218826192964,
+  "wine_quality|random": 72.07880529432255,
+  "wine_quality|mlp": 67.68027255311738,
+  "wine_quality|hybrid_knn": 69.91150731452456,
+  "vehicle|fixed": 80.08933751015199,
+  "vehicle|learned": 76.37436670920835,
+  "vehicle|random": 69.96341416250917,
+  "vehicle|mlp": 82.79521986309317,
+  "vehicle|hybrid_knn": 75.61085972850677,
+  "segment|fixed": 97.41702741702744,
+  "segment|learned": 96.83982683982684,
+  "segment|random": 96.5993265993266,
+  "segment|mlp": 97.22943722943724,
+  "segment|hybrid_knn": 96.58970658970658,
+  "digits|fixed": 97.21721861136902,
+  "digits|learned": 97.68704219539875,
+  "digits|random": 95.48560817084496,
+  "digits|mlp": 97.73064754633928,
+  "digits|hybrid_knn": 97.56962068846934,
+  "balance_scale|fixed": 93.97333333333333,
+  "balance_scale|learned": 98.43555555555557,
+  "balance_scale|random": 89.40444444444445,
+  "balance_scale|mlp": 97.84888888888888,
+  "balance_scale|hybrid_knn": 97.49333333333333,
+  "banknote_authentication|fixed": 99.81402344614023,
+  "banknote_authentication|learned": 100.0,
+  "banknote_authentication|random": 99.78143478581435,
+  "banknote_authentication|mlp": 100.0,
+  "banknote_authentication|hybrid_knn": 99.95959595959596,
+  "diabetes|fixed": 75.95695517264144,
+  "diabetes|learned": 74.26279602750193,
+  "diabetes|random": 73.2924954493582,
+  "diabetes|mlp": 76.47643569212197,
+  "diabetes|hybrid_knn": 73.66843033509699,
+  "ionosphere|fixed": 88.79141515761233,
+  "ionosphere|learned": 92.78202548625086,
+  "ionosphere|random": 86.54415381175947,
+  "ionosphere|mlp": 91.99150458305387,
+  "ionosphere|hybrid_knn": 92.08271853342276,
+  "qsar_biodeg|fixed": 87.43549236440232,
+  "qsar_biodeg|learned": 87.76197998946814,
+  "qsar_biodeg|random": 87.0036861506056,
+  "qsar_biodeg|mlp": 87.95155344918378,
+  "qsar_biodeg|hybrid_knn": 86.63507109004739,
+  "climate_model_simulation_crashes|fixed": 91.66666666666666,
+  "climate_model_simulation_crashes|learned": 94.52674897119343,
+  "climate_model_simulation_crashes|random": 91.48148148148147,
+  "climate_model_simulation_crashes|mlp": 94.3827160493827,
+  "climate_model_simulation_crashes|hybrid_knn": 94.21810699588475,
+  "hcv_egyptian_patients|fixed": 24.396309667067793,
+  "hcv_egyptian_patients|learned": 24.596871239470513,
+  "hcv_egyptian_patients|random": 25.25471319695146,
+  "hcv_egyptian_patients|mlp": 25.03008423586041,
+  "hcv_egyptian_patients|hybrid_knn": 25.142398716405935,
+  "mfeat_zernike|fixed": 80.70555555555558,
+  "mfeat_zernike|learned": 82.45555555555556,
+  "mfeat_zernike|random": 78.30555555555556,
+  "mfeat_zernike|mlp": 81.11666666666667,
+  "mfeat_zernike|hybrid_knn": 82.82777777777777,
+  "steel_plates_fault|fixed": 75.15590538196744,
+  "steel_plates_fault|learned": 73.50699505590451,
+  "steel_plates_fault|random": 74.77209751558465,
+  "steel_plates_fault|mlp": 75.80859077082543,
+  "steel_plates_fault|hybrid_knn": 70.57650685960122,
+  "vertebra_column|fixed": 83.11827956989248,
+  "vertebra_column|learned": 83.83512544802866,
+  "vertebra_column|random": 78.20788530465948,
+  "vertebra_column|mlp": 84.55197132616486,
+  "vertebra_column|hybrid_knn": 82.22222222222223
+ },
+ "contrasts": {
+  "PRIMARY": {
+   "rows": [
+    {
+     "dataset": "iris",
+     "mean_difference": 0.8888888888888857,
+     "p": 0.46609940120125903,
+     "folds_better": 7,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "wine",
+     "mean_difference": 1.3068783068783074,
+     "p": 0.30215903645804604,
+     "folds_better": 9,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "breast_cancer",
+     "mean_difference": -0.05865203815832443,
+     "p": 0.9196760551340364,
+     "folds_better": 7,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "wine_quality",
+     "mean_difference": -0.014585510275164637,
+     "p": 0.9874847854596609,
+     "folds_better": 9,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "vehicle",
+     "mean_difference": -3.7149708009436506,
+     "p": 0.03230776927526442,
+     "folds_better": 2,
+     "p_holm": 0.45230876985370194
+    },
+    {
+     "dataset": "segment",
+     "mean_difference": -0.577200577200579,
+     "p": 0.054727507269581394,
+     "folds_better": 2,
+     "p_holm": 0.7114575945045581
+    },
+    {
+     "dataset": "digits",
+     "mean_difference": 0.4698235840297146,
+     "p": 0.1405008460153397,
+     "folds_better": 12,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "balance_scale",
+     "mean_difference": 4.4622222222222225,
+     "p": 6.568969434824254e-06,
+     "folds_better": 15,
+     "p_holm": 0.00011167248039201231
+    },
+    {
+     "dataset": "banknote_authentication",
+     "mean_difference": 0.18597655385976872,
+     "p": 0.4844066555640614,
+     "folds_better": 7,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "diabetes",
+     "mean_difference": -1.6941591451395381,
+     "p": 0.17960120841192023,
+     "folds_better": 2,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "ionosphere",
+     "mean_difference": 3.9906103286384957,
+     "p": 0.06017236901621725,
+     "folds_better": 12,
+     "p_holm": 0.722068428194607
+    },
+    {
+     "dataset": "qsar_biodeg",
+     "mean_difference": 0.3264876250658248,
+     "p": 0.731837843845151,
+     "folds_better": 8,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "climate_model_simulation_crashes",
+     "mean_difference": 2.8600823045267485,
+     "p": 0.011023010003975937,
+     "folds_better": 14,
+     "p_holm": 0.16534515005963907
+    },
+    {
+     "dataset": "hcv_egyptian_patients",
+     "mean_difference": 0.20056157240272746,
+     "p": 0.8812218683323236,
+     "folds_better": 9,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "mfeat_zernike",
+     "mean_difference": 1.7500000000000004,
+     "p": 0.0054538161667031385,
+     "folds_better": 14,
+     "p_holm": 0.08726105866725022
+    },
+    {
+     "dataset": "steel_plates_fault",
+     "mean_difference": -1.6489103260629474,
+     "p": 0.08029502747167305,
+     "folds_better": 1,
+     "p_holm": 0.8832453021884036
+    },
+    {
+     "dataset": "vertebra_column",
+     "mean_difference": 0.7168458781361942,
+     "p": 0.5297965380912084,
+     "folds_better": 6,
+     "p_holm": 1.0
+    }
+   ],
+   "mean_difference": 0.5558764039334522,
+   "significantly_higher": 1,
+   "significantly_lower": 0,
+   "verdict": "improves ArrowFlow"
+  },
+  "learned - random": {
+   "rows": [
+    {
+     "dataset": "iris",
+     "mean_difference": 2.3703703703703685,
+     "p": 0.21582554875373294,
+     "folds_better": 11,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "wine",
+     "mean_difference": 2.1146384479717795,
+     "p": 0.16845996717337725,
+     "folds_better": 12,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "breast_cancer",
+     "mean_difference": 1.6600251858752075,
+     "p": 0.0368443389992701,
+     "folds_better": 14,
+     "p_holm": 0.368443389992701
+    },
+    {
+     "dataset": "wine_quality",
+     "mean_difference": 0.24307732497387713,
+     "p": 0.757972706333662,
+     "folds_better": 7,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "vehicle",
+     "mean_difference": 6.410952546699154,
+     "p": 0.00047356980884403723,
+     "folds_better": 15,
+     "p_holm": 0.006629977323816521
+    },
+    {
+     "dataset": "segment",
+     "mean_difference": 0.24050024050023877,
+     "p": 0.5017904238508585,
+     "folds_better": 9,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "digits",
+     "mean_difference": 2.2014340245538,
+     "p": 0.006738777349425531,
+     "folds_better": 15,
+     "p_holm": 0.08310493245911327
+    },
+    {
+     "dataset": "balance_scale",
+     "mean_difference": 9.031111111111104,
+     "p": 1.6749755165941575e-08,
+     "folds_better": 15,
+     "p_holm": 2.847458378210068e-07
+    },
+    {
+     "dataset": "banknote_authentication",
+     "mean_difference": 0.21856521418565533,
+     "p": 0.24247142057765286,
+     "folds_better": 10,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "diabetes",
+     "mean_difference": 0.9703005781437146,
+     "p": 0.26427341514145253,
+     "folds_better": 10,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "ionosphere",
+     "mean_difference": 6.2378716744913865,
+     "p": 0.00016327875847171693,
+     "folds_better": 15,
+     "p_holm": 0.002449181377075754
+    },
+    {
+     "dataset": "qsar_biodeg",
+     "mean_difference": 0.7582938388625574,
+     "p": 0.45103341793677143,
+     "folds_better": 10,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "climate_model_simulation_crashes",
+     "mean_difference": 3.0452674897119336,
+     "p": 0.006392687112239483,
+     "folds_better": 14,
+     "p_holm": 0.08310493245911327
+    },
+    {
+     "dataset": "hcv_egyptian_patients",
+     "mean_difference": -0.6578419574809449,
+     "p": 0.6247413974934894,
+     "folds_better": 5,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "mfeat_zernike",
+     "mean_difference": 4.1499999999999995,
+     "p": 1.077984228497642e-06,
+     "folds_better": 15,
+     "p_holm": 1.7247747655962273e-05
+    },
+    {
+     "dataset": "steel_plates_fault",
+     "mean_difference": -1.2651024596801481,
+     "p": 0.11229174385429437,
+     "folds_better": 3,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "vertebra_column",
+     "mean_difference": 5.627240143369177,
+     "p": 0.013181910272439212,
+     "folds_better": 15,
+     "p_holm": 0.14500101299683132
+    }
+   ],
+   "mean_difference": 2.550394339626992,
+   "significantly_higher": 4,
+   "significantly_lower": 0,
+   "verdict": null
+  },
+  "random - fixed": {
+   "rows": [
+    {
+     "dataset": "iris",
+     "mean_difference": -1.481481481481483,
+     "p": 0.3304975503556644,
+     "folds_better": 4,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "wine",
+     "mean_difference": -0.8077601410934719,
+     "p": 0.5591873254525708,
+     "folds_better": 5,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "breast_cancer",
+     "mean_difference": -1.7186772240335317,
+     "p": 0.0164764533910795,
+     "folds_better": 0,
+     "p_holm": 0.197717440692954
+    },
+    {
+     "dataset": "wine_quality",
+     "mean_difference": -0.25766283524904177,
+     "p": 0.7852930388080994,
+     "folds_better": 6,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "vehicle",
+     "mean_difference": -10.125923347642805,
+     "p": 3.285623839002569e-05,
+     "folds_better": 0,
+     "p_holm": 0.000525699814240411
+    },
+    {
+     "dataset": "segment",
+     "mean_difference": -0.8177008177008179,
+     "p": 0.005391779011179777,
+     "folds_better": 0,
+     "p_holm": 0.07548490615651687
+    },
+    {
+     "dataset": "digits",
+     "mean_difference": -1.731610440524086,
+     "p": 0.01296602881974342,
+     "folds_better": 0,
+     "p_holm": 0.16855837465666446
+    },
+    {
+     "dataset": "balance_scale",
+     "mean_difference": -4.568888888888881,
+     "p": 2.177670808673949e-05,
+     "folds_better": 0,
+     "p_holm": 0.00037020403747457136
+    },
+    {
+     "dataset": "banknote_authentication",
+     "mean_difference": -0.03258866032588662,
+     "p": 0.8061578497083506,
+     "folds_better": 2,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "diabetes",
+     "mean_difference": -2.664459723283253,
+     "p": 0.12983154423876678,
+     "folds_better": 2,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "ionosphere",
+     "mean_difference": -2.247261345852892,
+     "p": 0.0927308897569004,
+     "folds_better": 3,
+     "p_holm": 0.927308897569004
+    },
+    {
+     "dataset": "qsar_biodeg",
+     "mean_difference": -0.4318062137967326,
+     "p": 0.4728759786353207,
+     "folds_better": 5,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "climate_model_simulation_crashes",
+     "mean_difference": -0.18518518518518526,
+     "p": 0.3577591133678282,
+     "folds_better": 0,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "hcv_egyptian_patients",
+     "mean_difference": 0.8584035298836722,
+     "p": 0.4020078608583181,
+     "folds_better": 10,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "mfeat_zernike",
+     "mean_difference": -2.399999999999999,
+     "p": 0.001104044061035042,
+     "folds_better": 0,
+     "p_holm": 0.01656066091552563
+    },
+    {
+     "dataset": "steel_plates_fault",
+     "mean_difference": -0.3838078663827993,
+     "p": 0.655896299177756,
+     "folds_better": 6,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "vertebra_column",
+     "mean_difference": -4.910394265232983,
+     "p": 0.02605910777200432,
+     "folds_better": 0,
+     "p_holm": 0.2866501854920475
+    }
+   ],
+   "mean_difference": -1.9945179356935399,
+   "significantly_higher": 0,
+   "significantly_lower": 3,
+   "verdict": null
+  },
+  "learned - mlp": {
+   "rows": [
+    {
+     "dataset": "iris",
+     "mean_difference": -1.4802973661668755e-15,
+     "p": 0.9999999999999984,
+     "folds_better": 2,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "wine",
+     "mean_difference": -0.001763668430333117,
+     "p": 0.9980682722734143,
+     "folds_better": 5,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "breast_cancer",
+     "mean_difference": 0.11695906432748575,
+     "p": 0.6789741591620022,
+     "folds_better": 5,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "wine_quality",
+     "mean_difference": 4.641610066179033,
+     "p": 0.0002879529543080371,
+     "folds_better": 15,
+     "p_holm": 0.004895200223236631
+    },
+    {
+     "dataset": "vehicle",
+     "mean_difference": -6.420853153884832,
+     "p": 0.000734667214920268,
+     "folds_better": 0,
+     "p_holm": 0.011754675438724289
+    },
+    {
+     "dataset": "segment",
+     "mean_difference": -0.38961038961038785,
+     "p": 0.34773005202758744,
+     "folds_better": 5,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "digits",
+     "mean_difference": -0.04360535094053949,
+     "p": 0.9021075943438304,
+     "folds_better": 7,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "balance_scale",
+     "mean_difference": 0.5866666666666672,
+     "p": 0.37822575012942383,
+     "folds_better": 10,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "banknote_authentication",
+     "mean_difference": 0.0,
+     "p": 1.0,
+     "folds_better": 0,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "diabetes",
+     "mean_difference": -2.213639664620055,
+     "p": 0.030720353735465437,
+     "folds_better": 1,
+     "p_holm": 0.4300849522965161
+    },
+    {
+     "dataset": "ionosphere",
+     "mean_difference": 0.790520903196957,
+     "p": 0.38108623651490214,
+     "folds_better": 10,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "qsar_biodeg",
+     "mean_difference": -0.1895734597156403,
+     "p": 0.8345810857601805,
+     "folds_better": 5,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "climate_model_simulation_crashes",
+     "mean_difference": 0.14403292181069727,
+     "p": 0.7772439480350972,
+     "folds_better": 8,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "hcv_egyptian_patients",
+     "mean_difference": -0.43321299638989197,
+     "p": 0.7618862808453568,
+     "folds_better": 7,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "mfeat_zernike",
+     "mean_difference": 1.3388888888888872,
+     "p": 0.13537526334651484,
+     "folds_better": 12,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "steel_plates_fault",
+     "mean_difference": -2.301595714920919,
+     "p": 0.00237068576647596,
+     "folds_better": 0,
+     "p_holm": 0.035560286497139396
+    },
+    {
+     "dataset": "vertebra_column",
+     "mean_difference": -0.7168458781362,
+     "p": 0.6453768133087803,
+     "folds_better": 5,
+     "p_holm": 1.0
+    }
+   ],
+   "mean_difference": -0.2995306920928867,
+   "significantly_higher": 1,
+   "significantly_lower": 2,
+   "verdict": null
+  },
+  "learned - hybrid_knn": {
+   "rows": [
+    {
+     "dataset": "iris",
+     "mean_difference": 0.4444444444444436,
+     "p": 0.3510386817244475,
+     "folds_better": 4,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "wine",
+     "mean_difference": 0.0017636684303375578,
+     "p": 0.9971684612415143,
+     "folds_better": 3,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "breast_cancer",
+     "mean_difference": 0.05796201417999377,
+     "p": 0.8856021415220529,
+     "folds_better": 7,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "wine_quality",
+     "mean_difference": 2.410375304771854,
+     "p": 0.037701919722226356,
+     "folds_better": 13,
+     "p_holm": 0.5655287958333953
+    },
+    {
+     "dataset": "vehicle",
+     "mean_difference": 0.7635069807015545,
+     "p": 0.5586235266866417,
+     "folds_better": 9,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "segment",
+     "mean_difference": 0.25012025012025224,
+     "p": 0.41281651604378955,
+     "folds_better": 10,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "digits",
+     "mean_difference": 0.11742150692940045,
+     "p": 0.5252787761683981,
+     "folds_better": 10,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "balance_scale",
+     "mean_difference": 0.9422222222222227,
+     "p": 0.03080212798597823,
+     "folds_better": 14,
+     "p_holm": 0.4928340477756517
+    },
+    {
+     "dataset": "banknote_authentication",
+     "mean_difference": 0.04040404040403992,
+     "p": 0.6533976653313036,
+     "folds_better": 1,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "diabetes",
+     "mean_difference": 0.59436569240491,
+     "p": 0.4678201081362846,
+     "folds_better": 10,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "ionosphere",
+     "mean_difference": 0.6993069528280782,
+     "p": 0.32827199975575083,
+     "folds_better": 11,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "qsar_biodeg",
+     "mean_difference": 1.1269088994207446,
+     "p": 0.14490120983854538,
+     "folds_better": 12,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "climate_model_simulation_crashes",
+     "mean_difference": 0.3086419753086397,
+     "p": 0.5084412963281812,
+     "folds_better": 8,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "hcv_egyptian_patients",
+     "mean_difference": -0.5455274769354184,
+     "p": 0.6964310217322635,
+     "folds_better": 5,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "mfeat_zernike",
+     "mean_difference": -0.3722222222222219,
+     "p": 0.6566513326376935,
+     "folds_better": 7,
+     "p_holm": 1.0
+    },
+    {
+     "dataset": "steel_plates_fault",
+     "mean_difference": 2.930488196303268,
+     "p": 0.005035924358175634,
+     "folds_better": 15,
+     "p_holm": 0.08561071408898578
+    },
+    {
+     "dataset": "vertebra_column",
+     "mean_difference": 1.6129032258064504,
+     "p": 0.24317893617337366,
+     "folds_better": 11,
+     "p_holm": 1.0
+    }
+   ],
+   "mean_difference": 0.6695932750069735,
+   "significantly_higher": 0,
+   "significantly_lower": 0,
+   "verdict": null
+  }
+ }
+}
